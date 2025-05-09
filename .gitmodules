@@ -1,0 +1,3 @@
+[submodule "JLCPCB-Kicad-Library"]
+	path = JLCPCB-Kicad-Library
+	url = https://github.com/jharvey/JLCPCB-Kicad-Library.git
