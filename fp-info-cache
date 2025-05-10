@@ -1,4 +1,4 @@
-25631560080148421
+25636800397350329
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -65366,6 +65366,13 @@ capacitor tantalum
 2
 2
 JLCPCB
+Current-sensor_MT9221CT-06BR5_C879632
+
+
+0
+8
+8
+JLCPCB
 DBS_L8.2-W6.4-P5.10-LS10.0-BL
 DBS_L8.2-W6.4-P5.10-LS10.0-BL footprint
 DBS_L8.2-W6.4-P5.10-LS10.0-BL footprint C5377
@@ -65617,6 +65624,13 @@ IPEX-SMD_BWIPX-1-001E footprint C5137195
 0
 3
 3
+JLCPCB
+IR-LED_C131280
+
+
+0
+2
+2
 JLCPCB
 LED-SMD_4P-L1.6-W1.5_XL-1615RGBC-WS2812B
 LED-SMD_4P-L1.6-W1.5_XL-1615RGBC-WS2812B footprint
@@ -66163,6 +66177,13 @@ digital tube drivers_c2962580
 0
 20
 20
+JLCPCB
+port-expander-I2C_TCA9535PWR_C130204
+
+
+0
+24
+24
 Jumper
 SolderJumper-2_P1.3mm_Bridged2Bar_Pad1.0x1.5mm
 SMD Solder Jumper, 1x1.5mm Pads, 0.3mm gap, bridged with 2 copper strips
