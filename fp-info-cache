@@ -1,4 +1,4 @@
-26023821727872985
+26025570180082493
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -66457,6 +66457,13 @@ ANT-TH_L25.0-W25.0 footprint C784398
 0
 1
 1
+JLCPCB
+BATTERY-SMD_18650-1S-L77.1-W20.7-1
+
+
+0
+2
+2
 JLCPCB
 Bosch_LGA-8_2.5x2.5mm_P0.65mm_ClockwisePinNumbering
 LGA-8
