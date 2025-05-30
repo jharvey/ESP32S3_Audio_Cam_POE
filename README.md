@@ -1,6 +1,6 @@
 # ESP32S3_Audio_Cam_POE
 
-This is a PCB layout for ESP32S3 with OV2640 / OV5640 camera.  
+This is a PCB layout for ESP32S3 with OV2640 / OV5640 camera. This was designeed with KiCAD version 9. 
 The boards major features include:
 * Camera.
 * 2 way audio.
