@@ -8527,6 +8527,291 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "JLCPCB-Extended:PJ-316C-6A_SMD_3.5mm_Audio_Connectors_(Headphones)_C707223"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "CN1"
+				(at -10.16 8.89 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Value" "PJ-316C-6A"
+				(at -10.16 -8.89 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Footprint" "JLCPCB:SMD_3.5mm_Audio_Connectors_(Headphones)_C707223"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20200721/C707223_0F704CD3AF5CB0D9A9D180C1AE1E7534.pdf"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Connector Type:3.5mm耳机座 Current Rating (Max):500mA Voltage Rating (Max):30V Operating Temperature Range:-20°C~+70°C Operating Temperature Range:-20°C~+70°C"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer Part" "PJ-316C-6A"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "LCSC" "C707223"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "PJ-316C-6A SMD 3.5mm Audio Connectors Headphones C707223"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "PJ-316C-6A_SMD_3.5mm_Audio_Connectors_(Headphones)_C707223_1_0"
+				(polyline
+					(pts
+						(xy -3.556 5.08) (xy -3.302 4.064)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.556 -2.54) (xy -3.302 -1.524)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 7.62) (xy -10.16 7.62) (xy -10.16 7.62) (xy -10.16 1.27) (xy -10.16 1.27) (xy -10.668 2.032)
+						(xy -10.668 2.032) (xy -10.668 2.032)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 5.08) (xy -6.096 5.08) (xy -6.096 5.08) (xy -6.604 3.81) (xy -6.604 3.81) (xy -7.112 5.08)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy -3.556 2.54) (xy -3.556 2.54) (xy -3.556 5.08) (xy -3.556 5.08) (xy -3.81 4.064)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy -3.556 0) (xy -3.556 0) (xy -3.556 -2.54) (xy -3.556 -2.54) (xy -3.81 -1.524)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.54) (xy -4.826 -2.54) (xy -4.826 -2.54) (xy -5.334 -1.27) (xy -5.334 -1.27) (xy -5.842 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -5.08) (xy -7.874 -5.08) (xy -7.874 -5.08) (xy -8.382 -3.81) (xy -8.382 -3.81) (xy -8.89 -5.08)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin unspecified line
+					(at 2.54 7.62 180)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 2.54 5.08 180)
+					(length 2.54)
+					(name "3"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 2.54 2.54 180)
+					(length 2.54)
+					(name "6"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 2.54 0 180)
+					(length 2.54)
+					(name "5"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 2.54 -5.08 180)
+					(length 2.54)
+					(name "4"
+						(effects
+							(font
+								(size 0.0254 0.0254)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "JLCPCB-ICs:DS18B20_C695836"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -28797,7 +29082,7 @@
 		)
 		(uuid "170850a6-0443-4ecc-963d-46b24c26bcb8")
 	)
-	(text "expected risky area\n-- camera connector pinout, is pin1 really pin 1 not 24?\n-- I2S microphones and amplifier, should they be the same lines like code suggests\n-- I2C, does this need pull up, or can internal pullup suffice?\n-- POE ethernet, complete unknown. Fingers crossed. \n\nTODO\n-- make office console version, with multiple rooms which can be selected. \n-- add headphone jack, for quite speaker mode\n-- Make light bar, to be attached to the J13, J12, J11 connectors\n-- Add PSRAM chip below are not needed pins, perhaps we can get enough for PSRAM to be added\nETH.CS dedicated SI we don't need CS\nSD.CS same as above\nFLASH_QSPI_nCS same as above\nSPK.LRCLK find chip which doesn't have this LR junk.\nGPIO26 is already available, this makes 5 availble pins. I think PSRAM is a go.  \n\nNOTES\nhttps://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/sdmmc_host.html\nhttps://www.reddit.com/r/esp32/comments/d71es9/a_breakdown_of_my_experience_trying_to_talk_to_an/?rdt=50443\nhttps://dr-mntn.net/2021/02/using-the-sd-card-in-1-bit-mode-on-the-esp32-cam-from-ai-thinker"
+	(text "expected risky area\n-- camera connector pinout, is pin1 really pin 1 not 24?\n-- I2S microphones and amplifier, should they be the same lines like code suggests\n-- I2C, does this need pull up, or can internal pullup suffice?\n-- POE ethernet, complete unknown. Fingers crossed. \n\nTODO\n-- make office console version, with multiple rooms which can be selected. \n-- Make light bar, to be attached to the J13, J12, J11 connectors\n-- Add PSRAM chip below are not needed pins, perhaps we can get enough for PSRAM to be added\nETH.CS dedicated SI we don't need CS\nSD.CS same as above\nFLASH_QSPI_nCS same as above\nSPK.LRCLK find chip which doesn't have this LR junk.\nGPIO26 is already available, this makes 5 availble pins. I think PSRAM is a go.  \nHmmmm, seems the CS line is often desired to reset the device. While it might be capable of negating, it may also lead to instability. The S3 has 8MB internal PSRAM, lets see if that's enough before adding an external PSRAM chip. \n\nNOTES\nhttps://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/sdmmc_host.html\nhttps://www.reddit.com/r/esp32/comments/d71es9/a_breakdown_of_my_experience_trying_to_talk_to_an/?rdt=50443\nhttps://dr-mntn.net/2021/02/using-the-sd-card-in-1-bit-mode-on-the-esp32-cam-from-ai-thinker"
 		(exclude_from_sim no)
 		(at 567.69 417.068 0)
 		(effects
@@ -29663,7 +29948,7 @@
 	)
 	(text "SPEAKER"
 		(exclude_from_sim no)
-		(at 466.09 175.26 0)
+		(at 462.28 175.26 0)
 		(effects
 			(font
 				(size 2 2)
@@ -30251,7 +30536,7 @@
 		(uuid "00e1e403-7f3b-4457-85db-ff1fcbd96633")
 	)
 	(junction
-		(at 436.88 189.23)
+		(at 433.07 189.23)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "01cd5075-523e-4912-b902-f464a674ccde")
@@ -30521,7 +30806,7 @@
 		(uuid "2a15de6f-ae25-424d-915d-d0383a1689e9")
 	)
 	(junction
-		(at 520.7 201.93)
+		(at 514.35 201.93)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "2a368f24-3e34-4a4f-8b5b-7f5a2e678ef5")
@@ -30533,13 +30818,13 @@
 		(uuid "2d2c6479-d404-4aa0-972e-8933f12a4cf4")
 	)
 	(junction
-		(at 459.74 204.47)
+		(at 455.93 204.47)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "2dc6a67c-6ffb-4501-8680-919e3c68b3ef")
 	)
 	(junction
-		(at 471.17 204.47)
+		(at 467.36 204.47)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "32969926-79d5-46df-bce3-203a89e2393c")
@@ -30647,7 +30932,7 @@
 		(uuid "4dbaed58-a802-4efc-937f-4f852b956e8c")
 	)
 	(junction
-		(at 421.64 189.23)
+		(at 417.83 189.23)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "4deef01d-2758-4b4d-961a-fe67260cd93c")
@@ -30755,7 +31040,7 @@
 		(uuid "5b3e15ec-d206-4954-b22c-6ced232cd567")
 	)
 	(junction
-		(at 436.88 181.61)
+		(at 433.07 181.61)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "5ba2972f-2d25-4d37-8fe0-1cb664885328")
@@ -31319,7 +31604,7 @@
 		(uuid "bba41dd5-61a8-4320-a86d-8b557f6dd53f")
 	)
 	(junction
-		(at 421.64 177.8)
+		(at 417.83 177.8)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "bc7a1f1b-3a09-4c8b-8553-3d10908b503c")
@@ -31475,6 +31760,12 @@
 		(uuid "d5245d7f-1930-4b06-995d-2f99d9b4a703")
 	)
 	(junction
+		(at 519.43 207.01)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d52c0425-76a2-4306-b8e8-a28d9e69aa27")
+	)
+	(junction
 		(at 224.79 254)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -31499,7 +31790,7 @@
 		(uuid "d98f2b06-eca5-4d4d-b3a3-023d81da8208")
 	)
 	(junction
-		(at 459.74 212.09)
+		(at 455.93 212.09)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "daef9b3d-ca9c-4eb5-b71e-646d82cca3ff")
@@ -31583,7 +31874,7 @@
 		(uuid "ef553afc-ef4d-4dd5-b5d3-7cacb4f7a999")
 	)
 	(junction
-		(at 436.88 185.42)
+		(at 433.07 185.42)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f11251cd-a546-426d-a34c-236e139f9828")
@@ -31637,7 +31928,7 @@
 		(uuid "fbd1eaf4-4730-4034-8fef-fd22b71e4967")
 	)
 	(junction
-		(at 520.7 204.47)
+		(at 514.35 204.47)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "fde4c598-6235-4121-8413-40575d428855")
@@ -31653,6 +31944,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "ffa9aec8-ee40-4ecc-8617-dce3d866948e")
+	)
+	(junction
+		(at 524.51 201.93)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ffd5b9ac-556b-4937-a5e7-265d382c6736")
 	)
 	(no_connect
 		(at 317.5 394.97)
@@ -32264,7 +32561,7 @@
 	)
 	(wire
 		(pts
-			(xy 436.88 177.8) (xy 436.88 181.61)
+			(xy 433.07 177.8) (xy 433.07 181.61)
 		)
 		(stroke
 			(width 0)
@@ -32394,7 +32691,7 @@
 	)
 	(wire
 		(pts
-			(xy 457.2 186.69) (xy 471.17 186.69)
+			(xy 453.39 186.69) (xy 467.36 186.69)
 		)
 		(stroke
 			(width 0)
@@ -32464,7 +32761,7 @@
 	)
 	(polyline
 		(pts
-			(xy 537.21 201.93) (xy 537.21 204.47)
+			(xy 537.21 190.5) (xy 537.21 193.04)
 		)
 		(stroke
 			(width 0)
@@ -32591,6 +32888,16 @@
 			(type default)
 		)
 		(uuid "1adca567-0e22-4ce3-95f2-437cd8c95baa")
+	)
+	(wire
+		(pts
+			(xy 529.59 207.01) (xy 519.43 207.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1ae91792-f784-4275-94cc-753bf5150dd7")
 	)
 	(wire
 		(pts
@@ -32794,7 +33101,7 @@
 	)
 	(wire
 		(pts
-			(xy 518.16 186.69) (xy 504.19 186.69)
+			(xy 514.35 186.69) (xy 500.38 186.69)
 		)
 		(stroke
 			(width 0)
@@ -33304,7 +33611,7 @@
 	)
 	(wire
 		(pts
-			(xy 421.64 177.8) (xy 421.64 181.61)
+			(xy 417.83 177.8) (xy 417.83 181.61)
 		)
 		(stroke
 			(width 0)
@@ -33664,6 +33971,16 @@
 	)
 	(wire
 		(pts
+			(xy 524.51 193.04) (xy 524.51 201.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3dc43adf-34c8-45b7-96eb-a00ac6014f28")
+	)
+	(wire
+		(pts
 			(xy 80.01 275.59) (xy 109.22 275.59)
 		)
 		(stroke
@@ -33854,7 +34171,7 @@
 	)
 	(polyline
 		(pts
-			(xy 537.21 205.74) (xy 538.48 205.74)
+			(xy 537.21 194.31) (xy 538.48 194.31)
 		)
 		(stroke
 			(width 0)
@@ -34024,7 +34341,7 @@
 	)
 	(polyline
 		(pts
-			(xy 538.48 201.93) (xy 541.02 199.39)
+			(xy 538.48 190.5) (xy 541.02 187.96)
 		)
 		(stroke
 			(width 0)
@@ -34284,7 +34601,7 @@
 	)
 	(wire
 		(pts
-			(xy 471.17 201.93) (xy 471.17 204.47)
+			(xy 467.36 201.93) (xy 467.36 204.47)
 		)
 		(stroke
 			(width 0)
@@ -34424,7 +34741,7 @@
 	)
 	(polyline
 		(pts
-			(xy 537.21 204.47) (xy 537.21 205.74)
+			(xy 537.21 193.04) (xy 537.21 194.31)
 		)
 		(stroke
 			(width 0)
@@ -34914,7 +35231,7 @@
 	)
 	(wire
 		(pts
-			(xy 459.74 204.47) (xy 471.17 204.47)
+			(xy 455.93 204.47) (xy 467.36 204.47)
 		)
 		(stroke
 			(width 0)
@@ -35344,7 +35661,7 @@
 	)
 	(polyline
 		(pts
-			(xy 538.48 204.47) (xy 541.02 207.01)
+			(xy 538.48 193.04) (xy 541.02 195.58)
 		)
 		(stroke
 			(width 0)
@@ -35504,7 +35821,7 @@
 	)
 	(wire
 		(pts
-			(xy 436.88 181.61) (xy 436.88 185.42)
+			(xy 433.07 181.61) (xy 433.07 185.42)
 		)
 		(stroke
 			(width 0)
@@ -35544,7 +35861,7 @@
 	)
 	(polyline
 		(pts
-			(xy 537.21 201.93) (xy 537.21 200.66)
+			(xy 537.21 190.5) (xy 537.21 189.23)
 		)
 		(stroke
 			(width 0)
@@ -35834,6 +36151,16 @@
 	)
 	(wire
 		(pts
+			(xy 519.43 209.55) (xy 519.43 207.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7f713630-c788-4020-b67b-154e168fcac3")
+	)
+	(wire
+		(pts
 			(xy 198.12 53.34) (xy 198.12 68.58)
 		)
 		(stroke
@@ -35984,7 +36311,7 @@
 	)
 	(polyline
 		(pts
-			(xy 537.21 200.66) (xy 538.48 200.66)
+			(xy 537.21 189.23) (xy 538.48 189.23)
 		)
 		(stroke
 			(width 0)
@@ -36084,7 +36411,7 @@
 	)
 	(wire
 		(pts
-			(xy 429.26 185.42) (xy 421.64 185.42)
+			(xy 425.45 185.42) (xy 417.83 185.42)
 		)
 		(stroke
 			(width 0)
@@ -36184,7 +36511,7 @@
 	)
 	(wire
 		(pts
-			(xy 520.7 204.47) (xy 524.51 204.47)
+			(xy 514.35 204.47) (xy 529.59 204.47)
 		)
 		(stroke
 			(width 0)
@@ -36304,6 +36631,16 @@
 	)
 	(wire
 		(pts
+			(xy 529.59 209.55) (xy 519.43 209.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8ca6cda7-d44b-4d19-95de-00ab84970cd2")
+	)
+	(wire
+		(pts
 			(xy 247.65 142.24) (xy 281.94 142.24)
 		)
 		(stroke
@@ -36311,6 +36648,16 @@
 			(type default)
 		)
 		(uuid "8d2fc29e-d3ff-4c4a-95cb-83f09c8e8c3b")
+	)
+	(wire
+		(pts
+			(xy 500.38 204.47) (xy 514.35 204.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8d60c5de-40be-482d-aed5-4c4b16a0642b")
 	)
 	(wire
 		(pts
@@ -36374,7 +36721,7 @@
 	)
 	(wire
 		(pts
-			(xy 429.26 177.8) (xy 421.64 177.8)
+			(xy 425.45 177.8) (xy 417.83 177.8)
 		)
 		(stroke
 			(width 0)
@@ -36724,6 +37071,16 @@
 	)
 	(wire
 		(pts
+			(xy 500.38 201.93) (xy 514.35 201.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b1922f1-7803-4953-823b-fa78ba1e2b17")
+	)
+	(wire
+		(pts
 			(xy 181.61 321.31) (xy 209.55 321.31)
 		)
 		(stroke
@@ -36831,6 +37188,16 @@
 			(type default)
 		)
 		(uuid "9eff885c-fede-47b6-a998-a9e3c98122be")
+	)
+	(wire
+		(pts
+			(xy 525.78 214.63) (xy 529.59 214.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f398ead-59af-4bd0-9736-f7ba10a151c4")
 	)
 	(wire
 		(pts
@@ -37054,7 +37421,7 @@
 	)
 	(wire
 		(pts
-			(xy 436.88 189.23) (xy 471.17 189.23)
+			(xy 433.07 189.23) (xy 467.36 189.23)
 		)
 		(stroke
 			(width 0)
@@ -37101,6 +37468,16 @@
 			(type default)
 		)
 		(uuid "a735d8c6-93a9-4880-9df4-9de8e0d3f0e1")
+	)
+	(wire
+		(pts
+			(xy 519.43 207.01) (xy 519.43 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a7845e84-7bda-4999-8e86-a7b7f3ae1d02")
 	)
 	(wire
 		(pts
@@ -37494,7 +37871,7 @@
 	)
 	(polyline
 		(pts
-			(xy 538.48 200.66) (xy 538.48 205.74)
+			(xy 538.48 189.23) (xy 538.48 194.31)
 		)
 		(stroke
 			(width 0)
@@ -37584,7 +37961,7 @@
 	)
 	(wire
 		(pts
-			(xy 518.16 191.77) (xy 504.19 191.77)
+			(xy 514.35 191.77) (xy 500.38 191.77)
 		)
 		(stroke
 			(width 0)
@@ -37614,7 +37991,7 @@
 	)
 	(polyline
 		(pts
-			(xy 541.02 199.39) (xy 541.02 207.01)
+			(xy 541.02 187.96) (xy 541.02 195.58)
 		)
 		(stroke
 			(width 0)
@@ -37691,16 +38068,6 @@
 			(type default)
 		)
 		(uuid "bb42e0be-30a7-41e3-98b1-4ba454c96286")
-	)
-	(wire
-		(pts
-			(xy 504.19 204.47) (xy 520.7 204.47)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bb4d1954-b759-43bd-b68f-c4251067b1b2")
 	)
 	(wire
 		(pts
@@ -37944,7 +38311,7 @@
 	)
 	(wire
 		(pts
-			(xy 436.88 185.42) (xy 436.88 189.23)
+			(xy 433.07 185.42) (xy 433.07 189.23)
 		)
 		(stroke
 			(width 0)
@@ -38024,7 +38391,7 @@
 	)
 	(wire
 		(pts
-			(xy 421.64 185.42) (xy 421.64 189.23)
+			(xy 417.83 185.42) (xy 417.83 189.23)
 		)
 		(stroke
 			(width 0)
@@ -38544,7 +38911,7 @@
 	)
 	(wire
 		(pts
-			(xy 459.74 212.09) (xy 471.17 212.09)
+			(xy 455.93 212.09) (xy 467.36 212.09)
 		)
 		(stroke
 			(width 0)
@@ -39054,7 +39421,7 @@
 	)
 	(polyline
 		(pts
-			(xy 532.13 201.93) (xy 537.21 201.93)
+			(xy 532.13 190.5) (xy 537.21 190.5)
 		)
 		(stroke
 			(width 0)
@@ -39112,9 +39479,19 @@
 		)
 		(uuid "e3e9925d-7278-4f50-a36c-e312dc5c1449")
 	)
+	(wire
+		(pts
+			(xy 519.43 190.5) (xy 524.51 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e43cebcc-951a-49b6-ac6b-135d2580a73f")
+	)
 	(polyline
 		(pts
-			(xy 532.13 204.47) (xy 537.21 204.47)
+			(xy 532.13 193.04) (xy 537.21 193.04)
 		)
 		(stroke
 			(width 0)
@@ -39334,16 +39711,6 @@
 	)
 	(wire
 		(pts
-			(xy 504.19 201.93) (xy 520.7 201.93)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ed567b33-8df8-4a8d-8ec7-50d78060f529")
-	)
-	(wire
-		(pts
 			(xy 485.14 48.26) (xy 485.14 50.8)
 		)
 		(stroke
@@ -39494,7 +39861,7 @@
 	)
 	(wire
 		(pts
-			(xy 453.39 194.31) (xy 471.17 194.31)
+			(xy 449.58 194.31) (xy 467.36 194.31)
 		)
 		(stroke
 			(width 0)
@@ -39692,6 +40059,16 @@
 		)
 		(uuid "f418c1e2-6a25-4c77-b398-78719574c791")
 	)
+	(wire
+		(pts
+			(xy 524.51 201.93) (xy 529.59 201.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f4ae5387-60ee-4356-a332-d7b228e8e7ca")
+	)
 	(polyline
 		(pts
 			(xy 491.49 170.18) (xy 546.1 170.18)
@@ -39864,7 +40241,7 @@
 	)
 	(wire
 		(pts
-			(xy 520.7 201.93) (xy 524.51 201.93)
+			(xy 514.35 201.93) (xy 524.51 201.93)
 		)
 		(stroke
 			(width 0)
@@ -40938,7 +41315,7 @@
 		(cells
 			(table_cell "GAIN SLOT"
 				(exclude_from_sim no)
-				(at 415.29 198.12 0)
+				(at 411.48 198.12 0)
 				(size 21.59 2.54)
 				(margins 0.9525 0.9525 0.9525 0.9525)
 				(span 1 1)
@@ -40954,7 +41331,7 @@
 			)
 			(table_cell "GAIN (db)"
 				(exclude_from_sim no)
-				(at 436.88 198.12 0)
+				(at 433.07 198.12 0)
 				(size 12.7 2.54)
 				(margins 0.9525 0.9525 0.9525 0.9525)
 				(span 1 1)
@@ -40970,7 +41347,7 @@
 			)
 			(table_cell "100K TO GND"
 				(exclude_from_sim no)
-				(at 415.29 200.66 0)
+				(at 411.48 200.66 0)
 				(size 21.59 2.54)
 				(margins 0.9525 0.9525 0.9525 0.9525)
 				(span 1 1)
@@ -40986,7 +41363,7 @@
 			)
 			(table_cell "15"
 				(exclude_from_sim no)
-				(at 436.88 200.66 0)
+				(at 433.07 200.66 0)
 				(size 12.7 2.54)
 				(margins 0.9525 0.9525 0.9525 0.9525)
 				(span 1 1)
@@ -41002,7 +41379,7 @@
 			)
 			(table_cell "SHORT TO GND"
 				(exclude_from_sim no)
-				(at 415.29 203.2 0)
+				(at 411.48 203.2 0)
 				(size 21.59 2.54)
 				(margins 0.9525 0.9525 0.9525 0.9525)
 				(span 1 1)
@@ -41018,7 +41395,7 @@
 			)
 			(table_cell "12"
 				(exclude_from_sim no)
-				(at 436.88 203.2 0)
+				(at 433.07 203.2 0)
 				(size 12.7 2.54)
 				(margins 0.9525 0.9525 0.9525 0.9525)
 				(span 1 1)
@@ -41034,7 +41411,7 @@
 			)
 			(table_cell "NO CONNECT"
 				(exclude_from_sim no)
-				(at 415.29 205.74 0)
+				(at 411.48 205.74 0)
 				(size 21.59 2.54)
 				(margins 0.9525 0.9525 0.9525 0.9525)
 				(span 1 1)
@@ -41050,7 +41427,7 @@
 			)
 			(table_cell "9"
 				(exclude_from_sim no)
-				(at 436.88 205.74 0)
+				(at 433.07 205.74 0)
 				(size 12.7 2.54)
 				(margins 0.9525 0.9525 0.9525 0.9525)
 				(span 1 1)
@@ -41066,7 +41443,7 @@
 			)
 			(table_cell "SHORT TO VDD"
 				(exclude_from_sim no)
-				(at 415.29 208.28 0)
+				(at 411.48 208.28 0)
 				(size 21.59 2.54)
 				(margins 0.9525 0.9525 0.9525 0.9525)
 				(span 1 1)
@@ -41082,7 +41459,7 @@
 			)
 			(table_cell "6"
 				(exclude_from_sim no)
-				(at 436.88 208.28 0)
+				(at 433.07 208.28 0)
 				(size 12.7 2.54)
 				(margins 0.9525 0.9525 0.9525 0.9525)
 				(span 1 1)
@@ -41098,7 +41475,7 @@
 			)
 			(table_cell "100K TO VDD"
 				(exclude_from_sim no)
-				(at 415.29 210.82 0)
+				(at 411.48 210.82 0)
 				(size 21.59 2.54)
 				(margins 0.9525 0.9525 0.9525 0.9525)
 				(span 1 1)
@@ -41114,7 +41491,7 @@
 			)
 			(table_cell "3"
 				(exclude_from_sim no)
-				(at 436.88 210.82 0)
+				(at 433.07 210.82 0)
 				(size 12.7 2.54)
 				(margins 0.9525 0.9525 0.9525 0.9525)
 				(span 1 1)
@@ -41600,6 +41977,16 @@
 			(justify left bottom)
 		)
 		(uuid "28cb3668-7e3a-4e93-8c2d-a4a9a03ba37f")
+	)
+	(label "SPK.OutN"
+		(at 504.19 201.93 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "296e9375-1273-42b3-a813-cbe4524c2d0f")
 	)
 	(label "MIC.WS"
 		(at 501.65 132.08 0)
@@ -42835,7 +43222,7 @@
 		(uuid "9af53a00-a644-4f63-af17-e34c92e8d9a0")
 	)
 	(label "SPK.BCLK"
-		(at 518.16 186.69 180)
+		(at 514.35 186.69 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -43015,7 +43402,7 @@
 		(uuid "ad58b76e-0472-4569-af80-b804a2e08fb6")
 	)
 	(label "SPK.MODE"
-		(at 457.2 194.31 0)
+		(at 453.39 194.31 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -43093,6 +43480,16 @@
 			(justify left bottom)
 		)
 		(uuid "b75d8cd5-28fd-4f68-b50b-93d5ed37eaf7")
+	)
+	(label "SPK.MIC"
+		(at 529.59 214.63 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b81cb8d0-9191-4636-8438-9f3f8f707f94")
 	)
 	(label "USB_D+"
 		(at 182.88 187.96 0)
@@ -43355,6 +43752,16 @@
 		)
 		(uuid "c8c172f7-f3e5-488c-9454-6f02514c93c5")
 	)
+	(label "SPK.OutP"
+		(at 504.19 204.47 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c9372b74-8f27-466e-9395-2535d2c5cae3")
+	)
 	(label "CAM.VSYNC"
 		(at 182.88 144.78 0)
 		(effects
@@ -43376,7 +43783,7 @@
 		(uuid "cb1e06fc-2d85-48fe-92b6-11c4d5674867")
 	)
 	(label "SPK.LRCLK"
-		(at 518.16 191.77 180)
+		(at 514.35 191.77 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -43585,6 +43992,16 @@
 		)
 		(uuid "ddce9d9c-5859-4ec7-8f43-7eccfc74d419")
 	)
+	(label "SPK.OutPS"
+		(at 519.43 207.01 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "de1a6973-2d2a-4272-b4c8-e70dacb5ad46")
+	)
 	(label "W_RD_N"
 		(at 476.25 53.34 0)
 		(effects
@@ -43636,7 +44053,7 @@
 		(uuid "e3525533-0b4b-4dd0-922e-a5aeeabd3ded")
 	)
 	(label "SPK.DIN"
-		(at 457.2 186.69 0)
+		(at 453.39 186.69 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -43654,6 +44071,16 @@
 			(justify left bottom)
 		)
 		(uuid "e375daa0-fa3b-48db-a9e6-672b40d69aa3")
+	)
+	(label "SPK.OutP"
+		(at 529.59 212.09 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e3948b63-268c-4e4b-9e33-caa6ed17e098")
 	)
 	(label "PMU.Vd2"
 		(at 232.41 356.87 180)
@@ -48866,7 +49293,7 @@
 	)
 	(symbol
 		(lib_id "PCM_JLCPCB-Capacitors:0402,220pF")
-		(at 520.7 198.12 0)
+		(at 514.35 198.12 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -48874,7 +49301,7 @@
 		(dnp no)
 		(uuid "09ddd738-858f-461b-aa6f-59fbd6e74835")
 		(property "Reference" "C66"
-			(at 520.954 195.834 0)
+			(at 514.604 195.834 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48883,7 +49310,7 @@
 			)
 		)
 		(property "Value" "220pF"
-			(at 521.208 199.898 0)
+			(at 514.858 199.898 0)
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -48892,7 +49319,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:C_0402"
-			(at 518.922 198.12 90)
+			(at 512.572 198.12 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48901,7 +49328,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_FH--Guangdong-Fenghua-Advanced-Tech-0402B221K500NT_C1530.pdf"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48910,7 +49337,7 @@
 			)
 		)
 		(property "Description" "50V 220pF X7R ±10% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48919,7 +49346,7 @@
 			)
 		)
 		(property "LCSC" "C1530"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48928,7 +49355,7 @@
 			)
 		)
 		(property "Stock" "497728"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48937,7 +49364,7 @@
 			)
 		)
 		(property "Price" "0.004USD"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48946,7 +49373,7 @@
 			)
 		)
 		(property "Process" "SMT"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48955,7 +49382,7 @@
 			)
 		)
 		(property "Minimum Qty" "20"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48964,7 +49391,7 @@
 			)
 		)
 		(property "Attrition Qty" "10"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48973,7 +49400,7 @@
 			)
 		)
 		(property "Class" "Basic Component"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48982,7 +49409,7 @@
 			)
 		)
 		(property "Category" "Capacitors,Multilayer Ceramic Capacitors MLCC - SMD/SMT"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -48991,7 +49418,7 @@
 			)
 		)
 		(property "Manufacturer" "FH(Guangdong Fenghua Advanced Tech)"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49000,7 +49427,7 @@
 			)
 		)
 		(property "Part" "0402B221K500NT"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49009,7 +49436,7 @@
 			)
 		)
 		(property "Voltage Rated" "50V"
-			(at 523.24 200.66 0)
+			(at 516.89 200.66 0)
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -49019,7 +49446,7 @@
 			)
 		)
 		(property "Tolerance" "±10%"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49028,7 +49455,7 @@
 			)
 		)
 		(property "Capacitance" "220pF"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49037,7 +49464,7 @@
 			)
 		)
 		(property "Temperature Coefficient" "X7R"
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49046,7 +49473,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49054,7 +49481,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49062,7 +49489,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49070,7 +49497,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49078,7 +49505,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49086,7 +49513,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49094,7 +49521,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49102,7 +49529,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -49110,7 +49537,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 520.7 198.12 0)
+			(at 514.35 198.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50647,7 +51074,7 @@
 	)
 	(symbol
 		(lib_id "power:VBUS")
-		(at 421.64 177.8 0)
+		(at 417.83 177.8 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -50656,7 +51083,7 @@
 		(fields_autoplaced yes)
 		(uuid "0df4c9f9-a5e4-4d92-bca2-06d18042f92b")
 		(property "Reference" "#PWR082"
-			(at 421.64 181.61 0)
+			(at 417.83 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50665,7 +51092,7 @@
 			)
 		)
 		(property "Value" "Vdrive"
-			(at 421.64 172.72 0)
+			(at 417.83 172.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50673,7 +51100,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 421.64 177.8 0)
+			(at 417.83 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50682,7 +51109,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 421.64 177.8 0)
+			(at 417.83 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50691,7 +51118,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VBUS\""
-			(at 421.64 177.8 0)
+			(at 417.83 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50713,7 +51140,7 @@
 	)
 	(symbol
 		(lib_id "PCM_JLCPCB-Resistors:0603,0Ω")
-		(at 459.74 200.66 180)
+		(at 455.93 200.66 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -50721,7 +51148,7 @@
 		(dnp no)
 		(uuid "0e988998-463d-4b2e-906c-d0e5b8d03220")
 		(property "Reference" "TST-R18"
-			(at 457.2 201.422 90)
+			(at 453.39 201.422 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50729,7 +51156,7 @@
 			)
 		)
 		(property "Value" "0Ω"
-			(at 459.74 200.66 90)
+			(at 455.93 200.66 90)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -50738,7 +51165,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:R_0603"
-			(at 461.518 200.66 90)
+			(at 457.708 200.66 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50747,7 +51174,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0603WAF0000T5E_C21189.pdf"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50756,7 +51183,7 @@
 			)
 		)
 		(property "Description" "100mW Thick Film Resistors 75V ±1% 0Ω 0603 Chip Resistor - Surface Mount ROHS"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50765,7 +51192,7 @@
 			)
 		)
 		(property "LCSC" "C21189"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50774,7 +51201,7 @@
 			)
 		)
 		(property "Stock" "10110432"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50783,7 +51210,7 @@
 			)
 		)
 		(property "Price" "0.004USD"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50792,7 +51219,7 @@
 			)
 		)
 		(property "Process" "SMT"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50801,7 +51228,7 @@
 			)
 		)
 		(property "Minimum Qty" "20"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50810,7 +51237,7 @@
 			)
 		)
 		(property "Attrition Qty" "10"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50819,7 +51246,7 @@
 			)
 		)
 		(property "Class" "Basic Component"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50828,7 +51255,7 @@
 			)
 		)
 		(property "Category" "Resistors,Chip Resistor - Surface Mount"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50837,7 +51264,7 @@
 			)
 		)
 		(property "Manufacturer" "UNI-ROYAL(Uniroyal Elec)"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50846,7 +51273,7 @@
 			)
 		)
 		(property "Part" "0603WAF0000T5E"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50855,7 +51282,7 @@
 			)
 		)
 		(property "Resistance" "0Ω"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50864,7 +51291,7 @@
 			)
 		)
 		(property "Power(Watts)" "100mW"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50873,7 +51300,7 @@
 			)
 		)
 		(property "Type" "Thick Film Resistors"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50882,7 +51309,7 @@
 			)
 		)
 		(property "Overload Voltage (Max)" "75V"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50891,7 +51318,7 @@
 			)
 		)
 		(property "Operating Temperature Range" "-55°C~+155°C"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50900,7 +51327,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50909,7 +51336,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50917,7 +51344,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50925,7 +51352,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50933,7 +51360,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50941,7 +51368,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50949,7 +51376,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50957,7 +51384,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50965,7 +51392,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 459.74 200.66 0)
+			(at 455.93 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -50973,7 +51400,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 459.74 200.66 90)
+			(at 455.93 200.66 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -53921,7 +54348,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 421.64 189.23 0)
+		(at 417.83 189.23 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -53930,7 +54357,7 @@
 		(fields_autoplaced yes)
 		(uuid "127c283c-f86b-4e42-aa49-a0a193850994")
 		(property "Reference" "#PWR083"
-			(at 421.64 195.58 0)
+			(at 417.83 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -53939,7 +54366,7 @@
 			)
 		)
 		(property "Value" "Earth"
-			(at 421.64 193.04 0)
+			(at 417.83 193.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -53948,7 +54375,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 421.64 189.23 0)
+			(at 417.83 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -53957,7 +54384,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 421.64 189.23 0)
+			(at 417.83 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -53966,7 +54393,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 421.64 189.23 0)
+			(at 417.83 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58635,7 +59062,7 @@
 	)
 	(symbol
 		(lib_id "PCM_JLCPCB-Capacitors:0603,100nF")
-		(at 471.17 208.28 0)
+		(at 467.36 208.28 0)
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
@@ -58644,7 +59071,7 @@
 		(dnp no)
 		(uuid "1cabca5c-d751-4d5f-81a7-72456208992b")
 		(property "Reference" "C55"
-			(at 470.408 205.994 0)
+			(at 466.598 205.994 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58653,7 +59080,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 470.662 210.058 0)
+			(at 466.852 210.058 0)
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -58662,7 +59089,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:C_0603"
-			(at 472.948 208.28 90)
+			(at 469.138 208.28 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58671,7 +59098,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58680,7 +59107,7 @@
 			)
 		)
 		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58689,7 +59116,7 @@
 			)
 		)
 		(property "LCSC" "C14663"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58698,7 +59125,7 @@
 			)
 		)
 		(property "Stock" "58525348"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58707,7 +59134,7 @@
 			)
 		)
 		(property "Price" "0.006USD"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58716,7 +59143,7 @@
 			)
 		)
 		(property "Process" "SMT"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58725,7 +59152,7 @@
 			)
 		)
 		(property "Minimum Qty" "20"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58734,7 +59161,7 @@
 			)
 		)
 		(property "Attrition Qty" "6"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58743,7 +59170,7 @@
 			)
 		)
 		(property "Class" "Basic Component"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58752,7 +59179,7 @@
 			)
 		)
 		(property "Category" "Capacitors,Multilayer Ceramic Capacitors MLCC - SMD/SMT"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58761,7 +59188,7 @@
 			)
 		)
 		(property "Manufacturer" "YAGEO"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58770,7 +59197,7 @@
 			)
 		)
 		(property "Part" "CC0603KRX7R9BB104"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58779,7 +59206,7 @@
 			)
 		)
 		(property "Voltage Rated" "50V"
-			(at 468.63 210.82 0)
+			(at 464.82 210.82 0)
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -58789,7 +59216,7 @@
 			)
 		)
 		(property "Tolerance" "±10%"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58798,7 +59225,7 @@
 			)
 		)
 		(property "Capacitance" "100nF"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58807,7 +59234,7 @@
 			)
 		)
 		(property "Temperature Coefficient" "X7R"
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58816,7 +59243,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58824,7 +59251,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58832,7 +59259,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58840,7 +59267,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58848,7 +59275,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58856,7 +59283,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58864,7 +59291,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58872,7 +59299,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -58880,7 +59307,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 471.17 208.28 0)
+			(at 467.36 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -63188,7 +63615,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 520.7 212.09 0)
+		(at 514.35 212.09 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -63197,7 +63624,7 @@
 		(fields_autoplaced yes)
 		(uuid "27276a6a-9024-4440-a664-6b877340e17b")
 		(property "Reference" "#PWR0123"
-			(at 520.7 218.44 0)
+			(at 514.35 218.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -63206,7 +63633,7 @@
 			)
 		)
 		(property "Value" "Earth"
-			(at 520.7 215.9 0)
+			(at 514.35 215.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -63215,7 +63642,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 520.7 212.09 0)
+			(at 514.35 212.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -63224,7 +63651,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 520.7 212.09 0)
+			(at 514.35 212.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -63233,7 +63660,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 520.7 212.09 0)
+			(at 514.35 212.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66557,7 +66984,7 @@
 	)
 	(symbol
 		(lib_id "Jumper:SolderJumper_2_Open")
-		(at 433.07 189.23 0)
+		(at 429.26 189.23 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
@@ -66565,7 +66992,7 @@
 		(dnp yes)
 		(uuid "30e87fc6-f1cc-4f08-bc10-5408ab914425")
 		(property "Reference" "JP6"
-			(at 436.372 187.706 0)
+			(at 432.562 187.706 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66573,7 +67000,7 @@
 			)
 		)
 		(property "Value" "SolderJumper_2_Open"
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66582,7 +67009,7 @@
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm"
-			(at 433.07 189.23 0)
+			(at 429.26 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66591,7 +67018,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 433.07 189.23 0)
+			(at 429.26 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66600,7 +67027,7 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, open"
-			(at 433.07 189.23 0)
+			(at 429.26 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66609,7 +67036,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 433.07 189.23 0)
+			(at 429.26 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66617,7 +67044,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 433.07 189.23 0)
+			(at 429.26 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66625,7 +67052,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 433.07 189.23 0)
+			(at 429.26 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66633,7 +67060,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 433.07 189.23 0)
+			(at 429.26 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66641,7 +67068,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 433.07 189.23 0)
+			(at 429.26 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66649,7 +67076,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 433.07 189.23 0)
+			(at 429.26 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66657,7 +67084,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 433.07 189.23 0)
+			(at 429.26 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66665,7 +67092,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 433.07 189.23 0)
+			(at 429.26 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -66673,7 +67100,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 433.07 189.23 0)
+			(at 429.26 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72166,7 +72593,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 471.17 199.39 90)
+		(at 467.36 199.39 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -72174,7 +72601,7 @@
 		(dnp yes)
 		(uuid "3d2201b7-c195-4b25-8b53-f366da3e0b65")
 		(property "Reference" "TP64"
-			(at 466.09 199.39 90)
+			(at 462.28 199.39 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72183,7 +72610,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 469.1379 196.85 0)
+			(at 465.3279 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72193,7 +72620,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 471.17 194.31 0)
+			(at 467.36 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72202,7 +72629,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 471.17 194.31 0)
+			(at 467.36 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72211,7 +72638,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72220,7 +72647,7 @@
 			)
 		)
 		(property "Allied_Number" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72229,7 +72656,7 @@
 			)
 		)
 		(property "LCSC PART #" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72238,7 +72665,7 @@
 			)
 		)
 		(property "Arrow Part Number" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72246,7 +72673,7 @@
 			)
 		)
 		(property "Arrow Price/Stock" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72254,7 +72681,7 @@
 			)
 		)
 		(property "Cheap Version" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72262,7 +72689,7 @@
 			)
 		)
 		(property "Expensive Version" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72270,7 +72697,7 @@
 			)
 		)
 		(property "Field5" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72278,7 +72705,7 @@
 			)
 		)
 		(property "LCSC Part" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72286,7 +72713,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72294,7 +72721,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72302,7 +72729,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72310,7 +72737,7 @@
 			)
 		)
 		(property "Package" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72318,7 +72745,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72326,7 +72753,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72334,7 +72761,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72342,7 +72769,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72350,7 +72777,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72358,7 +72785,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72366,7 +72793,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72374,7 +72801,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 471.17 199.39 0)
+			(at 467.36 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -72382,7 +72809,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 471.17 199.39 90)
+			(at 467.36 199.39 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77158,7 +77585,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 504.19 196.85 270)
+		(at 500.38 196.85 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -77166,7 +77593,7 @@
 		(dnp yes)
 		(uuid "48858817-8ead-46ee-9a5e-edd3e3a59cd6")
 		(property "Reference" "TP67"
-			(at 509.27 196.85 90)
+			(at 505.46 196.85 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77175,7 +77602,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 506.2221 199.39 0)
+			(at 502.4121 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77185,7 +77612,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 504.19 201.93 0)
+			(at 500.38 201.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77194,7 +77621,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 504.19 201.93 0)
+			(at 500.38 201.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77203,7 +77630,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77212,7 +77639,7 @@
 			)
 		)
 		(property "Allied_Number" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77221,7 +77648,7 @@
 			)
 		)
 		(property "LCSC PART #" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77230,7 +77657,7 @@
 			)
 		)
 		(property "Arrow Part Number" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77238,7 +77665,7 @@
 			)
 		)
 		(property "Arrow Price/Stock" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77246,7 +77673,7 @@
 			)
 		)
 		(property "Cheap Version" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77254,7 +77681,7 @@
 			)
 		)
 		(property "Expensive Version" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77262,7 +77689,7 @@
 			)
 		)
 		(property "Field5" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77270,7 +77697,7 @@
 			)
 		)
 		(property "LCSC Part" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77278,7 +77705,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77286,7 +77713,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77294,7 +77721,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77302,7 +77729,7 @@
 			)
 		)
 		(property "Package" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77310,7 +77737,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77318,7 +77745,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77326,7 +77753,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77334,7 +77761,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77342,7 +77769,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77350,7 +77777,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77358,7 +77785,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77366,7 +77793,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 504.19 196.85 0)
+			(at 500.38 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -77374,7 +77801,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 504.19 196.85 90)
+			(at 500.38 196.85 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79014,7 +79441,7 @@
 	)
 	(symbol
 		(lib_id "PCM_JLCPCB-Resistors:0402,1MΩ")
-		(at 449.58 194.31 90)
+		(at 445.77 194.31 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -79022,7 +79449,7 @@
 		(dnp no)
 		(uuid "4ef8cb5d-0719-4aaf-b61a-b829c69b5bf1")
 		(property "Reference" "R43"
-			(at 454.66 193.04 90)
+			(at 450.85 193.04 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79030,7 +79457,7 @@
 			)
 		)
 		(property "Value" "1MΩ"
-			(at 449.58 194.31 90)
+			(at 445.77 194.31 90)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -79039,7 +79466,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:R_0402"
-			(at 449.58 196.088 90)
+			(at 445.77 196.088 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79048,7 +79475,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010030_UNI-ROYAL-Uniroyal-Elec-0402WGF1004TCE_C26083.pdf"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79057,7 +79484,7 @@
 			)
 		)
 		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1MΩ 0402 Chip Resistor - Surface Mount ROHS"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79066,7 +79493,7 @@
 			)
 		)
 		(property "LCSC" "C26083"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79075,7 +79502,7 @@
 			)
 		)
 		(property "Stock" "1772172"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79084,7 +79511,7 @@
 			)
 		)
 		(property "Price" "0.004USD"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79093,7 +79520,7 @@
 			)
 		)
 		(property "Process" "SMT"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79102,7 +79529,7 @@
 			)
 		)
 		(property "Minimum Qty" "20"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79111,7 +79538,7 @@
 			)
 		)
 		(property "Attrition Qty" "10"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79120,7 +79547,7 @@
 			)
 		)
 		(property "Class" "Basic Component"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79129,7 +79556,7 @@
 			)
 		)
 		(property "Category" "Resistors,Chip Resistor - Surface Mount"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79138,7 +79565,7 @@
 			)
 		)
 		(property "Manufacturer" "UNI-ROYAL(Uniroyal Elec)"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79147,7 +79574,7 @@
 			)
 		)
 		(property "Part" "0402WGF1004TCE"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79156,7 +79583,7 @@
 			)
 		)
 		(property "Resistance" "1MΩ"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79165,7 +79592,7 @@
 			)
 		)
 		(property "Power(Watts)" "62.5mW"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79174,7 +79601,7 @@
 			)
 		)
 		(property "Type" "Thick Film Resistors"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79183,7 +79610,7 @@
 			)
 		)
 		(property "Overload Voltage (Max)" "50V"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79192,7 +79619,7 @@
 			)
 		)
 		(property "Operating Temperature Range" "-55°C~+155°C"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79201,7 +79628,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79210,7 +79637,7 @@
 			)
 		)
 		(property "Temperature Coefficient" "±100ppm/°C"
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79219,7 +79646,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79227,7 +79654,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79235,7 +79662,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79243,7 +79670,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79251,7 +79678,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79259,7 +79686,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79267,7 +79694,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79275,7 +79702,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 449.58 194.31 0)
+			(at 445.77 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79283,7 +79710,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 449.58 194.31 90)
+			(at 445.77 194.31 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79613,7 +80040,7 @@
 	)
 	(symbol
 		(lib_id "PCM_JLCPCB-Resistors:0805,100kΩ")
-		(at 425.45 189.23 90)
+		(at 421.64 189.23 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -79621,7 +80048,7 @@
 		(dnp no)
 		(uuid "4f952faa-bb29-4125-8608-5c09d4a79199")
 		(property "Reference" "R41"
-			(at 430.276 190.5 90)
+			(at 426.466 190.5 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79629,7 +80056,7 @@
 			)
 		)
 		(property "Value" "100kΩ"
-			(at 425.45 189.23 90)
+			(at 421.64 189.23 90)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -79638,7 +80065,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:R_0805"
-			(at 425.45 191.008 90)
+			(at 421.64 191.008 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79647,7 +80074,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2205312316_UNI-ROYAL-Uniroyal-Elec-0805W8F1003T5E_C149504.pdf"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79656,7 +80083,7 @@
 			)
 		)
 		(property "Description" "125mW Thick Film Resistors 150V ±100ppm/°C ±1% 100kΩ 0805 Chip Resistor - Surface Mount ROHS"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79665,7 +80092,7 @@
 			)
 		)
 		(property "LCSC" "C149504"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79674,7 +80101,7 @@
 			)
 		)
 		(property "Stock" "2162292"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79683,7 +80110,7 @@
 			)
 		)
 		(property "Price" "0.005USD"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79692,7 +80119,7 @@
 			)
 		)
 		(property "Process" "SMT"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79701,7 +80128,7 @@
 			)
 		)
 		(property "Minimum Qty" "20"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79710,7 +80137,7 @@
 			)
 		)
 		(property "Attrition Qty" "10"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79719,7 +80146,7 @@
 			)
 		)
 		(property "Class" "Basic Component"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79728,7 +80155,7 @@
 			)
 		)
 		(property "Category" "Resistors,Chip Resistor - Surface Mount"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79737,7 +80164,7 @@
 			)
 		)
 		(property "Manufacturer" "UNI-ROYAL(Uniroyal Elec)"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79746,7 +80173,7 @@
 			)
 		)
 		(property "Part" "0805W8F1003T5E"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79755,7 +80182,7 @@
 			)
 		)
 		(property "Resistance" "100kΩ"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79764,7 +80191,7 @@
 			)
 		)
 		(property "Power(Watts)" "125mW"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79773,7 +80200,7 @@
 			)
 		)
 		(property "Type" "Thick Film Resistors"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79782,7 +80209,7 @@
 			)
 		)
 		(property "Overload Voltage (Max)" "150V"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79791,7 +80218,7 @@
 			)
 		)
 		(property "Operating Temperature Range" "-55°C~+155°C"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79800,7 +80227,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79809,7 +80236,7 @@
 			)
 		)
 		(property "Temperature Coefficient" "±100ppm/°C"
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79818,7 +80245,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79826,7 +80253,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79834,7 +80261,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79842,7 +80269,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79850,7 +80277,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79858,7 +80285,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79866,7 +80293,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79874,7 +80301,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 425.45 189.23 0)
+			(at 421.64 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79882,7 +80309,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 425.45 189.23 90)
+			(at 421.64 189.23 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82754,7 +83181,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 504.19 194.31 270)
+		(at 500.38 194.31 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -82762,7 +83189,7 @@
 		(dnp yes)
 		(uuid "55232c44-6b48-40ff-afcc-266ee4aa5f71")
 		(property "Reference" "TP66"
-			(at 509.27 194.31 90)
+			(at 505.46 194.31 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82771,7 +83198,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 506.2221 196.85 0)
+			(at 502.4121 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82781,7 +83208,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 504.19 199.39 0)
+			(at 500.38 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82790,7 +83217,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 504.19 199.39 0)
+			(at 500.38 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82799,7 +83226,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82808,7 +83235,7 @@
 			)
 		)
 		(property "Allied_Number" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82817,7 +83244,7 @@
 			)
 		)
 		(property "LCSC PART #" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82826,7 +83253,7 @@
 			)
 		)
 		(property "Arrow Part Number" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82834,7 +83261,7 @@
 			)
 		)
 		(property "Arrow Price/Stock" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82842,7 +83269,7 @@
 			)
 		)
 		(property "Cheap Version" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82850,7 +83277,7 @@
 			)
 		)
 		(property "Expensive Version" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82858,7 +83285,7 @@
 			)
 		)
 		(property "Field5" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82866,7 +83293,7 @@
 			)
 		)
 		(property "LCSC Part" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82874,7 +83301,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82882,7 +83309,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82890,7 +83317,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82898,7 +83325,7 @@
 			)
 		)
 		(property "Package" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82906,7 +83333,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82914,7 +83341,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82922,7 +83349,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82930,7 +83357,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82938,7 +83365,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82946,7 +83373,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82954,7 +83381,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82962,7 +83389,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 504.19 194.31 0)
+			(at 500.38 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82970,7 +83397,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 504.19 194.31 90)
+			(at 500.38 194.31 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -90645,7 +91072,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 504.19 189.23 90)
+		(at 500.38 189.23 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -90654,7 +91081,7 @@
 		(fields_autoplaced yes)
 		(uuid "6633ec9a-9611-4b09-b621-e1c5f0a15ca9")
 		(property "Reference" "#PWR0113"
-			(at 510.54 189.23 0)
+			(at 506.73 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -90663,7 +91090,7 @@
 			)
 		)
 		(property "Value" "Earth"
-			(at 508 189.23 0)
+			(at 504.19 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -90672,7 +91099,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 504.19 189.23 0)
+			(at 500.38 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -90681,7 +91108,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 504.19 189.23 0)
+			(at 500.38 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -90690,7 +91117,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 504.19 189.23 0)
+			(at 500.38 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -96450,7 +96877,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 459.74 212.09 0)
+		(at 455.93 212.09 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -96459,7 +96886,7 @@
 		(fields_autoplaced yes)
 		(uuid "7314bff1-50be-4930-a921-08ed760f3dc2")
 		(property "Reference" "#PWR093"
-			(at 459.74 218.44 0)
+			(at 455.93 218.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -96468,7 +96895,7 @@
 			)
 		)
 		(property "Value" "Earth"
-			(at 459.74 215.9 0)
+			(at 455.93 215.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -96477,7 +96904,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 459.74 212.09 0)
+			(at 455.93 212.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -96486,7 +96913,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 459.74 212.09 0)
+			(at 455.93 212.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -96495,7 +96922,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 459.74 212.09 0)
+			(at 455.93 212.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98188,7 +98615,7 @@
 	)
 	(symbol
 		(lib_id "PCM_JLCPCB-Resistors:0805,100kΩ")
-		(at 425.45 181.61 90)
+		(at 421.64 181.61 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -98196,7 +98623,7 @@
 		(dnp no)
 		(uuid "76aec19b-6e4c-4c30-a1a9-8dc9e19f961a")
 		(property "Reference" "R40"
-			(at 430.276 182.88 90)
+			(at 426.466 182.88 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98204,7 +98631,7 @@
 			)
 		)
 		(property "Value" "100kΩ"
-			(at 425.45 181.61 90)
+			(at 421.64 181.61 90)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -98213,7 +98640,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:R_0805"
-			(at 425.45 183.388 90)
+			(at 421.64 183.388 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98222,7 +98649,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2205312316_UNI-ROYAL-Uniroyal-Elec-0805W8F1003T5E_C149504.pdf"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98231,7 +98658,7 @@
 			)
 		)
 		(property "Description" "125mW Thick Film Resistors 150V ±100ppm/°C ±1% 100kΩ 0805 Chip Resistor - Surface Mount ROHS"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98240,7 +98667,7 @@
 			)
 		)
 		(property "LCSC" "C149504"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98249,7 +98676,7 @@
 			)
 		)
 		(property "Stock" "2162292"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98258,7 +98685,7 @@
 			)
 		)
 		(property "Price" "0.005USD"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98267,7 +98694,7 @@
 			)
 		)
 		(property "Process" "SMT"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98276,7 +98703,7 @@
 			)
 		)
 		(property "Minimum Qty" "20"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98285,7 +98712,7 @@
 			)
 		)
 		(property "Attrition Qty" "10"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98294,7 +98721,7 @@
 			)
 		)
 		(property "Class" "Basic Component"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98303,7 +98730,7 @@
 			)
 		)
 		(property "Category" "Resistors,Chip Resistor - Surface Mount"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98312,7 +98739,7 @@
 			)
 		)
 		(property "Manufacturer" "UNI-ROYAL(Uniroyal Elec)"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98321,7 +98748,7 @@
 			)
 		)
 		(property "Part" "0805W8F1003T5E"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98330,7 +98757,7 @@
 			)
 		)
 		(property "Resistance" "100kΩ"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98339,7 +98766,7 @@
 			)
 		)
 		(property "Power(Watts)" "125mW"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98348,7 +98775,7 @@
 			)
 		)
 		(property "Type" "Thick Film Resistors"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98357,7 +98784,7 @@
 			)
 		)
 		(property "Overload Voltage (Max)" "150V"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98366,7 +98793,7 @@
 			)
 		)
 		(property "Operating Temperature Range" "-55°C~+155°C"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98375,7 +98802,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98384,7 +98811,7 @@
 			)
 		)
 		(property "Temperature Coefficient" "±100ppm/°C"
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98393,7 +98820,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98401,7 +98828,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98409,7 +98836,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98417,7 +98844,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98425,7 +98852,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98433,7 +98860,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98441,7 +98868,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98449,7 +98876,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 425.45 181.61 0)
+			(at 421.64 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -98457,7 +98884,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 425.45 181.61 90)
+			(at 421.64 181.61 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99215,7 +99642,7 @@
 	)
 	(symbol
 		(lib_id "power:VBUS")
-		(at 459.74 196.85 90)
+		(at 455.93 196.85 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -99224,7 +99651,7 @@
 		(fields_autoplaced yes)
 		(uuid "7a0db6f2-e3e6-4e49-ad78-f38e862ce0f2")
 		(property "Reference" "#PWR092"
-			(at 463.55 196.85 0)
+			(at 459.74 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99233,7 +99660,7 @@
 			)
 		)
 		(property "Value" "Vdrive"
-			(at 455.93 196.8499 90)
+			(at 452.12 196.8499 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99242,7 +99669,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 459.74 196.85 0)
+			(at 455.93 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99251,7 +99678,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 459.74 196.85 0)
+			(at 455.93 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99260,7 +99687,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VBUS\""
-			(at 459.74 196.85 0)
+			(at 455.93 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99282,7 +99709,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 471.17 191.77 270)
+		(at 467.36 191.77 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -99291,7 +99718,7 @@
 		(fields_autoplaced yes)
 		(uuid "7a4f4074-5da4-4064-9014-01a1f278b507")
 		(property "Reference" "#PWR0100"
-			(at 464.82 191.77 0)
+			(at 461.01 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99300,7 +99727,7 @@
 			)
 		)
 		(property "Value" "Earth"
-			(at 467.36 191.77 0)
+			(at 463.55 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99309,7 +99736,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 471.17 191.77 0)
+			(at 467.36 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99318,7 +99745,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 471.17 191.77 0)
+			(at 467.36 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99327,7 +99754,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 471.17 191.77 0)
+			(at 467.36 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -100601,7 +101028,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 504.19 199.39 90)
+		(at 500.38 199.39 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -100610,7 +101037,7 @@
 		(fields_autoplaced yes)
 		(uuid "7d1450f9-3170-42a6-912b-e1c5a7d949d9")
 		(property "Reference" "#PWR0114"
-			(at 510.54 199.39 0)
+			(at 506.73 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -100619,7 +101046,7 @@
 			)
 		)
 		(property "Value" "Earth"
-			(at 508 199.39 0)
+			(at 504.19 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -100628,7 +101055,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 504.19 199.39 0)
+			(at 500.38 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -100637,7 +101064,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 504.19 199.39 0)
+			(at 500.38 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -100646,7 +101073,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 504.19 199.39 0)
+			(at 500.38 199.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104391,7 +104818,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 529.59 201.93 0)
+		(at 529.59 190.5 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -104399,7 +104826,7 @@
 		(dnp yes)
 		(uuid "8541c1b8-4e4c-4bf7-aee5-a94a65ec51dd")
 		(property "Reference" "J10"
-			(at 528.828 199.136 0)
+			(at 528.828 187.706 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104408,7 +104835,7 @@
 			)
 		)
 		(property "Value" "Conn_01x02"
-			(at 532.13 204.4699 0)
+			(at 532.13 193.0399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104418,7 +104845,7 @@
 			)
 		)
 		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x02_P1.00mm_Vertical"
-			(at 529.59 201.93 0)
+			(at 529.59 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104427,7 +104854,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 529.59 201.93 0)
+			(at 529.59 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104436,7 +104863,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 529.59 201.93 0)
+			(at 529.59 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104445,7 +104872,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 529.59 201.93 0)
+			(at 529.59 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104453,7 +104880,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 529.59 201.93 0)
+			(at 529.59 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104461,7 +104888,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 529.59 201.93 0)
+			(at 529.59 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104469,7 +104896,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 529.59 201.93 0)
+			(at 529.59 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104477,7 +104904,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 529.59 201.93 0)
+			(at 529.59 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104485,7 +104912,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 529.59 201.93 0)
+			(at 529.59 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104493,7 +104920,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 529.59 201.93 0)
+			(at 529.59 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104501,7 +104928,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 529.59 201.93 0)
+			(at 529.59 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -104509,7 +104936,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 529.59 201.93 0)
+			(at 529.59 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105076,7 +105503,7 @@
 	)
 	(symbol
 		(lib_id "Jumper:SolderJumper_2_Open")
-		(at 433.07 177.8 0)
+		(at 429.26 177.8 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
@@ -105084,7 +105511,7 @@
 		(dnp yes)
 		(uuid "88d7a437-f05d-4767-acdd-51d939e65c7f")
 		(property "Reference" "JP3"
-			(at 436.372 176.276 0)
+			(at 432.562 176.276 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105092,7 +105519,7 @@
 			)
 		)
 		(property "Value" "SolderJumper_2_Open"
-			(at 433.07 173.99 0)
+			(at 429.26 173.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105101,7 +105528,7 @@
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm"
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105110,7 +105537,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105119,7 +105546,7 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, open"
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105128,7 +105555,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105136,7 +105563,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105144,7 +105571,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105152,7 +105579,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105160,7 +105587,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105168,7 +105595,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105176,7 +105603,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105184,7 +105611,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105192,7 +105619,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105351,7 +105778,7 @@
 	)
 	(symbol
 		(lib_id "PCM_JLCPCB-Capacitors:0805,10uF,(2)")
-		(at 459.74 208.28 0)
+		(at 455.93 208.28 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -105359,7 +105786,7 @@
 		(dnp no)
 		(uuid "8a64a0bc-2692-4467-8f01-43ebad27ba4b")
 		(property "Reference" "C54"
-			(at 460.502 205.994 0)
+			(at 456.692 205.994 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105368,7 +105795,7 @@
 			)
 		)
 		(property "Value" "10uF"
-			(at 460.502 210.058 0)
+			(at 456.692 210.058 0)
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -105377,7 +105804,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:C_0805"
-			(at 457.962 208.28 90)
+			(at 454.152 208.28 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105386,7 +105813,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411041759_Murata-Electronics-GRM21BR61H106KE43L_C440198.pdf"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105395,7 +105822,7 @@
 			)
 		)
 		(property "Description" "50V 10uF X5R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105404,7 +105831,7 @@
 			)
 		)
 		(property "LCSC" "C440198"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105413,7 +105840,7 @@
 			)
 		)
 		(property "Stock" "1200750"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105422,7 +105849,7 @@
 			)
 		)
 		(property "Price" "0.069USD"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105431,7 +105858,7 @@
 			)
 		)
 		(property "Process" "SMT"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105440,7 +105867,7 @@
 			)
 		)
 		(property "Minimum Qty" "5"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105449,7 +105876,7 @@
 			)
 		)
 		(property "Attrition Qty" "4"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105458,7 +105885,7 @@
 			)
 		)
 		(property "Class" "Basic Component"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105467,7 +105894,7 @@
 			)
 		)
 		(property "Category" "Capacitors,Multilayer Ceramic Capacitors MLCC - SMD/SMT"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105476,7 +105903,7 @@
 			)
 		)
 		(property "Manufacturer" "Murata Electronics"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105485,7 +105912,7 @@
 			)
 		)
 		(property "Part" "GRM21BR61H106KE43L"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105494,7 +105921,7 @@
 			)
 		)
 		(property "Voltage Rated" "50V"
-			(at 462.28 210.82 0)
+			(at 458.47 210.82 0)
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -105504,7 +105931,7 @@
 			)
 		)
 		(property "Tolerance" "±10%"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105513,7 +105940,7 @@
 			)
 		)
 		(property "Capacitance" "10uF"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105522,7 +105949,7 @@
 			)
 		)
 		(property "Temperature Coefficient" "X5R"
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105531,7 +105958,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105539,7 +105966,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105547,7 +105974,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105555,7 +105982,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105563,7 +105990,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105571,7 +105998,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105579,7 +106006,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105587,7 +106014,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -105595,7 +106022,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 459.74 208.28 0)
+			(at 455.93 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111503,7 +111930,7 @@
 	)
 	(symbol
 		(lib_id "Jumper:SolderJumper_2_Open")
-		(at 433.07 185.42 0)
+		(at 429.26 185.42 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
@@ -111511,7 +111938,7 @@
 		(dnp yes)
 		(uuid "941c1311-22e8-4db6-92d5-713f985429f8")
 		(property "Reference" "JP5"
-			(at 436.372 183.896 0)
+			(at 432.562 183.896 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111519,7 +111946,7 @@
 			)
 		)
 		(property "Value" "SolderJumper_2_Open"
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111528,7 +111955,7 @@
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm"
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111537,7 +111964,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111546,7 +111973,7 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, open"
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111555,7 +111982,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111563,7 +111990,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111571,7 +111998,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111579,7 +112006,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111587,7 +112014,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111595,7 +112022,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111603,7 +112030,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111611,7 +112038,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -111619,7 +112046,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 433.07 185.42 0)
+			(at 429.26 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125700,7 +126127,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-ICs:MAX98357AETE+T C910544")
-		(at 487.68 195.58 0)
+		(at 483.87 195.58 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -125709,7 +126136,7 @@
 		(fields_autoplaced yes)
 		(uuid "b83a716b-5bea-428d-afc0-1b2978cca127")
 		(property "Reference" "U15"
-			(at 487.68 179.07 0)
+			(at 483.87 179.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125717,7 +126144,7 @@
 			)
 		)
 		(property "Value" "MAX98357AETE+T"
-			(at 487.68 181.61 0)
+			(at 483.87 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125725,7 +126152,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:MAX98357AETE+T_C910544"
-			(at 487.934 174.244 0)
+			(at 484.124 174.244 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125734,7 +126161,7 @@
 			)
 		)
 		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20210106/C910544_CB6DE4B2CEE254A72E6BDB40E718D281.pdf"
-			(at 487.68 181.356 0)
+			(at 483.87 181.356 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125743,7 +126170,7 @@
 			)
 		)
 		(property "Description" "Type of Power Amplifier: Speaker Channels:Monaural Output Power: Supply Voltage:2.5V~5.5V Supply Voltage:2.5V~5.5V Operating Temperature:-40°C~+85°C Operating Temperature:-40°C~+85°C"
-			(at 487.934 179.07 0)
+			(at 484.124 179.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125752,7 +126179,7 @@
 			)
 		)
 		(property "Manufacturer Part" "MAX98357AETE+T"
-			(at 487.426 171.45 0)
+			(at 483.616 171.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125761,7 +126188,7 @@
 			)
 		)
 		(property "Supplier Part" "C910544"
-			(at 487.426 176.53 0)
+			(at 483.616 176.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125770,7 +126197,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 487.68 195.58 0)
+			(at 483.87 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125778,7 +126205,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 487.68 195.58 0)
+			(at 483.87 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125786,7 +126213,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 487.68 195.58 0)
+			(at 483.87 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125794,7 +126221,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 487.68 195.58 0)
+			(at 483.87 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125802,7 +126229,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 487.68 195.58 0)
+			(at 483.87 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125810,7 +126237,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 487.68 195.58 0)
+			(at 483.87 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125818,7 +126245,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 487.68 195.58 0)
+			(at 483.87 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125826,7 +126253,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 487.68 195.58 0)
+			(at 483.87 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -125834,7 +126261,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 487.68 195.58 0)
+			(at 483.87 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -126584,7 +127011,7 @@
 	)
 	(symbol
 		(lib_id "power:VBUS")
-		(at 438.15 194.31 90)
+		(at 434.34 194.31 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -126593,7 +127020,7 @@
 		(fields_autoplaced yes)
 		(uuid "ba977a0e-eec1-4213-b290-27c90d729c88")
 		(property "Reference" "#PWR087"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -126602,7 +127029,7 @@
 			)
 		)
 		(property "Value" "Vdrive"
-			(at 434.34 194.3099 90)
+			(at 430.53 194.3099 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -126611,7 +127038,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 438.15 194.31 0)
+			(at 434.34 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -126620,7 +127047,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 438.15 194.31 0)
+			(at 434.34 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -126629,7 +127056,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VBUS\""
-			(at 438.15 194.31 0)
+			(at 434.34 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -133180,6 +133607,244 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 525.78 214.63 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp yes)
+		(uuid "ca65def0-d9e7-45f1-b5fc-6024e4f1e3b8")
+		(property "Reference" "TP85"
+			(at 520.7 214.63 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 523.7479 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
+			(at 525.78 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 525.78 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Allied_Number" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC PART #" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Cheap Version" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Expensive Version" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Field5" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Mouser Part Number" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Mouser Price/Stock" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Package" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dropout Voltage" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Feature" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Maximum Input Voltage" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Number Of Outputs" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Output Current" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Output Polarity" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Output Type" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Output Voltage" ""
+			(at 525.78 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Name" ""
+			(at 525.78 214.63 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a1991da7-3889-4ee2-b839-7cf2fc328e61")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "TP85")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Interface_Ethernet:W5500")
 		(at 323.85 71.12 0)
 		(unit 1)
@@ -137172,7 +137837,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 471.17 196.85 90)
+		(at 467.36 196.85 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -137180,7 +137845,7 @@
 		(dnp yes)
 		(uuid "d4b7a6f3-ec54-4d4c-ae29-66517de26c2c")
 		(property "Reference" "TP63"
-			(at 466.09 196.85 90)
+			(at 462.28 196.85 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137189,7 +137854,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 469.1379 194.31 0)
+			(at 465.3279 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137199,7 +137864,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 471.17 191.77 0)
+			(at 467.36 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137208,7 +137873,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 471.17 191.77 0)
+			(at 467.36 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137217,7 +137882,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137226,7 +137891,7 @@
 			)
 		)
 		(property "Allied_Number" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137235,7 +137900,7 @@
 			)
 		)
 		(property "LCSC PART #" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137244,7 +137909,7 @@
 			)
 		)
 		(property "Arrow Part Number" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137252,7 +137917,7 @@
 			)
 		)
 		(property "Arrow Price/Stock" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137260,7 +137925,7 @@
 			)
 		)
 		(property "Cheap Version" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137268,7 +137933,7 @@
 			)
 		)
 		(property "Expensive Version" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137276,7 +137941,7 @@
 			)
 		)
 		(property "Field5" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137284,7 +137949,7 @@
 			)
 		)
 		(property "LCSC Part" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137292,7 +137957,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137300,7 +137965,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137308,7 +137973,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137316,7 +137981,7 @@
 			)
 		)
 		(property "Package" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137324,7 +137989,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137332,7 +137997,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137340,7 +138005,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137348,7 +138013,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137356,7 +138021,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137364,7 +138029,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137372,7 +138037,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137380,7 +138045,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 471.17 196.85 0)
+			(at 467.36 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -137388,7 +138053,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 471.17 196.85 90)
+			(at 467.36 196.85 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139595,7 +140260,7 @@
 	)
 	(symbol
 		(lib_id "PCM_JLCPCB-Resistors:0603,0Ω")
-		(at 441.96 194.31 90)
+		(at 438.15 194.31 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -139603,7 +140268,7 @@
 		(dnp no)
 		(uuid "d99765c9-a74a-46bd-86f0-2ee79fafa5b2")
 		(property "Reference" "TST-R16"
-			(at 441.96 191.77 90)
+			(at 438.15 191.77 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139611,7 +140276,7 @@
 			)
 		)
 		(property "Value" "0Ω"
-			(at 441.96 194.31 90)
+			(at 438.15 194.31 90)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -139620,7 +140285,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:R_0603"
-			(at 441.96 196.088 90)
+			(at 438.15 196.088 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139629,7 +140294,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0603WAF0000T5E_C21189.pdf"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139638,7 +140303,7 @@
 			)
 		)
 		(property "Description" "100mW Thick Film Resistors 75V ±1% 0Ω 0603 Chip Resistor - Surface Mount ROHS"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139647,7 +140312,7 @@
 			)
 		)
 		(property "LCSC" "C21189"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139656,7 +140321,7 @@
 			)
 		)
 		(property "Stock" "10110432"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139665,7 +140330,7 @@
 			)
 		)
 		(property "Price" "0.004USD"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139674,7 +140339,7 @@
 			)
 		)
 		(property "Process" "SMT"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139683,7 +140348,7 @@
 			)
 		)
 		(property "Minimum Qty" "20"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139692,7 +140357,7 @@
 			)
 		)
 		(property "Attrition Qty" "10"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139701,7 +140366,7 @@
 			)
 		)
 		(property "Class" "Basic Component"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139710,7 +140375,7 @@
 			)
 		)
 		(property "Category" "Resistors,Chip Resistor - Surface Mount"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139719,7 +140384,7 @@
 			)
 		)
 		(property "Manufacturer" "UNI-ROYAL(Uniroyal Elec)"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139728,7 +140393,7 @@
 			)
 		)
 		(property "Part" "0603WAF0000T5E"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139737,7 +140402,7 @@
 			)
 		)
 		(property "Resistance" "0Ω"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139746,7 +140411,7 @@
 			)
 		)
 		(property "Power(Watts)" "100mW"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139755,7 +140420,7 @@
 			)
 		)
 		(property "Type" "Thick Film Resistors"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139764,7 +140429,7 @@
 			)
 		)
 		(property "Overload Voltage (Max)" "75V"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139773,7 +140438,7 @@
 			)
 		)
 		(property "Operating Temperature Range" "-55°C~+155°C"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139782,7 +140447,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139791,7 +140456,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139799,7 +140464,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139807,7 +140472,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139815,7 +140480,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139823,7 +140488,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139831,7 +140496,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139839,7 +140504,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139847,7 +140512,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 441.96 194.31 0)
+			(at 438.15 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -139855,7 +140520,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 441.96 194.31 90)
+			(at 438.15 194.31 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144499,7 +145164,7 @@
 	)
 	(symbol
 		(lib_id "PCM_JLCPCB-Capacitors:0402,220pF")
-		(at 520.7 208.28 0)
+		(at 514.35 208.28 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -144507,7 +145172,7 @@
 		(dnp no)
 		(uuid "e205aa92-8189-4ce4-90a6-c95dcd6ac439")
 		(property "Reference" "C67"
-			(at 520.954 205.994 0)
+			(at 514.604 205.994 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144516,7 +145181,7 @@
 			)
 		)
 		(property "Value" "220pF"
-			(at 521.208 210.058 0)
+			(at 514.858 210.058 0)
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -144525,7 +145190,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:C_0402"
-			(at 518.922 208.28 90)
+			(at 512.572 208.28 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144534,7 +145199,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_FH--Guangdong-Fenghua-Advanced-Tech-0402B221K500NT_C1530.pdf"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144543,7 +145208,7 @@
 			)
 		)
 		(property "Description" "50V 220pF X7R ±10% 0402 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144552,7 +145217,7 @@
 			)
 		)
 		(property "LCSC" "C1530"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144561,7 +145226,7 @@
 			)
 		)
 		(property "Stock" "497728"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144570,7 +145235,7 @@
 			)
 		)
 		(property "Price" "0.004USD"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144579,7 +145244,7 @@
 			)
 		)
 		(property "Process" "SMT"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144588,7 +145253,7 @@
 			)
 		)
 		(property "Minimum Qty" "20"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144597,7 +145262,7 @@
 			)
 		)
 		(property "Attrition Qty" "10"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144606,7 +145271,7 @@
 			)
 		)
 		(property "Class" "Basic Component"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144615,7 +145280,7 @@
 			)
 		)
 		(property "Category" "Capacitors,Multilayer Ceramic Capacitors MLCC - SMD/SMT"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144624,7 +145289,7 @@
 			)
 		)
 		(property "Manufacturer" "FH(Guangdong Fenghua Advanced Tech)"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144633,7 +145298,7 @@
 			)
 		)
 		(property "Part" "0402B221K500NT"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144642,7 +145307,7 @@
 			)
 		)
 		(property "Voltage Rated" "50V"
-			(at 523.24 210.82 0)
+			(at 516.89 210.82 0)
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -144652,7 +145317,7 @@
 			)
 		)
 		(property "Tolerance" "±10%"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144661,7 +145326,7 @@
 			)
 		)
 		(property "Capacitance" "220pF"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144670,7 +145335,7 @@
 			)
 		)
 		(property "Temperature Coefficient" "X7R"
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144679,7 +145344,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144687,7 +145352,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144695,7 +145360,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144703,7 +145368,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144711,7 +145376,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144719,7 +145384,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144727,7 +145392,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144735,7 +145400,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -144743,7 +145408,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 520.7 208.28 0)
+			(at 514.35 208.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -148610,7 +149275,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 520.7 194.31 180)
+		(at 514.35 194.31 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -148619,7 +149284,7 @@
 		(fields_autoplaced yes)
 		(uuid "eb2db501-d611-4174-8f9c-1d81dda1d71e")
 		(property "Reference" "#PWR0122"
-			(at 520.7 187.96 0)
+			(at 508 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -148628,7 +149293,7 @@
 			)
 		)
 		(property "Value" "Earth"
-			(at 520.7 190.5 0)
+			(at 510.54 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -148637,7 +149302,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 520.7 194.31 0)
+			(at 514.35 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -148646,7 +149311,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 520.7 194.31 0)
+			(at 514.35 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -148655,7 +149320,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 520.7 194.31 0)
+			(at 514.35 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149459,7 +150124,7 @@
 	)
 	(symbol
 		(lib_id "Jumper:SolderJumper_2_Open")
-		(at 433.07 181.61 0)
+		(at 429.26 181.61 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
@@ -149467,7 +150132,7 @@
 		(dnp yes)
 		(uuid "ee4b712c-2a65-496a-a7e2-804e585e73c7")
 		(property "Reference" "JP4"
-			(at 436.372 180.086 0)
+			(at 432.562 180.086 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149475,7 +150140,7 @@
 			)
 		)
 		(property "Value" "SolderJumper_2_Open"
-			(at 433.07 177.8 0)
+			(at 429.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149484,7 +150149,7 @@
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm"
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149493,7 +150158,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149502,7 +150167,7 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, open"
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149511,7 +150176,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149519,7 +150184,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149527,7 +150192,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149535,7 +150200,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149543,7 +150208,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149551,7 +150216,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149559,7 +150224,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149567,7 +150232,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -149575,7 +150240,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 433.07 181.61 0)
+			(at 429.26 181.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -151141,6 +151806,107 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "C49")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLCPCB-Extended:PJ-316C-6A_SMD_3.5mm_Audio_Connectors_(Headphones)_C707223")
+		(at 532.13 209.55 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f3a7c4c6-0d02-41da-a2f3-c965bf0e7fa5")
+		(property "Reference" "CN1"
+			(at 533.654 198.628 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "PJ-316C-6A"
+			(at 543.56 209.5499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "JLCPCB:SMD_3.5mm_Audio_Connectors_(Headphones)_C707223"
+			(at 532.13 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20200721/C707223_0F704CD3AF5CB0D9A9D180C1AE1E7534.pdf"
+			(at 532.13 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Connector Type:3.5mm耳机座 Current Rating (Max):500mA Voltage Rating (Max):30V Operating Temperature Range:-20°C~+70°C Operating Temperature Range:-20°C~+70°C"
+			(at 532.13 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part" "PJ-316C-6A"
+			(at 532.13 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C707223"
+			(at 532.13 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c712c6e4-3228-4519-89f4-fd979cfa45a6")
+		)
+		(pin "6"
+			(uuid "6a1e79d1-953a-4d60-b43f-8527ffae110a")
+		)
+		(pin "5"
+			(uuid "a7647c89-1db0-493a-bb9a-8ad478f655d5")
+		)
+		(pin "2"
+			(uuid "935ce229-0c9f-44f2-96dd-8358856f2e6e")
+		)
+		(pin "4"
+			(uuid "1811b879-5dde-4477-a214-be1bc765bd5a")
+		)
+		(pin "3"
+			(uuid "891f8379-fd31-4ec5-be8f-37d4be0ba809")
+		)
+		(instances
+			(project ""
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "CN1")
 					(unit 1)
 				)
 			)
@@ -154114,7 +154880,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 487.68 209.55 0)
+		(at 483.87 209.55 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -154123,7 +154889,7 @@
 		(fields_autoplaced yes)
 		(uuid "f8ee148c-e1aa-4d07-a436-eed43f5d7ab6")
 		(property "Reference" "#PWR0109"
-			(at 487.68 215.9 0)
+			(at 483.87 215.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -154132,7 +154898,7 @@
 			)
 		)
 		(property "Value" "Earth"
-			(at 487.68 213.36 0)
+			(at 483.87 213.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -154141,7 +154907,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 487.68 209.55 0)
+			(at 483.87 209.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -154150,7 +154916,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 487.68 209.55 0)
+			(at 483.87 209.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -154159,7 +154925,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 487.68 209.55 0)
+			(at 483.87 209.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)

@@ -1308,12 +1308,6 @@
           "label": "Exclude from Board",
           "name": "${EXCLUDE_FROM_BOARD}",
           "show": true
-        },
-        {
-          "group_by": false,
-          "label": "PartID",
-          "name": "PartID",
-          "show": false
         }
       ],
       "filter_string": "",
