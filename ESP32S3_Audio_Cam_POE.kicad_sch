@@ -43441,6 +43441,16 @@
 		)
 		(uuid "6ade2b4e-ed53-4f81-8ccb-b2d5e92e8475")
 	)
+	(label "com"
+		(at 26.67 76.2 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6e840f87-29b6-436c-a168-798892f21167")
+	)
 	(label "MISC.OUT3"
 		(at 256.54 303.53 0)
 		(effects
