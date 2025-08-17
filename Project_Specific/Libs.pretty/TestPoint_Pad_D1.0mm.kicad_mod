@@ -1,0 +1,270 @@
+(footprint "TestPoint_Pad_D1.0mm"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "SMD pad as test Point, diameter 1.0mm")
+	(tags "test point SMD pad")
+	(property "Reference" "TP9"
+		(at 0 -1.448 0)
+		(layer "F.SilkS")
+		(uuid "4097151e-dde8-4f29-8056-a19c263ecd77")
+		(effects
+			(font (size 0.5 0.5) (thickness 0.125))
+		)
+	)
+	(property "Value" "TestPoint"
+		(at 0 1.55 0)
+		(layer "F.Fab")
+		(uuid "0591d9df-b511-4dd8-8618-b89cc9cd314d")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Datasheet" "~"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5e9b7662-76bb-40a7-a3e7-6947eccc3ae2")
+		(effects
+			(font (size 1.27 1.27) (thickness 0.15))
+		)
+	)
+	(property "Description" "test point"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f1842cbf-0d02-4a1b-b372-b8be48be9457")
+		(effects
+			(font (size 1.27 1.27) (thickness 0.15))
+		)
+	)
+	(property "Allied_Number" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "431e883f-670a-4568-b4c0-5f8dac2cd539")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "LCSC PART #" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d568e99f-5f4d-43ac-bf7b-a648706fe143")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Arrow Part Number" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9a94c06b-7e6e-4f33-870e-ebe0929dbb67")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Arrow Price/Stock" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7c4332f0-f3e3-4769-94f2-f81181066127")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Cheap Version" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "76109d23-b1b1-41ba-bff6-b04d9b424066")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Expensive Version" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c391a18d-929e-422d-86bc-1dc82d17baea")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Field5" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "352faefe-058e-4c3a-91fa-2404e2e1b161")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "LCSC Part" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7a90223b-3efd-4876-9bc3-e6d4c257c35c")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "MPN" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "338609a2-06bd-4c09-a026-d11db2bc1b0c")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Mouser Part Number" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "db1003e6-b3bf-4376-8a29-6a33f3701b88")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Mouser Price/Stock" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0063ba8d-5f63-46d1-b5b9-2ffea0214732")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Package" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fe446095-1b54-4b1b-88ec-e57ce7d631ef")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Dropout Voltage" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "241c99ca-117d-4a0d-9080-4520de9225a8")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Feature" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4a693e51-430a-4f66-b06c-736f4560d2f3")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Maximum Input Voltage" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3a6c8466-a4f5-4268-b44a-9435ae1bf712")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Number Of Outputs" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4291a577-50ae-420d-848a-a9f0cee22487")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Output Current" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "cd47e26e-eb43-4cbe-902e-00767d0802bb")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Output Polarity" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "51c0c9a3-b98d-4309-830f-9b166faaa37b")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Output Type" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "85149fd8-0ae4-41f7-a7be-dd59959b35bd")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Output Voltage" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "97e947db-4106-4d57-be7f-1560580291e7")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Name" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ea33b763-25ca-4e7f-832b-c3fda10bc280")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(attr exclude_from_pos_files dnp)
+	(fp_text user "${REFERENCE}"
+		(at 0 -1.45 0)
+		(layer "F.Fab")
+		(uuid "8f345385-7111-4e69-81ec-01d4fc015a37")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(pad "1" smd circle
+		(at 0 0)
+		(size 1 1)
+		(layers "F.Cu" "F.Mask")
+		(uuid "9eadcca0-a978-4fbb-99c2-fd4ca5469bd2")
+	)
+	(embedded_fonts no)
+)
