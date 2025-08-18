@@ -30932,12 +30932,6 @@
 		(uuid "2763dfa1-644c-4365-88a3-ea246646e46a")
 	)
 	(junction
-		(at 210.82 83.82)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2838f766-1643-43b6-8e54-f6b72a9ef8af")
-	)
-	(junction
 		(at 368.3 387.35)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -31970,6 +31964,12 @@
 		(uuid "c343915c-475d-493c-920b-da63e542c7a8")
 	)
 	(junction
+		(at 204.47 83.82)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c3db8470-1f49-4c4a-85aa-1fcf79b8c395")
+	)
+	(junction
 		(at 210.82 71.12)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -32162,6 +32162,12 @@
 		(uuid "df1dba69-c0e6-4ddb-892e-8b324a14f80b")
 	)
 	(junction
+		(at 212.09 83.82)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "dfb6541a-4d5b-48d1-811e-b27b5600972b")
+	)
+	(junction
 		(at 307.34 394.97)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -32178,12 +32184,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e1e375d7-10ba-49f2-9a22-77fe5059ab57")
-	)
-	(junction
-		(at 205.74 83.82)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "e1e9f4fa-9692-45c4-ba6c-f478405dcc03")
 	)
 	(junction
 		(at 326.39 237.49)
@@ -34249,6 +34249,16 @@
 	)
 	(wire
 		(pts
+			(xy 212.09 83.82) (xy 226.06 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "395f8480-2b44-491d-bd6d-2534210e4c07")
+	)
+	(wire
+		(pts
 			(xy 213.36 265.43) (xy 213.36 264.16)
 		)
 		(stroke
@@ -34836,6 +34846,16 @@
 			(type default)
 		)
 		(uuid "4a1dfc18-e30f-438c-86f8-faaf4e304db7")
+	)
+	(wire
+		(pts
+			(xy 204.47 83.82) (xy 205.74 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4a2a6a94-c255-4284-8f9a-24cf2290676d")
 	)
 	(wire
 		(pts
@@ -37339,7 +37359,7 @@
 	)
 	(wire
 		(pts
-			(xy 194.31 83.82) (xy 205.74 83.82)
+			(xy 194.31 83.82) (xy 204.47 83.82)
 		)
 		(stroke
 			(width 0)
@@ -40909,7 +40929,7 @@
 	)
 	(wire
 		(pts
-			(xy 210.82 83.82) (xy 226.06 83.82)
+			(xy 210.82 83.82) (xy 212.09 83.82)
 		)
 		(stroke
 			(width 0)
@@ -99585,7 +99605,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 205.74 83.82 90)
+		(at 204.47 83.82 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -99593,7 +99613,7 @@
 		(dnp yes)
 		(uuid "6a857ee9-2d1d-4948-9360-e5498f6dfee9")
 		(property "Reference" "TP128"
-			(at 201.168 82.804 90)
+			(at 199.898 82.804 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99602,7 +99622,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 203.7079 81.28 0)
+			(at 202.4379 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99612,7 +99632,7 @@
 			)
 		)
 		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
-			(at 205.74 78.74 0)
+			(at 204.47 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99621,7 +99641,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 205.74 78.74 0)
+			(at 204.47 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99630,7 +99650,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99639,7 +99659,7 @@
 			)
 		)
 		(property "Allied_Number" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99648,7 +99668,7 @@
 			)
 		)
 		(property "LCSC PART #" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99657,7 +99677,7 @@
 			)
 		)
 		(property "Arrow Part Number" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99665,7 +99685,7 @@
 			)
 		)
 		(property "Arrow Price/Stock" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99673,7 +99693,7 @@
 			)
 		)
 		(property "Cheap Version" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99681,7 +99701,7 @@
 			)
 		)
 		(property "Expensive Version" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99689,7 +99709,7 @@
 			)
 		)
 		(property "Field5" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99697,7 +99717,7 @@
 			)
 		)
 		(property "LCSC Part" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99705,7 +99725,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99713,7 +99733,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99721,7 +99741,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99729,7 +99749,7 @@
 			)
 		)
 		(property "Package" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99737,7 +99757,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99745,7 +99765,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99753,7 +99773,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99761,7 +99781,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99769,7 +99789,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99777,7 +99797,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99785,7 +99805,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99793,7 +99813,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 205.74 83.82 0)
+			(at 204.47 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -99801,7 +99821,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 205.74 83.82 90)
+			(at 204.47 83.82 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161279,7 +161299,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 210.82 83.82 270)
+		(at 212.09 83.82 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -161287,7 +161307,7 @@
 		(dnp yes)
 		(uuid "ebc3417c-1b6f-4647-96c1-bf7b0fb44ce2")
 		(property "Reference" "TP129"
-			(at 215.138 82.804 90)
+			(at 216.408 82.804 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161296,7 +161316,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 212.8521 86.36 0)
+			(at 214.1221 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161306,7 +161326,7 @@
 			)
 		)
 		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
-			(at 210.82 88.9 0)
+			(at 212.09 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161315,7 +161335,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 210.82 88.9 0)
+			(at 212.09 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161324,7 +161344,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161333,7 +161353,7 @@
 			)
 		)
 		(property "Allied_Number" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161342,7 +161362,7 @@
 			)
 		)
 		(property "LCSC PART #" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161351,7 +161371,7 @@
 			)
 		)
 		(property "Arrow Part Number" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161359,7 +161379,7 @@
 			)
 		)
 		(property "Arrow Price/Stock" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161367,7 +161387,7 @@
 			)
 		)
 		(property "Cheap Version" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161375,7 +161395,7 @@
 			)
 		)
 		(property "Expensive Version" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161383,7 +161403,7 @@
 			)
 		)
 		(property "Field5" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161391,7 +161411,7 @@
 			)
 		)
 		(property "LCSC Part" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161399,7 +161419,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161407,7 +161427,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161415,7 +161435,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161423,7 +161443,7 @@
 			)
 		)
 		(property "Package" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161431,7 +161451,7 @@
 			)
 		)
 		(property "Dropout Voltage" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161439,7 +161459,7 @@
 			)
 		)
 		(property "Feature" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161447,7 +161467,7 @@
 			)
 		)
 		(property "Maximum Input Voltage" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161455,7 +161475,7 @@
 			)
 		)
 		(property "Number Of Outputs" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161463,7 +161483,7 @@
 			)
 		)
 		(property "Output Current" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161471,7 +161491,7 @@
 			)
 		)
 		(property "Output Polarity" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161479,7 +161499,7 @@
 			)
 		)
 		(property "Output Type" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161487,7 +161507,7 @@
 			)
 		)
 		(property "Output Voltage" ""
-			(at 210.82 83.82 0)
+			(at 212.09 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -161495,7 +161515,7 @@
 			)
 		)
 		(property "Name" ""
-			(at 210.82 83.82 90)
+			(at 212.09 83.82 90)
 			(effects
 				(font
 					(size 1.27 1.27)
