@@ -36,6 +36,6 @@ TBD create file in OnShape and post link here. TBD
 
 ## 3D pictures from KICAD
 <div align="center">
-<img src="ESP32S3_Audio_Cam_POE_Back.png" alt="ESP32S3_Cam_POE_Back" width="600" />
-<img src="ESP32S3_Audio_Cam_POE_Front.png" alt="ESP32S3_Cam_POE_Front" width="600" />
+<img src="production/V0.1/ESP32S3_Audio_Cam_POE_Back.png" alt="ESP32S3_Cam_POE_Back" width="600" />
+<img src="production/V0.1/ESP32S3_Audio_Cam_POE_Front.png" alt="ESP32S3_Cam_POE_Front" width="600" />
 <div align="left">
