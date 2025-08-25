@@ -12,7 +12,7 @@ The boards major features include:
 * Stream video to NVR recording station. 
 
 ## Firmware
-Firmware found here https://github.com/jharvey/ESP32-CAM_MJPEG2SD
+Firmware found here <TBD> https://github.com/jharvey/ESP32-CAM_MJPEG2SD </TBD>
 
 
 Changes up to version 0.1:
@@ -34,6 +34,8 @@ TBD currently has not had it's first spin. TBD
 See 3D case found here
 TBD create file in OnShape and post link here. TBD
 
-![Back side of PCB](/ESP32S3_Audio_Cam_POE_Back.png)
-
-![Front side of PCB](/ESP32S3_Audio_Cam_POE_Front.png)
+## 3D pictures from KICAD
+<div align="center">
+<img src="ESP32S3_Audio_Cam_POE_Back.png" alt="ESP32S3_Cam_POE_Back" width="600" />
+<img src="ESP32S3_Audio_Cam_POE_Front.png" alt="ESP32S3_Cam_POE_Front" width="600" />
+<div align="left">
