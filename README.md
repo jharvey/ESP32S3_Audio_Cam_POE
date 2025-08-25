@@ -33,3 +33,9 @@ TBD currently has not had it's first spin. TBD
 ## 3D case
 See 3D case found here
 TBD create file in OnShape and post link here. TBD
+
+## 3D pictures from KICAD
+<div align="center">
+<img src="ESP32S3_Audio_Cam_POE_Back.png" alt="ESP32S3_Cam_POE_Back" width="600" />
+<img src="ESP32S3_Audio_Cam_POE_Front.png" alt="ESP32S3_Cam_POE_Front" width="600" />
+<div align="left">
