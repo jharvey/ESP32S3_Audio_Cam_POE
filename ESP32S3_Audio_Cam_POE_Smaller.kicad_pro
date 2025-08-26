@@ -136,7 +136,7 @@
         "min_copper_edge_clearance": 0.05842,
         "min_groove_width": 0.0,
         "min_hole_clearance": 0.2,
-        "min_hole_to_hole": 0.24,
+        "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.508,
         "min_microvia_drill": 0.127,
         "min_resolved_spokes": 2,
@@ -500,7 +500,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "ESP32S3_Audio_Cam_POE.kicad_pro",
+    "filename": "ESP32S3_Audio_Cam_POE_Smaller.kicad_pro",
     "version": 3
   },
   "net_settings": {
