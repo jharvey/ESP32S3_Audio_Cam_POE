@@ -6933,6 +6933,12 @@
 		(uuid "053c43c9-9d79-4e29-9f2b-deceeb77bb34")
 	)
 	(junction
+		(at 242.57 29.21)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "059682e0-fcfb-46ff-bfe7-7c57e402d765")
+	)
+	(junction
 		(at 153.67 100.33)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7174,6 +7180,16 @@
 	)
 	(wire
 		(pts
+			(xy 233.68 43.18) (xy 233.68 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "084c32c4-ca44-44ae-b770-77c9d5a2fe91")
+	)
+	(wire
+		(pts
 			(xy 80.01 130.81) (xy 80.01 184.15)
 		)
 		(stroke
@@ -7381,6 +7397,16 @@
 			(type default)
 		)
 		(uuid "287b9c4a-7852-4088-b520-b49767a02b83")
+	)
+	(wire
+		(pts
+			(xy 242.57 29.21) (xy 245.11 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "295bf065-91aa-4966-b844-9182d9fa85fe")
 	)
 	(wire
 		(pts
@@ -7631,6 +7657,16 @@
 			(type default)
 		)
 		(uuid "55ee8c1e-f122-435c-9db1-0cf70547b992")
+	)
+	(wire
+		(pts
+			(xy 233.68 29.21) (xy 242.57 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5731be5b-424b-4878-8e58-4beb8c5da7b1")
 	)
 	(wire
 		(pts
@@ -8254,7 +8290,7 @@
 	)
 	(wire
 		(pts
-			(xy 232.41 43.18) (xy 218.44 43.18)
+			(xy 218.44 43.18) (xy 233.68 43.18)
 		)
 		(stroke
 			(width 0)
@@ -8752,16 +8788,6 @@
 		)
 		(uuid "fb6c869a-478e-4b14-a3cc-e82b6fc57203")
 	)
-	(polyline
-		(pts
-			(xy 115.824 57.404) (xy 115.57 56.896)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fd43cbdd-0293-471f-9ba4-8cb95f177ac1")
-	)
 	(wire
 		(pts
 			(xy 91.44 130.81) (xy 80.01 130.81)
@@ -9026,16 +9052,6 @@
 			(justify right bottom)
 		)
 		(uuid "12003d33-5c56-403b-8767-f19f39314fb5")
-	)
-	(label "SPK.LRCLK"
-		(at 16.51 33.02 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "1ca41fb1-2828-48b1-9b8d-55a207451d10")
 	)
 	(label "7SEG.CLK"
 		(at 140.97 115.57 180)
@@ -9358,7 +9374,7 @@
 		(uuid "a2635238-647c-4b97-ade5-5aaa4c76faf6")
 	)
 	(label "SPK.DIN"
-		(at 118.11 59.69 180)
+		(at 118.11 57.15 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9376,6 +9392,16 @@
 			(justify right bottom)
 		)
 		(uuid "acb60bfe-cbab-4f2d-97aa-cb3ff7e26033")
+	)
+	(label "V.SPK"
+		(at 248.92 24.13 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ad38b982-516f-4ab4-878f-20c6a6125db3")
 	)
 	(label "SPK.MODE"
 		(at 171.45 45.72 0)
@@ -9577,6 +9603,16 @@
 		)
 		(uuid "e3948b63-268c-4e4b-9e33-caa6ed17e098")
 	)
+	(label "V.SPK"
+		(at 176.53 55.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e4cb776c-b33a-4ce2-b6dd-5a681247c802")
+	)
 	(label "CAM.D2"
 		(at 118.11 34.29 180)
 		(effects
@@ -9588,7 +9624,7 @@
 		(uuid "e7660846-4a9a-4f4c-b5f4-e89e6e27370c")
 	)
 	(label "SPK.BCLK"
-		(at 118.11 57.15 180)
+		(at 118.11 59.69 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -12770,6 +12806,244 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "TP64")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 242.57 29.21 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp yes)
+		(uuid "3d833139-c6cd-44dd-abf4-4621e79e3213")
+		(property "Reference" "TP1"
+			(at 242.57 24.13 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 245.11 27.1779 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 247.65 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 247.65 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Allied_Number" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC PART #" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Cheap Version" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Expensive Version" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Field5" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Mouser Part Number" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Mouser Price/Stock" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Package" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dropout Voltage" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Feature" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Maximum Input Voltage" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Number Of Outputs" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Output Current" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Output Polarity" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Output Type" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Output Voltage" ""
+			(at 242.57 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Name" ""
+			(at 242.57 29.21 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "798bf69b-cc8d-46f0-8508-7802f1346576")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE_Smaller"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "TP1")
 					(unit 1)
 				)
 			)
@@ -16418,6 +16692,151 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "C70")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Jumper:SolderJumper_3_Bridged12")
+		(at 248.92 29.21 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp yes)
+		(uuid "6e2f1ab6-9dff-480d-bfab-c15cc575a4f1")
+		(property "Reference" "JP1"
+			(at 250.952 29.21 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "SolderJumper_3_Bridged12"
+			(at 252.73 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Jumper:SolderJumper-3_P1.3mm_Bridged12_Pad1.0x1.5mm"
+			(at 248.92 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 248.92 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "3-pole Solder Jumper, pins 1+2 closed/bridged"
+			(at 248.92 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Dropout Voltage" ""
+			(at 248.92 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Feature" ""
+			(at 248.92 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Maximum Input Voltage" ""
+			(at 248.92 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Number Of Outputs" ""
+			(at 248.92 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Output Current" ""
+			(at 248.92 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Output Polarity" ""
+			(at 248.92 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Output Type" ""
+			(at 248.92 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Output Voltage" ""
+			(at 248.92 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Name" ""
+			(at 248.92 29.21 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2e4c1331-7078-4bdb-b88c-59dceb3a6f82")
+		)
+		(pin "2"
+			(uuid "2e13fef6-4a34-4880-abb9-d820d465379f")
+		)
+		(pin "3"
+			(uuid "bd813fc9-e42e-4b74-9428-6dc0eb8d256d")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE_Smaller"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "JP1")
 					(unit 1)
 				)
 			)
@@ -23570,6 +23989,73 @@
 			(project ""
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "U11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 248.92 34.29 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "fd901351-fe49-40b5-9334-0fba2589a433")
+		(property "Reference" "#PWR02"
+			(at 248.92 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "COM"
+			(at 248.92 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 248.92 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 248.92 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 248.92 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ebd5f9bb-4f2e-471b-b0bb-3f345df606f8")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE_Smaller"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR02")
 					(unit 1)
 				)
 			)
