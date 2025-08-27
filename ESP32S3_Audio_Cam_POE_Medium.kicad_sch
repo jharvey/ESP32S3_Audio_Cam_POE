@@ -19989,12 +19989,6 @@
 		(uuid "e6b66174-1b20-4b08-b34f-1dc3b6afafdb")
 	)
 	(junction
-		(at 33.02 -285.75)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "eb0f6637-5660-48a2-9acb-86365703e0d9")
-	)
-	(junction
 		(at 515.62 -116.84)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -24668,16 +24662,6 @@
 	)
 	(wire
 		(pts
-			(xy 33.02 -287.02) (xy 33.02 -285.75)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e8a19a2c-f1d2-4f36-8f56-c5bd1b023071")
-	)
-	(wire
-		(pts
 			(xy 109.22 -127) (xy 123.19 -127)
 		)
 		(stroke
@@ -26856,7 +26840,7 @@
 		)
 		(uuid "54bd5e42-d4bb-461c-9022-3d260d60ea65")
 	)
-	(label "2U0RXD"
+	(label "U0RXD"
 		(at 252.73 -146.05 0)
 		(effects
 			(font
@@ -27828,7 +27812,7 @@
 		)
 		(uuid "de1a6973-2d2a-4272-b4c8-e70dacb5ad46")
 	)
-	(label "2U0TXD"
+	(label "U0TXD"
 		(at 252.73 -148.59 0)
 		(effects
 			(font
@@ -34429,7 +34413,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "Vdrive"
+		(property "Value" "+3V3"
 			(at 64.77 -285.7501 90)
 			(effects
 				(font
@@ -34907,6 +34891,71 @@
 			(project "ESP32S3_Audio_Cam_POE_Smaller"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "R37")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 33.02 -285.75 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1495260b-6521-4af0-85d2-e15f1537e48c")
+		(property "Reference" "#PWR06"
+			(at 36.83 -285.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "VBUS+3V3"
+			(at 25.4 -286.766 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 33.02 -285.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 33.02 -285.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 33.02 -285.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a59b94db-a033-45e6-a88b-c9c29b0e751c")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE_Medium"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -43474,73 +43523,6 @@
 			(project "ESP32S3_Audio_Cam_POE_Smaller"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "C11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:VBUS")
-		(at 33.02 -285.75 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "324e24b7-0445-4caf-bf15-b4882753223f")
-		(property "Reference" "#PWR02"
-			(at 36.83 -285.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "VBUS"
-			(at 29.21 -285.7501 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 33.02 -285.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 33.02 -285.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"VBUS\""
-			(at 33.02 -285.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d9e0931e-c6a7-4fba-8cce-ba273787b078")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE_Smaller"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR02")
 					(unit 1)
 				)
 			)
@@ -68640,7 +68622,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "76101220-40e7-47a2-ba2a-a9cc866c10e9")
 		(property "Reference" "#PWR0112"
 			(at 69.85 31.75 0)
@@ -68651,13 +68632,12 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+3V3"
-			(at 62.23 31.7499 90)
+		(property "Value" "VBUS+3V3"
+			(at 58.42 30.734 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" ""
@@ -103572,7 +103552,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "VBUS"
+		(property "Value" "VBUS+3V3"
 			(at 64.77 -280.6701 90)
 			(effects
 				(font
