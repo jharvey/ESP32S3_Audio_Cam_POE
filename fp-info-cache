@@ -1,4 +1,4 @@
-26473556783920750
+26463409887749058
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -262,13 +262,6 @@ Battery
 BatteryHolder_MPD_BH-18650-PC
 Battery holder, MPD BH-18650, battery type 1x18650, https://www.batteryholders.com/uploads/parts/BH-18650-PC/datasheets/BH-18650-PC-datasheet.pdf, generated with kicad-footprint-generator StandardBox_generator.py
 horizontal single
-0
-2
-2
-Battery
-BatteryHolder_MPD_BH-18650-PC2
-18650 Battery Holder (http://www.memoryprotectiondevices.com/datasheets/BK-18650-PC2-datasheet.pdf)
-18650 Battery Holder
 0
 2
 2
@@ -73381,13 +73374,6 @@ SMD SMT crystal oscillator
 4
 4
 Oscillator
-Oscillator_SMD_EuroQuartz_XO32-4Pin_3.2x2.5mm_HandSoldering
-Miniature Crystal Clock Oscillator EuroQuartz XO32 series, http://cdn-reichelt.de/documents/datenblatt/B400/XO32.pdf, hand-soldering, 3.2x2.5mm^2 package
-SMD SMT crystal oscillator hand-soldering
-0
-4
-4
-Oscillator
 Oscillator_SMD_EuroQuartz_XO32-4Pin_3.2x2.5mm_RotB
 EuroQuartz XO32, Miniature Crystal Clock Oscillator, 3.2x2.5mm package, SMD, generated with kicad-footprint-generator make_crystal.py, http://cdn-reichelt.de/documents/datenblatt/B400/XO32.pdf
 
@@ -85463,13 +85449,6 @@ PQFP QFP MQFP S-52-2 high-standoff
 52
 52
 Package_QFP
-MQFP-44_10x10mm_P0.8mm
-MQFP, 44 Pin (https://www.analog.com/media/en/technical-documentation/data-sheets/ad7722.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
-MQFP QFP
-0
-44
-44
-Package_QFP
 Microchip_PQFP-44_10x10mm_P0.8mm
 Microchip  PQFP, 44 Pin (JEDEC MO-112 variation AA-2, Microchip and Analog Devices, https://www.jedec.org/document_search?search_api_views_fulltext=MO-112, https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/20005418B.pdf#page=10, https://www.analog.com/media/en/technical-documentation/data-sheets/ad7722.pdf#page=23), generated with kicad-footprint-generator ipc_gullwing_generator.py
 Microchip PQFP QFP P-QFP 44-Lead-MQFP S-44-2
@@ -85826,13 +85805,6 @@ VQFP QFP
 0
 80
 80
-Package_QFP
-VQFP-100_14x14mm_P0.5mm
-VQFP, 100 Pin (http://www.microsemi.com/index.php?option=com_docman&task=doc_download&gid=131095), generated with kicad-footprint-generator ipc_gullwing_generator.py
-VQFP QFP
-0
-100
-100
 Package_QFP
 VQFP-128_14x14mm_P0.4mm
 VQFP, 128 Pin (http://www.microsemi.com/index.php?option=com_docman&task=doc_download&gid=131095), generated with kicad-footprint-generator ipc_gullwing_generator.py
@@ -86201,13 +86173,6 @@ Package_SO
 HTSSOP-20-1EP_4.4x6.5mm_P0.65mm_EP3.4x6.5mm_Mask2.75x3.43mm_ThermalVias
 HTSSOP, 20 Pin (http://www.ti.com/lit/ds/symlink/tlc5971.pdf#page=37&zoom=160,-90,3), generated with kicad-footprint-generator ipc_gullwing_generator.py
 HTSSOP SO Texas_PWP0020U
-0
-42
-21
-Package_SO
-HTSSOP-20-1EP_4.4x6.5mm_P0.65mm_EP3.4x6.5mm_Mask2.75x3.43mm_ThermalVias_HandSolder
-HTSSOP, 20 Pin (http://www.ti.com/lit/ds/symlink/tlc5971.pdf#page=37&zoom=160,-90,3), generated with kicad-footprint-generator ipc_gullwing_generator.py
-HTSSOP SO
 0
 42
 21
@@ -87619,13 +87584,6 @@ SSOP-8 3.95x5.21x3.27mm 1.27mm
 8
 8
 Package_SO
-SSOP-8_5.25x5.24mm_P1.27mm
-SSOP, 8 Pin (http://www.fujitsu.com/ca/en/Images/MB85RS2MT-DS501-00023-1v0-E.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
-SSOP SO
-0
-8
-8
-Package_SO
 SSOP-10-1EP_3.9x4.9mm_P1mm_EP2.1x3.3mm
 SSOP, 10 Pin (http://download.py32.org/%E6%95%B0%E6%8D%AE%E6%89%8B%E5%86%8C/zh-CN/PY32F002A%20%E7%B3%BB%E5%88%97%E6%95%B0%E6%8D%AE%E6%89%8B%E5%86%8C_Rev1.0.pdf#page=44), generated with kicad-footprint-generator ipc_gullwing_generator.py
 SSOP SO ESSOP-10
@@ -88616,13 +88574,6 @@ Package_SO
 Texas_DYY0016A_TSOT-23-16_2x4.2mm_P0.5mm
 Texas DYY0016A TSSOP, 16 Pin (https://www.ti.com/lit/ds/symlink/tmux1574.pdf#page=42), generated with kicad-footprint-generator ipc_gullwing_generator.py
 Texas TSSOP SO SOT-23-THIN
-0
-16
-16
-Package_SO
-Texas_DYY0016A_TSOT-23-16_4.2x2.0mm_P0.5mm
-TSSOP, 16 Pin (https://www.ti.com/lit/ds/symlink/tmux1574.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
-TSSOP SO
 0
 16
 16
@@ -93190,6 +93141,13 @@ Through hole pin header THT 1x01 1.00mm single row
 0
 1
 1
+Project-specific
+PinHeader_1x02_P1.00mm_Vertical
+Through hole straight pin header, 1x02, 1.00mm pitch, single row
+Through hole pin header THT 1x02 1.00mm single row
+0
+2
+2
 Project-specific
 TestPoint_Pad_D1.0mm
 SMD pad as test Point, diameter 1.0mm
