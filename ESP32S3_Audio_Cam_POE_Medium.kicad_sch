@@ -20478,7 +20478,7 @@
 		(uuid "cd7d1f87-1f2e-4493-8bc7-14a43e77492c")
 	)
 	(no_connect
-		(at 74.93 196.85)
+		(at 74.93 204.47)
 		(uuid "d63e1f37-0be1-4520-a8e2-3daebd8bc095")
 	)
 	(no_connect
@@ -35161,7 +35161,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "VBUS+3V3"
+		(property "Value" "Vsys_5V"
 			(at 29.21 153.924 90)
 			(effects
 				(font
@@ -67836,7 +67836,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "VBUS+3V3"
+		(property "Value" "3V3-primary"
 			(at 67.31 203.454 90)
 			(effects
 				(font
@@ -79810,6 +79810,71 @@
 			(project "ESP32S3_Audio_Cam_POE_Smaller"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "TP51")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 74.93 196.85 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9c76899b-750e-4096-a4d9-08884c7ade0f")
+		(property "Reference" "#PWR0127"
+			(at 78.74 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "Vsys_5V"
+			(at 67.31 195.834 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 74.93 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 74.93 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 74.93 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7673f12c-3983-44e3-9981-0bf4186d0a64")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE_Medium"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0127")
 					(unit 1)
 				)
 			)
@@ -96245,6 +96310,71 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+3V3")
+		(at 74.93 194.31 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d54593bf-f915-453c-9b81-01ec597871c9")
+		(property "Reference" "#PWR0128"
+			(at 78.74 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "V-USB"
+			(at 67.31 193.294 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 74.93 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 74.93 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 74.93 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a7a1d017-a140-4aac-a51d-8d237aeea5f0")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE_Medium"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0128")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
 		(at 313.69 135.89 0)
 		(unit 1)
@@ -102807,7 +102937,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "VBUS+3V3"
+		(property "Value" "Vsys_5V"
 			(at 68.58 160.0199 90)
 			(effects
 				(font
@@ -107225,6 +107355,71 @@
 			(project "ESP32S3_Audio_Cam_POE_Smaller"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR029")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 74.93 201.93 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f18c6f1b-56e8-4d06-a130-7a3be0572d0a")
+		(property "Reference" "#PWR0129"
+			(at 78.74 201.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "3V3-prim-EN"
+			(at 67.31 200.914 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 74.93 201.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 74.93 201.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 74.93 201.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4a9570b6-78b7-4f03-900a-4500af74fe6d")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE_Medium"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0129")
 					(unit 1)
 				)
 			)
