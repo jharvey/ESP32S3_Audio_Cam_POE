@@ -490,7 +490,6 @@
       "single_global_label": "ignore",
       "unannotated": "error",
       "unconnected_wire_endpoint": "ignore",
-      "undefined_netclass": "error",
       "unit_value_mismatch": "error",
       "unresolved_variable": "error",
       "wire_dangling": "error"
@@ -1357,7 +1356,7 @@
       "include_excluded_from_bom": true,
       "name": "",
       "sort_asc": true,
-      "sort_field": "Value"
+      "sort_field": "Footprint"
     },
     "connection_grid_size": 50.0,
     "drawing": {
