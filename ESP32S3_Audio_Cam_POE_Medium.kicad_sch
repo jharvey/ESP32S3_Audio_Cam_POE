@@ -26632,7 +26632,7 @@
 		)
 		(uuid "1f01c2b3-c03d-4f19-890a-52fa3b1aa74d")
 	)
-	(label "PMU.Vo2"
+	(label "VDCDC5"
 		(at 303.53 119.38 180)
 		(effects
 			(font
