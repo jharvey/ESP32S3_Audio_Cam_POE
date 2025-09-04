@@ -135405,6 +135405,17 @@
 		(layer "Cmts.User")
 		(uuid "3cb910c4-8b86-4db6-9727-39fc066b7725")
 	)
+	(gr_circle
+		(center 73.152 118.745)
+		(end 75.692 118.745)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "3f743296-e33c-4f5f-8a1e-1f0cfeb39403")
+	)
 	(gr_line
 		(start 33.7566 195.7219)
 		(end 33.7566 172.8619)
@@ -135414,6 +135425,17 @@
 		)
 		(layer "Cmts.User")
 		(uuid "58224a37-45f3-4048-bbf3-efa464ebc468")
+	)
+	(gr_circle
+		(center 73.152 202.057)
+		(end 75.692 202.057)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "5db7f945-c87f-499c-a144-99a4607e4ee9")
 	)
 	(gr_circle
 		(center 39.341258 161.6859)
@@ -160506,6 +160528,10 @@
 		(members "5fc5fe59-eb6c-4152-b63e-e44cd0d3a4db" "8048d57e-3589-4792-bda8-9bac24b2bbee"
 			"8d432dce-6d62-484c-a728-23e4a60033c7"
 		)
+	)
+	(group ""
+		(uuid "ebc87205-361b-4b38-96ad-cf9ade3ea131")
+		(members "3f743296-e33c-4f5f-8a1e-1f0cfeb39403" "5db7f945-c87f-499c-a144-99a4607e4ee9")
 	)
 	(embedded_fonts no)
 )

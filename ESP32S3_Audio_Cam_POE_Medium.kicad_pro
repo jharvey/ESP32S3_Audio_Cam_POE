@@ -728,7 +728,7 @@
       "plot": "JLCPCB/",
       "pos_files": "JLCPCB/",
       "specctra_dsn": "",
-      "step": "",
+      "step": "production/V0.1_Medium/ESP32S3_Audio_Cam_POE_Medium.step",
       "svg": "",
       "vrml": ""
     },
