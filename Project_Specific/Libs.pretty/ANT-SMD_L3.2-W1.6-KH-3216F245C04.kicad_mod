@@ -1,0 +1,473 @@
+(footprint "ANT-SMD_L3.2-W1.6-KH-3216F245C04"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "ANT"
+		(at 0 1 180)
+		(layer "F.SilkS")
+		(uuid "b6bb6cef-b687-402b-aee5-9c220fd809d3")
+		(effects
+			(font (size 0.686 0.6285) (thickness 0.1525))
+			(justify top)
+		)
+	)
+	(property "Value" "KH-3216-H0209"
+		(at 0 -2 180)
+		(layer "F.Fab")
+		(uuid "df1db5de-3cfe-4ab2-87cc-601b510bf8ea")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20211126/47D9D63D1A7578CBC67CF3AB2A53F46A.pdf"
+		(at 0 0 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9b284e38-ea86-4fa4-aef7-ff6d80865602")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Description" "1206 Antennas"
+		(at 0 0 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ab6e9753-f6f4-4b15-b90e-18cf81f54cb5")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Height" "1.4"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "26d33dc8-04f2-4526-9ebf-d4906e4c33ad")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "RS Part Number" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "bc2795d9-a6c4-4d7f-984c-55c9ec0a7c88")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "RS Price/Stock" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1a63b7e8-4403-444a-ac18-4ecee7a0f22b")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Manufacturer_Name" "Shenzhen Kinghelm Elec"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "024a668e-8a3c-4030-98f8-119ab074a0c6")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Manufacturer_Part_Number" "KH-3216-H0209"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a88c18b7-caff-4b2a-9838-4523b21530d3")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Allied_Number" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d6c097e5-5060-4556-beed-1d997510d0e5")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "LCSC PART #" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5ee58d39-b88d-4dc4-9fbf-fda365c29023")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Arrow Part Number" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "44d1efe9-a8fd-401f-9a64-24bcc2b6e270")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Arrow Price/Stock" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5efca7dc-b971-466a-943a-f3f415f92adf")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Cheap Version" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f20e958e-4a96-4400-865e-6d3f097fdf83")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Expensive Version" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2c056414-60f1-4a61-b5f9-dc654ceb2d45")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Field5" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "04abb5a5-ab66-4a25-b496-0c3c4c7350d7")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "LCSC Part" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4b72134f-981e-44da-af68-ba416068d789")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "MPN" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c070dc52-f571-4a93-a523-323d98820844")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Mouser Part Number" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ac62b397-624e-437d-85c5-a7bb3adf5cc1")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Mouser Price/Stock" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "678954d3-b3f0-4c2d-aca2-7b928161020b")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Package" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "cba96ef4-d8e6-4440-afde-4b8cf8a12572")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Manufacturer Part" "KH-3216-H0209"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d9fc21b1-57c4-45a9-b4ba-2045ff5e8046")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Manufacturer" "kinghelm(金航标)"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1a2d8e71-93dc-4e5e-8bbc-8daaa8a9eeac")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Supplier Part" "C2925417"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "493ce836-5fe6-4118-90f1-40c7af882b70")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Supplier" "LCSC"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1162f84e-2e69-40f2-affb-de5177ed0e0d")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "LCSC Part Name" "KH-3216-H0209"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "538e648a-fa82-42fc-a980-053828493ae4")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Dropout Voltage" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2fd46750-0385-48d2-b1e1-b4c267ab2711")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Feature" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d69c6c8f-971d-4016-a588-01884712359e")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Maximum Input Voltage" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b0274c6f-b96a-4300-9bb8-540ba3d5cc70")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Number Of Outputs" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1587f45a-157d-4651-a717-91d9b1ce1701")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Output Current" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "46ffb728-114a-4e52-90b6-9852f60cadb7")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Output Polarity" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "29319641-d276-48e1-a1e5-870182bd2cb0")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Output Type" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a0c25b0e-12f1-4f7e-9585-6f8df1fe5047")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Output Voltage" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "33c24ed8-af58-466c-b74f-57eb775329bd")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "Name" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6d3d1a3a-19ae-47be-8853-0cee97ef3aed")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(property "LCSC" "C2925417"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6364aa72-47c6-43ee-a0b8-7a32b97566a2")
+		(effects
+			(font (size 1 1) (thickness 0.15))
+		)
+	)
+	(fp_line
+		(start -1.1 -0.8)
+		(end 1.02 -0.8)
+		(stroke (width 0.152) (type default))
+		(layer "F.SilkS")
+		(uuid "8015938b-f0bb-4472-96ed-c9dc3e42edbd")
+	)
+	(fp_line
+		(start -1.1 0.8)
+		(end 1.02 0.8)
+		(stroke (width 0.152) (type default))
+		(layer "F.SilkS")
+		(uuid "02276c68-1abe-4e5b-8704-8d059e384fc0")
+	)
+	(fp_poly
+		(pts
+			(xy -1.1 -0.8) (xy -1.1 0.8) (xy -0.5 0.8) (xy -0.5 -0.8)
+		)
+		(stroke (width 0) (type default))
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "9e1237aa-d0d2-45d9-95d2-45eb3daac423")
+	)
+	(fp_poly
+		(pts
+			(xy -1.1 -0.8) (xy -1.1 0.8) (xy -0.5 0.8) (xy -0.5 -0.8)
+		)
+		(stroke (width 0) (type default))
+		(fill yes)
+		(layer "Dwgs.User")
+		(uuid "cd304ff0-b2fc-4497-9059-2835a52e4425")
+	)
+	(fp_poly
+		(pts
+			(xy -1.2 -0.8) (xy -1.2 0.8) (xy -1.6 0.8) (xy -1.6 -0.8)
+		)
+		(stroke (width 0) (type default))
+		(fill yes)
+		(layer "User.1")
+		(uuid "27f4a9cd-ad1d-44ee-92d0-62b1459e4aae")
+	)
+	(fp_poly
+		(pts
+			(xy 1.2 0.8) (xy 1.2 -0.8) (xy 1.6 -0.8) (xy 1.6 0.8)
+		)
+		(stroke (width 0) (type default))
+		(fill yes)
+		(layer "User.1")
+		(uuid "aed5ada6-6d37-412b-8e0e-194f1643e3ae")
+	)
+	(fp_line
+		(start -1.6 -0.8)
+		(end 1.6 -0.8)
+		(stroke (width 0.051) (type default))
+		(layer "User.2")
+		(uuid "77cb728c-835e-4a19-8193-ce5773a4b3f6")
+	)
+	(fp_line
+		(start -1.6 0.8)
+		(end -1.6 -0.8)
+		(stroke (width 0.051) (type default))
+		(layer "User.2")
+		(uuid "de425e77-53e4-4610-a280-d0e4db238649")
+	)
+	(fp_line
+		(start 1.6 -0.8)
+		(end 1.6 0.8)
+		(stroke (width 0.051) (type default))
+		(layer "User.2")
+		(uuid "92aa81fd-e9c8-4867-af35-729963554e2c")
+	)
+	(fp_line
+		(start 1.6 0.8)
+		(end -1.6 0.8)
+		(stroke (width 0.051) (type default))
+		(layer "User.2")
+		(uuid "9463346a-95de-4af7-9a2d-644e3ffb3eab")
+	)
+	(fp_poly
+		(pts
+			(xy -1.54 0.8) (xy -1.557574 0.757574) (xy -1.6 0.74) (xy -1.642426 0.757574) (xy -1.66 0.8) (xy -1.642426 0.842426)
+			(xy -1.6 0.86) (xy -1.557574 0.842426)
+		)
+		(stroke (width 0) (type default))
+		(fill yes)
+		(layer "User.3")
+		(uuid "0457a0b4-874b-4f09-8d24-f2a8d1dd90a9")
+	)
+	(pad "1" smd rect
+		(at -1.45 0.45)
+		(size 0.5 0.9)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "2b0c4a2c-6bf8-423e-93c1-dba845379002")
+	)
+	(pad "2" smd rect
+		(at 1.45 0 180)
+		(size 0.5 1.8)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "15e5431e-6a16-4fc5-be6c-1cf9fb882b11")
+	)
+	(pad "3" smd rect
+		(at -1.45 -0.45)
+		(size 0.5 0.9)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "931b611d-334b-4ddd-b9ab-d84807b2b768")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/JLCPCB-Kicad-Library/3dmodels/JLCPCB.3dshapes/ANT-SMD_L3.2-W1.6-KH-3216F245C04.step"
+		(offset (xyz 0 0 0))
+		(scale (xyz 1 1 1))
+		(rotate (xyz -90 -0 -0))
+	)
+)
