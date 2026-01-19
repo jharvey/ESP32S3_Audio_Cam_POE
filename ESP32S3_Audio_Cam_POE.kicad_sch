@@ -40432,7 +40432,7 @@
 	)
 	(wire
 		(pts
-			(xy 421.64 109.22) (xy 421.64 111.76)
+			(xy 421.64 110.49) (xy 421.64 111.76)
 		)
 		(stroke
 			(width 0)
@@ -44069,6 +44069,16 @@
 			(type default)
 		)
 		(uuid "ee6907dc-512d-4640-a2a8-eea3553f26b8")
+	)
+	(wire
+		(pts
+			(xy 421.64 102.87) (xy 421.64 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ee7b1099-0a8a-46a6-88ab-b441cbc275f1")
 	)
 	(wire
 		(pts
@@ -79715,7 +79725,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Capacitors:0805,100nF")
-		(at 421.64 105.41 0)
+		(at 421.64 106.68 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -79724,7 +79734,7 @@
 		(fields_autoplaced yes)
 		(uuid "9562ae4a-4a8d-4873-8112-005fd617115d")
 		(property "Reference" "C107"
-			(at 424.18 102.8699 0)
+			(at 424.18 104.1399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79733,7 +79743,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 424.18 105.41 0)
+			(at 424.18 106.68 0)
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -79742,7 +79752,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:C_0805"
-			(at 419.862 105.41 90)
+			(at 419.862 106.68 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79751,7 +79761,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Samsung-Electro-Mechanics-CL21B104KCFNNNE_C28233.pdf"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79760,7 +79770,7 @@
 			)
 		)
 		(property "Description" "100V 100nF X7R ±10% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79769,7 +79779,7 @@
 			)
 		)
 		(property "LCSC" "C28233"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79778,7 +79788,7 @@
 			)
 		)
 		(property "Stock" "2208943"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79787,7 +79797,7 @@
 			)
 		)
 		(property "Price" "0.009USD"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79796,7 +79806,7 @@
 			)
 		)
 		(property "Process" "SMT"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79805,7 +79815,7 @@
 			)
 		)
 		(property "Minimum Qty" "20"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79814,7 +79824,7 @@
 			)
 		)
 		(property "Attrition Qty" "10"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79823,7 +79833,7 @@
 			)
 		)
 		(property "Class" "Basic Component"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79832,7 +79842,7 @@
 			)
 		)
 		(property "Category" "Capacitors,Multilayer Ceramic Capacitors MLCC - SMD/SMT"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79841,7 +79851,7 @@
 			)
 		)
 		(property "Manufacturer" "Samsung Electro-Mechanics"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79850,7 +79860,7 @@
 			)
 		)
 		(property "Part" "CL21B104KCFNNNE"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79859,7 +79869,7 @@
 			)
 		)
 		(property "Voltage Rated" "100V"
-			(at 424.18 107.95 0)
+			(at 424.18 109.22 0)
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -79868,7 +79878,7 @@
 			)
 		)
 		(property "Tolerance" "±10%"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79877,7 +79887,7 @@
 			)
 		)
 		(property "Capacitance" "100nF"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79886,7 +79896,7 @@
 			)
 		)
 		(property "Temperature Coefficient" "X7R"
-			(at 421.64 105.41 0)
+			(at 421.64 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
