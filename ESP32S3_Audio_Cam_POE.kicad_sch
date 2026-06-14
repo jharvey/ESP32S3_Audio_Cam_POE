@@ -32851,17 +32851,6 @@
 		)
 		(uuid "0d0eff4c-5534-412e-919a-0a361d17e729")
 	)
-	(text "GPIO37"
-		(exclude_from_sim no)
-		(at 238.76 233.68 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "0eb0b48c-31aa-4ec8-8b37-cf151abd2259")
-	)
 	(text "2GPIO21"
 		(exclude_from_sim no)
 		(at 181.61 321.31 0)
@@ -33909,6 +33898,17 @@
 			(justify right bottom)
 		)
 		(uuid "ae3f2e8e-20d4-4ec4-af82-1e5d6bf7a91d")
+	)
+	(text "SD IN 1 BIT MODE"
+		(exclude_from_sim no)
+		(at 228.854 157.226 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "af6682c2-59e9-47bc-b896-833831a77dde")
 	)
 	(text "GPIO35"
 		(exclude_from_sim no)
@@ -44804,16 +44804,6 @@
 	)
 	(wire
 		(pts
-			(xy 204.47 233.68) (xy 238.76 233.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "efba89c2-5f3b-4d73-9165-971ff601828d")
-	)
-	(wire
-		(pts
 			(xy 327.66 149.86) (xy 327.66 152.4)
 		)
 		(stroke
@@ -46831,16 +46821,6 @@
 		)
 		(uuid "1b83be17-e324-44c7-b5af-5112ab136c62")
 	)
-	(label "SPK.LRCLK"
-		(at 182.88 190.5 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "1ca41fb1-2828-48b1-9b8d-55a207451d10")
-	)
 	(label "PMU.Vd2"
 		(at 214.63 387.35 180)
 		(effects
@@ -46882,7 +46862,7 @@
 		(uuid "1eb2080b-e3b8-4d54-a160-4154d09afb05")
 	)
 	(label "7SEG.CLK"
-		(at 182.88 195.58 0)
+		(at 193.04 175.26 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -47031,7 +47011,7 @@
 		)
 		(uuid "279dc243-8621-440d-8d55-f45cc7a2bc69")
 	)
-	(label "MIC.SCK"
+	(label "I2S.SCK"
 		(at 571.5 158.75 0)
 		(effects
 			(font
@@ -47081,7 +47061,7 @@
 		)
 		(uuid "2975bc39-53f8-4622-8a71-867fd69858f8")
 	)
-	(label "MIC.WS"
+	(label "I2S.WS"
 		(at 571.5 121.92 0)
 		(effects
 			(font
@@ -47553,7 +47533,7 @@
 		(uuid "4edf784a-b69a-4dbc-bfb5-e78d83640bc9")
 	)
 	(label "7SEG.DIO"
-		(at 182.88 198.12 0)
+		(at 193.04 170.18 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -48053,7 +48033,7 @@
 		)
 		(uuid "7af09051-d256-4335-9b5a-5a69d29328ac")
 	)
-	(label "MIC.SCK"
+	(label "I2S.SCK"
 		(at 219.71 227.33 0)
 		(effects
 			(font
@@ -48444,7 +48424,7 @@
 		)
 		(uuid "9af53a00-a644-4f63-af17-e34c92e8d9a0")
 	)
-	(label "SPK.BCLK"
+	(label "I2S.SCK"
 		(at 514.35 186.69 180)
 		(effects
 			(font
@@ -48495,7 +48475,7 @@
 		(uuid "a28dd16a-1051-4c1e-895a-763f560336ff")
 	)
 	(label "SPK.DIN"
-		(at 205.74 231.14 0)
+		(at 182.88 190.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -48644,7 +48624,7 @@
 		)
 		(uuid "b1eb485c-6fe7-4f12-8d44-b57f83623c25")
 	)
-	(label "MIC.WS"
+	(label "I2S.WS"
 		(at 572.77 156.21 0)
 		(effects
 			(font
@@ -48724,7 +48704,7 @@
 		)
 		(uuid "b827887d-dbfb-476a-bdb7-50b1a28d183b")
 	)
-	(label "MIC.WS"
+	(label "I2S.WS"
 		(at 219.71 222.25 0)
 		(effects
 			(font
@@ -49005,7 +48985,7 @@
 		)
 		(uuid "cafb3903-bfcf-4213-ac68-cb21942a822e")
 	)
-	(label "MIC.SCK"
+	(label "I2S.SCK"
 		(at 570.23 124.46 0)
 		(effects
 			(font
@@ -49015,7 +48995,7 @@
 		)
 		(uuid "cb1e06fc-2d85-48fe-92b6-11c4d5674867")
 	)
-	(label "SPK.LRCLK"
+	(label "I2S.WS"
 		(at 514.35 191.77 180)
 		(effects
 			(font
@@ -49475,16 +49455,6 @@
 			(justify right bottom)
 		)
 		(uuid "ec9b6927-df67-4628-8bb7-c91f6c090172")
-	)
-	(label "SPK.BCLK"
-		(at 205.74 233.68 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ed45f795-b023-47e8-8ed8-bb67a8acb113")
 	)
 	(label "PMU.Vo1"
 		(at 304.8 361.95 180)
