@@ -22,4 +22,5 @@
   (lib (name "JLCPCB-Variable-Resistors")(type "KiCad")(uri "${KIPRJMOD}/JLCPCB-Kicad-Library/symbols/JLCPCB-Variable-Resistors.kicad_sym")(options "")(descr ""))
   (lib (name "ANT-H0209-2450MHz")(type "KiCad")(uri "${KIPRJMOD}/Project_Specific/ant-smd_kh-3216-h0209_c2925417.kicad_sym")(options "")(descr ""))
   (lib (name "ANT_0200-915MHz")(type "KiCad")(uri "${KIPRJMOD}/Project_Specific/ant-smd_h2u646mhlq0200_C5370061.kicad_sym")(options "")(descr ""))
+  (lib (name "JLC_Convertered")(type "KiCad")(uri "${KIPRJMOD}/Project_Specific/JLC_Convertered.kicad_sym")(options "")(descr ""))
 )

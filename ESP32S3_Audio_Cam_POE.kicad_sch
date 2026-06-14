@@ -11534,207 +11534,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "JLCPCB-ICs:ICS-43434_C5656610"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "U1"
-				(at -6.35 5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-				)
-			)
-			(property "Value" "ICS-43434"
-				(at -6.35 -7.62 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-				)
-			)
-			(property "Footprint" "JLCPCB:ICS-43434_C5656610"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/231023/DS-000069-ICS-43434-v1.2-8194c7772d771e21a553109502704f97.pdf"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Direction:Omni-directional Supply Voltage:1.65V~3.63V Supply Voltage:1.65V~3.63V Current Consumption:550uA Current Consumption:550uA SNR(Signal to Noise Ratio):64dB Sensitivity:- Sensitivity:-"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "LCSC" "C5656610"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "ICS-43434 C5656610"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "ICS-43434_C5656610_1_0"
-				(rectangle
-					(start -6.35 -5.08)
-					(end 6.35 5.08)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center -5.08 3.81)
-					(radius 0.381)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin unspecified line
-					(at -8.89 2.54 0)
-					(length 2.54)
-					(name "WS"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at -8.89 0 0)
-					(length 2.54)
-					(name "LR"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at -8.89 -2.54 0)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at 8.89 2.54 180)
-					(length 2.54)
-					(name "SD"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at 8.89 0 180)
-					(length 2.54)
-					(name "VDD"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at 8.89 -2.54 180)
-					(length 2.54)
-					(name "SCK"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "JLCPCB-ICs:MAX98357AETE+T C910544"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -15008,6 +14807,221 @@
 						)
 					)
 					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "JLC_Convertered:MSM261S4030H0R"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "MK"
+				(at -5.08 10.16 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MSM261S4030H0R"
+				(at -5.08 -12.7 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Project-specific:LGA-8_4.0x3.0mm_P0.84mm_MSM261S4030H0R"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://files.waveshare.com/upload/0/01/MSM261S4030H0R.pdf"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "LCSC" "C2840615"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "MSM261S4030H0R_1_1"
+				(rectangle
+					(start -7.62 7.62)
+					(end 7.62 -10.16)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin input line
+					(at -10.16 5.08 0)
+					(length 2.54)
+					(name "WS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 2.54 0)
+					(length 2.54)
+					(name "SCK"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 -2.54 0)
+					(length 2.54)
+					(name "L/R"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 -5.08 0)
+					(length 2.54)
+					(name "CHIPEN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 10.16 270)
+					(length 2.54)
+					(name "VDD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -12.7 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 10.16 5.08 180)
+					(length 2.54)
+					(name "SD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 10.16 -5.08 180)
+					(length 2.54)
+					(name "NC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -34211,12 +34225,6 @@
 		(uuid "046d58f4-3ad7-4062-8565-688e7e73a59b")
 	)
 	(junction
-		(at 535.94 153.67)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "053c43c9-9d79-4e29-9f2b-deceeb77bb34")
-	)
-	(junction
 		(at 407.67 224.79)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -34227,12 +34235,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "07258f33-0ea5-4bb9-bbc6-57dab905e109")
-	)
-	(junction
-		(at 535.94 161.29)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "075d5b9d-5f8f-44d9-8fcd-d0c6709e0be8")
 	)
 	(junction
 		(at 264.16 73.66)
@@ -34269,12 +34271,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "0abfd22f-0371-424d-9581-57c47af17765")
-	)
-	(junction
-		(at 508 161.29)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "0af25cfa-b9be-4584-8c48-db0dc35893b3")
 	)
 	(junction
 		(at 529.59 345.44)
@@ -34383,6 +34379,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "1bc539fb-1139-4214-b433-dc5be2c21957")
+	)
+	(junction
+		(at 589.28 151.13)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1d16c3d7-5f47-4952-bf8e-6b3b4765e45a")
 	)
 	(junction
 		(at 165.1 50.8)
@@ -34587,12 +34589,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "38ddfa91-4731-4eb2-89f7-d6d85a86ce02")
-	)
-	(junction
-		(at 535.94 142.24)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3b642ad4-dd3b-4e88-ac7e-dfd982ef8c2f")
 	)
 	(junction
 		(at 181.61 278.13)
@@ -34829,6 +34825,12 @@
 		(uuid "5e6662be-ffed-4393-b9e3-754f9901e499")
 	)
 	(junction
+		(at 567.69 151.13)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "617fe7a0-0666-4255-ab53-1ff4239a9f91")
+	)
+	(junction
 		(at 308.61 382.27)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -34935,6 +34937,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "6ffc43d7-eb0c-4b03-9d3c-ed6b81bcef32")
+	)
+	(junction
+		(at 566.42 116.84)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "70aaccc7-25d6-4a36-95d3-3ad607c3ed5f")
 	)
 	(junction
 		(at 210.82 63.5)
@@ -35531,18 +35539,6 @@
 		(uuid "c21c7e74-2ff7-4f39-8b6c-d5a5f8b27ca3")
 	)
 	(junction
-		(at 508 142.24)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "c25120a3-9c41-499d-9153-7105b7a2a504")
-	)
-	(junction
-		(at 535.94 134.62)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "c2cebd50-6d46-447f-8803-acaa8c6aefb6")
-	)
-	(junction
 		(at 41.91 191.77)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -35735,6 +35731,12 @@
 		(uuid "dc38be15-f0ff-473d-ab8a-1581bf4c1d65")
 	)
 	(junction
+		(at 589.28 173.99)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "dc3c6f70-58b9-45ae-957e-533a9ed6feee")
+	)
+	(junction
 		(at 53.34 52.07)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -35873,6 +35875,12 @@
 		(uuid "f4bb48f0-b478-4b1f-a283-ea999900cb2f")
 	)
 	(junction
+		(at 588.01 139.7)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f5317277-c16b-4419-b3f5-9a7d6866ea14")
+	)
+	(junction
 		(at 24.13 222.25)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -35907,6 +35915,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "fbd1eaf4-4730-4034-8fef-fd22b71e4967")
+	)
+	(junction
+		(at 588.01 116.84)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fdc7cc88-2e54-4423-a36f-8e5036365f66")
 	)
 	(junction
 		(at 514.35 204.47)
@@ -35957,6 +35971,10 @@
 	(no_connect
 		(at 370.205 193.04)
 		(uuid "17a76c96-6489-42d4-b0f3-fa077454c653")
+	)
+	(no_connect
+		(at 598.17 132.08)
+		(uuid "1d2b315a-7a57-4926-9a53-50df05f3accf")
 	)
 	(no_connect
 		(at 306.07 226.06)
@@ -36047,6 +36065,10 @@
 		(uuid "d62f8190-0e65-4599-aa37-48cb286abe0c")
 	)
 	(no_connect
+		(at 591.82 179.07)
+		(uuid "d6aea5bb-8f8b-4c62-9e01-c3005646aa60")
+	)
+	(no_connect
 		(at 474.98 250.19)
 		(uuid "e0bfa6e5-7bb9-4720-a2b8-d2347976e47f")
 	)
@@ -36057,6 +36079,10 @@
 	(no_connect
 		(at 317.5 387.35)
 		(uuid "e308836e-7e20-47cb-a046-5e9062d33838")
+	)
+	(no_connect
+		(at 599.44 166.37)
+		(uuid "e3c221c9-3e52-4a9e-8c78-67ec3202aa8e")
 	)
 	(no_connect
 		(at 474.98 287.02)
@@ -36149,16 +36175,6 @@
 			(type default)
 		)
 		(uuid "028bb129-da5f-490d-9e2d-0ec6be561c53")
-	)
-	(wire
-		(pts
-			(xy 535.94 161.29) (xy 508 161.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "02aee53b-62a3-44d5-a12b-0c082776d5c7")
 	)
 	(wire
 		(pts
@@ -36282,6 +36298,16 @@
 	)
 	(wire
 		(pts
+			(xy 568.96 132.08) (xy 577.85 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "06b43e82-3951-4172-af4d-ec00007c0e4a")
+	)
+	(wire
+		(pts
 			(xy 378.46 27.94) (xy 387.35 27.94)
 		)
 		(stroke
@@ -36329,6 +36355,16 @@
 			(type default)
 		)
 		(uuid "0864a075-affa-4f72-98da-e156d4b33e88")
+	)
+	(wire
+		(pts
+			(xy 566.42 116.84) (xy 571.5 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "08ba8fb2-ff64-4d57-a1c5-9da9eaf8add9")
 	)
 	(wire
 		(pts
@@ -37122,16 +37158,6 @@
 	)
 	(wire
 		(pts
-			(xy 508 142.24) (xy 535.94 142.24)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1f3315c4-9814-4154-85c2-dadf06d7e08e")
-	)
-	(wire
-		(pts
 			(xy 247.65 147.32) (xy 281.94 147.32)
 		)
 		(stroke
@@ -37272,16 +37298,6 @@
 	)
 	(wire
 		(pts
-			(xy 501.65 153.67) (xy 508 153.67)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "25e20605-165f-4c77-adec-0c61cc56402f")
-	)
-	(wire
-		(pts
 			(xy 53.34 293.37) (xy 41.91 293.37)
 		)
 		(stroke
@@ -37399,16 +37415,6 @@
 			(type default)
 		)
 		(uuid "2806ca1d-1ce0-424b-8cdd-c03f7923f8f2")
-	)
-	(wire
-		(pts
-			(xy 497.84 161.29) (xy 508 161.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "280bdd2a-f3f3-4fa9-8c82-4de200add1ab")
 	)
 	(wire
 		(pts
@@ -37732,7 +37738,7 @@
 	)
 	(wire
 		(pts
-			(xy 533.4 137.16) (xy 525.78 137.16)
+			(xy 570.23 124.46) (xy 577.85 124.46)
 		)
 		(stroke
 			(width 0)
@@ -38742,6 +38748,16 @@
 	)
 	(wire
 		(pts
+			(xy 570.23 129.54) (xy 577.85 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4dd3c09f-8f69-4485-81e0-bbd9a8bd50ea")
+	)
+	(wire
+		(pts
 			(xy 429.26 99.06) (xy 429.26 101.6)
 		)
 		(stroke
@@ -38892,16 +38908,6 @@
 	)
 	(wire
 		(pts
-			(xy 497.84 139.7) (xy 497.84 142.24)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "523a5f9d-9d70-4d3a-9b34-304efdbdb840")
-	)
-	(wire
-		(pts
 			(xy 276.86 58.42) (xy 300.99 58.42)
 		)
 		(stroke
@@ -38949,16 +38955,6 @@
 			(type default)
 		)
 		(uuid "53b78e07-0126-4167-a170-2ddb40733940")
-	)
-	(wire
-		(pts
-			(xy 497.84 128.27) (xy 497.84 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "53f6a42f-de44-4a48-94a9-07d567391484")
 	)
 	(wire
 		(pts
@@ -39159,6 +39155,16 @@
 			(type default)
 		)
 		(uuid "599e6b18-c523-49fe-ac05-0519e59e045f")
+	)
+	(wire
+		(pts
+			(xy 567.69 151.13) (xy 572.77 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5a2579a5-3036-4948-a1fe-f819e4e2f824")
 	)
 	(wire
 		(pts
@@ -39372,6 +39378,16 @@
 	)
 	(wire
 		(pts
+			(xy 571.5 158.75) (xy 579.12 158.75)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5fe0c97a-8219-4bac-8469-f076619a5d29")
+	)
+	(wire
+		(pts
 			(xy 424.18 147.32) (xy 424.18 148.59)
 		)
 		(stroke
@@ -39509,6 +39525,16 @@
 			(type default)
 		)
 		(uuid "65b1bc8c-4ff5-4e1e-ae06-966802b668a9")
+	)
+	(wire
+		(pts
+			(xy 570.23 166.37) (xy 579.12 166.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "65b47fc8-9b2d-4f11-b624-ddfc7f7e08ca")
 	)
 	(wire
 		(pts
@@ -39819,26 +39845,6 @@
 			(type default)
 		)
 		(uuid "6c7b6461-c46b-472e-8c9d-e2a00636cfb9")
-	)
-	(wire
-		(pts
-			(xy 533.4 151.13) (xy 525.78 151.13)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6ca676ec-222d-4c62-9e2b-d3b7e78f5cd3")
-	)
-	(wire
-		(pts
-			(xy 497.84 158.75) (xy 497.84 161.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6d005445-12cd-439a-a75d-8a428fec2554")
 	)
 	(wire
 		(pts
@@ -40382,6 +40388,16 @@
 	)
 	(wire
 		(pts
+			(xy 572.77 156.21) (xy 579.12 156.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7bacc67a-179f-4a60-918e-9ba37d0ff47a")
+	)
+	(wire
+		(pts
 			(xy 521.97 53.34) (xy 521.97 58.42)
 		)
 		(stroke
@@ -40682,7 +40698,7 @@
 	)
 	(wire
 		(pts
-			(xy 501.65 132.08) (xy 508 132.08)
+			(xy 571.5 121.92) (xy 577.85 121.92)
 		)
 		(stroke
 			(width 0)
@@ -40752,7 +40768,7 @@
 	)
 	(wire
 		(pts
-			(xy 533.4 132.08) (xy 525.78 132.08)
+			(xy 605.79 121.92) (xy 598.17 121.92)
 		)
 		(stroke
 			(width 0)
@@ -40879,16 +40895,6 @@
 			(type default)
 		)
 		(uuid "871cc31f-c272-4d0b-aaa3-4b6eb6d686c9")
-	)
-	(wire
-		(pts
-			(xy 535.94 134.62) (xy 541.02 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8755cdb0-baae-45ec-9d8e-957951766626")
 	)
 	(wire
 		(pts
@@ -41022,6 +41028,16 @@
 	)
 	(wire
 		(pts
+			(xy 589.28 151.13) (xy 580.39 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8b955770-1c00-42d2-bffa-dc7c31743447")
+	)
+	(wire
+		(pts
 			(xy 247.65 193.04) (xy 281.94 193.04)
 		)
 		(stroke
@@ -41029,6 +41045,16 @@
 			(type default)
 		)
 		(uuid "8c07423c-8c32-4b92-bdab-55094aa4b5b3")
+	)
+	(wire
+		(pts
+			(xy 566.42 139.7) (xy 588.01 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8c249e6e-bd40-45ba-9daf-fd94e5e5bc34")
 	)
 	(wire
 		(pts
@@ -41382,6 +41408,16 @@
 	)
 	(wire
 		(pts
+			(xy 588.01 116.84) (xy 579.12 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "975db881-cb75-4c94-be6d-a51f45eb90a4")
+	)
+	(wire
+		(pts
 			(xy 360.68 224.79) (xy 400.05 224.79)
 		)
 		(stroke
@@ -41509,6 +41545,16 @@
 			(type default)
 		)
 		(uuid "9afd4b45-e9e4-42b4-9209-7e4367b24296")
+	)
+	(wire
+		(pts
+			(xy 566.42 134.62) (xy 566.42 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b0b2573-15ed-44f0-a75b-a8997553a3d4")
 	)
 	(wire
 		(pts
@@ -41822,16 +41868,6 @@
 	)
 	(wire
 		(pts
-			(xy 497.84 147.32) (xy 497.84 148.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a463fe11-9157-4a0c-8c6f-4228affdca30")
-	)
-	(wire
-		(pts
 			(xy 436.88 27.94) (xy 452.12 27.94)
 		)
 		(stroke
@@ -42022,6 +42058,16 @@
 	)
 	(wire
 		(pts
+			(xy 567.69 168.91) (xy 567.69 173.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aa37f41d-aa85-4878-a7bc-aa27ef762a42")
+	)
+	(wire
+		(pts
 			(xy 339.09 83.82) (xy 350.52 83.82)
 		)
 		(stroke
@@ -42029,16 +42075,6 @@
 			(type default)
 		)
 		(uuid "aa6946ed-80aa-42ee-826a-6d09b6fc0b10")
-	)
-	(wire
-		(pts
-			(xy 535.94 153.67) (xy 541.02 153.67)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ab1971e7-7013-4f05-843f-6b2d3b486aee")
 	)
 	(wire
 		(pts
@@ -42300,16 +42336,6 @@
 		)
 		(uuid "b4d79276-3dd1-4289-8796-92fb59293400")
 	)
-	(wire
-		(pts
-			(xy 533.4 156.21) (xy 525.78 156.21)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b4e2650e-6baf-4ea0-adf3-45c81b6f1412")
-	)
 	(polyline
 		(pts
 			(xy 458.47 217.17) (xy 409.575 217.17)
@@ -42389,6 +42415,16 @@
 			(type default)
 		)
 		(uuid "b715d65a-84bb-4d01-b7fe-3a5a776903ac")
+	)
+	(wire
+		(pts
+			(xy 607.06 156.21) (xy 599.44 156.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b72048d8-70fa-4385-b990-857a9d5f4d49")
 	)
 	(wire
 		(pts
@@ -42529,16 +42565,6 @@
 			(type default)
 		)
 		(uuid "b9929ab2-5913-4afa-ab63-593838f8f219")
-	)
-	(wire
-		(pts
-			(xy 525.78 153.67) (xy 535.94 153.67)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b9a2a924-d648-4195-b2c9-1ac9b2feb236")
 	)
 	(wire
 		(pts
@@ -42869,16 +42895,6 @@
 			(type default)
 		)
 		(uuid "c25d55d5-08f0-4b5b-bdc4-13bbcb95c641")
-	)
-	(wire
-		(pts
-			(xy 501.65 151.13) (xy 508 151.13)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c2cff89d-53cf-4637-aa00-d98c400be4ae")
 	)
 	(wire
 		(pts
@@ -43332,16 +43348,6 @@
 	)
 	(wire
 		(pts
-			(xy 497.84 142.24) (xy 508 142.24)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ce08a273-bc6d-4db4-bb69-0b357bd224f5")
-	)
-	(wire
-		(pts
 			(xy 308.61 76.2) (xy 287.02 76.2)
 		)
 		(stroke
@@ -43732,16 +43738,6 @@
 	)
 	(wire
 		(pts
-			(xy 525.78 134.62) (xy 535.94 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d82fb3c1-ebfc-4608-8847-e6d054ba48af")
-	)
-	(wire
-		(pts
 			(xy 287.02 77.47) (xy 256.54 77.47)
 		)
 		(stroke
@@ -43879,6 +43875,16 @@
 			(type default)
 		)
 		(uuid "dd16a73b-61cf-44e9-818c-f18a313f61d6")
+	)
+	(wire
+		(pts
+			(xy 567.69 173.99) (xy 589.28 173.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dd894895-932a-45f6-adae-5007f88f802b")
 	)
 	(wire
 		(pts
@@ -44162,16 +44168,6 @@
 	)
 	(wire
 		(pts
-			(xy 508 156.21) (xy 508 161.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e67d1f3d-b6bb-46f3-9f51-023222f9d878")
-	)
-	(wire
-		(pts
 			(xy 407.67 241.3) (xy 400.05 241.3)
 		)
 		(stroke
@@ -44349,16 +44345,6 @@
 			(type default)
 		)
 		(uuid "ed071afe-db8d-4470-ace7-3dba6ee2eaec")
-	)
-	(wire
-		(pts
-			(xy 508 137.16) (xy 508 142.24)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ed4227ac-e263-4190-ba30-980573d07cde")
 	)
 	(wire
 		(pts
@@ -45022,16 +45008,6 @@
 	)
 	(wire
 		(pts
-			(xy 501.65 134.62) (xy 508 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fa7a7591-fa58-40bd-be64-cd149de143dd")
-	)
-	(wire
-		(pts
 			(xy 323.85 407.67) (xy 342.9 407.67)
 		)
 		(stroke
@@ -45219,6 +45195,16 @@
 			(type default)
 		)
 		(uuid "ffcd9e3b-20e4-4f93-8da5-1d96ad764c07")
+	)
+	(wire
+		(pts
+			(xy 571.5 163.83) (xy 579.12 163.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ffe1a5db-c938-4e78-8b94-18a06340d375")
 	)
 	(table
 		(column_count 2)
@@ -46268,6 +46254,16 @@
 		)
 		(uuid "04547be7-31f3-44b0-89c1-c12461013cae")
 	)
+	(label "MIC.R"
+		(at 570.23 129.54 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "055350bf-ff15-4f17-bae1-fd7a9d9f0b83")
+	)
 	(label "FLASH_QSPI_CLK"
 		(at 449.58 161.29 180)
 		(effects
@@ -46369,6 +46365,16 @@
 		)
 		(uuid "0a42ea98-6da8-4f4f-b3bd-ba6569474df9")
 	)
+	(label "3V3-U16"
+		(at 568.96 132.08 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0bb652fd-8244-4e8c-bd46-58eafb12cd31")
+	)
 	(label "USB_D-"
 		(at 101.6 30.48 180)
 		(effects
@@ -46418,16 +46424,6 @@
 			(justify left bottom)
 		)
 		(uuid "102399c1-7ee4-4716-b2f1-93679f2e8081")
-	)
-	(label "MIC.SD"
-		(at 533.4 151.13 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "12003d33-5c56-403b-8767-f19f39314fb5")
 	)
 	(label "ETH.RST"
 		(at 287.02 58.42 0)
@@ -46699,6 +46695,16 @@
 		)
 		(uuid "279dc243-8621-440d-8d55-f45cc7a2bc69")
 	)
+	(label "MIC.SCK"
+		(at 571.5 158.75 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "28059f87-8441-46dd-8a1c-410493f19b1c")
+	)
 	(label "2CHIP_BOOT"
 		(at 191.77 273.05 0)
 		(effects
@@ -46740,7 +46746,7 @@
 		(uuid "2975bc39-53f8-4622-8a71-867fd69858f8")
 	)
 	(label "MIC.WS"
-		(at 501.65 132.08 0)
+		(at 571.5 121.92 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -46758,6 +46764,16 @@
 			(justify left bottom)
 		)
 		(uuid "2c450b8f-0c64-42e6-8754-36d96aaf319e")
+	)
+	(label "3V3-U16"
+		(at 588.01 116.84 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2c6baabe-fa3c-4d12-88f7-49bf2d78a9a6")
 	)
 	(label "W_RD_P"
 		(at 476.25 45.72 0)
@@ -47110,16 +47126,6 @@
 		)
 		(uuid "4a992cac-174a-4be2-905e-5181fbf5df88")
 	)
-	(label "MIC.L"
-		(at 501.65 153.67 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "4a9cebcc-76d8-4a27-a55b-042c77abf42c")
-	)
 	(label "HS_SCK"
 		(at 323.85 190.5 0)
 		(effects
@@ -47259,6 +47265,16 @@
 			(justify left bottom)
 		)
 		(uuid "5039c4ca-4179-4d30-99d0-077964638a53")
+	)
+	(label "MIC.SD"
+		(at 607.06 156.21 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "50ac844a-c8fb-4783-a8ad-19993adc3e8c")
 	)
 	(label "W_TD_OUT_P"
 		(at 436.88 63.5 180)
@@ -48102,16 +48118,6 @@
 		)
 		(uuid "a2361754-cd90-422f-9725-cc17ef278ebc")
 	)
-	(label "MIC.WS"
-		(at 501.65 151.13 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "a2635238-647c-4b97-ade5-5aaa4c76faf6")
-	)
 	(label "2FLASH_QSPI_nWP"
 		(at 323.85 410.21 0)
 		(effects
@@ -48281,6 +48287,16 @@
 			(justify left bottom)
 		)
 		(uuid "b1eb485c-6fe7-4f12-8d44-b57f83623c25")
+	)
+	(label "MIC.WS"
+		(at 572.77 156.21 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b257ecc9-b45f-44e8-a352-4492634aedfb")
 	)
 	(label "2FLASH_QSPI_DI"
 		(at 256.54 288.29 0)
@@ -48533,18 +48549,8 @@
 		)
 		(uuid "c3118d5a-7c92-4141-b8d3-cd2ef9ab3e60")
 	)
-	(label "MIC.SCK"
-		(at 533.4 156.21 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "c4014509-45eb-419f-aaef-daf09052fdb5")
-	)
 	(label "MIC.SD"
-		(at 533.4 132.08 180)
+		(at 605.79 121.92 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -48572,6 +48578,16 @@
 			(justify left bottom)
 		)
 		(uuid "c6687333-4d89-4457-936b-232d19a58dc8")
+	)
+	(label "MIC.L"
+		(at 571.5 163.83 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c7869000-6aac-4db3-a860-aebd4a9a0044")
 	)
 	(label "2FLASH_QSPI_DI"
 		(at 386.08 412.75 180)
@@ -48634,12 +48650,12 @@
 		(uuid "cafb3903-bfcf-4213-ac68-cb21942a822e")
 	)
 	(label "MIC.SCK"
-		(at 533.4 137.16 180)
+		(at 570.23 124.46 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left bottom)
 		)
 		(uuid "cb1e06fc-2d85-48fe-92b6-11c4d5674867")
 	)
@@ -48903,6 +48919,16 @@
 		)
 		(uuid "e11c7cf5-0781-4a5f-bac9-9dcf390120c4")
 	)
+	(label "3V3-U17"
+		(at 570.23 166.37 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e16f3a3e-1156-4aa2-b4ed-1b49ca94705b")
+	)
 	(label "W_VP"
 		(at 538.48 58.42 180)
 		(effects
@@ -48983,6 +49009,16 @@
 			(justify left bottom)
 		)
 		(uuid "e6444544-8d28-420c-a681-2101e83bd6c3")
+	)
+	(label "3V3-U17"
+		(at 589.28 151.13 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e6639953-2171-42dd-ae26-2b503e85ac41")
 	)
 	(label "2FLASH_QSPI_CLK"
 		(at 256.54 283.21 0)
@@ -49163,16 +49199,6 @@
 			(justify right bottom)
 		)
 		(uuid "f3b7b0e5-590e-4680-86ba-89fd5dde11bd")
-	)
-	(label "MIC.R"
-		(at 501.65 134.62 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "f3dbbc74-d26b-4e31-ba8f-2e25d516f4be")
 	)
 	(label "CAM.SCL"
 		(at 248.92 162.56 0)
@@ -57730,6 +57756,74 @@
 		)
 	)
 	(symbol
+		(lib_id "power:Earth")
+		(at 596.9 151.13 90)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "21ae089f-25e9-4690-a11b-1cf4ada5cd9b")
+		(property "Reference" "#PWR0201"
+			(at 603.25 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "COM"
+			(at 600.71 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 596.9 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 596.9 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 596.9 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9fd5eb8a-daf0-4389-9e17-fd3df68189ec")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0201")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:NetTie_2")
 		(at 208.28 60.96 0)
 		(unit 1)
@@ -57792,83 +57886,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "NT13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "PCM_JLCPCB-Resistors:0603,0Ω")
-		(at 541.02 149.86 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "21f84bb6-0b28-482e-98fa-8e5304c63553")
-		(property "Reference" "TST-R27"
-			(at 538.48 148.59 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "0Ω"
-			(at 541.02 149.86 90)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 0.8 0.8)
-				)
-			)
-		)
-		(property "Footprint" "PCM_JLCPCB:R_0603"
-			(at 542.798 149.86 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0603WAF0000T5E_C21189.pdf"
-			(at 541.02 149.86 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "100mW Thick Film Resistors 75V ±1% 0Ω 0603 Chip Resistor - Surface Mount ROHS"
-			(at 541.02 149.86 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C21189"
-			(at 541.02 149.86 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "dbfd6871-6aed-48c7-af7f-6379bf707e5a")
-		)
-		(pin "2"
-			(uuid "77ac0bba-ea1b-4a5e-80a3-3933ad0e244f")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TST-R27")
 					(unit 1)
 				)
 			)
@@ -61860,6 +61877,73 @@
 		)
 	)
 	(symbol
+		(lib_id "power:Earth")
+		(at 588.01 139.7 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "36b27963-a305-4b0a-a119-782d241a7665")
+		(property "Reference" "#PWR0200"
+			(at 588.01 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "COM"
+			(at 588.01 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 588.01 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 588.01 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 588.01 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2da3ab24-870b-4650-9914-1565c4cfdbc4")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0200")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 358.14 154.94 90)
 		(unit 1)
@@ -61921,6 +62005,103 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "TP46")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC_Convertered:MSM261S4030H0R")
+		(at 588.01 127 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "38179dba-c232-4029-8349-1e2768021c35")
+		(property "Reference" "U16"
+			(at 579.12 135.636 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "MSM261S4030H0R"
+			(at 590.1533 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Project-specific:LGA-8_4.0x3.0mm_P0.84mm_MSM261S4030H0R"
+			(at 588.01 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://files.waveshare.com/upload/0/01/MSM261S4030H0R.pdf"
+			(at 588.01 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 588.01 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C2840615"
+			(at 588.01 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f569093a-3c5a-4cd9-afab-a361026ef5c0")
+		)
+		(pin "5"
+			(uuid "a4538aa5-590e-44f0-9098-5d6b0a5004a8")
+		)
+		(pin "4"
+			(uuid "abe6bd33-9dd8-4fc6-a12c-a6fbde030fdd")
+		)
+		(pin "6"
+			(uuid "b2cb0855-4526-42f4-8445-a5901f527fc7")
+		)
+		(pin "1"
+			(uuid "d8374c14-4648-49a9-b6d4-d3a6d713f1d3")
+		)
+		(pin "3"
+			(uuid "1850be29-f44c-4e67-8d5c-050187adb6d5")
+		)
+		(pin "7"
+			(uuid "9843e937-3402-48e3-9900-d374325c8d02")
+		)
+		(pin "8"
+			(uuid "3a872cac-d0dd-4360-9df0-04e934f9e946")
+		)
+		(instances
+			(project ""
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "U16")
 					(unit 1)
 				)
 			)
@@ -62305,78 +62486,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "R16")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Jumper:SolderJumper_3_Bridged12")
-		(at 497.84 153.67 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp yes)
-		(uuid "39f7f161-e50a-46b9-a928-694b5653622a")
-		(property "Reference" "JP8"
-			(at 495.808 153.67 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "SolderJumper_3_Bridged12"
-			(at 494.03 153.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" "Jumper:SolderJumper-3_P1.3mm_Bridged12_Pad1.0x1.5mm"
-			(at 497.84 153.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 497.84 153.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "3-pole Solder Jumper, pins 1+2 closed/bridged"
-			(at 497.84 153.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "8e6bc606-f719-4384-a21a-145a6a943eb1")
-		)
-		(pin "2"
-			(uuid "acb53742-8410-4f84-9f6e-d914c8a1fac0")
-		)
-		(pin "3"
-			(uuid "4b19e34c-86e5-4745-bcb5-0fefa55f84aa")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "JP8")
 					(unit 1)
 				)
 			)
@@ -62953,6 +63062,84 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "C76")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "PCM_JLCPCB-Resistors:0603,0Ω")
+		(at 576.58 151.13 270)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3c5c5dbe-444b-494b-987c-4203adc1ee31")
+		(property "Reference" "TST-R27"
+			(at 574.548 153.416 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0Ω"
+			(at 576.58 151.13 90)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "PCM_JLCPCB:R_0603"
+			(at 576.58 152.908 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0603WAF0000T5E_C21189.pdf"
+			(at 576.58 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "100mW Thick Film Resistors 75V ±1% 0Ω 0603 Chip Resistor - Surface Mount ROHS"
+			(at 576.58 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C21189"
+			(at 576.58 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "43355c6d-ea4f-4059-8046-91b85be741ee")
+		)
+		(pin "2"
+			(uuid "cb47fa75-55d7-4fd7-b014-b6c374611c9f")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "TST-R27")
 					(unit 1)
 				)
 			)
@@ -63645,6 +63832,160 @@
 		)
 	)
 	(symbol
+		(lib_id "PCM_JLCPCB-Resistors:0603,0Ω")
+		(at 567.69 154.94 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "40d3d3c9-6c63-4838-9fbf-273dd4c9a9ba")
+		(property "Reference" "TST-R21"
+			(at 565.15 156.464 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0Ω"
+			(at 567.69 154.94 90)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "PCM_JLCPCB:R_0603"
+			(at 569.468 154.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0603WAF0000T5E_C21189.pdf"
+			(at 567.69 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "100mW Thick Film Resistors 75V ±1% 0Ω 0603 Chip Resistor - Surface Mount ROHS"
+			(at 567.69 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C21189"
+			(at 567.69 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2623d635-a342-47ec-b304-3548abfe8e7c")
+		)
+		(pin "2"
+			(uuid "1c357aa6-ec03-4a32-92ef-2e0bea929b9d")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "TST-R21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "PCM_JLCPCB-Capacitors:0603,100nF")
+		(at 593.09 151.13 90)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "41507426-4f9b-424e-9c21-36c0a4a179d5")
+		(property "Reference" "C70"
+			(at 595.122 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100nF"
+			(at 591.058 148.336 0)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "PCM_JLCPCB:C_0603"
+			(at 593.09 149.352 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
+			(at 593.09 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+			(at 593.09 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 593.09 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f32ee514-0ad9-41bf-81d7-6c392ffa6ac8")
+		)
+		(pin "2"
+			(uuid "f81ca7b0-78d9-4201-92fd-466e562a6102")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "C70")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "PCM_JLCPCB-Resistors:0402,22Ω")
 		(at 27.94 114.3 270)
 		(unit 1)
@@ -64057,26 +64398,16 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3V3")
-		(at 505.46 128.27 270)
+		(lib_id "Jumper:SolderJumper_3_Bridged12")
+		(at 567.69 163.83 90)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "43c71057-1942-4c49-9ede-f7f3d0e8dd71")
-		(property "Reference" "#PWR0115"
-			(at 501.65 128.27 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 509.27 128.2699 90)
+		(dnp yes)
+		(uuid "43876701-1d2b-455c-80b4-1633f8f1e263")
+		(property "Reference" "JP8"
+			(at 565.658 163.83 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -64084,8 +64415,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 505.46 128.27 0)
+		(property "Value" "SolderJumper_3_Bridged12"
+			(at 563.88 163.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -64093,8 +64424,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
-			(at 505.46 128.27 0)
+		(property "Footprint" "Jumper:SolderJumper-3_P1.3mm_Bridged12_Pad1.0x1.5mm"
+			(at 567.69 163.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -64102,8 +64433,17 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 505.46 128.27 0)
+		(property "Datasheet" "~"
+			(at 567.69 163.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "3-pole Solder Jumper, pins 1+2 closed/bridged"
+			(at 567.69 163.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -64112,12 +64452,18 @@
 			)
 		)
 		(pin "1"
-			(uuid "fa1a1895-7370-4756-ae2b-2d8a42582852")
+			(uuid "fd21da3e-371b-4d6c-9b68-3af1f547d280")
+		)
+		(pin "2"
+			(uuid "fe7ea2fa-9bb4-45a1-b9f6-a370a6d4e981")
+		)
+		(pin "3"
+			(uuid "91adf0a6-bd24-4e19-947f-5b8d702bae97")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0115")
+					(reference "JP8")
 					(unit 1)
 				)
 			)
@@ -67719,94 +68065,6 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-ICs:ICS-43434_C5656610")
-		(at 516.89 134.62 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "5729fd95-118c-46c1-8179-3d41842089b3")
-		(property "Reference" "U16"
-			(at 521.462 128.27 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "ICS-43434"
-			(at 516.636 140.97 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLCPCB:ICS-43434_C5656610"
-			(at 516.89 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/231023/DS-000069-ICS-43434-v1.2-8194c7772d771e21a553109502704f97.pdf"
-			(at 516.89 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Direction:Omni-directional Supply Voltage:1.65V~3.63V Supply Voltage:1.65V~3.63V Current Consumption:550uA Current Consumption:550uA SNR(Signal to Noise Ratio):64dB Sensitivity:- Sensitivity:-"
-			(at 516.89 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C5656610"
-			(at 516.89 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "5"
-			(uuid "841c602a-a47c-4548-b70d-dcda8f9abdb1")
-		)
-		(pin "3"
-			(uuid "6d3305a0-2c36-42f0-8e66-11da9351dd3e")
-		)
-		(pin "6"
-			(uuid "138984e6-989f-4172-b9f0-477ac0a22df7")
-		)
-		(pin "1"
-			(uuid "3a22162e-1cf8-4764-b54a-3d13c00aae1e")
-		)
-		(pin "2"
-			(uuid "192e3536-b783-4717-87c9-abeb7dc0f719")
-		)
-		(pin "4"
-			(uuid "047c5426-e64a-404f-b8dd-816471c670ce")
-		)
-		(instances
-			(project ""
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "U16")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "PCM_JLCPCB-Transistors:PMOS,AO3401A")
 		(at 525.78 374.65 270)
 		(mirror x)
@@ -70202,7 +70460,7 @@
 	)
 	(symbol
 		(lib_id "PCM_JLCPCB-Resistors:0603,0Ω")
-		(at 501.65 128.27 90)
+		(at 566.42 120.65 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -70210,7 +70468,7 @@
 		(dnp no)
 		(uuid "62b90989-5820-44d9-8dd5-73a9bb1d50c6")
 		(property "Reference" "TST-R20"
-			(at 502.92 125.73 90)
+			(at 563.88 122.174 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -70218,7 +70476,7 @@
 			)
 		)
 		(property "Value" "0Ω"
-			(at 501.65 128.27 90)
+			(at 566.42 120.65 90)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -70227,7 +70485,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:R_0603"
-			(at 501.65 130.048 90)
+			(at 568.198 120.65 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -70236,7 +70494,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0603WAF0000T5E_C21189.pdf"
-			(at 501.65 128.27 0)
+			(at 566.42 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -70245,7 +70503,7 @@
 			)
 		)
 		(property "Description" "100mW Thick Film Resistors 75V ±1% 0Ω 0603 Chip Resistor - Surface Mount ROHS"
-			(at 501.65 128.27 0)
+			(at 566.42 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -70254,7 +70512,7 @@
 			)
 		)
 		(property "LCSC" "C21189"
-			(at 501.65 128.27 0)
+			(at 566.42 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -70608,73 +70866,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "TP112")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:Earth")
-		(at 535.94 161.29 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "64987c08-2a73-4320-af2e-680073dd27d2")
-		(property "Reference" "#PWR0129"
-			(at 535.94 167.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "COM"
-			(at 535.94 165.1 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 535.94 161.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 535.94 161.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 535.94 161.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "77462fac-1dec-4938-9911-b4393ee14b48")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0129")
 					(unit 1)
 				)
 			)
@@ -72508,71 +72699,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3V3")
-		(at 505.46 147.32 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "6c4e6d56-87b6-41cd-af40-7564f7527e64")
-		(property "Reference" "#PWR0116"
-			(at 501.65 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 511.302 147.32 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 505.46 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 505.46 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 505.46 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "ae8eb327-fcb6-40e9-a0ee-ded640e697e1")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0116")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:HC-RJ45-055-4_8P8C_Shielded C3000211")
 		(at 495.3 48.26 180)
 		(unit 1)
@@ -72671,82 +72797,6 @@
 			(project ""
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "J9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "PCM_JLCPCB-Capacitors:0603,100nF")
-		(at 535.94 157.48 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "6c83a6b0-48f6-4021-b290-26a462839a9c")
-		(property "Reference" "C70"
-			(at 538.48 155.448 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "100nF"
-			(at 538.734 159.512 0)
-			(effects
-				(font
-					(size 0.8 0.8)
-				)
-			)
-		)
-		(property "Footprint" "PCM_JLCPCB:C_0603"
-			(at 537.718 157.48 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
-			(at 535.94 157.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 535.94 157.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C14663"
-			(at 535.94 157.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "3e5715c6-b235-4ab8-8067-f933fbdcc31e")
-		)
-		(pin "2"
-			(uuid "3f824940-ec64-4aba-a030-97cd2c56d101")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "C70")
 					(unit 1)
 				)
 			)
@@ -76093,7 +76143,8 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 541.02 127 270)
+		(at 566.42 116.84 90)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -76101,7 +76152,7 @@
 		(dnp no)
 		(uuid "7d29e9d1-1b27-43a0-a89f-ad9085dae21b")
 		(property "Reference" "#PWR0132"
-			(at 537.21 127 0)
+			(at 570.23 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -76110,7 +76161,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 539.242 124.968 90)
+			(at 568.198 114.808 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -76119,7 +76170,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 541.02 127 0)
+			(at 566.42 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -76128,7 +76179,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 541.02 127 0)
+			(at 566.42 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -76137,7 +76188,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 541.02 127 0)
+			(at 566.42 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79381,7 +79432,8 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 535.94 142.24 0)
+		(at 595.63 116.84 90)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -79390,7 +79442,7 @@
 		(fields_autoplaced yes)
 		(uuid "8f3d546c-9074-43b2-818f-a3facd4b299f")
 		(property "Reference" "#PWR0128"
-			(at 535.94 148.59 0)
+			(at 601.98 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79399,7 +79451,7 @@
 			)
 		)
 		(property "Value" "COM"
-			(at 535.94 146.05 0)
+			(at 599.44 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79408,7 +79460,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 535.94 142.24 0)
+			(at 595.63 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79417,7 +79469,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 535.94 142.24 0)
+			(at 595.63 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -79426,7 +79478,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 535.94 142.24 0)
+			(at 595.63 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -80682,6 +80734,103 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR0124")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC_Convertered:MSM261S4030H0R")
+		(at 589.28 161.29 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "93c98da3-aa8c-4466-b41f-2635d51d295c")
+		(property "Reference" "U17"
+			(at 580.644 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "MSM261S4030H0R"
+			(at 591.4233 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Project-specific:LGA-8_4.0x3.0mm_P0.84mm_MSM261S4030H0R"
+			(at 589.28 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://files.waveshare.com/upload/0/01/MSM261S4030H0R.pdf"
+			(at 589.28 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 589.28 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C2840615"
+			(at 589.28 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "457fc758-cb6c-4271-85da-4d295483bbd4")
+		)
+		(pin "5"
+			(uuid "060b7d41-c903-48b6-a545-b241462f3231")
+		)
+		(pin "4"
+			(uuid "2a5af552-7fc6-473f-8c91-94d2b461925d")
+		)
+		(pin "6"
+			(uuid "7058f537-abd8-44a6-9e69-2c60ab09d566")
+		)
+		(pin "1"
+			(uuid "515d5b89-f7a6-41b6-a1ae-6eba8de10faf")
+		)
+		(pin "3"
+			(uuid "47f55589-8105-42c7-aecc-a538052280e9")
+		)
+		(pin "7"
+			(uuid "843225d1-26bf-417b-b8fc-bf47aa84bfb6")
+		)
+		(pin "8"
+			(uuid "12d4c5c0-32cf-4bbc-889d-ec69bd664e78")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "U17")
 					(unit 1)
 				)
 			)
@@ -82514,94 +82663,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#FLG09")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLCPCB-ICs:ICS-43434_C5656610")
-		(at 516.89 153.67 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "a0d46f6b-cf0d-458b-8af0-8c294848225a")
-		(property "Reference" "U17"
-			(at 521.208 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "ICS-43434"
-			(at 516.636 160.02 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLCPCB:ICS-43434_C5656610"
-			(at 516.89 153.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/231023/DS-000069-ICS-43434-v1.2-8194c7772d771e21a553109502704f97.pdf"
-			(at 516.89 153.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Direction:Omni-directional Supply Voltage:1.65V~3.63V Supply Voltage:1.65V~3.63V Current Consumption:550uA Current Consumption:550uA SNR(Signal to Noise Ratio):64dB Sensitivity:- Sensitivity:-"
-			(at 516.89 153.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C5656610"
-			(at 516.89 153.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "5"
-			(uuid "76d14e40-cb98-4486-9bdd-63ae7e726309")
-		)
-		(pin "3"
-			(uuid "197d7591-cd05-4e10-aa70-71d3db6ab2b9")
-		)
-		(pin "6"
-			(uuid "560cb155-40af-4363-a167-2dc0d515bc54")
-		)
-		(pin "1"
-			(uuid "6a0fea9d-9ae3-4678-a1bb-78a6e58d8eef")
-		)
-		(pin "2"
-			(uuid "7bd639e5-e36d-4a0f-b24c-f6f3af949c98")
-		)
-		(pin "4"
-			(uuid "51e9be6b-aa48-46c6-a66d-a12037e75314")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "U17")
 					(unit 1)
 				)
 			)
@@ -86716,72 +86777,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3V3")
-		(at 541.02 146.05 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "b0906d94-ac98-413e-8588-e3d53e464ee3")
-		(property "Reference" "#PWR0133"
-			(at 537.21 146.05 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 539.242 144.018 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 541.02 146.05 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 541.02 146.05 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 541.02 146.05 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "85ba26e1-6ee9-460b-950d-3764645ccf3f")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0133")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "PCM_JLCPCB-Capacitors:0402,3.3pF")
 		(at 127 358.14 0)
 		(unit 1)
@@ -86855,83 +86850,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "C98")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "PCM_JLCPCB-Resistors:0603,0Ω")
-		(at 501.65 147.32 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "b0f89c0d-8b0b-416b-b3bc-ef6ba7e0a1ff")
-		(property "Reference" "TST-R21"
-			(at 502.92 144.78 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "0Ω"
-			(at 501.65 147.32 90)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 0.8 0.8)
-				)
-			)
-		)
-		(property "Footprint" "PCM_JLCPCB:R_0603"
-			(at 501.65 149.098 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0603WAF0000T5E_C21189.pdf"
-			(at 501.65 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "100mW Thick Film Resistors 75V ±1% 0Ω 0603 Chip Resistor - Surface Mount ROHS"
-			(at 501.65 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC" "C21189"
-			(at 501.65 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "734be11b-e84f-426c-baf8-1936c570ea98")
-		)
-		(pin "2"
-			(uuid "86dde4b5-7027-42be-85dd-4f07b700d141")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TST-R21")
 					(unit 1)
 				)
 			)
@@ -92976,6 +92894,73 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+3V3")
+		(at 567.69 151.13 90)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d1bbb8a5-7be0-4086-8a9f-8c1ce2c9cf6d")
+		(property "Reference" "#PWR0115"
+			(at 571.5 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 569.468 149.098 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 567.69 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 567.69 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 567.69 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "706e64c1-2890-4646-bada-580c91c3c8cf")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0115")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:Earth")
 		(at 295.91 400.05 90)
 		(mirror x)
@@ -94823,7 +94808,7 @@
 	)
 	(symbol
 		(lib_id "Jumper:SolderJumper_3_Bridged12")
-		(at 497.84 134.62 90)
+		(at 566.42 129.54 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -94832,7 +94817,7 @@
 		(dnp yes)
 		(uuid "dbd54fc0-1666-46ea-9220-96285fe8ed24")
 		(property "Reference" "JP7"
-			(at 495.808 134.62 90)
+			(at 564.388 129.54 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -94841,7 +94826,7 @@
 			)
 		)
 		(property "Value" "SolderJumper_3_Bridged12"
-			(at 494.03 134.62 0)
+			(at 562.61 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -94850,7 +94835,7 @@
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-3_P1.3mm_Bridged12_Pad1.0x1.5mm"
-			(at 497.84 134.62 0)
+			(at 566.42 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -94859,7 +94844,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 497.84 134.62 0)
+			(at 566.42 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -94868,7 +94853,7 @@
 			)
 		)
 		(property "Description" "3-pole Solder Jumper, pins 1+2 closed/bridged"
-			(at 497.84 134.62 0)
+			(at 566.42 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -94886,7 +94871,7 @@
 			(uuid "0736f85b-4a4c-4f66-9d59-5cded9faf637")
 		)
 		(instances
-			(project ""
+			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "JP7")
 					(unit 1)
@@ -95128,7 +95113,8 @@
 	)
 	(symbol
 		(lib_id "PCM_JLCPCB-Capacitors:0603,100nF")
-		(at 535.94 138.43 180)
+		(at 591.82 116.84 90)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -95136,7 +95122,7 @@
 		(dnp no)
 		(uuid "dcecd351-0979-45d9-8a8e-53a4fbab7175")
 		(property "Reference" "C69"
-			(at 538.48 136.398 0)
+			(at 593.852 114.3 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -95144,7 +95130,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 538.734 140.462 0)
+			(at 589.788 114.046 0)
 			(effects
 				(font
 					(size 0.8 0.8)
@@ -95152,7 +95138,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:C_0603"
-			(at 537.718 138.43 90)
+			(at 591.82 115.062 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -95161,7 +95147,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
-			(at 535.94 138.43 0)
+			(at 591.82 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -95170,7 +95156,7 @@
 			)
 		)
 		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 535.94 138.43 0)
+			(at 591.82 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -95179,7 +95165,7 @@
 			)
 		)
 		(property "LCSC" "C14663"
-			(at 535.94 138.43 0)
+			(at 591.82 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -95424,7 +95410,8 @@
 	)
 	(symbol
 		(lib_id "PCM_JLCPCB-Resistors:0603,0Ω")
-		(at 541.02 130.81 180)
+		(at 575.31 116.84 270)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -95432,7 +95419,7 @@
 		(dnp no)
 		(uuid "dd92e31a-84e0-45ef-ad40-bd5cb39d462c")
 		(property "Reference" "TST-R26"
-			(at 538.48 129.54 90)
+			(at 573.278 119.126 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -95440,7 +95427,7 @@
 			)
 		)
 		(property "Value" "0Ω"
-			(at 541.02 130.81 90)
+			(at 575.31 116.84 90)
 			(do_not_autoplace yes)
 			(effects
 				(font
@@ -95449,7 +95436,7 @@
 			)
 		)
 		(property "Footprint" "PCM_JLCPCB:R_0603"
-			(at 542.798 130.81 90)
+			(at 575.31 118.618 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -95458,7 +95445,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0603WAF0000T5E_C21189.pdf"
-			(at 541.02 130.81 0)
+			(at 575.31 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -95467,7 +95454,7 @@
 			)
 		)
 		(property "Description" "100mW Thick Film Resistors 75V ±1% 0Ω 0603 Chip Resistor - Surface Mount ROHS"
-			(at 541.02 130.81 0)
+			(at 575.31 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -95476,7 +95463,7 @@
 			)
 		)
 		(property "LCSC" "C21189"
-			(at 541.02 130.81 0)
+			(at 575.31 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -102639,6 +102626,73 @@
 			(project ""
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "U11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 589.28 173.99 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "fce40be0-347b-4bfa-8a8f-ea141c2b1f6d")
+		(property "Reference" "#PWR0202"
+			(at 589.28 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "COM"
+			(at 589.28 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 589.28 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 589.28 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 589.28 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7ad64fb9-ab29-4532-8941-66bd8f29524f")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0202")
 					(unit 1)
 				)
 			)
