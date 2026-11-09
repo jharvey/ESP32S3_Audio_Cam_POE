@@ -32,6 +32,8 @@ Clone with the JLCPCB library submodule, which the symbol and footprint tables p
 git clone --recurse-submodules https://github.com/jharvey/ESP32S3_Audio_Cam_POE.git
 ```
 
+All JLCPCB symbols, footprints and 3D models resolve from this submodule, so you do not need the JLCPCB library installed through the KiCad Plugin and Content Manager. Other 3D models use KiCad's standard `${KICAD10_3DMODEL_DIR}` library.
+
 On Windows, if the submodule fails with "Filename too long" or "'$GIT_DIR' too big", enable long paths first (`git config --global core.longpaths true`) or clone to a shorter folder.
 
 
@@ -43,4 +45,7 @@ See 3D case found here
 TBD create file in OnShape and post link here. TBD
 
 ## 3D pictures from KICAD
-TBD export front and back renders to `production/V0.1_All-in-one/` and link them here. TBD
+<div align="center">
+<img src="./production/V0.1_All-in-one/ESP32S3_Audio_Cam_POE_Front.png" alt="ESP32S3_Audio_Cam_POE front" width="600" />
+<img src="./production/V0.1_All-in-one/ESP32S3_Audio_Cam_POE_Back.png" alt="ESP32S3_Audio_Cam_POE back" width="600" />
+</div>
