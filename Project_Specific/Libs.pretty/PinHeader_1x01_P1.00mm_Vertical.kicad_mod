@@ -1,7 +1,7 @@
 (footprint "PinHeader_1x01_P1.00mm_Vertical"
-	(version 20241229)
+	(version 20260206)
 	(generator "pcbnew")
-	(generator_version "9.0")
+	(generator_version "10.0")
 	(layer "F.Cu")
 	(descr "Through hole straight pin header, 1x01, 1.00mm pitch, single row")
 	(tags "Through hole pin header THT 1x01 1.00mm single row")
@@ -10,7 +10,10 @@
 		(layer "F.SilkS")
 		(uuid "6416221e-aa2f-4253-bbe8-628b00a83c7f")
 		(effects
-			(font (size 0.5 0.5) (thickness 0.125))
+			(font
+				(size 0.5 0.5)
+				(thickness 0.125)
+			)
 		)
 	)
 	(property "Value" "TestPoint"
@@ -18,7 +21,10 @@
 		(layer "F.Fab")
 		(uuid "35a9040b-1f42-4b8c-bc43-f93cd3e1f243")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Datasheet" "~"
@@ -27,7 +33,10 @@
 		(hide yes)
 		(uuid "63d97211-a04a-4b3a-85ee-bfbd883b728b")
 		(effects
-			(font (size 1.27 1.27) (thickness 0.15))
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Description" "test point"
@@ -36,7 +45,10 @@
 		(hide yes)
 		(uuid "9916eff0-588d-410e-8820-e4aad1edbab7")
 		(effects
-			(font (size 1.27 1.27) (thickness 0.15))
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Allied_Number" ""
@@ -46,7 +58,10 @@
 		(hide yes)
 		(uuid "7392140f-3ca3-4f1d-9de3-d7ebdb626282")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "LCSC PART #" ""
@@ -56,7 +71,10 @@
 		(hide yes)
 		(uuid "c3bf0a08-9a37-4471-8497-9abc80d9cc29")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Arrow Part Number" ""
@@ -66,7 +84,10 @@
 		(hide yes)
 		(uuid "671f445a-2a66-4916-959a-ca9adab14f50")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Arrow Price/Stock" ""
@@ -76,7 +97,10 @@
 		(hide yes)
 		(uuid "6bd46481-a4e7-447e-be0c-24f7bc0f488d")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Cheap Version" ""
@@ -86,7 +110,10 @@
 		(hide yes)
 		(uuid "733d2c6a-4adc-406b-9749-8920fd4b985d")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Expensive Version" ""
@@ -96,7 +123,10 @@
 		(hide yes)
 		(uuid "068124ef-6af6-4960-b4da-c93eb923f637")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Field5" ""
@@ -106,7 +136,10 @@
 		(hide yes)
 		(uuid "4d23b7c7-29e6-434f-b5de-e6ed93185aaf")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "LCSC Part" ""
@@ -116,7 +149,10 @@
 		(hide yes)
 		(uuid "29d22809-6c8e-4a5e-9165-e1a73bacd56b")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "MPN" ""
@@ -126,7 +162,10 @@
 		(hide yes)
 		(uuid "96056eac-dbbd-4dd3-b09b-c2ac71a5c3c5")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Mouser Part Number" ""
@@ -136,7 +175,10 @@
 		(hide yes)
 		(uuid "0c4f54b3-77bb-4daa-9fc3-69f30516448c")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Mouser Price/Stock" ""
@@ -146,7 +188,10 @@
 		(hide yes)
 		(uuid "0052b2eb-ff08-4c8f-afb6-7995cc9a26b3")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Package" ""
@@ -156,7 +201,10 @@
 		(hide yes)
 		(uuid "bb95608d-4ae3-4a06-b3f6-799421ca9db9")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Dropout Voltage" ""
@@ -166,7 +214,10 @@
 		(hide yes)
 		(uuid "b188c92c-809d-46df-8e90-a81dfeb09918")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Feature" ""
@@ -176,7 +227,10 @@
 		(hide yes)
 		(uuid "ed1c33e5-d482-411f-bec0-6f07f4a3859c")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Maximum Input Voltage" ""
@@ -186,7 +240,10 @@
 		(hide yes)
 		(uuid "88e78c6d-d9be-4a88-9b49-b891af27132d")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Number Of Outputs" ""
@@ -196,7 +253,10 @@
 		(hide yes)
 		(uuid "7991dff0-68b9-4d61-ae34-875280edaf35")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Output Current" ""
@@ -206,7 +266,10 @@
 		(hide yes)
 		(uuid "277a1527-8e21-476c-af33-56a070de1ab3")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Output Polarity" ""
@@ -216,7 +279,10 @@
 		(hide yes)
 		(uuid "a3c3658c-33d6-47ee-8b78-8a17a99042d7")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Output Type" ""
@@ -226,7 +292,10 @@
 		(hide yes)
 		(uuid "c2726dee-a2ca-457d-946a-f95ec384fd79")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Output Voltage" ""
@@ -236,7 +305,10 @@
 		(hide yes)
 		(uuid "81c4cf8c-d1eb-4837-bd16-a47e0fd0a9af")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Name" ""
@@ -246,16 +318,23 @@
 		(hide yes)
 		(uuid "72355561-2c6d-4036-99f6-02c4dc4d9664")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(attr through_hole dnp)
+	(duplicate_pad_numbers_are_jumpers no)
 	(fp_text user "${REFERENCE}"
 		(at 0 0 90)
 		(layer "F.Fab")
 		(uuid "f817e481-c47f-4b36-b99c-390764647b2e")
 		(effects
-			(font (size 0.76 0.76) (thickness 0.114))
+			(font
+				(size 0.76 0.76)
+				(thickness 0.114)
+			)
 		)
 	)
 	(pad "1" thru_hole rect
@@ -268,8 +347,14 @@
 	)
 	(embedded_fonts no)
 	(model "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_1.00mm.3dshapes/PinHeader_1x01_P1.00mm_Vertical.step"
-		(offset (xyz 0 0 0))
-		(scale (xyz 1 1 1))
-		(rotate (xyz 0 0 0))
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
 	)
 )

@@ -1,14 +1,17 @@
 (footprint "ANT-SMD_H2U646MHLQ0200"
-	(version 20241229)
+	(version 20260206)
 	(generator "pcbnew")
-	(generator_version "9.0")
+	(generator_version "10.0")
 	(layer "F.Cu")
 	(property "Reference" "ANT"
 		(at 0 2 180)
 		(layer "F.SilkS")
 		(uuid "b7eafb9c-d8d6-4fed-bac7-8d263173ddd5")
 		(effects
-			(font (size 0.686 0.6285) (thickness 0.1525))
+			(font
+				(size 0.686 0.6285)
+				(thickness 0.1525)
+			)
 			(justify top)
 		)
 	)
@@ -17,7 +20,10 @@
 		(layer "F.Fab")
 		(uuid "9798c869-c95a-4d85-93f9-dff88bb5fcb1")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Datasheet" ""
@@ -26,7 +32,10 @@
 		(hide yes)
 		(uuid "036eb191-1ea0-4ea9-99be-b97b861ed68f")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Description" "Antennas"
@@ -35,7 +44,10 @@
 		(hide yes)
 		(uuid "325bda17-c4b6-4171-8a34-591d1db5121d")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Height" "0.50"
@@ -45,7 +57,10 @@
 		(hide yes)
 		(uuid "6c66e2e2-b27c-49bb-bb2f-cf47dcf6ff78")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "RS Part Number" ""
@@ -55,7 +70,10 @@
 		(hide yes)
 		(uuid "945a7e1d-d83f-4d78-a64f-c226e7355fdc")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "RS Price/Stock" ""
@@ -65,7 +83,10 @@
 		(hide yes)
 		(uuid "bbd5ea3b-fae9-49dd-9d9e-3277c17ea2b4")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Manufacturer_Name" ""
@@ -75,7 +96,10 @@
 		(hide yes)
 		(uuid "1a528f7b-9057-4508-9ece-186a16b52960")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Manufacturer_Part_Number" "H2U646MHLQ0200"
@@ -85,7 +109,10 @@
 		(hide yes)
 		(uuid "a747fc62-54cf-4fca-a47f-5ac21ffbcaed")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Allied_Number" ""
@@ -95,7 +122,10 @@
 		(hide yes)
 		(uuid "ab2d8574-12ec-456e-8dba-d1dcc8fb0029")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "LCSC PART #" "C5370061"
@@ -105,7 +135,10 @@
 		(hide yes)
 		(uuid "fddb61de-8b24-437c-83af-729a397361eb")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Arrow Part Number" ""
@@ -115,7 +148,10 @@
 		(hide yes)
 		(uuid "4c28b5d7-f642-4467-bf60-ce727af2ffd3")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Arrow Price/Stock" ""
@@ -125,7 +161,10 @@
 		(hide yes)
 		(uuid "34f35934-8494-4977-94c7-4da9eb416554")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Cheap Version" ""
@@ -135,7 +174,10 @@
 		(hide yes)
 		(uuid "48764415-404e-478e-af23-a07149dc828e")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Expensive Version" ""
@@ -145,7 +187,10 @@
 		(hide yes)
 		(uuid "41fc93d3-0778-48c8-8ba9-dcadb5aed375")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Field5" ""
@@ -155,7 +200,10 @@
 		(hide yes)
 		(uuid "cd9aed0e-5c4b-4626-b32f-c307562e6adc")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "LCSC Part" ""
@@ -165,7 +213,10 @@
 		(hide yes)
 		(uuid "ef3723cd-e01e-4cbc-996f-3a2ce9cd4a14")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "MPN" ""
@@ -175,7 +226,10 @@
 		(hide yes)
 		(uuid "247cc8b5-5d7e-4e58-a007-0ca3313125d7")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Mouser Part Number" ""
@@ -185,7 +239,10 @@
 		(hide yes)
 		(uuid "0fcfa6a2-de9c-45d9-9490-1038ed97d325")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Mouser Price/Stock" ""
@@ -195,7 +252,10 @@
 		(hide yes)
 		(uuid "973c4c79-b1a9-4d64-9641-4f27539e9bde")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Package" ""
@@ -205,7 +265,10 @@
 		(hide yes)
 		(uuid "39e96eac-e540-4e29-beaa-b648f9ce96cc")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Manufacturer Part" ""
@@ -215,7 +278,10 @@
 		(hide yes)
 		(uuid "5769a382-9059-4c4d-a384-065bdad37054")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Manufacturer" ""
@@ -225,7 +291,10 @@
 		(hide yes)
 		(uuid "fdfcd88a-896f-4a83-a746-19ebecf9834f")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Supplier Part" "C5370061"
@@ -235,7 +304,10 @@
 		(hide yes)
 		(uuid "91211522-7655-4816-9c83-3281cb115684")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Supplier" "LCSC"
@@ -245,7 +317,10 @@
 		(hide yes)
 		(uuid "9dcd7b37-3738-43ce-8a00-a542a48f0472")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "LCSC Part Name" ""
@@ -255,7 +330,10 @@
 		(hide yes)
 		(uuid "75db34ef-26e1-4793-9917-afc262674d82")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Dropout Voltage" ""
@@ -265,7 +343,10 @@
 		(hide yes)
 		(uuid "951038ac-9b55-456a-85ec-07eea48c1b1d")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Feature" ""
@@ -275,7 +356,10 @@
 		(hide yes)
 		(uuid "7f1529f8-6d1e-4ee0-a896-25931077da37")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Maximum Input Voltage" ""
@@ -285,7 +369,10 @@
 		(hide yes)
 		(uuid "e302ab4c-72fa-48bf-86bd-a6bd5d039da5")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Number Of Outputs" ""
@@ -295,7 +382,10 @@
 		(hide yes)
 		(uuid "7f1b690d-b05b-40eb-901b-d1b0b1816ffd")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Output Current" ""
@@ -305,7 +395,10 @@
 		(hide yes)
 		(uuid "5403b293-c0ff-4e6a-ad82-a86a860d8bc8")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Output Polarity" ""
@@ -315,7 +408,10 @@
 		(hide yes)
 		(uuid "c3070e66-846e-41be-99d7-8be821b1ba3e")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Output Type" ""
@@ -325,7 +421,10 @@
 		(hide yes)
 		(uuid "c40e1c21-220c-414b-a2a5-4b518054a633")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Output Voltage" ""
@@ -335,7 +434,10 @@
 		(hide yes)
 		(uuid "5159fc9b-3115-4061-94ab-ffab7b063d0e")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "Name" ""
@@ -345,7 +447,10 @@
 		(hide yes)
 		(uuid "83ef3328-02ec-4816-8cc8-3dd9701a4a3b")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
 	(property "LCSC" "C5370061"
@@ -355,20 +460,30 @@
 		(hide yes)
 		(uuid "9dfcd302-18a6-4702-86ef-de90884bb590")
 		(effects
-			(font (size 1 1) (thickness 0.15))
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
 		)
 	)
+	(duplicate_pad_numbers_are_jumpers no)
 	(fp_line
 		(start -4.5 -1.5)
 		(end 4.5 -1.5)
-		(stroke (width 0.152) (type default))
+		(stroke
+			(width 0.152)
+			(type default)
+		)
 		(layer "F.SilkS")
 		(uuid "75284b2c-2eac-4f47-abce-02cb8f2df5ca")
 	)
 	(fp_line
 		(start -4.5 1.5)
 		(end 4.5 1.5)
-		(stroke (width 0.152) (type default))
+		(stroke
+			(width 0.152)
+			(type default)
+		)
 		(layer "F.SilkS")
 		(uuid "89643d2c-279b-4531-9d81-6d346a6b6659")
 	)
@@ -376,7 +491,10 @@
 		(pts
 			(xy 3.5 -1.5) (xy 3.5 1.5) (xy 4.5 1.5) (xy 4.5 -1.5)
 		)
-		(stroke (width 0) (type default))
+		(stroke
+			(width 0)
+			(type default)
+		)
 		(fill yes)
 		(layer "F.SilkS")
 		(uuid "80ae4ea6-79d7-4c4e-bc42-10175a7c5bef")
@@ -385,7 +503,10 @@
 		(pts
 			(xy 3.5 -1.5) (xy 3.5 1.5) (xy 4.5 1.5) (xy 4.5 -1.5)
 		)
-		(stroke (width 0) (type default))
+		(stroke
+			(width 0)
+			(type default)
+		)
 		(fill yes)
 		(layer "Dwgs.User")
 		(uuid "81ed56ca-5129-4d0a-9ff2-011c3053b490")
@@ -393,7 +514,10 @@
 	(fp_rect
 		(start -5.6 -1.7)
 		(end 5.6 1.7)
-		(stroke (width 0.05) (type solid))
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
 		(fill no)
 		(layer "F.CrtYd")
 		(uuid "1fd4f376-00c5-4fd5-88a8-3a189b275502")
@@ -402,7 +526,10 @@
 		(pts
 			(xy -4.5 -1.5) (xy -4.5 1.5) (xy -5.5 1.5) (xy -5.5 -1.5)
 		)
-		(stroke (width 0) (type default))
+		(stroke
+			(width 0)
+			(type default)
+		)
 		(fill yes)
 		(layer "User.1")
 		(uuid "6ce016eb-487f-43a9-9287-6c5082e6c7d4")
@@ -411,7 +538,10 @@
 		(pts
 			(xy 4.5 1.5) (xy 4.5 -1.5) (xy 5.5 -1.5) (xy 5.5 1.5)
 		)
-		(stroke (width 0) (type default))
+		(stroke
+			(width 0)
+			(type default)
+		)
 		(fill yes)
 		(layer "User.1")
 		(uuid "a7362509-5d02-407a-ab1c-8420cd548a5b")
@@ -419,28 +549,40 @@
 	(fp_line
 		(start -6 -2)
 		(end 6 -2)
-		(stroke (width 0.051) (type default))
+		(stroke
+			(width 0.051)
+			(type default)
+		)
 		(layer "User.2")
 		(uuid "92df6dd1-942e-4410-98b5-be1e0763c91e")
 	)
 	(fp_line
 		(start -6 2)
 		(end -6 -2)
-		(stroke (width 0.051) (type default))
+		(stroke
+			(width 0.051)
+			(type default)
+		)
 		(layer "User.2")
 		(uuid "3742d507-2812-41f1-87b1-93aa4413a3bf")
 	)
 	(fp_line
 		(start 6 -2)
 		(end 6 2)
-		(stroke (width 0.051) (type default))
+		(stroke
+			(width 0.051)
+			(type default)
+		)
 		(layer "User.2")
 		(uuid "4dab644a-26dd-43b2-8710-533f3f01a01e")
 	)
 	(fp_line
 		(start 6 2)
 		(end -6 2)
-		(stroke (width 0.051) (type default))
+		(stroke
+			(width 0.051)
+			(type default)
+		)
 		(layer "User.2")
 		(uuid "ac91d621-6d56-4117-85a1-ec40c7bf4345")
 	)
@@ -450,7 +592,10 @@
 		(layer "F.SilkS")
 		(uuid "9dc53c45-81e6-4e1d-8de0-a120c3a57d0a")
 		(effects
-			(font (size 1 1) (thickness 0.1))
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
 			(justify left bottom)
 		)
 	)
@@ -474,8 +619,14 @@
 	)
 	(embedded_fonts no)
 	(model "${KIPRJMOD}/JLCPCB-Kicad-Library/3dmodels/JLCPCB.3dshapes/ANT-SMD_L3.2-W1.6-KH-3216F245C04.step"
-		(offset (xyz 0 0 0))
-		(scale (xyz 3.125 1.11 1.93))
-		(rotate (xyz -90 -0 -180))
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 3.125 1.11 1.93)
+		)
+		(rotate
+			(xyz -90 -0 -180)
+		)
 	)
 )
