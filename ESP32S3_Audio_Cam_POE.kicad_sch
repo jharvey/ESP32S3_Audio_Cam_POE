@@ -15763,22 +15763,16 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "JLCPCB-Diodes:Switching,1N4148W"
-			(pin_numbers
-				(hide yes)
-			)
+		(symbol "JLCPCB-Diodes:Schottky,DSK24"
+			(pin_numbers hide)
 			(pin_names
 				(offset 0)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "D"
 				(at 2.032 0.834 0)
-				(show_name no)
-				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -15786,10 +15780,8 @@
 					(justify left)
 				)
 			)
-			(property "Value" "1N4148W"
+			(property "Value" "DSK24"
 				(at 2.032 -1.2122 0)
-				(show_name no)
-				(do_not_autoplace no)
 				(effects
 					(font
 						(size 0.8 0.8)
@@ -15797,227 +15789,133 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" "JLCPCB:D_SOD-123"
+			(property "Footprint" "JLCPCB:D_SOD-123FL"
 				(at -1.778 0 90)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1811061725_ST-Semtech-1N4148W_C81598.pdf"
+			(property "Datasheet" "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2408141453_hongjiacheng-DSK24_C22466352.pdf"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(property "Description" "75V Independent Type 1V@50mA 4ns 150mA SOD-123 Switching Diodes ROHS"
+			(property "Description" "40V Independent Type 550mV@2A 2A SOD-123FL Schottky Diodes ROHS"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(property "LCSC" "C81598"
+			(property "LCSC" "C22466352"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(property "Stock" "2123933"
+			(property "Stock" "28132"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(property "Price" "0.013USD"
+			(property "Price" "0.022USD"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
 			(property "Process" "SMT"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(property "Minimum Qty" "20"
+			(property "Minimum Qty" "15"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(property "Attrition Qty" "10"
+			(property "Attrition Qty" "4"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(property "Class" "Basic Component"
+			(property "Class" "Preferred Component"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(property "Category" "Diodes,Switching Diode"
+			(property "Category" "Diodes,Schottky Diodes"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(property "Manufacturer" "ST(Semtech)"
+			(property "Manufacturer" "hongjiacheng"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(property "Part" "1N4148W"
+			(property "Part" "DSK24"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-				)
-			)
-			(property "Rectified Current" "150mA"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Forward Voltage (Vf@If)" "1V@50mA"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Reverse Voltage (Vr)" "75V"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Reverse Recovery Time (trr)" "4ns"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Diode Configuration" "Independent Type"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Reverse Leakage Current" "1uA@75V"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
+					(hide yes)
 				)
 			)
 			(property "ki_fp_filters" "D_*"
 				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(hide yes)
 				)
 			)
-			(symbol "Switching,1N4148W_0_1"
+			(symbol "Schottky,DSK24_0_1"
 				(polyline
 					(pts
 						(xy -1.27 1.27) (xy 0 -1.27) (xy 1.27 1.27) (xy -1.27 1.27)
@@ -16032,7 +15930,7 @@
 				)
 				(polyline
 					(pts
-						(xy -1.27 -1.27) (xy 1.27 -1.27)
+						(xy 0.635 -1.905) (xy 1.27 -1.905) (xy 1.27 -1.27) (xy -1.27 -1.27) (xy -1.27 -0.635) (xy -0.635 -0.635)
 					)
 					(stroke
 						(width 0.254)
@@ -16043,7 +15941,7 @@
 					)
 				)
 			)
-			(symbol "Switching,1N4148W_1_1"
+			(symbol "Schottky,DSK24_1_1"
 				(pin passive line
 					(at 0 -3.81 90)
 					(length 3.81)
@@ -16081,7 +15979,6 @@
 					)
 				)
 			)
-			(embedded_fonts no)
 		)
 		(symbol "JLCPCB-Diodes:TVS-Uni,SMAJ58A"
 			(pin_numbers
@@ -56926,7 +56823,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Diodes:Switching,1N4148W")
+		(lib_id "JLCPCB-Diodes:Schottky,DSK24")
 		(at 50.8 275.59 90)
 		(unit 1)
 		(body_style 1)
@@ -56947,7 +56844,7 @@
 				)
 			)
 		)
-		(property "Value" "1N4148W"
+		(property "Value" "DSK24"
 			(at 50.8 271.78 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -56957,7 +56854,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:D_SOD-123"
+		(property "Footprint" "JLCPCB:D_SOD-123FL"
 			(at 50.8 277.368 90)
 			(hide yes)
 			(show_name no)
@@ -56968,7 +56865,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1811061725_ST-Semtech-1N4148W_C81598.pdf"
+		(property "Datasheet" "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2408141453_hongjiacheng-DSK24_C22466352.pdf"
 			(at 50.8 275.59 0)
 			(hide yes)
 			(show_name no)
@@ -56979,7 +56876,7 @@
 				)
 			)
 		)
-		(property "Description" "75V Independent Type 1V@50mA 4ns 150mA SOD-123 Switching Diodes ROHS"
+		(property "Description" "40V 2A 550mV@2A SOD-123FL Schottky Diode ROHS"
 			(at 50.8 275.59 0)
 			(hide yes)
 			(show_name no)
@@ -56990,7 +56887,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C81598"
+		(property "LCSC" "C22466352"
 			(at 50.8 275.59 0)
 			(hide yes)
 			(show_name no)
@@ -64004,7 +63901,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Diodes:Switching,1N4148W")
+		(lib_id "JLCPCB-Diodes:Schottky,DSK24")
 		(at 510.54 101.6 90)
 		(unit 1)
 		(body_style 1)
@@ -64025,7 +63922,7 @@
 				)
 			)
 		)
-		(property "Value" "1N4148W"
+		(property "Value" "DSK24"
 			(at 510.54 97.79 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -64035,7 +63932,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:D_SOD-123"
+		(property "Footprint" "JLCPCB:D_SOD-123FL"
 			(at 510.54 103.378 90)
 			(hide yes)
 			(show_name no)
@@ -64046,7 +63943,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1811061725_ST-Semtech-1N4148W_C81598.pdf"
+		(property "Datasheet" "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2408141453_hongjiacheng-DSK24_C22466352.pdf"
 			(at 510.54 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -64057,7 +63954,7 @@
 				)
 			)
 		)
-		(property "Description" "75V Independent Type 1V@50mA 4ns 150mA SOD-123 Switching Diodes ROHS"
+		(property "Description" "40V 2A 550mV@2A SOD-123FL Schottky Diode ROHS"
 			(at 510.54 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -64068,7 +63965,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C81598"
+		(property "LCSC" "C22466352"
 			(at 510.54 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -109880,7 +109777,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Diodes:Switching,1N4148W")
+		(lib_id "JLCPCB-Diodes:Schottky,DSK24")
 		(at 50.8 31.75 90)
 		(unit 1)
 		(body_style 1)
@@ -109901,7 +109798,7 @@
 				)
 			)
 		)
-		(property "Value" "1N4148W"
+		(property "Value" "DSK24"
 			(at 50.8 27.94 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -109911,7 +109808,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:D_SOD-123"
+		(property "Footprint" "JLCPCB:D_SOD-123FL"
 			(at 50.8 33.528 90)
 			(hide yes)
 			(show_name no)
@@ -109922,7 +109819,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1811061725_ST-Semtech-1N4148W_C81598.pdf"
+		(property "Datasheet" "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2408141453_hongjiacheng-DSK24_C22466352.pdf"
 			(at 50.8 31.75 0)
 			(hide yes)
 			(show_name no)
@@ -109933,7 +109830,7 @@
 				)
 			)
 		)
-		(property "Description" "75V Independent Type 1V@50mA 4ns 150mA SOD-123 Switching Diodes ROHS"
+		(property "Description" "40V 2A 550mV@2A SOD-123FL Schottky Diode ROHS"
 			(at 50.8 31.75 0)
 			(hide yes)
 			(show_name no)
@@ -109944,7 +109841,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C81598"
+		(property "LCSC" "C22466352"
 			(at 50.8 31.75 0)
 			(hide yes)
 			(show_name no)
