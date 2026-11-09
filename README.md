@@ -1,6 +1,6 @@
 # ESP32S3_Audio_Cam_POE
 
-This is a PCB layout for ESP32S3 with OV2640 / OV5640 camera. This was designeed with KiCAD version 9. 
+This is a PCB layout for ESP32S3 with OV2640 / OV5640 camera. It was designed in KiCad 9 and converted to KiCad 10 (10.0.8); the files no longer open in KiCad 9.
 The boards major features include:
 * Camera.
 * 2 way audio.
@@ -17,6 +17,8 @@ Firmware found here https://github.com/jharvey/ESP32-CAM_MJPEG2SD
 
 Changes up to version 0.1:
 * Initial layout
+* Converted to KiCad 10.
+* Removed the Medium and Smaller cost-reduction variants.
 
 ## Purpose
 
@@ -24,7 +26,13 @@ The layout design intent is to make a hardwired intercom system which includes o
 
 
 ## Installation
-After cloning, don't forget to check out the submodule. 
+Clone with the JLCPCB library submodule, which the symbol and footprint tables point to:
+
+```
+git clone --recurse-submodules https://github.com/jharvey/ESP32S3_Audio_Cam_POE.git
+```
+
+On Windows, if the submodule fails with "Filename too long" or "'$GIT_DIR' too big", enable long paths first (`git config --global core.longpaths true`) or clone to a shorter folder.
 
 
 TBD currently has not had it's first spin. TBD
@@ -35,7 +43,4 @@ See 3D case found here
 TBD create file in OnShape and post link here. TBD
 
 ## 3D pictures from KICAD
-<div align="center">
-<img src="./production/V0.1_All-in-one/ESP32S3_Audio_Cam_POE_Back.png" alt="ESP32S3_Cam_POE_Back" width="600" />
-<img src="./production/V0.1_All-in-one/ESP32S3_Audio_Cam_POE_Front.png" alt="ESP32S3_Cam_POE_Front" width="600" />
-<div align="left">
+TBD export front and back renders to `production/V0.1_All-in-one/` and link them here. TBD

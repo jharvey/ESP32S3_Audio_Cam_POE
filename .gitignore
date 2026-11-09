@@ -1,1 +1,10 @@
 ESP32S3_Audio_Cam_POE-backups
+
+# KiCad per-user and generated files
+*.kicad_prl
+*-bak
+*.bak
+fp-info-cache
+_autosave-*
+~*.lck
+*.lck
