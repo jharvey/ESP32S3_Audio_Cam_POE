@@ -1,0 +1,196 @@
+(footprint "LGA-8_4.0x3.0mm_P0.84mm_MSM261S4030H0R"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "MEMSensing MSM261S4030H0R 8-Pad LGA package, 4.0x3.0mm body, with acoustic center reference clearance")
+	(tags "MEMS Microphone I2S LGA-8")
+	(property "Reference" "REF**"
+		(at 0 -2.3 0)
+		(layer "F.SilkS")
+		(uuid "8182d139-7681-46e3-95a1-c4e97ff609ba")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "MSM261S4030H0R"
+		(at 0 2.3 0)
+		(layer "F.Fab")
+		(uuid "6a18120b-1db2-4e25-bf02-b30d58ec618a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "67c1f3d9-7812-49a9-9a16-f60aeff39592")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e2c1c61f-1912-4e53-8638-a12eedbba171")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -2 -1.5)
+		(end 2 -1.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "07b8a70d-976b-4b99-8558-2242541f4f48")
+	)
+	(fp_line
+		(start -2 -1)
+		(end -2 -1.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "838f0236-cde0-4ca1-886a-cfe7272e6d16")
+	)
+	(fp_line
+		(start -2 1.5)
+		(end 2 1.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a6ebf0ce-2cf0-4c54-8ec4-f702b16f6ccf")
+	)
+	(fp_circle
+		(center -2.4 -1.5)
+		(end -2.25 -1.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "0f318b39-98e4-4bdb-83ad-3972fb614cb4")
+	)
+	(fp_line
+		(start -2.2 -1.7)
+		(end 2.2 -1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "d3df68b4-0db3-4f66-bd16-1801faff2ce3")
+	)
+	(fp_line
+		(start -2.2 1.7)
+		(end -2.2 -1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "0599e7c4-d645-4c1b-af47-d370cd60a53e")
+	)
+	(fp_line
+		(start 2.2 -1.7)
+		(end 2.2 1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "23144840-88f7-4e9e-a5b1-8ba09d22cea0")
+	)
+	(fp_line
+		(start 2.2 1.7)
+		(end -2.2 1.7)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "44cb529d-591f-43a0-91dc-501c4c62631c")
+	)
+	(pad "1" smd rect
+		(at -1.26 -0.925)
+		(size 0.53 0.55)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "ef86ecf9-1f12-4c96-988c-48a9ef20c201")
+	)
+	(pad "2" smd rect
+		(at -0.42 -0.925)
+		(size 0.53 0.55)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "725eb0ba-1224-44ce-8c30-a37dae49893b")
+	)
+	(pad "3" smd rect
+		(at 0.42 -0.925)
+		(size 0.53 0.55)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "d65006a7-bcda-436c-9512-2e2de5b88dd8")
+	)
+	(pad "4" smd rect
+		(at 1.26 -0.925)
+		(size 0.53 0.55)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "6bfb4974-6acc-4bc2-b079-eed014c59286")
+	)
+	(pad "5" smd rect
+		(at 1.26 0.925)
+		(size 0.53 0.55)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "3e580b49-2d78-4abb-818b-46844f138342")
+	)
+	(pad "6" smd rect
+		(at 0.42 0.925)
+		(size 0.53 0.55)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "37f3d8d0-2a03-49e3-88cd-a972a84a7565")
+	)
+	(pad "7" smd rect
+		(at -0.42 0.925)
+		(size 0.53 0.55)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "fbb82320-32d3-4ee0-92f9-015ba8cf38e2")
+	)
+	(pad "8" smd rect
+		(at -1.26 0.925)
+		(size 0.53 0.55)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "a89ba16e-31c9-44c0-8b69-8312ceb9d11d")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/Project_Specific/Libs.pretty/3D/MSM261S4030.stp"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -90)
+		)
+	)
+)

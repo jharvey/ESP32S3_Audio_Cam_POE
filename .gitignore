@@ -8,3 +8,10 @@ fp-info-cache
 _autosave-*
 ~*.lck
 *.lck
+
+# Editor local history (VS Code Local History extension)
+.history/
+
+# Fabrication plugin working output (regenerated on each export)
+jlcpcb/
+production/backups/
