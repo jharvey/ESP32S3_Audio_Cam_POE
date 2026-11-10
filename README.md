@@ -1,14 +1,14 @@
 # ESP32S3_Audio_Cam_POE
 
 This is a PCB layout for ESP32S3 with OV2640 / OV5640 camera. It was designed in KiCad 9 and converted to KiCad 10 (10.0.8); the files no longer open in KiCad 9.
-The boards major features include:
+The board's major features include:
 * Camera.
 * 2 way audio.
 * Hardwired Ethernet including POE.
 * Camera pan / tilt servos and lamp control.
 * record to SD card.
 * misc outputs to drive misc motors or similar outputs. 
-* Battery powered option with Lion type of battery. 
+* Battery powered option with Li-ion type of battery. 
 * Stream video to NVR recording station. 
 
 ## Firmware
@@ -22,7 +22,7 @@ Changes up to version 0.1:
 
 ## Purpose
 
-The layout design intent is to make a hardwired intercom system which includes options for camera, making a near equivilant of a doorbell camera. Hardwired means it's not susceptibale to RF jaming, or similar attacks. It can be battery powered at the ethernet switch source so it can handle power outagaged. Lighting controls allow night time spot light, and day time spot light controls. Pan, Tilt, Rotate could potentailly allow a laser pointer to distract bad players if things go bump in the night. 
+The layout design intent is to make a hardwired intercom system which includes options for camera, making a near equivalent of a doorbell camera. Hardwired means it's not susceptible to RF jamming, or similar attacks. It can be battery powered at the ethernet switch source so it can handle power outages. Lighting controls allow night time spot light, and day time spot light controls. Pan, Tilt, Rotate could potentially allow a laser pointer to distract bad players if things go bump in the night. 
 
 
 ## Installation
@@ -37,7 +37,7 @@ All JLCPCB symbols, footprints and 3D models resolve from this submodule, so you
 On Windows, if the submodule fails with "Filename too long" or "'$GIT_DIR' too big", enable long paths first (`git config --global core.longpaths true`) or clone to a shorter folder.
 
 
-TBD currently has not had it's first spin. TBD
+TBD currently has not had its first spin. TBD
 
 
 ## 3D case
