@@ -83140,7 +83140,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SLS0563DRA1GD"
+		(property "Value" "SLS0563DBA1GD"
 			(at 377.19 282.956 0)
 			(hide yes)
 			(show_name no)
@@ -83163,7 +83163,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20180809/C226009_EE59EAA71ECDEEB6ECFBCF0A3750AC97.pdf"
+		(property "Datasheet" "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2201121230_SUNLIGHT-SLS0563DBA1GD_C2913085.pdf"
 			(at 363.22 292.1 0)
 			(hide yes)
 			(show_name no)
@@ -83185,7 +83185,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C2913084"
+		(property "LCSC" "C2913085"
 			(at 363.22 292.1 0)
 			(hide yes)
 			(show_name no)
@@ -91443,7 +91443,7 @@
 				)
 			)
 		)
-		(property "Value" "MT9221CT-06BR5"
+		(property "Value" "MT9221CT-10BR5"
 			(at 53.848 177.292 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -91464,7 +91464,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20200930/C879632_5F5456270CF1CA95370F0D1924A5F706.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2010121808_Magn-Tek-MT9221CT-10BR5_C879633.pdf"
 			(at 53.34 187.96 0)
 			(hide yes)
 			(show_name no)
@@ -91475,7 +91475,7 @@
 				)
 			)
 		)
-		(property "Description" "Current Range:±6A Current Range:±6A Supply Voltage:5V Supply Voltage:5V Operating Temperature:-40°C~+125°C Operating Temperature:-40°C~+125°C"
+		(property "Description" "Current sensor, +/-10A, 200mV/A, 5V, SOP-8"
 			(at 53.34 187.96 0)
 			(hide yes)
 			(show_name no)
@@ -91486,7 +91486,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C879632"
+		(property "LCSC" "C879633"
 			(at 53.34 187.96 0)
 			(hide yes)
 			(show_name no)
@@ -104513,7 +104513,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Value" "RFM69HCW"
+		(property "Value" "DL-RFM95-915M"
 			(at 340.36 210.82 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -104535,7 +104535,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2404121542_DreamLNK-DL-RFM95-915M_C2844473.pdf"
 			(at 350.52 190.5 0)
 			(hide yes)
 			(show_name no)
@@ -104546,7 +104546,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "LoRa/FSK module, SX1276, 915 MHz, RFM95 compatible"
 			(at 350.52 190.5 0)
 			(show_name no)
 			(do_not_autoplace no)

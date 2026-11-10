@@ -149006,7 +149006,7 @@
 				(justify left top mirror)
 			)
 		)
-		(property "Value" "RFM69HCW"
+		(property "Value" "DL-RFM95-915M"
 			(at -8.1 -8.7 225)
 			(layer "B.Fab")
 			(uuid "10092d00-ce11-4ca7-8cec-1bd19895de97")
@@ -149018,7 +149018,7 @@
 				(justify left top mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2404121542_DreamLNK-DL-RFM95-915M_C2844473.pdf"
 			(at 0 0 225)
 			(layer "B.Fab")
 			(hide yes)
@@ -149031,7 +149031,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "LoRa/FSK module, SX1276, 915 MHz, RFM95 compatible"
 			(at 0 0 225)
 			(layer "B.Fab")
 			(hide yes)
@@ -173630,7 +173630,7 @@
 				(justify left bottom mirror)
 			)
 		)
-		(property "Value" "SLS0563DRA1GD"
+		(property "Value" "SLS0563DBA1GD"
 			(at 0 0 0)
 			(layer "B.Fab")
 			(uuid "35fbe999-56ba-4240-be3b-edcc24369337")
@@ -173642,7 +173642,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20180809/C226009_EE59EAA71ECDEEB6ECFBCF0A3750AC97.pdf"
+		(property "Datasheet" "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2201121230_SUNLIGHT-SLS0563DBA1GD_C2913085.pdf"
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
@@ -173668,7 +173668,7 @@
 				(justify mirror)
 			)
 		)
-		(property "LCSC" "C2913084"
+		(property "LCSC" "C2913085"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -175390,7 +175390,7 @@
 				(justify right top mirror)
 			)
 		)
-		(property "Value" "MT9221CT-06BR5"
+		(property "Value" "MT9221CT-10BR5"
 			(at 0 0 90)
 			(layer "B.Fab")
 			(uuid "3601e095-8230-4c92-a74e-16ec18b5abce")
@@ -175402,7 +175402,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20200930/C879632_5F5456270CF1CA95370F0D1924A5F706.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2010121808_Magn-Tek-MT9221CT-10BR5_C879633.pdf"
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
@@ -175415,7 +175415,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Description" "Current Range:±6A Current Range:±6A Supply Voltage:5V Supply Voltage:5V Operating Temperature:-40°C~+125°C Operating Temperature:-40°C~+125°C"
+		(property "Description" "Current sensor, +/-10A, 200mV/A, 5V, SOP-8"
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
@@ -175428,7 +175428,7 @@
 				(justify mirror)
 			)
 		)
-		(property "LCSC" "C879632"
+		(property "LCSC" "C879633"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
