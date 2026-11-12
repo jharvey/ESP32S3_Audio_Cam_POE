@@ -24,6 +24,10 @@ target_compile_options(ic_simcommon PRIVATE -O2 -Wall)
 add_executable(ic-selftest selftest/selftest.cpp)
 target_link_libraries(ic-selftest PRIVATE ic_core ic_simcommon)
 
+add_executable(ic-netsim netsim/netsim.cpp)
+target_link_libraries(ic-netsim PRIVATE ic_core)
+target_compile_options(ic-netsim PRIVATE -O2)
+
 find_package(Qt6 QUIET COMPONENTS Core Network Widgets)
 if(Qt6_FOUND AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/app/main.cpp)
     add_executable(intercom-sim WIN32

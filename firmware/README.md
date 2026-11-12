@@ -13,6 +13,7 @@ the same code. The plan is in [Docs/firmware_plan.md](../Docs/firmware_plan.md).
 | `src/board/Pins.h` | ESP32-S3 pin map from the schematic netlist. |
 | `src/main.cpp` | ESP32-S3 drivers behind the core's interfaces. **First draft, not compiled yet.** |
 | `sim/` | Qt desktop simulator and the `ic-selftest` checks. |
+| `sim/netsim/` | `ic-netsim`: a whole-school network load simulation (switches, uplinks, QoS, Wi-Fi, emergency video). Results are in [Docs/network_sim_results.md](../Docs/network_sim_results.md). |
 
 ## What works today (in the simulator)
 

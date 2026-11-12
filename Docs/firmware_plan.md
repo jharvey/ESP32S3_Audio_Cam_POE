@@ -127,6 +127,34 @@ It talks to simulated units and real units the same way.
 - The laser module is switched by one MISC.OUT P-FET.
 - **Safety:** Class 2 (≤1 mW) only. Aim at the torso and never the head; tracking keeps aim below the detected face box.
 
+## Network load test
+
+**Done:** see [network_sim_results.md](network_sim_results.md).
+
+Findings:
+- Each unit must send audio ahead of its own video. Without that, 720p-size frames cause 6.9 % audio dropouts; with it, latency stays around 1 ms.
+- The NVR port must be gigabit.
+- 100 Mbit/s floor uplinks are enough for VGA video.
+
+The original plan follows.
+
+The load test simulates the whole school (35–45 units, probably on the server downstairs) during an emergency, with every cover open and every camera streaming. Audio must stay clean.
+
+| Stream | Per unit | All 35 rooms |
+|---|---|---|
+| Audio, raw PCM now (only talkers send) | 262 kbit/s per talker | ~1 Mbit/s with 4 talkers (multicast) |
+| Audio, Opus later | ~24 kbit/s per talker | ~0.1 Mbit/s |
+| Video, MJPEG VGA 10–15 fps, 25–40 KB/frame | 2–5 Mbit/s | 70–175 Mbit/s |
+
+- **Simulated video:** sim units send dummy MJPEG frames at the real size and rate when emergency mode starts.
+- **Measurements:** audio loss, jitter-buffer concealment and latency, with and without video.
+- **Network design to check:**
+  - gigabit uplinks to the office and NVR,
+  - audio priority over video (DSCP / switch QoS),
+  - one stream per unit, to the NVR only; the console views through the NVR,
+  - lower resolution or frame rate for idle rooms,
+  - little or no video over Wi-Fi.
+
 ## Open questions / to verify
 
 - Whether ESP-SR AFE is usable from Arduino-ESP32 3.x under PlatformIO, or whether this needs ESP-IDF directly.

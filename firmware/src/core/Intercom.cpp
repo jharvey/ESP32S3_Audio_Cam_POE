@@ -335,6 +335,15 @@ void Intercom::updatePanel() {
     }
 }
 
+AudioStats Intercom::audioStats() const {
+    AudioStats s = retired_;
+    for (const auto& t : talkers_) {
+        s.concealed += t->jb.concealed();
+        s.lateDrops += t->jb.lateDrops();
+    }
+    return s;
+}
+
 // ---- the frame -------------------------------------------------------------------------
 void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     frame_++;
@@ -422,13 +431,19 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
             in[n].pcm = frames[n];
             in[n].level = lvl;
             n++;
+            retired_.framesPlayed++;
             bool found = false;
             for (auto& h : heard_)
                 if (h.first == t.id.key()) { h.second++; found = true; }
             if (!found) heard_.push_back({t.id.key(), 1});
         }
-        if (!t.jb.playing() && frame_ - t.lastFrame > uint32_t(kTalkerIdleFrames)) talkers_.erase(talkers_.begin() + long(i));
-        else i++;
+        if (!t.jb.playing() && frame_ - t.lastFrame > uint32_t(kTalkerIdleFrames)) {
+            retired_.concealed += t.jb.concealed();
+            retired_.lateDrops += t.jb.lateDrops();
+            talkers_.erase(talkers_.begin() + long(i));
+        } else {
+            i++;
+        }
     }
     playing_ = n;
     float gainDb = params_.volumeDb + ((transmitting_ && params_.duck) ? params_.duckDb : 0.0f);

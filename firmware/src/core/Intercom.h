@@ -23,6 +23,12 @@ struct IntercomOptions {
     int maxTaps = 2048;  // longest echo filter this platform can run in real time
 };
 
+struct AudioStats {
+    uint32_t framesPlayed = 0;   // received frames played out (all talkers)
+    uint32_t concealed = 0;      // missing frames bridged by concealment
+    uint32_t lateDrops = 0;      // frames that arrived after their playout time
+};
+
 struct Peer {
     StatusPacket status;
     uint32_t lastFrame = 0;
@@ -54,6 +60,7 @@ public:
     uint8_t sentLevel() const { return sentLevel_; }
     uint8_t speakerLevel() const { return spkLevel_; }
     uint32_t frame() const { return frame_; }
+    AudioStats audioStats() const;
     // Talkers heard since start, for tests: (unit key, frames played).
     const std::vector<std::pair<uint32_t, uint32_t>>& heard() const { return heard_; }
 
@@ -100,6 +107,7 @@ private:
     std::vector<std::unique_ptr<Talker>> talkers_;
     std::vector<Peer> peers_;
     std::vector<std::pair<uint32_t, uint32_t>> heard_;
+    AudioStats retired_;  // counters of talkers already forgotten
 };
 
 }  // namespace ic
