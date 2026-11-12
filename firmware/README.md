@@ -11,7 +11,7 @@ the same code. The plan is in [Docs/firmware_plan.md](../Docs/firmware_plan.md).
 |---|---|
 | `src/core/` | The intercom itself, plain C++17 with no Arduino calls: packets, jitter buffer, multi-talker mixer, NLMS echo canceller, link failover, room-number setup. Built unchanged into both the firmware and the simulator. |
 | `src/board/Pins.h` | ESP32-S3 pin map from the schematic netlist. |
-| `src/main.cpp` | ESP32-S3 drivers behind the core's interfaces. **First draft, not compiled yet.** |
+| `src/main.cpp` | ESP32-S3 drivers behind the core's interfaces. **Compiles; not tested on hardware yet.** |
 | `sim/` | Qt desktop simulator and the `ic-selftest` checks. |
 | `sim/netsim/` | `ic-netsim`: a whole-school network load simulation (switches, uplinks, QoS, Wi-Fi, emergency video). Results are in [Docs/network_sim_results.md](../Docs/network_sim_results.md). |
 
@@ -152,4 +152,19 @@ intercom-sim --name 101 --headless --auto-talk 3,2 --quit-after 8
 
 ## Firmware build
 
-Not built yet. It needs Arduino-ESP32 3.x (the pioarduino platform in `platformio.ini`). The first build downloads about 1.5 GB of toolchain.
+Compiles with no errors or warnings (Arduino-ESP32 3.2.0 on ESP-IDF 5.4, via the pioarduino platform in `platformio.ini`).
+RAM use is 17% and flash use is 20% of the app partition. Not run on hardware yet.
+
+```bat
+cd firmware
+pio run
+```
+
+Where the files live:
+- **Espressif framework and libraries (~1.5 GB):** on the NAS at `M:\pio` (`core_dir`).
+- **Compiler (1.3 GB):** a local copy at `C:\pio-tc`. Windows won't run programs from the NAS share ("Access is denied"), so `platform_packages` links it in.
+  - To set up on another PC, copy `M:\pio\packages\toolchain-xtensa-esp-elf` to `C:\pio-tc\`.
+- **Build output:** local, in `firmware\.pio`.
+
+The NAS is slow, so a clean build takes about 50 minutes. Rebuilds after small changes are much faster.
+If that's too slow, move `core_dir` to a local short path such as `C:/pio`.
