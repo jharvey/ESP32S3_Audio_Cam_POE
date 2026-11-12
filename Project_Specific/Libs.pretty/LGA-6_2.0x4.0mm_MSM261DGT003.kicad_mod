@@ -1,0 +1,181 @@
+(footprint "LGA-6_2.0x4.0mm_MSM261DGT003"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "MEMSensing MSM261DGT003 top-port PDM microphone, LGA-6, 2.0x4.0mm body, pads 0.57x0.64 per datasheet DS-042 v1.0 (land 0.60x0.64). Pin 1 VDD, 2/5 GND, 3 DATA, 4 CLK, 6 L/R. Top port, no PCB hole")
+	(tags "MEMS microphone PDM LGA-6 top port")
+	(property "Reference" "REF**"
+		(at 0 -3.1 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "1ac8c1fe-a555-499c-b18a-d9ff47473a5d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "MSM261DGT003"
+		(at 0 3.1 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "84096320-5b78-45dc-b22b-62640b4d218f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2504171512_MEMS-MSM261DGT003_C48227730.pdf"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d5277b9c-dbf3-42b0-8330-a9a7724950ae")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" "PDM MEMS microphone, top port, LGA-6 2x4mm"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "83024292-af11-417c-88b9-699355f3eeec")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_rect
+		(start -1 -2)
+		(end 1 2)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "e1dd3f1a-6ae4-4002-955d-2d00632c2894")
+	)
+	(fp_circle
+		(center 0 -1.1)
+		(end 0.325 -1.1)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "9bbe7023-b2ee-44f9-87e1-cab6a2b3a700")
+	)
+	(fp_rect
+		(start -1.25 -2.25)
+		(end 1.25 2.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "77095dc5-06c3-4547-bf18-01914fce8a49")
+	)
+	(fp_line
+		(start -1.11 -2.11)
+		(end 1.11 -2.11)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "6db68a7a-76d1-4c2a-bba0-fd630bc60957")
+	)
+	(fp_line
+		(start -1.11 2.11)
+		(end 1.11 2.11)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "10f36624-224e-460c-9a05-f5c0cccfa24e")
+	)
+	(fp_line
+		(start -1.11 -2.11)
+		(end -1.11 2.11)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "d797e25f-b0fa-4382-a4fb-e4629e3fee9c")
+	)
+	(fp_line
+		(start 1.11 -2.11)
+		(end 1.11 2.11)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "07980980-4cca-4271-9ce1-c8b44277ea70")
+	)
+	(fp_circle
+		(center 1.45 1.6)
+		(end 1.55 1.6)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "d1ae0281-14d5-4558-abd5-2d03237bc4c1")
+	)
+	(pad "1" smd roundrect
+		(at 0.585 0.94)
+		(size 0.6 0.64)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.5)
+		(uuid "28d27f32-2e1e-4344-a7f7-ec3ed3bd7e90")
+	)
+	(pad "2" smd rect
+		(at 0.585 0)
+		(size 0.6 0.64)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "95096103-5485-42c6-a98b-991c024378ab")
+	)
+	(pad "3" smd rect
+		(at 0.585 -0.94)
+		(size 0.6 0.64)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "72ee4d7b-6984-4b11-8c66-8038df6fb634")
+	)
+	(pad "4" smd rect
+		(at -0.585 -0.94)
+		(size 0.6 0.64)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "a97f7811-1ab0-414a-95e4-7d9b3553c1b6")
+	)
+	(pad "5" smd rect
+		(at -0.585 0)
+		(size 0.6 0.64)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "d3ae334e-a2d0-42d2-836c-4fec9cceff8c")
+	)
+	(pad "6" smd rect
+		(at -0.585 0.94)
+		(size 0.6 0.64)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "bca3bce1-72ea-4cfe-9df2-2ea717e44647")
+	)
+	(embedded_fonts no)
+)
