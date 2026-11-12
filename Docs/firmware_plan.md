@@ -127,6 +127,14 @@ It talks to simulated units and real units the same way.
 - CPU and RAM budget with AFE, Opus and the camera running at the same time (the camera is only on in emergencies).
 - Whether outdoor Wi-Fi covers the parking lot (needs an outdoor AP if not).
 - LoRa protocol and repeater design.
+- **Hardware issue to fix:** camera D1/D2 sit on GPIO45/46, which are strapping pins. With the camera always powered, a
+  reset while the camera drives GPIO45 high selects 1.8 V flash and the board won't boot.
+  Fix either way:
+  - burn the VDD_SPI eFuses at provisioning, or
+  - move those two lines in the next board spin.
+- Ethernet and Wi-Fi on the same subnet with the same IP: lwIP routing and IGMP per interface need a hardware test.
+
+Simulator status: see [firmware/README.md](../firmware/README.md).
 
 Firmware goes in `firmware/` in this repo, and the simulator goes in `firmware/sim/`.
 The hardware (KiCad files) is still a draft: the placement is done, but the 63 new connections are unrouted.
