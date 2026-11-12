@@ -6,10 +6,12 @@
 #include <cstdio>
 #include <cstring>
 #include <deque>
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
+#include "Calibrator.h"
 #include "Intercom.h"
 #include "NlmsAec.h"
 #include "Packet.h"
@@ -232,6 +234,9 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog {
     UnitId loadUnit() override { return id; }
     void saveUnit(const UnitId& u) override { id = u; }
     void log(const char* m) override { logs.push_back(m); }
+    std::map<std::string, std::string> kv;
+    std::string loadText(const char* k) override { return kv[k]; }
+    void saveText(const char* k, const std::string& v) override { kv[k] = v; }
 
     void step() {
         int16_t mic[kFrameSamples], spk[kFrameSamples];
@@ -300,7 +305,137 @@ static void testIntercom() {
     CHECK(!u.ic->inSetup() && !strcmp(s, "305a"), "panel setup saved unit %s", s);
 }
 
+// ---------------------------------------------------------------------------------
+static void testTuning() {
+    printf("tuning parameters\n");
+    TuneParams p;
+    CHECK(p.set("mu", "0.05") && p.set("taps", "99999") && p.set("duck", "1") && !p.set("nope", "1") && !p.set("mu", "x"),
+          "set with clamping, unknown keys refused");
+    std::string v;
+    p.get("taps", &v);
+    CHECK(v == "4096", "taps clamped to %s", v.c_str());
+    TuneParams q;
+    q.fromString(p.toString());
+    CHECK(q.toString() == p.toString(), "save/load text round trip: %s", q.toString().c_str());
+}
+
+// Runs auto-tune against a simulated room. hwDelayMs = converter/DMA latency on the echo path.
+static CalResult runCal(sim::RoomPreset preset, int hwDelayMs, float noiseDbfs, bool deadSpeaker, TuneParams* tuned) {
+    sim::RoomEcho room;
+    room.setPreset(preset);
+    std::vector<int16_t> line(size_t(hwDelayMs) * kSampleRate / 1000 + 1, 0);
+    size_t lp = 0;
+    Calibrator cal;
+    cal.start(TuneParams(), 4096);
+    int16_t prev[kFrameSamples] = {}, mic[kFrameSamples], spk[kFrameSamples];
+    float echo[kFrameSamples];
+    uint32_t rng = 7;
+    float na = 32768.0f * std::pow(10.0f, noiseDbfs / 20.0f) * 1.732f;
+    for (int k = 0; k < 400 && cal.active(); k++) {
+        int16_t d[kFrameSamples];
+        for (int i = 0; i < kFrameSamples; i++) {
+            d[i] = line[lp];
+            line[lp] = deadSpeaker ? 0 : prev[i];
+            lp = (lp + 1) % line.size();
+        }
+        room.process(d, echo, kFrameSamples);
+        for (int i = 0; i < kFrameSamples; i++) {
+            rng = rng * 1664525u + 1013904223u;
+            float n = na * (float(rng >> 8) / float(1u << 24) * 2 - 1);
+            mic[i] = int16_t(std::max(-32767.0f, std::min(32767.0f, echo[i] + n)));
+        }
+        cal.frame(mic, spk);
+        memcpy(prev, spk, sizeof(prev));
+    }
+    if (tuned) *tuned = cal.tuned();
+    return cal.result();
+}
+
+static void testAutoTune() {
+    printf("auto-tune (simulated rooms + hardware latency)\n");
+    TuneParams t;
+    CalResult r = runCal(sim::RoomPreset::Classroom, 12, -75, false, &t);
+    printf("      %s\n", r.summary().c_str());
+    CHECK(r.ok && std::fabs(r.delayMs - 12.0f) <= 1.0f, "classroom, 12 ms latency: found delay %.1f ms", r.delayMs);
+    CHECK(r.ok && !t.duck && r.erleAfterDb >= 12, "classroom: no ducking needed, ERLE %.1f dB", r.erleAfterDb);
+
+    r = runCal(sim::RoomPreset::Gym, 12, -75, false, &t);
+    printf("      %s\n", r.summary().c_str());
+    CHECK(r.ok && t.duck && r.tailMs > 250, "gym: long tail (%.0f ms, RT60 %.2f s) -> ducking on, nlp %.0f dB", r.tailMs,
+          r.rt60S, t.nlpDb);
+
+    r = runCal(sim::RoomPreset::Classroom, 150, -75, false, &t);
+    printf("      %s\n", r.summary().c_str());
+    CHECK(r.ok && r.erleBeforeDb < 3 && r.erleAfterDb > 12,
+          "150 ms latency (beyond the default filter): ERLE %.1f dB before -> %.1f dB after", r.erleBeforeDb,
+          r.erleAfterDb);
+
+    r = runCal(sim::RoomPreset::Classroom, 12, -25, false, nullptr);
+    CHECK(!r.ok, "noisy room refused: %s", r.message.c_str());
+    r = runCal(sim::RoomPreset::Classroom, 12, -75, true, nullptr);
+    CHECK(!r.ok, "dead speaker detected: %s", r.message.c_str());
+}
+
+static void testConsole() {
+    printf("console (local and over the network)\n");
+    Bus bus;
+    FakeUnit a(&bus, {101, 0}, 120), b(&bus, {214, 0}, 160);
+    std::deque<std::vector<uint8_t>> tool;  // an office tool listening on the network
+    bus.queues.push_back(&tool);
+    for (int k = 0; k < 20; k++) { a.step(); b.step(); }
+
+    std::string rep = a.ic->command("set mu 0.08 nlp_db -20");
+    CHECK(rep.rfind("ok", 0) == 0 && std::fabs(a.ic->params().mu - 0.08f) < 1e-6f, "set: %s", rep.c_str());
+    CHECK(a.ic->command("set mu banana").find("bad") != std::string::npos, "bad value refused");
+    a.ic->command("save");
+    CHECK(a.kv["tune"].find("mu=0.08") != std::string::npos, "save writes flash");
+    a.ic->command("defaults");
+    a.ic->command("load");
+    CHECK(std::fabs(a.ic->params().mu - 0.08f) < 1e-6f, "load restores saved values");
+    a.ic->command("set mu 0.3");
+    a.ic->command("save");
+    rep = a.ic->command("undo");
+    CHECK(std::fabs(a.ic->params().mu - 0.08f) < 1e-6f, "undo: %s", rep.c_str());
+
+    // Network: a tool (room 0) tells 214 to turn its speaker down, then reads it back.
+    TextPacket t;
+    t.from = {0, 0};
+    parseTarget("214", &t.targetRoom, &t.targetSub);
+    t.text = "set volume_db -6";
+    uint8_t buf[kMaxPacketBytes];
+    size_t n = encodeText(t, buf);
+    for (auto* q : bus.queues) q->push_back(std::vector<uint8_t>(buf, buf + n));
+    for (int k = 0; k < 3; k++) { a.step(); b.step(); }
+    std::string got;
+    for (auto& pkt : tool) {
+        TextPacket r;
+        if (decodeText(pkt.data(), pkt.size(), &r) && r.type == PacketType::Reply) {
+            char u[8];
+            formatUnit(r.from, u);
+            got += std::string(u) + ": " + r.text + "; ";
+        }
+    }
+    CHECK(std::fabs(b.ic->params().volumeDb + 6) < 1e-6f && std::fabs(a.ic->params().volumeDb) < 1e-6f,
+          "network command reached only 214");
+    CHECK(got.find("214: ok volume_db=-6") != std::string::npos, "tool got reply: %s", got.c_str());
+
+    // Panel combo MODE+UP 3 s starts auto-tune; TALK cancels it.
+    a.held = (1 << kBtnMode) | (1 << kBtnUp);
+    for (int k = 0; k < 155; k++) { a.step(); b.step(); }
+    a.held = 0;
+    bool started = a.ic->calibrating();
+    for (int k = 0; k < 5; k++) a.step();
+    CHECK(started && !a.ic->inSetup(), "MODE+UP held 3 s starts auto-tune, not room setup");
+    a.held = 1;
+    a.step();
+    a.held = 0;
+    CHECK(!a.ic->calibrating(), "TALK cancels auto-tune");
+}
+
 int main() {
+    testTuning();
+    testAutoTune();
+    testConsole();
     testPackets();
     testJitter();
     testMixer();

@@ -3,19 +3,66 @@
 //   intercom-sim --name 150a --echo gym     first of several units in the gym
 //   intercom-sim --name 999 --battery --no-poe    portable unit on Wi-Fi
 //   intercom-sim --name 101 --headless --auto-talk 3,2 --quit-after 8   scripted, prints SUMMARY
+//   intercom-sim --send "214 cal"           network console: auto-tune unit 214
+//   intercom-sim --send "all get"           show every unit's tuning
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QCoreApplication>
 #include <QDir>
+#include <QElapsedTimer>
+#include <QHostAddress>
+#include <QUdpSocket>
+#include <cstdio>
 #include <memory>
+
+#include "Packet.h"
 
 #include "SimUnit.h"
 #include "SimWindow.h"
 
+// --send: a tiny network console client (what an office tool would do).
+static int sendCommand(const QString& arg) {
+    QString target = arg.section(' ', 0, 0), cmd = arg.section(' ', 1);
+    ic::TextPacket t;
+    t.type = ic::PacketType::Command;
+    t.from = {0, 0};  // room 0 = console / tool
+    if (!ic::parseTarget(target.toStdString(), &t.targetRoom, &t.targetSub) || cmd.isEmpty()) {
+        fprintf(stderr, "usage: --send \"<all|214|214a> <command>\"\n");
+        return 2;
+    }
+    t.text = cmd.toStdString();
+    QUdpSocket sock;
+    QHostAddress group(QString::fromLatin1(ic::kMulticastGroup));
+    sock.bind(QHostAddress::AnyIPv4, ic::kAudioPort, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
+    sock.setSocketOption(QAbstractSocket::MulticastLoopbackOption, 1);
+    sock.joinMulticastGroup(group);
+    uint8_t buf[ic::kMaxPacketBytes + 16];
+    sock.writeDatagram(reinterpret_cast<const char*>(buf), qint64(ic::encodeText(t, buf)), group, ic::kAudioPort);
+    QElapsedTimer clock;
+    clock.start();
+    int replies = 0;
+    while (clock.elapsed() < 1500) {
+        if (!sock.waitForReadyRead(100)) continue;
+        while (sock.hasPendingDatagrams()) {
+            qint64 n = sock.readDatagram(reinterpret_cast<char*>(buf), sizeof(buf));
+            ic::TextPacket r;
+            if (n > 0 && ic::decodeText(buf, size_t(n), &r) && r.type == ic::PacketType::Reply && r.targetRoom == 0) {
+                char u[8];
+                ic::formatUnit(r.from, u);
+                printf("%s: %s\n", u, r.text.c_str());
+                replies++;
+            }
+        }
+    }
+    fflush(stdout);
+    if (!replies) fprintf(stderr, "no reply\n");
+    return replies ? 0 : 1;
+}
+
 int main(int argc, char** argv) {
     bool headless = false;
     for (int i = 1; i < argc; i++)
-        if (QString(argv[i]) == "--headless") headless = true;
+        if (QString(argv[i]) == "--headless" || QString(argv[i]).startsWith("--send")) headless = true;
     std::unique_ptr<QCoreApplication> app(headless ? new QCoreApplication(argc, argv) : new QApplication(argc, argv));
     QCoreApplication::setApplicationName("intercom-sim");
 
@@ -28,7 +75,8 @@ int main(int argc, char** argv) {
     p.addOption({"battery", "Battery fitted (portable unit)."});
     p.addOption({"no-poe", "Start unplugged."});
     p.addOption({"no-wifi", "Start out of Wi-Fi range."});
-    p.addOption({"aec-delay", "Extra speaker-to-mic delay for the echo canceller, ms (PC mic mode).", "ms", "0"});
+    p.addOption({"hw-delay", "Simulated speaker->mic hardware latency, ms (auto-tune should find it).", "ms", "12"});
+    p.addOption({"send", "Send a console command to units on the network and print replies: \"214a get\", \"all stats\".", "target cmd"});
     p.addOption({"auto-talk", "Hold TALK from START for DUR seconds.", "start,dur"});
     p.addOption({"quit-after", "Exit after N seconds and print a SUMMARY line.", "s"});
     p.addOption({"fresh", "Forget the saved room number for this name."});
@@ -48,7 +96,8 @@ int main(int argc, char** argv) {
     o.battery = p.isSet("battery");
     o.poe = !p.isSet("no-poe");
     o.wifi = !p.isSet("no-wifi");
-    o.aecDelayMs = p.value("aec-delay").toInt();
+    o.hwDelayMs = p.value("hw-delay").toInt();
+    if (p.isSet("send")) return sendCommand(p.value("send"));
     if (p.isSet("auto-talk")) {
         QStringList v = p.value("auto-talk").split(',');
         o.autoTalkAt = v.value(0).toDouble();

@@ -54,6 +54,13 @@ speaker mix ----------+   (reference)
 - **AGC** keeps levels even between someone close to the unit and someone across a room.
 - **VAD (voice detection)** stops sending silence, which saves bandwidth when many buttons are held at once.
 
+### Auto-tune and manual override (built)
+- Every unit can measure its own room and set its echo-canceller settings:
+  - Start it from the panel (MODE + UP 3 s) or the console (`cal`).
+  - It measures delay, reverb time, coupling and noise, then replays the recording to choose settings.
+- Every setting can also be read and changed by hand, then saved, over USB serial or the network.
+- Details are in [firmware/README.md](../firmware/README.md).
+
 ### Large echoey rooms (gym)
 - The gym's reverb tail (1–2 s) is longer than any AEC filter can cancel, and every unit in the gym plays the same audio.
 - **Room groups:** units with the same room number form a group.
@@ -133,6 +140,8 @@ It talks to simulated units and real units the same way.
   - burn the VDD_SPI eFuses at provisioning, or
   - move those two lines in the next board spin.
 - Ethernet and Wi-Fi on the same subnet with the same IP: lwIP routing and IGMP per interface need a hardware test.
+- Auto-tune analysis takes ~0.5 s on a PC at 1024 taps; on the S3 it must run in a low-priority task.
+- Network console commands need a PIN or key before deployment.
 
 Simulator status: see [firmware/README.md](../firmware/README.md).
 

@@ -2,11 +2,14 @@
 //
 // Audio  (16-byte header + payload):
 //   'I' 'C' ver type | room u16 | sub u8 | flags u8 | target u16 | seq u16 | level u8 | codec u8 | nsamples u16
+// Command / Reply (16-byte header + text, console over the network):
+//   'I' 'C' ver type | room u16 | sub u8 | target sub u8 (0xff any) | target room u16 (0xffff all) | 6 rsvd | text
 // Status (16 bytes):
 //   'I' 'C' ver type | room u16 | sub u8 | link u8 | power u8 | battery u8 | flags u8 | rsvd u8 | uptime_s u32
 #pragma once
 #include <cstddef>
 #include <cstdint>
+#include <string>
 
 #include "Config.h"
 
@@ -26,7 +29,7 @@ void formatUnit(const UnitId& id, char* buf);
 void formatIp(const UnitId& id, char* buf);
 void ipForUnit(const UnitId& id, uint8_t ip[4]);
 
-enum class PacketType : uint8_t { Audio = 1, Status = 2 };
+enum class PacketType : uint8_t { Audio = 1, Status = 2, Command = 3, Reply = 4 };
 enum class Codec : uint8_t { Pcm16 = 0, Opus = 1 };
 enum class LinkType : uint8_t { None = 0, Ethernet = 1, WiFi = 2 };
 enum class PowerSource : uint8_t { PoE = 0, Battery = 1 };
@@ -56,6 +59,25 @@ struct StatusPacket {
     uint8_t flags = 0;
     uint32_t uptimeS = 0;
 };
+
+constexpr uint16_t kTargetAllRooms = 0xffff;
+constexpr uint8_t kTargetAnySub = 0xff;
+constexpr size_t kMaxTextBytes = kMaxPacketBytes - kHeaderBytes;  // 640
+
+struct TextPacket {
+    PacketType type = PacketType::Command;
+    UnitId from;
+    uint16_t targetRoom = kTargetAllRooms;
+    uint8_t targetSub = kTargetAnySub;
+    std::string text;
+    bool addressedTo(const UnitId& u) const {
+        return targetRoom == kTargetAllRooms || (targetRoom == u.room && (targetSub == kTargetAnySub || targetSub == u.sub));
+    }
+};
+size_t encodeText(const TextPacket& t, uint8_t* out);  // text truncated to kMaxTextBytes
+bool decodeText(const uint8_t* buf, size_t len, TextPacket* t);
+// "all", "214" (any unit in room 214), "214a"
+bool parseTarget(const std::string& s, uint16_t* room, uint8_t* sub);
 
 size_t encodeAudio(const AudioHeader& h, const int16_t* pcm, uint8_t* out);
 size_t encodeStatus(const StatusPacket& s, uint8_t* out);

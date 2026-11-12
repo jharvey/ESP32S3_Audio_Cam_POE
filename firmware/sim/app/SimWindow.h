@@ -7,6 +7,7 @@ class SimUnit;
 class QCheckBox;
 class QComboBox;
 class QLabel;
+class QLineEdit;
 class QListWidget;
 class QPlainTextEdit;
 class QProgressBar;
@@ -32,7 +33,8 @@ private:
     QSlider* battLevel_;
     QComboBox *mic_, *echo_;
     QProgressBar *mMic_, *mSent_, *mSpk_;
-    QLabel *status_, *aecInfo_;
+    QLabel *status_, *aecInfo_, *params_;
+    QLineEdit* cmd_;
     QListWidget* peers_;
     QPlainTextEdit* log_;
 };

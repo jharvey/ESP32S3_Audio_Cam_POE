@@ -7,6 +7,8 @@
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QLabel>
+#include <QLineEdit>
+#include <QSignalBlocker>
 #include <QListWidget>
 #include <QPainter>
 #include <QPainterPath>
@@ -95,7 +97,7 @@ private:
         static const struct { char c; uint8_t s; } map[] = {
             {'0', 0x3f}, {'1', 0x06}, {'2', 0x5b}, {'3', 0x4f}, {'4', 0x66}, {'5', 0x6d}, {'6', 0x7d}, {'7', 0x07},
             {'8', 0x7f}, {'9', 0x6f}, {'a', 0x77}, {'b', 0x7c}, {'c', 0x58}, {'d', 0x5e}, {'e', 0x79}, {'f', 0x71},
-            {'-', 0x40}, {' ', 0x00}};
+            {'-', 0x40}, {' ', 0x00}, {'L', 0x38}, {'r', 0x50}, {'n', 0x54}, {'o', 0x5c}, {'P', 0x73}, {'u', 0x1c}};
         uint8_t segs = 0;
         for (auto& m : map)
             if (m.c == ch) segs = m.s;
@@ -192,8 +194,8 @@ SimWindow::SimWindow(SimUnit* unit, QWidget* parent) : QWidget(parent), unit_(un
     aul->addRow(listen_);
     connect(mic_, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int i) { unit_->setMicMode(MicMode(i)); });
     connect(echo_, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int i) { unit_->setEcho(sim::RoomPreset(i)); });
-    connect(aec_, &QCheckBox::toggled, this, [this](bool on) { unit_->setAecEnabled(on); });
-    connect(duck_, &QCheckBox::toggled, this, [this](bool on) { unit_->setDuck(on); });
+    connect(aec_, &QCheckBox::toggled, this, [this](bool on) { unit_->command(on ? "set aec 1" : "set aec 0"); });
+    connect(duck_, &QCheckBox::toggled, this, [this](bool on) { unit_->command(on ? "set duck 1" : "set duck 0"); });
     connect(listen_, &QCheckBox::toggled, this, [this](bool on) { unit_->setListen(on); });
 
     auto meter = [](const QString& fmt) {
@@ -212,6 +214,27 @@ SimWindow::SimWindow(SimUnit* unit, QWidget* parent) : QWidget(parent), unit_(un
     aul->addRow("Speaker", mSpk_);
     aul->addRow("Echo canceller", aecInfo_);
     right->addWidget(au);
+
+    auto* tu = new QGroupBox("Tuning (same console as USB serial / network)");
+    auto* tul = new QVBoxLayout(tu);
+    auto* tuRow = new QHBoxLayout;
+    auto* calBtn = new QPushButton("Auto-tune echo canceller");
+    calBtn->setFocusPolicy(Qt::NoFocus);
+    connect(calBtn, &QPushButton::clicked, this, [this] { unit_->command("cal"); });
+    cmd_ = new QLineEdit;
+    cmd_->setPlaceholderText("command: help, get, set mu 0.1, save, undo, cal result, stats");
+    connect(cmd_, &QLineEdit::returnPressed, this, [this] {
+        unit_->command(cmd_->text());
+        cmd_->clear();
+    });
+    tuRow->addWidget(calBtn);
+    tuRow->addWidget(cmd_, 1);
+    tul->addLayout(tuRow);
+    params_ = new QLabel;
+    params_->setWordWrap(true);
+    params_->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    tul->addWidget(params_);
+    right->addWidget(tu);
 
     auto* nw = new QGroupBox("Units on the network");
     auto* nwl = new QVBoxLayout(nw);
@@ -233,7 +256,7 @@ SimWindow::SimWindow(SimUnit* unit, QWidget* parent) : QWidget(parent), unit_(un
     auto* t = new QTimer(this);
     connect(t, &QTimer::timeout, this, &SimWindow::refresh);
     t->start(100);
-    resize(760, 640);
+    resize(800, 720);
 }
 
 void SimWindow::refresh() {
@@ -257,6 +280,15 @@ void SimWindow::refresh() {
         if (ic->inSetup()) s += "<br><b>Setting room number</b>";
     }
     status_->setText(s);
+    if (ic) {
+        QString pt = QString::fromStdString(ic->params().toString());
+        if (ic->calibrating()) pt = QString("<b>Auto-tune running %1 %</b> - room quiet<br>").arg(ic->calProgress()) + pt;
+        else if (const ic::CalResult* r = ic->lastCal()) pt += "<br><small>last auto-tune: " + QString::fromStdString(r->summary()).toHtmlEscaped() + "</small>";
+        params_->setText(pt);
+        QSignalBlocker b1(aec_), b2(duck_);
+        aec_->setChecked(ic->params().aec);
+        duck_->setChecked(ic->params().duck);
+    }
     mMic_->setValue(ic ? ic->micLevel() : 0);
     mSent_->setValue(ic ? ic->sentLevel() : 0);
     mSpk_->setValue(ic ? ic->speakerLevel() : 0);
@@ -284,6 +316,7 @@ void SimWindow::refresh() {
 }
 
 bool SimWindow::keyToButton(int key, int* b) const {
+    if (cmd_->hasFocus()) return false;  // typing a command
     switch (key) {
         case Qt::Key_Space: *b = ic::kBtnTalk; return true;
         case Qt::Key_M: *b = ic::kBtnMode; return true;

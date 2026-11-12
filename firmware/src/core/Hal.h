@@ -3,6 +3,7 @@
 #pragma once
 #include <cstddef>
 #include <cstdint>
+#include <string>
 
 #include "Packet.h"
 
@@ -45,7 +46,7 @@ class IPanel {
 public:
     virtual ~IPanel() = default;
     virtual uint8_t buttons() = 0;  // bit n = Button n held
-    // 3 characters: '0'-'9', 'a'-'f', '-', ' '. dots: bit n lights the decimal point after digit n.
+    // 3 characters: '0'-'9', 'a'-'f', 'L', 'r', 'n', 'o', 'P', 'u', '-', ' '. dots: bit n lights the decimal point after digit n.
     virtual void show(const char text[3], uint8_t dots) = 0;
 };
 
@@ -54,6 +55,9 @@ public:
     virtual ~IStore() = default;
     virtual UnitId loadUnit() = 0;
     virtual void saveUnit(const UnitId& id) = 0;
+    // Small text values in flash (tuning parameters). Empty string = not set.
+    virtual std::string loadText(const char* key) = 0;
+    virtual void saveText(const char* key, const std::string& value) = 0;
 };
 
 class ILog {

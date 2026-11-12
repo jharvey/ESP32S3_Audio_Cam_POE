@@ -10,14 +10,30 @@ constexpr int kMaxBulkDelay = 8000;          // 0.5 s
 constexpr double kFarActivePow = 1.0e4;      // mean square, ~ -50 dBFS
 constexpr int kDtHangFrames = 5;
 constexpr int kDtGiveUpFrames = 100;         // 2 s of "double talk" = echo path changed, re-adapt
-constexpr float kNlpAtten = 0.25f;           // -12 dB on residual echo
 }  // namespace
 
-NlmsAec::NlmsAec(int taps, int bulkDelay, float mu) : taps_(taps), mu_(mu) {
+NlmsAec::NlmsAec(int taps, int bulkDelay, float mu) : mu_(mu) {
+    allocate(taps);
+    setBulkDelay(bulkDelay);
+}
+
+void NlmsAec::allocate(int taps) {
+    taps_ = taps;
     ringN_ = taps_ + 3 * kFrameSamples + kMaxBulkDelay;
     ring_.assign(2 * size_t(ringN_), 0.0f);
     w_.assign(size_t(taps_), 0.0f);
-    setBulkDelay(bulkDelay);
+    refCount_ = micCount_ = 0;
+    reset();
+}
+
+void NlmsAec::configure(const TuneParams& p) {
+    if (p.taps != taps_) allocate(p.taps);  // new length: start over
+    setBulkDelay(int(p.delayMs * kSampleRate / 1000.0f + 0.5f));
+    mu_ = p.mu;
+    dtFactor_ = float(std::pow(10.0, p.dtDb / 10.0));
+    nlp_ = p.nlp;
+    nlpAtten_ = float(std::pow(10.0, p.nlpDb / 20.0));
+    enabled_ = p.aec;
 }
 
 void NlmsAec::setBulkDelay(int samples) {
@@ -69,11 +85,11 @@ void NlmsAec::capture(const int16_t* mic, int16_t* out) {
     // a syllable ends), not just the newest frame.
     refAvg_ = 0.8 * refAvg_ + 0.2 * refP;
     stats_.farActive = refAvg_ > kFarActivePow;
-    // Double talk: this frame's echo reduction fell about 9 dB below what the filter
+    // Double talk: this frame's echo reduction fell dt_db (default 9 dB) below what the filter
     // normally achieves. A fixed threshold fails in reverberant rooms, where the uncancellable
     // tail keeps the error high all the time.
     double expectErr = micP * std::pow(10.0, -double(stats_.erleDb) / 10.0);
-    bool dtNow = stats_.converged && stats_.farActive && errP > 8.0 * expectErr && micP > 4.0 * kFarActivePow / 100.0;
+    bool dtNow = stats_.converged && stats_.farActive && errP > dtFactor_ * expectErr && micP > 4.0 * kFarActivePow / 100.0;
     if (dtNow) {
         dtHang_ = kDtHangFrames;
         if (++dtRun_ > kDtGiveUpFrames) {  // not double talk: the echo path moved
@@ -120,7 +136,7 @@ void NlmsAec::capture(const int16_t* mic, int16_t* out) {
     micCount_ += kFrameSamples;
 
     // Residual echo suppression (NLP).
-    float target = (enabled_ && nlp_ && stats_.farActive && !stats_.doubleTalk) ? kNlpAtten : 1.0f;
+    float target = (enabled_ && nlp_ && stats_.farActive && !stats_.doubleTalk) ? nlpAtten_ : 1.0f;
     float g0 = nlpGain_;
     nlpGain_ += (target - nlpGain_) * 0.5f;
     stats_.nlpGain = nlpGain_;

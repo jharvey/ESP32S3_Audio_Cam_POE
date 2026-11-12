@@ -123,17 +123,28 @@ public:
         gPrefs.putUShort("room", id.room);
         gPrefs.putUChar("sub", id.sub);
     }
+    std::string loadText(const char* key) override { return gPrefs.getString(key, "").c_str(); }
+    void saveText(const char* key, const std::string& v) override { gPrefs.putString(key, v.c_str()); }
     void log(const char* m) override { Serial.println(m); }
 };
 
 Board gBoard;
 // TODO: replace with the ESP-SR AFE (AEC + NS + AGC) once it builds; NLMS is the fallback.
-ic::NlmsAec gAec(512, 0);
+ic::NlmsAec gAec(1024, 0);
 ic::Intercom* gIntercom = nullptr;
+
+// USB serial console: loop() collects lines, the audio task runs them between frames so the
+// core is only ever touched from one thread. Same commands as over the network ("help").
+struct ConsoleLine { char text[160]; };
+QueueHandle_t gConsole;
 
 void audioTask(void*) {
     static int16_t mic[ic::kFrameSamples], spk[ic::kFrameSamples];
     for (;;) {
+        ConsoleLine line;
+        if (xQueueReceive(gConsole, &line, 0) == pdTRUE) {
+            Serial.println(gIntercom->command(line.text).c_str());
+        }
         // Blocks until 20 ms of mic samples are in: the I2S clock paces everything.
         if (gMic.readBytes(reinterpret_cast<char*>(mic), sizeof(mic)) != sizeof(mic)) continue;
         gIntercom->processFrame(mic, spk);
@@ -163,7 +174,13 @@ void setup() {
     delay(10);
     ETH.begin(ETH_PHY_W5500, 1, pins::ETH_CS, -1, -1, SPI3_HOST, pins::SPI_SCLK, pins::SPI_MISO, pins::SPI_MOSI);
 
-    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, gAec);
+    // NLMS cost grows with taps; 1024 (64 ms) is the planned real-time limit on the S3 until
+    // ESP-SR replaces it. TODO: auto-tune's analysis (~0.5 s on a PC, several s on the S3) must
+    // move to a low-priority task so it does not stall the audio task.
+    ic::IntercomOptions io;
+    io.maxTaps = 1024;
+    gConsole = xQueueCreate(4, sizeof(ConsoleLine));
+    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, gAec, io);
     gIntercom = &intercom;
     intercom.begin();
 
@@ -175,4 +192,19 @@ void setup() {
     xTaskCreatePinnedToCore(audioTask, "audio", 16384, nullptr, 20, nullptr, 1);
 }
 
-void loop() { delay(1000); }
+void loop() {
+    static ConsoleLine line;
+    static size_t n = 0;
+    while (Serial.available()) {
+        char c = char(Serial.read());
+        if (c == '\r') continue;
+        if (c == '\n') {
+            line.text[n] = 0;
+            if (n) xQueueSend(gConsole, &line, 0);
+            n = 0;
+        } else if (n + 1 < sizeof(line.text)) {
+            line.text[n++] = c;
+        }
+    }
+    delay(10);
+}

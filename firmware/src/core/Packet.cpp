@@ -95,6 +95,46 @@ bool decodeStatus(const uint8_t* buf, size_t len, StatusPacket* s) {
     return true;
 }
 
+size_t encodeText(const TextPacket& t, uint8_t* out) {
+    putPrefix(out, t.type, t.from);
+    out[7] = t.targetSub;
+    put16(out + 8, t.targetRoom);
+    for (int i = 10; i < 16; i++) out[i] = 0;
+    size_t n = t.text.size() < kMaxTextBytes ? t.text.size() : kMaxTextBytes;
+    for (size_t i = 0; i < n; i++) out[kHeaderBytes + i] = uint8_t(t.text[i]);
+    return kHeaderBytes + n;
+}
+
+bool decodeText(const uint8_t* buf, size_t len, TextPacket* t) {
+    bool ok;
+    PacketType type = peekType(buf, len, &ok);
+    if (!ok || (type != PacketType::Command && type != PacketType::Reply)) return false;
+    t->type = type;
+    t->from.room = get16(buf + 4);
+    t->from.sub = buf[6];
+    t->targetSub = buf[7];
+    t->targetRoom = get16(buf + 8);
+    t->text.assign(reinterpret_cast<const char*>(buf + kHeaderBytes), len - kHeaderBytes);
+    return true;
+}
+
+bool parseTarget(const std::string& s, uint16_t* room, uint8_t* sub) {
+    if (s == "all" || s == "*") {
+        *room = kTargetAllRooms;
+        *sub = kTargetAnySub;
+        return true;
+    }
+    unsigned r = 0;
+    size_t i = 0;
+    while (i < s.size() && s[i] >= '0' && s[i] <= '9') r = r * 10 + unsigned(s[i++] - '0');
+    if (i == 0 || r > 999) return false;
+    *room = uint16_t(r);
+    if (i == s.size()) *sub = kTargetAnySub;
+    else if (i + 1 == s.size() && s[i] >= 'a' && s[i] <= 'd') *sub = uint8_t(s[i] - 'a' + 1);
+    else return false;
+    return true;
+}
+
 uint8_t frameLevel(const int16_t* pcm, int n) {
     double e = 0;
     for (int i = 0; i < n; i++) e += double(pcm[i]) * pcm[i];

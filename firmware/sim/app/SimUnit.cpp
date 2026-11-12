@@ -22,6 +22,7 @@ const QHostAddress kGroup(QString::fromLatin1(ic::kMulticastGroup));
 SimUnit::SimUnit(const SimOptions& opt, QObject* parent)
     : QObject(parent), opt_(opt), mic_(opt.mic), poe_(opt.poe), wifiInRange_(opt.wifi), hasBattery_(opt.battery) {
     room_.setPreset(opt.echo);
+    hwLine_.assign(size_t(std::max(0, opt.hwDelayMs)) * ic::kSampleRate / 1000, 0);
     QDir().mkpath(opt_.dataDir);
 }
 
@@ -53,8 +54,13 @@ void SimUnit::setPoe(bool on) { poe_ = on; powerUpdate(); }
 void SimUnit::setWifiInRange(bool on) { wifiInRange_ = on; }
 void SimUnit::setHasBattery(bool on) { hasBattery_ = on; powerUpdate(); }
 void SimUnit::setBattery(double pct) { battery_ = std::max(0.0, std::min(100.0, pct)); powerUpdate(); }
-void SimUnit::setAecEnabled(bool on) { aecOn_ = on; if (aec_) aec_->setEnabled(on); }
-void SimUnit::setDuck(bool on) { duck_ = on; if (ic_) ic_->options().duckWhileTalking = on; }
+QString SimUnit::command(const QString& line) {
+    if (!ic_) return "unit is off or booting";
+    log(qPrintable("> " + line));
+    QString reply = QString::fromStdString(ic_->command(line.toStdString()));
+    for (const QString& l : reply.split('\n', Qt::SkipEmptyParts)) log(qPrintable("  " + l));
+    return reply;
+}
 
 void SimUnit::setMicMode(MicMode m) {
     mic_ = m;
@@ -153,6 +159,16 @@ void SimUnit::saveUnit(const ic::UnitId& id) {
     s.setValue("sub", id.sub);
 }
 
+std::string SimUnit::loadText(const char* key) {
+    QSettings s(opt_.dataDir + "/unit.ini", QSettings::IniFormat);
+    return s.value(key).toString().toStdString();
+}
+
+void SimUnit::saveText(const char* key, const std::string& value) {
+    QSettings s(opt_.dataDir + "/unit.ini", QSettings::IniFormat);
+    s.setValue(key, QString::fromStdString(value));
+}
+
 void SimUnit::log(const char* msg) {
     QString line = QString("%1  %2").arg(clock_.isValid() ? clock_.elapsed() / 1000.0 : 0.0, 7, 'f', 2).arg(msg);
     fprintf(stdout, "[%s] %s\n", qPrintable(opt_.name), qPrintable(line));
@@ -165,9 +181,8 @@ void SimUnit::tick() {
     qint64 now = clock_.elapsed();
 
     // Battery: drains on battery power, charges on PoE (sped up for the demo).
-    static qint64 lastBatt = 0;
-    double dt = (now - lastBatt) / 1000.0;
-    lastBatt = now;
+    double dt = (now - lastBatt_) / 1000.0;
+    lastBatt_ = now;
     if (hasBattery_ && powered_) {
         if (poe_) battery_ = std::min(100.0, battery_ + dt * 0.5);
         else battery_ = std::max(0.0, battery_ - dt * 0.1);
@@ -176,10 +191,10 @@ void SimUnit::tick() {
 
     // Boot finished: the firmware starts.
     if (powered_ && !ic_ && now - bootAt_ >= kBootMs) {
-        aec_.reset(new ic::NlmsAec(2048, opt_.aecDelayMs * ic::kSampleRate / 1000));
-        aec_->setEnabled(aecOn_);
-        ic_.reset(new ic::Intercom(ic::Hal{this, this, this, this, this, this}, *aec_));
-        ic_->options().duckWhileTalking = duck_;
+        aec_.reset(new ic::NlmsAec(2048, 0));
+        ic::IntercomOptions io;
+        io.maxTaps = 4096;  // a PC can run more; the S3 limit is set in the firmware
+        ic_.reset(new ic::Intercom(ic::Hal{this, this, this, this, this, this}, *aec_, io));
         ic_->begin();
         ic::UnitId id = ic_->unit();
         voice_ = sim::TestVoice(100.0f + float((id.room * 37 + id.sub * 53) % 130), id.key(), -22.0f);
@@ -230,8 +245,20 @@ void SimUnit::tick() {
 void SimUnit::processFrame(int16_t* mic) {
     if (!ic_) return;
     if (mic_ != MicMode::Pc) {
+        // Speaker path latency (DMA buffers, DAC/ADC), then the room.
+        size_t L = hwLine_.size();
+        int16_t delayed[ic::kFrameSamples];
+        for (int i = 0; i < ic::kFrameSamples; i++) {
+            if (L) {
+                delayed[i] = hwLine_[hwPos_];
+                hwLine_[hwPos_] = lastSpk_[i];
+                hwPos_ = (hwPos_ + 1) % L;
+            } else {
+                delayed[i] = lastSpk_[i];
+            }
+        }
         float echo[ic::kFrameSamples];
-        room_.process(lastSpk_, echo, ic::kFrameSamples);  // what the mic hears of our own speaker
+        room_.process(delayed, echo, ic::kFrameSamples);  // what the mic hears of our own speaker
         int16_t voice[ic::kFrameSamples] = {};
         if (mic_ == MicMode::Test && (buttons() & (1u << ic::kBtnTalk))) voice_.render(voice, ic::kFrameSamples);
         for (int i = 0; i < ic::kFrameSamples; i++) {

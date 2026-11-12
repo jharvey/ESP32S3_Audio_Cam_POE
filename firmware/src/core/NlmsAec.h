@@ -26,16 +26,20 @@ public:
     const AecStats& stats() const override { return stats_; }
     const char* name() const override { return "NLMS"; }
 
+    void configure(const TuneParams& p) override;
     void setNlp(bool on) { nlp_ = on; }
+    int taps() const { return taps_; }
     void setBulkDelay(int samples);
 
 private:
-    float refAt(long long abs) const;
+    void allocate(int taps);
     int windowStart(long long t) const;  // mirrored-buffer index of the oldest tap for mic sample t
 
     int taps_;
     int delay_;  // total: one frame + bulk
     float mu_;
+    float dtFactor_ = 8.0f;   // ~9 dB
+    float nlpAtten_ = 0.25f;  // -12 dB
     bool enabled_ = true;
     bool nlp_ = true;
     int ringN_;

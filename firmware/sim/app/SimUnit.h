@@ -9,6 +9,7 @@
 #include <QString>
 #include <QTimer>
 #include <memory>
+#include <vector>
 
 #include "Intercom.h"
 #include "NlmsAec.h"
@@ -31,7 +32,7 @@ struct SimOptions {
     bool poe = true;
     bool wifi = true;
     bool battery = false;
-    int aecDelayMs = 0;
+    int hwDelayMs = 12;  // simulated I2S DMA + converter latency on the echo path (auto-tune finds it)
     double autoTalkAt = -1, autoTalkFor = 0;
     double quitAfter = -1;
 };
@@ -57,8 +58,7 @@ public:
     void setBattery(double pct);
     void setMicMode(MicMode m);
     void setEcho(sim::RoomPreset p) { room_.setPreset(p); }
-    void setAecEnabled(bool on);
-    void setDuck(bool on);
+    QString command(const QString& line);  // console, same as USB serial / network
     void setListen(bool on);
 
     // State for the UI.
@@ -89,6 +89,8 @@ public:
     ic::UnitId loadUnit() override;
     void saveUnit(const ic::UnitId& id) override;
     void log(const char* msg) override;
+    std::string loadText(const char* key) override;
+    void saveText(const char* key, const std::string& value) override;
 
 signals:
     void logLine(const QString& line);
@@ -105,6 +107,7 @@ private:
     QTimer timer_;
     QElapsedTimer clock_;
     qint64 framesRun_ = 0;
+    qint64 lastBatt_ = 0;
     QUdpSocket* sock_ = nullptr;
 
     std::unique_ptr<ic::NlmsAec> aec_;
@@ -114,7 +117,8 @@ private:
     WinAudioIn in_;
     WinAudioOut out_;
     MicMode mic_;
-    bool aecOn_ = true, duck_ = false;
+    std::vector<int16_t> hwLine_;  // speaker -> echo path delay line
+    size_t hwPos_ = 0;
 
     bool poe_, wifiInRange_, hasBattery_;
     double battery_ = 80;

@@ -10,6 +10,8 @@
 #pragma once
 #include <cstdint>
 
+#include "Tuning.h"
+
 namespace ic {
 
 struct AecStats {
@@ -28,6 +30,7 @@ public:
     virtual void setEnabled(bool on) = 0;
     virtual bool enabled() const = 0;
     virtual void reset() = 0;
+    virtual void configure(const TuneParams& p) = 0;  // taps, delay, mu, thresholds, NLP
     virtual const AecStats& stats() const = 0;
     virtual const char* name() const = 0;
 };
