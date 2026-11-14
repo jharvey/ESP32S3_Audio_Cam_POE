@@ -21,7 +21,8 @@ add_library(ic_simcommon STATIC common/RoomEcho.cpp common/TestVoice.cpp)
 target_include_directories(ic_simcommon PUBLIC common)
 target_compile_options(ic_simcommon PRIVATE -O2 -Wall)
 
-add_executable(ic-selftest selftest/selftest.cpp)
+add_executable(ic-selftest selftest/selftest.cpp ${FW}/src/board/Tm1637.cpp)
+target_include_directories(ic-selftest PRIVATE ${FW}/src/board)
 target_link_libraries(ic-selftest PRIVATE ic_core ic_simcommon)
 
 add_executable(ic-netsim netsim/netsim.cpp)
@@ -34,9 +35,21 @@ if(Qt6_FOUND AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/app/main.cpp)
         app/main.cpp
         app/SimUnit.cpp app/SimUnit.h
         app/SimWindow.cpp app/SimWindow.h
+        app/SimWebServer.cpp app/SimWebServer.h
         app/WinAudio.cpp app/WinAudio.h)
     target_link_libraries(intercom-sim PRIVATE ic_core ic_simcommon Qt6::Core Qt6::Network Qt6::Widgets)
     if(WIN32)
         target_link_libraries(intercom-sim PRIVATE winmm)
+    endif()
+
+    # Office console: room grid, all-call / talk to a room, signed commands.
+    add_executable(intercom-console WIN32
+        console/main.cpp
+        console/ConsoleWindow.cpp console/ConsoleWindow.h
+        app/WinAudio.cpp app/WinAudio.h)
+    target_include_directories(intercom-console PRIVATE app)
+    target_link_libraries(intercom-console PRIVATE ic_core ic_simcommon Qt6::Core Qt6::Network Qt6::Widgets)
+    if(WIN32)
+        target_link_libraries(intercom-console PRIVATE winmm)
     endif()
 endif()

@@ -25,6 +25,8 @@ public:
     virtual bool ethernetUp() = 0;  // W5500 PHY link (PoE cable plugged in)
     virtual bool wifiUp() = 0;      // associated to the intercom SSID
     virtual void useLink(LinkType link) = 0;
+    // The room number changed: move both links to the unit's new IP address.
+    virtual void setAddress(const UnitId& id) { (void)id; }
 };
 
 struct PowerState {
@@ -60,6 +62,14 @@ public:
     virtual void saveText(const char* key, const std::string& value) = 0;
 };
 
+// Optional board checks for the "selftest" command: which chips answer, link state, etc.
+// One line per check, starting with "ok " or "FAIL ".
+class IDiag {
+public:
+    virtual ~IDiag() = default;
+    virtual std::string boardTest() = 0;
+};
+
 class ILog {
 public:
     virtual ~ILog() = default;
@@ -73,6 +83,7 @@ struct Hal {
     IPanel* panel;
     IStore* store;
     ILog* log;
+    IDiag* diag = nullptr;  // optional
 };
 
 }  // namespace ic

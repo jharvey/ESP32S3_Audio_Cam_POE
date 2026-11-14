@@ -56,7 +56,22 @@ std::string CalResult::summary() const {
     return buf;
 }
 
+void Calibrator::abort() {
+    if (phase_ == Phase::Analyzing) cancelled_ = true;  // the job still owns the buffers
+    else phase_ = Phase::Idle;
+}
+
+bool Calibrator::poll() {
+    if (phase_ != Phase::Analyzing || !done_.load(std::memory_order_acquire)) return false;
+    phase_ = Phase::Idle;
+    bool keep = !cancelled_;
+    cancelled_ = false;
+    return keep;
+}
+
 void Calibrator::start(const TuneParams& current, int maxTaps) {
+    if (phase_ == Phase::Analyzing) return;
+    cancelled_ = false;
     before_ = current;
     tuned_ = current;
     maxTaps_ = maxTaps;
@@ -77,6 +92,7 @@ int Calibrator::progressPct() const {
         case Phase::Noise: done = kSettleFrames + count_; break;
         case Phase::Burst: done = kSettleFrames + kNoiseFrames + count_; break;
         case Phase::Tail: done = kSettleFrames + kNoiseFrames + kBurstFrames + count_; break;
+        case Phase::Analyzing: return 99;
         default: return 0;
     }
     return done * 100 / (kSettleFrames + kNoiseFrames + kBurstFrames + kTailFrames);
@@ -86,6 +102,7 @@ bool Calibrator::frame(const int16_t* mic, int16_t* speaker) {
     std::memset(speaker, 0, sizeof(int16_t) * kFrameSamples);
     switch (phase_) {
         case Phase::Idle:
+        case Phase::Analyzing:
             return false;
         case Phase::Settle:
             if (++count_ >= kSettleFrames) { phase_ = Phase::Noise; count_ = 0; }
@@ -113,8 +130,20 @@ bool Calibrator::frame(const int16_t* mic, int16_t* speaker) {
         case Phase::Tail:
             mic_.insert(mic_.end(), mic, mic + kFrameSamples);
             if (++count_ >= kTailFrames) {
+                double noise = noiseAcc_ / (double(kNoiseFrames) * kFrameSamples);
+                if (runner_) {
+                    // Heavy part (cross-correlation, replays through the echo canceller) off the
+                    // audio thread. Only the job touches ref_, mic_, res_ and tuned_ until done_.
+                    phase_ = Phase::Analyzing;
+                    done_.store(false);
+                    runner_([this, noise] {
+                        analyze(ref_, mic_, noise);
+                        done_.store(true, std::memory_order_release);
+                    });
+                    return false;
+                }
                 phase_ = Phase::Idle;
-                analyze(ref_, mic_, noiseAcc_ / (double(kNoiseFrames) * kFrameSamples));
+                analyze(ref_, mic_, noise);
                 return true;
             }
             return false;

@@ -26,6 +26,8 @@ struct TuneParams {
     bool set(const std::string& key, const std::string& value);  // false = unknown key / bad value
     bool get(const std::string& key, std::string* value) const;
     static const char* help();  // one line per key with range
+    // JSON array for the web interface: [{"key","kind","min","max","desc","value"}, ...]
+    std::string toJson() const;
 };
 
 }  // namespace ic

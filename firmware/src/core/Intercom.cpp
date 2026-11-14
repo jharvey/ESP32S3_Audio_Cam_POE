@@ -1,9 +1,12 @@
 #include "Intercom.h"
 
+#include "Auth.h"
+
 #include <algorithm>
 #include <cmath>
 #include <cstdarg>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <sstream>
 
@@ -14,6 +17,7 @@ constexpr int kEthStableFrames = 10;     // Ethernet must be up 200 ms before tr
 constexpr int kTalkerIdleFrames = 50;    // forget a talker 1 s after its last packet
 constexpr size_t kMaxTalkers = 16;
 constexpr uint32_t kComboFrames = 150;   // MODE + UP held 3 s = auto-tune
+constexpr uint32_t kUpHoldFrames = 250;  // or UP alone held 5 s (one-key panels)
 constexpr uint32_t kResultFrames = 250;  // show the auto-tune result for 5 s
 const char* kTuneKey = "tune";
 const char* kTunePrevKey = "tune_prev";
@@ -31,10 +35,18 @@ const char* kHelp =
     "  cal result           last auto-tune measurements\n"
     "  stats                echo canceller and link state\n"
     "  unit [214a]          show or set the room number (sets the IP address)\n"
+    "  tone [seconds]       play a 1 kHz test tone on this unit's speaker (default 2 s, 0 stops)\n"
+    "  talk [seconds|off]   transmit as if TALK were held (USB only; default 5 s, bring-up without the panel)\n"
+    "  selftest [result]    check the board and the speaker->mic path (plays a short tone)\n"
+    "  version              firmware version\n"
+    "  netkey <key>         set the network command key (USB only; \"netkey off\" refuses all network commands)\n"
+    "  webpass <password>   set the web interface password (USB only; \"webpass off\" turns it off)\n"
     "parameters:\n";
 }  // namespace
 
-Intercom::Intercom(const Hal& hal, EchoCanceller& aec, IntercomOptions opt) : hal_(hal), aec_(aec), opt_(opt) {}
+Intercom::Intercom(const Hal& hal, EchoCanceller& aec, IntercomOptions opt) : hal_(hal), aec_(aec), opt_(opt) {
+    cal_.setRunner(opt_.runBackground);
+}
 
 void Intercom::logf(const char* fmt, ...) {
     if (!hal_.log) return;
@@ -48,6 +60,7 @@ void Intercom::logf(const char* fmt, ...) {
 
 void Intercom::begin() {
     unit_ = hal_.store->loadUnit();
+    lastNonce_ = netauth::loadNonce(*hal_.store);
     params_ = TuneParams();
     params_.taps = std::min(params_.taps, opt_.maxTaps);
     std::string saved = hal_.store->loadText(kTuneKey);
@@ -87,7 +100,7 @@ void Intercom::finishCal() {
 }
 
 // ---- console ---------------------------------------------------------------------------
-std::string Intercom::command(const std::string& line) {
+std::string Intercom::command(const std::string& line, CmdSource src) {
     std::istringstream in(line);
     std::vector<std::string> a;
     std::string tok;
@@ -150,7 +163,7 @@ std::string Intercom::command(const std::string& line) {
     }
     if (c == "cal") {
         if (a.size() > 1 && a[1] == "result") return haveCal_ ? cal_.result().summary() : "no auto-tune run yet";
-        if (cal_.active()) return "auto-tune already running";
+        if (cal_.active() || testPhase_) return "auto-tune or self-test already running";
         startCal("console");
         return "auto-tune started: ~5 s, keep the room quiet; result in the log and \"cal result\"";
     }
@@ -167,16 +180,70 @@ std::string Intercom::command(const std::string& line) {
             uint16_t room;
             uint8_t sub;
             if (!parseTarget(a[1], &room, &sub) || room == kTargetAllRooms) return "usage: unit 214 | unit 214a";
-            unit_.room = room;
-            unit_.sub = sub == kTargetAnySub ? 0 : sub;
-            hal_.store->saveUnit(unit_);
-            sendStatus();
+            UnitId id;
+            id.room = room;
+            id.sub = sub == kTargetAnySub ? 0 : sub;
+            setUnit(id);
         }
         char u[8], ip[16];
         formatUnit(unit_, u);
         formatIp(unit_, ip);
         snprintf(buf, sizeof(buf), "unit %s ip %s", u, ip);
         return buf;
+    }
+    if (c == "version") return std::string("firmware ") + kFirmwareVersion;
+    if (c == "talk") {
+        if (src != CmdSource::Local) return "talk only works from the USB console";
+        if (a.size() > 1 && a[1] == "off") {
+            talkFrames_ = 0;
+            return "talk off";
+        }
+        float secs = a.size() > 1 ? std::strtof(a[1].c_str(), nullptr) : 5.0f;
+        secs = std::max(0.0f, std::min(secs, 60.0f));
+        talkFrames_ = uint32_t(secs * 1000 / kFrameMs);
+        snprintf(buf, sizeof(buf), "talking for %.0f s (\"talk off\" stops)", double(secs));
+        return buf;
+    }
+    if (c == "selftest") {
+        if (a.size() > 1 && a[1] == "result") return testResult_.empty() ? "no self-test run yet" : testResult_;
+        if (cal_.active() || testPhase_) return "busy (auto-tune or self-test running)";
+        testBoard_ = hal_.diag ? hal_.diag->boardTest() : std::string("ok board checks not available on this platform\n");
+        testPhase_ = 1;
+        testCount_ = 0;
+        testQuiet_ = testLoud_ = 0;
+        return "self-test started (~1.5 s, plays a tone); \"selftest result\" shows the result";
+    }
+    if (c == "netkey") {
+        if (src != CmdSource::Local) return "netkey only works from the USB console";
+        if (a.size() != 2)
+            return netauth::loadKey(*hal_.store).empty() ? "network commands off (no key)" : "network commands on (key set)";
+        if (a[1] == "off") {
+            netauth::saveKey(*hal_.store, "");
+            return "network commands off";
+        }
+        if (int(a[1].size()) < netauth::kMinKeyLen) return "key too short (at least 16 characters, no spaces)";
+        netauth::saveKey(*hal_.store, a[1]);
+        logf("network key changed");
+        return "network key set; network commands on";
+    }
+    if (c == "tone") {
+        float secs = a.size() > 1 ? std::strtof(a[1].c_str(), nullptr) : 2.0f;
+        if (secs < 0) secs = 0;
+        if (secs > 30) secs = 30;
+        toneFrames_ = uint32_t(secs * 1000 / kFrameMs);
+        return toneFrames_ ? "playing a 1 kHz test tone" : "tone stopped";
+    }
+    if (c == "webpass") {
+        if (src != CmdSource::Local) return "webpass only works from the USB console";
+        if (a.size() != 2) return auth::hasPassword(*hal_.store) ? "web interface on (password set)" : "web interface off (no password)";
+        if (a[1] == "off") {
+            auth::clearPassword(*hal_.store);
+            return "web interface off";
+        }
+        if (int(a[1].size()) < auth::kMinPasswordLen) return "password too short (at least 8 characters, no spaces)";
+        auth::setPassword(*hal_.store, a[1], frame_ ^ unit_.key());
+        logf("web password changed");
+        return "web password set; web interface on";
     }
     return "unknown command \"" + c + "\" (try help)";
 }
@@ -237,6 +304,52 @@ Intercom::Talker* Intercom::talkerFor(const UnitId& id) {
     return talkers_.back().get();
 }
 
+void Intercom::setUnit(const UnitId& id) {
+    if (id == unit_) return;
+    unit_ = id;
+    hal_.store->saveUnit(unit_);
+    hal_.links->setAddress(unit_);
+    char u[8], ip[16];
+    formatUnit(unit_, u);
+    formatIp(unit_, ip);
+    logf("room set to %s, ip %s", u, ip);
+    sendStatus();
+}
+
+// Self-test audio check: 0.5 s quiet, then 1 s of 1 kHz tone; the mic must hear the tone.
+void Intercom::selfTestFrame(const int16_t* mic, int16_t* speaker) {
+    constexpr int kQuietFrames = 25, kToneFrames = 50, kSkipFrames = 5;
+    double p = 0;
+    for (int i = 0; i < kFrameSamples; i++) p += double(mic[i]) * mic[i];
+    p /= kFrameSamples;
+    std::memset(speaker, 0, sizeof(int16_t) * kFrameSamples);
+    if (testPhase_ == 1) {
+        testQuiet_ += p;
+        if (++testCount_ >= kQuietFrames) {
+            testPhase_ = 2;
+            testCount_ = 0;
+        }
+        return;
+    }
+    const float w = 2.0f * 3.14159265f * 1000.0f / kSampleRate;
+    for (int i = 0; i < kFrameSamples; i++, tonePhase_++)
+        speaker[i] = int16_t(8200.0f * std::sin(w * float(tonePhase_ % kSampleRate)));
+    if (testCount_ >= kSkipFrames) testLoud_ += p;  // skip the speaker->mic latency at the start
+    if (++testCount_ < kToneFrames) return;
+
+    double quietDb = 10 * std::log10(testQuiet_ / kQuietFrames / (32768.0 * 32768.0) + 1e-12);
+    double loudDb = 10 * std::log10(testLoud_ / (kToneFrames - kSkipFrames) / (32768.0 * 32768.0) + 1e-12);
+    char buf[200];
+    bool ok = loudDb - quietDb >= 15 && loudDb > -60;
+    snprintf(buf, sizeof(buf), "%s speaker->mic: tone heard at %.1f dBFS, quiet room %.1f dBFS (%.1f dB above)%s\n",
+             ok ? "ok" : "FAIL", loudDb, quietDb, loudDb - quietDb, ok ? "" : " - check the speaker, amp and mics");
+    testResult_ = testBoard_ + buf;
+    bool allOk = testResult_.find("FAIL") == std::string::npos;
+    testResult_ += allOk ? "SELF-TEST PASSED" : "SELF-TEST FAILED";
+    testPhase_ = 0;
+    logf("self-test:\n%s", testResult_.c_str());
+}
+
 void Intercom::receive() {
     uint8_t buf[kMaxPacketBytes + 16];
     int16_t pcm[kFrameSamples];
@@ -247,7 +360,7 @@ void Intercom::receive() {
         PacketType type = peekType(buf, n, &ok);
         if (!ok) continue;
         if (type == PacketType::Audio) {
-            if (cal_.active()) continue;  // the room must stay quiet while auto-tune measures
+            if (cal_.measuring() || testPhase_) continue;  // the room must stay quiet while measuring
             AudioHeader h;
             if (!decodeAudio(buf, n, &h, pcm)) continue;
             if (h.from == unit_) continue;                                               // our own multicast echo
@@ -270,11 +383,22 @@ void Intercom::receive() {
             p->status = s;
             p->lastFrame = frame_;
         } else if (type == PacketType::Command) {
-            // TODO before deployment: require a PIN / key; anyone on the intercom VLAN can send these.
+            // Signed with the network key (netkey), and never replayed.
             TextPacket t;
             if (!decodeText(buf, n, &t) || !t.addressedTo(unit_)) continue;
-            std::string reply = command(t.text);
-            logf("net command from %u: %s", unsigned(t.from.room), t.text.c_str());
+            std::string cmd;
+            uint64_t nonce = 0;
+            netauth::Check ck = netauth::verify(netauth::loadKey(*hal_.store), lastNonce_, t, &cmd, &nonce);
+            if (ck != netauth::Check::Ok) {
+                logf("net command from %u refused: %s", unsigned(t.from.room), netauth::describe(ck));
+                sendReply(t, netauth::describe(ck));
+                continue;
+            }
+            lastNonce_ = nonce;
+            netauth::saveNonce(*hal_.store, nonce);
+            std::string reply = command(cmd, CmdSource::Network);
+            bool secret = cmd.compare(0, 7, "webpass") == 0 || cmd.compare(0, 6, "netkey") == 0;
+            logf("net command from %u: %s", unsigned(t.from.room), secret ? "(password command, hidden)" : cmd.c_str());
             sendReply(t, reply);
         }
     }
@@ -352,15 +476,31 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     const uint8_t talkBit = 1u << kBtnTalk;
     const uint8_t combo = (1u << kBtnMode) | (1u << kBtnUp);
 
-    // MODE + UP held 3 s starts auto-tune.
-    if ((held & combo) == combo && !setup_.active()) {
+    // Auto-tune from the panel: MODE + UP held 3 s, or UP alone held 5 s. (The board's TM1637
+    // key scan reports one key at a time, so on hardware only the UP-alone hold works.)
+    const bool comboHeld = (held & combo) == combo;
+    const bool upHeld = held == (1u << kBtnUp);
+    if ((comboHeld || upHeld) && !setup_.active()) {
         if (!comboSince_) comboSince_ = frame_;
-        else if (frame_ - comboSince_ == kComboFrames) startCal("panel");
+        else if (frame_ - comboSince_ == (comboHeld ? kComboFrames : kUpHoldFrames)) startCal("panel");
     } else {
         comboSince_ = 0;
     }
 
-    if (cal_.active()) {
+    if (cal_.analyzing() && cal_.poll()) finishCal();
+    if (testPhase_) {
+        selfTestFrame(mic, speaker);
+        spkLevel_ = frameLevel(speaker, kFrameSamples);
+        transmitting_ = false;
+        sentLevel_ = playing_ = 0;
+        aec_.playback(speaker);
+        updateLink();
+        receive();
+        if (frame_ % kStatusEveryFrames == 0) sendStatus();
+        updatePanel();
+        return;
+    }
+    if (cal_.measuring()) {
         if (held & talkBit) {
             cal_.abort();
             logf("auto-tune cancelled (TALK pressed)");
@@ -383,16 +523,9 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     // Panel: room-number setup and TALK. (MODE alone held 3 s = setup; with UP = auto-tune.)
     UnitId id = unit_;
     uint8_t setupHeld = comboSince_ ? uint8_t(held & ~(1u << kBtnMode)) : held;
-    if (setup_.update(setupHeld, frame_, &id) && id != unit_) {
-        unit_ = id;
-        hal_.store->saveUnit(unit_);
-        char u[8], ip[16];
-        formatUnit(unit_, u);
-        formatIp(unit_, ip);
-        logf("room set to %s, ip %s", u, ip);
-        sendStatus();
-    }
-    bool talk = (held & talkBit) && !setup_.active();
+    if (setup_.update(setupHeld, frame_, &id) && id != unit_) setUnit(id);
+    if (talkFrames_) talkFrames_--;
+    bool talk = ((held & talkBit) || talkFrames_) && !setup_.active();
     if (talk != transmitting_) {
         transmitting_ = talk;
         sendStatus();
@@ -449,6 +582,14 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     float gainDb = params_.volumeDb + ((transmitting_ && params_.duck) ? params_.duckDb : 0.0f);
     if (n) mixer_.mix(in, n, std::pow(10.0f, gainDb / 20.0f), speaker);
     else std::memset(speaker, 0, sizeof(int16_t) * kFrameSamples);
+    if (toneFrames_) {  // test tone, -12 dBFS, mixed in before the echo canceller's reference
+        toneFrames_--;
+        const float w = 2.0f * 3.14159265f * 1000.0f / kSampleRate;
+        for (int i = 0; i < kFrameSamples; i++, tonePhase_++) {
+            int v = speaker[i] + int(8200.0f * std::sin(w * float(tonePhase_ % kSampleRate)));
+            speaker[i] = int16_t(v > 32767 ? 32767 : v < -32767 ? -32767 : v);
+        }
+    }
     spkLevel_ = frameLevel(speaker, kFrameSamples);
     aec_.playback(speaker);
 

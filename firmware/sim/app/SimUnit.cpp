@@ -26,7 +26,22 @@ SimUnit::SimUnit(const SimOptions& opt, QObject* parent)
     QDir().mkpath(opt_.dataDir);
 }
 
-SimUnit::~SimUnit() = default;
+SimUnit::~SimUnit() { stopFirmware(); }
+
+void SimUnit::stopFirmware() {
+    if (analysis_.joinable()) analysis_.join();  // the analysis job uses the core's buffers
+    web_.reset();
+    ic_.reset();
+    aec_.reset();
+}
+
+std::string SimUnit::boardTest() {
+    std::string r;
+    r += "ok I2C: TCA9555 0x20, PCA9685 0x40, AXP2101 0x34 (simulated)\n";
+    r += ethUp_ ? "ok Ethernet link up\n" : "FAIL Ethernet link down (PoE cable?)\n";
+    r += wifiAssoc_ ? "ok Wi-Fi associated\n" : "ok Wi-Fi not associated (normal on wired units)\n";
+    return r;
+}
 
 void SimUnit::start() {
     sock_ = new QUdpSocket(this);
@@ -56,10 +71,21 @@ void SimUnit::setHasBattery(bool on) { hasBattery_ = on; powerUpdate(); }
 void SimUnit::setBattery(double pct) { battery_ = std::max(0.0, std::min(100.0, pct)); powerUpdate(); }
 QString SimUnit::command(const QString& line) {
     if (!ic_) return "unit is off or booting";
-    log(qPrintable("> " + line));
+    // Don't put the web password in the log.
+    log(qPrintable("> " + (line.trimmed().startsWith("webpass ") || line.trimmed().startsWith("netkey ") ? line.trimmed().section(' ', 0, 0) + " ****" : line)));
     QString reply = QString::fromStdString(ic_->command(line.toStdString()));
     for (const QString& l : reply.split('\n', Qt::SkipEmptyParts)) log(qPrintable("  " + l));
     return reply;
+}
+
+ic::HttpResponse SimUnit::web(const ic::HttpRequest& req) {
+    if (!web_) {
+        ic::HttpResponse r;
+        r.status = 503;
+        r.body = "unit is off or booting";
+        return r;
+    }
+    return web_->handle(req);
 }
 
 void SimUnit::setMicMode(MicMode m) {
@@ -84,8 +110,7 @@ void SimUnit::powerUpdate() {
         log(poe_ ? "sim: power on (PoE), booting" : "sim: power on (battery), booting");
     } else {
         log("sim: power lost - unit off");
-        ic_.reset();
-        aec_.reset();
+        stopFirmware();
         ethUp_ = wifiAssoc_ = false;
         link_ = ic::LinkType::None;
         text_[0] = text_[1] = text_[2] = ' ';
@@ -194,8 +219,15 @@ void SimUnit::tick() {
         aec_.reset(new ic::NlmsAec(2048, 0));
         ic::IntercomOptions io;
         io.maxTaps = 4096;  // a PC can run more; the S3 limit is set in the firmware
-        ic_.reset(new ic::Intercom(ic::Hal{this, this, this, this, this, this}, *aec_, io));
+        io.runBackground = [this](std::function<void()> job) {
+            if (analysis_.joinable()) analysis_.join();
+            analysis_ = std::thread(std::move(job));
+        };
+        ic_.reset(new ic::Intercom(ic::Hal{this, this, this, this, this, this, this}, *aec_, io));
         ic_->begin();
+        web_.reset(new ic::WebUi(*ic_));
+        if (!opt_.webPass.isEmpty()) ic_->command("webpass " + opt_.webPass.toStdString());
+        if (!opt_.netKey.isEmpty()) ic_->command("netkey " + opt_.netKey.toStdString());
         ic::UnitId id = ic_->unit();
         voice_ = sim::TestVoice(100.0f + float((id.room * 37 + id.sub * 53) % 130), id.key(), -22.0f);
         log(qPrintable(QString("sim: booted in %1 ms").arg(now - bootAt_)));

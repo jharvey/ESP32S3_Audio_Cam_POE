@@ -6,14 +6,19 @@
 #include <cstdio>
 #include <cstring>
 #include <deque>
+#include <functional>
 #include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "Calibrator.h"
+#include "Auth.h"
 #include "Intercom.h"
+#include "WebUi.h"
 #include "NlmsAec.h"
+#include "Panel.h"
+#include "Tm1637.h"
 #include "Packet.h"
 #include "RoomEcho.h"
 #include "TestVoice.h"
@@ -398,10 +403,14 @@ static void testConsole() {
     CHECK(std::fabs(a.ic->params().mu - 0.08f) < 1e-6f, "undo: %s", rep.c_str());
 
     // Network: a tool (room 0) tells 214 to turn its speaker down, then reads it back.
+    const std::string key = "test-network-key-123";
+    a.ic->command("netkey " + key);
+    b.ic->command("netkey " + key);
     TextPacket t;
     t.from = {0, 0};
     parseTarget("214", &t.targetRoom, &t.targetSub);
     t.text = "set volume_db -6";
+    t.text = netauth::sign(key, 1000, t);
     uint8_t buf[kMaxPacketBytes];
     size_t n = encodeText(t, buf);
     for (auto* q : bus.queues) q->push_back(std::vector<uint8_t>(buf, buf + n));
@@ -432,10 +441,352 @@ static void testConsole() {
     CHECK(!a.ic->calibrating(), "TALK cancels auto-tune");
 }
 
+static std::string basic(const std::string& userPass) {
+    static const char* k = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    std::string out = "Basic ";
+    size_t i = 0;
+    for (; i + 2 < userPass.size(); i += 3) {
+        uint32_t v = uint8_t(userPass[i]) << 16 | uint8_t(userPass[i + 1]) << 8 | uint8_t(userPass[i + 2]);
+        out += k[v >> 18]; out += k[(v >> 12) & 63]; out += k[(v >> 6) & 63]; out += k[v & 63];
+    }
+    if (userPass.size() - i == 1) {
+        uint32_t v = uint8_t(userPass[i]) << 16;
+        out += k[v >> 18]; out += k[(v >> 12) & 63]; out += "==";
+    } else if (userPass.size() - i == 2) {
+        uint32_t v = uint8_t(userPass[i]) << 16 | uint8_t(userPass[i + 1]) << 8;
+        out += k[v >> 18]; out += k[(v >> 12) & 63]; out += k[(v >> 6) & 63]; out += '=';
+    }
+    return out;
+}
+
+// Sends one command packet onto the bus and returns the replies the tool saw.
+static std::string netCommand(Bus& bus, std::deque<std::vector<uint8_t>>& tool, std::vector<FakeUnit*> units, const std::string& target,
+                              const std::string& text) {
+    TextPacket t;
+    t.from = {0, 0};
+    parseTarget(target, &t.targetRoom, &t.targetSub);
+    t.text = text;
+    uint8_t buf[kMaxPacketBytes];
+    size_t n = encodeText(t, buf);
+    tool.clear();
+    for (auto* q : bus.queues) q->push_back(std::vector<uint8_t>(buf, buf + n));
+    for (int k = 0; k < 3; k++)
+        for (auto* u : units) u->step();
+    std::string got;
+    for (auto& pkt : tool) {
+        TextPacket r;
+        if (decodeText(pkt.data(), pkt.size(), &r) && r.type == PacketType::Reply) got += r.text + "; ";
+    }
+    return got;
+}
+
+static std::string signedText(const std::string& key, uint64_t nonce, const std::string& target, const std::string& cmd) {
+    TextPacket t;
+    t.from = {0, 0};
+    parseTarget(target, &t.targetRoom, &t.targetSub);
+    t.text = cmd;
+    return netauth::sign(key, nonce, t);
+}
+
+static void testNetAuth() {
+    printf("network command key\n");
+    CHECK(hmacSha256Hex("key", "The quick brown fox jumps over the lazy dog") ==
+              "f7bc83f430538424b13298e6aa6fb143ef4d59a14946175997479dbc2d1a3cd8",
+          "HMAC-SHA256 test vector");
+    Bus bus;
+    FakeUnit a(&bus, {214, 0}, 120);
+    std::deque<std::vector<uint8_t>> tool;
+    bus.queues.push_back(&tool);
+    for (int k = 0; k < 20; k++) a.step();
+    const std::string key = "school-key-0123456789";
+
+    std::string r = netCommand(bus, tool, {&a}, "214", "set volume_db -9");
+    CHECK(r.find("off") != std::string::npos && std::fabs(a.ic->params().volumeDb) < 1e-6f, "no key set: network commands refused (%s)", r.c_str());
+    CHECK(a.ic->command("netkey short").find("short") != std::string::npos, "short key refused");
+    CHECK(a.ic->command("netkey " + key, CmdSource::Network).find("USB") != std::string::npos, "netkey can't be set over the network");
+    a.ic->command("netkey " + key);
+    r = netCommand(bus, tool, {&a}, "214", "set volume_db -9");
+    CHECK(r.find("not signed") != std::string::npos && std::fabs(a.ic->params().volumeDb) < 1e-6f, "unsigned command refused");
+    r = netCommand(bus, tool, {&a}, "214", signedText("wrong-key-0123456789", 5000, "214", "set volume_db -9"));
+    CHECK(r.find("wrong network key") != std::string::npos && std::fabs(a.ic->params().volumeDb) < 1e-6f, "wrong key refused");
+    std::string good = signedText(key, 5000, "214", "set volume_db -9");
+    r = netCommand(bus, tool, {&a}, "214", good);
+    CHECK(r.find("ok volume_db=-9") != std::string::npos, "signed command accepted: %s", r.c_str());
+    a.ic->command("set volume_db 0");
+    r = netCommand(bus, tool, {&a}, "214", good);
+    CHECK(r.find("old or repeated") != std::string::npos && std::fabs(a.ic->params().volumeDb) < 1e-6f, "replayed command refused");
+    r = netCommand(bus, tool, {&a}, "all", signedText(key, 5001, "214", "set volume_db -9"));
+    CHECK(r.find("wrong network key") != std::string::npos, "signature covers the target (re-addressed packet refused)");
+    std::string tampered = signedText(key, 5002, "214", "set volume_db -9");
+    tampered.replace(tampered.size() - 2, 2, "12");
+    r = netCommand(bus, tool, {&a}, "214", tampered);
+    CHECK(r.find("wrong network key") != std::string::npos, "changed command text refused");
+    CHECK(a.kv["net_nonce"] == "5000", "last accepted nonce saved in flash (%s)", a.kv["net_nonce"].c_str());
+    r = netCommand(bus, tool, {&a}, "214", signedText(key, 6000, "214", "talk 5"));
+    CHECK(r.find("USB") != std::string::npos && !a.ic->transmitting(), "talk refused over the network");
+    r = netCommand(bus, tool, {&a}, "214", signedText(key, 6001, "214", "netkey another-key-0123456"));
+    CHECK(r.find("USB") != std::string::npos, "netkey refused over the network, even signed");
+    bool leaked = false;
+    for (auto& l : a.logs) leaked |= l.find("another-key") != std::string::npos;
+    CHECK(!leaked, "keys never written to the log");
+}
+
+static void testBringUp() {
+    printf("bring-up commands (talk, selftest, version)\n");
+    Bus bus;
+    FakeUnit a(&bus, {214, 0}, 120), b(&bus, {101, 0}, 160);
+    for (int k = 0; k < 20; k++) { a.step(); b.step(); }
+    CHECK(a.ic->command("version").find(kFirmwareVersion) != std::string::npos, "version: %s", a.ic->command("version").c_str());
+    a.ic->command("talk 1");
+    for (int k = 0; k < 40; k++) { a.step(); b.step(); }
+    bool during = a.ic->transmitting();
+    uint32_t heard = b.heardFrom(a.id);
+    for (int k = 0; k < 20; k++) { a.step(); b.step(); }
+    CHECK(during && heard > 20 && !a.ic->transmitting(), "talk 1: transmits for 1 s without the button (101 heard %u frames)", heard);
+
+    // Self-test with the speaker coupled to the mic (a working unit) and without (dead speaker).
+    for (int pass = 0; pass < 2; pass++) {
+        bool coupled = pass == 0;
+        CHECK(a.ic->command("selftest").find("started") != std::string::npos, "selftest starts");
+        int16_t mic[kFrameSamples] = {}, spk[kFrameSamples] = {};
+        uint32_t rng = 9;
+        for (int k = 0; k < 100 && a.ic->selfTesting(); k++) {
+            for (int i = 0; i < kFrameSamples; i++) {
+                rng = rng * 1664525u + 1013904223u;
+                int noise = int(rng >> 27) - 16;  // quiet room
+                mic[i] = int16_t(noise + (coupled ? spk[i] / 4 : 0));
+            }
+            a.ic->processFrame(mic, spk);
+        }
+        std::string res = a.ic->command("selftest result");
+        if (coupled)
+            CHECK(res.find("SELF-TEST PASSED") != std::string::npos, "self-test passes with a working speaker:\n%s", res.c_str());
+        else
+            CHECK(res.find("FAIL speaker->mic") != std::string::npos, "self-test catches a dead speaker");
+    }
+}
+
+static void testBackgroundCal() {
+    printf("auto-tune analysis in a background task\n");
+    std::vector<std::function<void()>> jobs;
+    Bus bus;
+    struct BgUnit : FakeUnit {
+        BgUnit(Bus* b, std::vector<std::function<void()>>* jobs) : FakeUnit(b, {214, 0}, 120) {
+            IntercomOptions io;
+            io.maxTaps = 512;
+            io.runBackground = [jobs](std::function<void()> j) { jobs->push_back(std::move(j)); };
+            ic.reset(new Intercom(Hal{this, this, this, this, this, this}, aec, io));
+            ic->begin();
+        }
+    } a(&bus, &jobs);
+    sim::RoomEcho room;
+    room.setPreset(sim::RoomPreset::Classroom);
+    int16_t mic[kFrameSamples] = {}, spk[kFrameSamples] = {};
+    float echo[kFrameSamples];
+    uint32_t rng = 3;
+    auto step = [&] {
+        room.process(spk, echo, kFrameSamples);  // echo of the previous speaker frame
+        for (int i = 0; i < kFrameSamples; i++) {
+            rng = rng * 1664525u + 1013904223u;
+            float n = 60.0f * (float(rng >> 8) / float(1u << 24) * 2 - 1);  // about -60 dBFS room noise
+            mic[i] = int16_t(std::max(-32767.0f, std::min(32767.0f, echo[i] + n)));
+        }
+        a.ic->processFrame(mic, spk);
+    };
+    a.ic->command("cal");
+    int k = 0;
+    for (; k < 400 && jobs.empty(); k++) step();
+    CHECK(jobs.size() == 1 && a.ic->calibrating() && a.ic->calProgress() == 99, "measurement done, analysis handed to the background (%d frames)", k);
+    for (int i = 0; i < 10; i++) step();
+    CHECK(a.ic->calibrating() && !a.ic->lastCal(), "audio keeps running while the analysis runs");
+    jobs[0]();  // the background task finishes
+    step();
+    CHECK(!a.ic->calibrating() && a.ic->lastCal() && a.ic->lastCal()->ok, "result picked up on the next frame: %s",
+          a.ic->lastCal() ? a.ic->lastCal()->summary().c_str() : "none");
+}
+
+// A TM1637 on two open-drain lines: decodes start / stop / bytes / ACK like the chip, and
+// answers key reads. Checks the driver's bit stream without hardware.
+struct FakeTm1637 : board::Tm1637Lines {
+    bool present = true;
+    bool mc = true, md = true, cd = true;  // master CLK, master DIO, chip DIO (true = released)
+    bool inFrame = false, reading = false, firstByte = true;
+    int bits = 0;
+    uint8_t cur = 0, keyCode = 0xFF;
+    std::vector<std::vector<uint8_t>> frames;
+    bool line() const { return md && cd; }
+    void clk(bool h) override {
+        if (h == mc) return;
+        mc = h;
+        if (!inFrame || !present) return;
+        if (h) {
+            bits++;
+            if (!reading && bits <= 8 && line()) cur |= uint8_t(1u << (bits - 1));
+            return;
+        }
+        if (reading) {
+            if (bits < 8) cd = (keyCode >> bits) & 1;
+            else if (bits == 8) cd = true;
+            else endByte();
+        } else {
+            if (bits == 8) cd = false;  // ACK
+            else if (bits == 9) {
+                cd = true;
+                endByte();
+            }
+        }
+    }
+    void endByte() {
+        if (!reading) {
+            frames.back().push_back(cur);
+            if (firstByte && cur == 0x42) {
+                reading = true;
+                cd = keyCode & 1;  // the chip presents bit 0 as the ACK clock ends
+            }
+            firstByte = false;
+        }
+        bits = 0;
+        cur = 0;
+    }
+    void dio(bool h) override {
+        if (h == md) return;
+        bool was = line();
+        md = h;
+        if (!mc || was == line()) return;
+        if (!h) {  // start: DIO falls while CLK high
+            inFrame = true;
+            reading = false;
+            firstByte = true;
+            bits = 0;
+            cur = 0;
+            frames.push_back({});
+        } else {  // stop
+            inFrame = false;
+            reading = false;
+        }
+    }
+    bool readDio() override { return line(); }
+};
+
+static void testPanelDriver() {
+    printf("front panel (TM1637 through the I/O expander)\n");
+    FakeTm1637 chip;
+    board::Tm1637 tm(chip);
+    const char text[3] = {'2', '1', '4'};
+    bool ok = tm.show(text, 0x02, 4);
+    using board::Tm1637;
+    bool frames = chip.frames.size() == 3 && chip.frames[0] == std::vector<uint8_t>{0x40} &&
+                  chip.frames[1] == std::vector<uint8_t>{0xC0, Tm1637::segments('2'), uint8_t(Tm1637::segments('1') | 0x80), Tm1637::segments('4')} &&
+                  chip.frames[2] == std::vector<uint8_t>{0x8C};
+    CHECK(ok && frames, "display \"21.4\": data command, 3 digits with the dot, display on (chip ACKed every byte)");
+
+    struct Case { uint8_t code; Button b; const char* name; };
+    const Case cases[] = {{0xF7, kBtnTalk, "PB1 TALK"}, {0xEF, kBtnMode, "PB2 MODE"}, {0xF5, kBtnUp, "PB4 UP"}, {0xEE, kBtnDown, "PB5 DOWN"}};
+    for (const Case& c : cases) {
+        chip.keyCode = c.code;
+        uint8_t got = 0;
+        bool r = tm.readKeys(&got);
+        CHECK(r && got == c.code && board::buttonsFromKey(got) == (1u << c.b), "key scan 0x%02X -> %s", got, c.name);
+    }
+    chip.keyCode = 0xFF;
+    uint8_t got = 0;
+    tm.readKeys(&got);
+    CHECK(got == 0xFF && board::buttonsFromKey(got) == 0, "no key -> no buttons");
+
+    FakeTm1637 missing;
+    missing.present = false;
+    board::Tm1637 tm2(missing);
+    CHECK(!tm2.show(text, 0, 4), "missing display detected (no ACK)");
+
+    // One-key panels: UP alone held 5 s starts auto-tune.
+    Bus bus;
+    FakeUnit u(&bus, {214, 0}, 120);
+    u.held = 1u << kBtnUp;
+    for (int k = 0; k < 240; k++) u.step();
+    bool early = u.ic->calibrating();
+    for (int k = 0; k < 20; k++) u.step();
+    u.held = 0;
+    CHECK(!early && u.ic->calibrating(), "UP held 5 s starts auto-tune (not before)");
+}
+
+static void testWeb() {
+    printf("web interface\n");
+    CHECK(sha256Hex("abc") == "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", "SHA-256 test vector");
+    CHECK(sha256Hex(std::string(64, 'a')) == "ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb", "SHA-256 two-block message");
+    Bus bus;
+    FakeUnit a(&bus, {214, 0}, 120), b(&bus, {101, 0}, 160);
+    for (int k = 0; k < 60; k++) { a.step(); b.step(); }
+    WebUi web(*a.ic);
+    HttpRequest req;
+    req.method = "GET";
+    req.path = "/";
+    CHECK(web.handle(req).status == 403, "no password set: web interface off");
+
+    CHECK(a.ic->command("webpass short").find("short") != std::string::npos, "short password refused");
+    CHECK(a.ic->command("webpass s3cret-pass", CmdSource::Network).find("USB") != std::string::npos &&
+              a.ic->command("webpass s3cret-pass", CmdSource::Web).find("USB") != std::string::npos,
+          "webpass refused from the network and the web");
+    a.ic->command("webpass s3cret-pass");
+    CHECK(a.kv["web_pass"].find("s3cret") == std::string::npos && a.kv["web_pass"].size() > 64, "password stored as a hash");
+
+    HttpResponse r = web.handle(req);
+    CHECK(r.status == 401 && r.askLogin && r.realm == "Intercom 214", "no login: 401 asks for the password");
+    req.authorization = basic("admin:wrong-pass");
+    CHECK(web.handle(req).status == 401, "wrong password refused");
+    req.authorization = basic("admin:s3cret-pass");
+    r = web.handle(req);
+    CHECK(r.status == 200 && r.body.find("<html") != std::string::npos, "right password: page served (%zu bytes)", r.body.size());
+
+    req.path = "/api/status";
+    r = web.handle(req);
+    CHECK(r.status == 200 && r.body.find("\"unit\":\"214\"") != std::string::npos && r.body.find("\"ip\":\"10.42.20.14\"") != std::string::npos &&
+              r.body.find("\"key\":\"mu\"") != std::string::npos && r.body.find("\"unit\":\"101\"") != std::string::npos,
+          "status JSON has unit, IP, settings and peers");
+
+    req.path = "/api/cmd";
+    req.method = "POST";
+    req.body = "set volume_db -3";
+    CHECK(web.handle(req).status == 403, "command without X-Intercom header refused (cross-site)");
+    req.xIntercom = "1";
+    r = web.handle(req);
+    CHECK(r.status == 200 && std::fabs(a.ic->params().volumeDb + 3) < 1e-6f, "web command applied: %s", r.body.c_str());
+    req.body = "webpass newpassword1";
+    CHECK(web.handle(req).body.find("USB") != std::string::npos && a.ic->command("webpass").find("on") != std::string::npos,
+          "web can't change the password");
+
+    req.body = "tone 1";
+    web.handle(req);
+    int16_t mic[kFrameSamples] = {}, spk[kFrameSamples];
+    a.ic->processFrame(mic, spk);
+    CHECK(a.ic->toneActive() && a.ic->speakerLevel() > 60, "test tone plays (speaker level %u)", a.ic->speakerLevel());
+
+    // Password change logs out the old one (even though the login is cached).
+    a.ic->command("webpass another-pass");
+    req.method = "GET";
+    req.path = "/api/status";
+    CHECK(web.handle(req).status == 401, "old password stops working after webpass");
+
+    // 5 wrong passwords lock the page for 30 s, even for the right password.
+    req.authorization = basic("admin:nope-nope");
+    for (int k = 0; k < 5; k++) web.handle(req);
+    req.authorization = basic("admin:another-pass");
+    CHECK(web.handle(req).status == 429, "5 wrong passwords: locked");
+    for (int k = 0; k < 30 * 50 + 5; k++) a.step();
+    CHECK(web.handle(req).status == 200, "unlocked after 30 s");
+
+    a.ic->command("webpass off");
+    CHECK(web.handle(req).status == 403, "webpass off turns the web interface off");
+}
+
 int main() {
     testTuning();
     testAutoTune();
     testConsole();
+    testWeb();
+    testPanelDriver();
+    testNetAuth();
+    testBringUp();
+    testBackgroundCal();
     testPackets();
     testJitter();
     testMixer();

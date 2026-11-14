@@ -101,4 +101,19 @@ const char* TuneParams::help() {
     return h.c_str();
 }
 
+std::string TuneParams::toJson() const {
+    static const char* kinds[] = {"bool", "int", "float"};
+    std::string out = "[";
+    char buf[320];
+    for (int i = 0; i < int(sizeof(kFields) / sizeof(kFields[0])); i++) {
+        const Field& f = kFields[i];
+        std::string v;
+        get(f.key, &v);
+        snprintf(buf, sizeof(buf), "%s{\"key\":\"%s\",\"kind\":\"%s\",\"min\":%g,\"max\":%g,\"desc\":\"%s\",\"value\":%s}", i ? "," : "",
+                 f.key, kinds[int(f.kind)], double(f.lo), double(f.hi), f.desc, v.c_str());
+        out += buf;
+    }
+    return out + "]";
+}
+
 }  // namespace ic

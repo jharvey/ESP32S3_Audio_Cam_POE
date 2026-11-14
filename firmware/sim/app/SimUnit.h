@@ -9,12 +9,14 @@
 #include <QString>
 #include <QTimer>
 #include <memory>
+#include <thread>
 #include <vector>
 
 #include "Intercom.h"
 #include "NlmsAec.h"
 #include "RoomEcho.h"
 #include "TestVoice.h"
+#include "WebUi.h"
 #include "WinAudio.h"
 
 class QUdpSocket;
@@ -32,6 +34,9 @@ struct SimOptions {
     bool poe = true;
     bool wifi = true;
     bool battery = false;
+    int webPort = 0;     // web interface on http://localhost:<port> (0 = off)
+    QString webPass;     // set this web password at boot, as if typed on the USB console
+    QString netKey;      // set this network key at boot, as if typed on the USB console
     int hwDelayMs = 12;  // simulated I2S DMA + converter latency on the echo path (auto-tune finds it)
     double autoTalkAt = -1, autoTalkFor = 0;
     double quitAfter = -1;
@@ -43,7 +48,8 @@ class SimUnit : public QObject,
                 public ic::IPower,
                 public ic::IPanel,
                 public ic::IStore,
-                public ic::ILog {
+                public ic::ILog,
+                public ic::IDiag {
     Q_OBJECT
 public:
     explicit SimUnit(const SimOptions& opt, QObject* parent = nullptr);
@@ -59,6 +65,7 @@ public:
     void setMicMode(MicMode m);
     void setEcho(sim::RoomPreset p) { room_.setPreset(p); }
     QString command(const QString& line);  // console, same as USB serial / network
+    ic::HttpResponse web(const ic::HttpRequest& req);  // web interface (SimWebServer)
     void setListen(bool on);
 
     // State for the UI.
@@ -91,6 +98,7 @@ public:
     void log(const char* msg) override;
     std::string loadText(const char* key) override;
     void saveText(const char* key, const std::string& value) override;
+    std::string boardTest() override;
 
 signals:
     void logLine(const QString& line);
@@ -112,6 +120,9 @@ private:
 
     std::unique_ptr<ic::NlmsAec> aec_;
     std::unique_ptr<ic::Intercom> ic_;
+    std::unique_ptr<ic::WebUi> web_;
+    std::thread analysis_;  // auto-tune analysis runs here, off the frame timer (as on the S3)
+    void stopFirmware();
     sim::RoomEcho room_;
     sim::TestVoice voice_;
     WinAudioIn in_;

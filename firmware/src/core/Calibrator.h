@@ -13,7 +13,9 @@
 //   ERLE                                 -> residual echo suppression depth, ducking on/off
 // Results are applied and saved; the previous settings can be restored with "undo".
 #pragma once
+#include <atomic>
 #include <cstdint>
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -40,12 +42,23 @@ struct CalResult {
 
 class Calibrator {
 public:
+    using Runner = std::function<void(std::function<void()>)>;
+    // Where the analysis runs. Empty (default) = inline, inside frame().
+    void setRunner(Runner r) { runner_ = std::move(r); }
+
     void start(const TuneParams& current, int maxTaps);
-    void abort() { phase_ = Phase::Idle; }
+    // Stops the measurement. A background analysis already running finishes, but its result
+    // is dropped.
+    void abort();
     bool active() const { return phase_ != Phase::Idle; }
+    bool measuring() const { return active() && phase_ != Phase::Analyzing; }  // room must stay quiet
+    bool analyzing() const { return phase_ == Phase::Analyzing; }
     int progressPct() const;
-    // One frame: raw mic in, speaker out. Returns true on the frame the result is ready.
+    // One frame while measuring: raw mic in, speaker out. Returns true on the frame the result
+    // is ready (only when the analysis runs inline).
     bool frame(const int16_t* mic, int16_t* speaker);
+    // Call once per frame while analyzing in the background: true once, when the result is ready.
+    bool poll();
     const CalResult& result() const { return res_; }
     const TuneParams& tuned() const { return tuned_; }
 
@@ -54,7 +67,7 @@ public:
     void analyze(const std::vector<int16_t>& ref, const std::vector<int16_t>& mic, double noisePow);
 
 private:
-    enum class Phase { Idle, Settle, Noise, Burst, Tail };
+    enum class Phase { Idle, Settle, Noise, Burst, Tail, Analyzing };
     static constexpr int kSettleFrames = 50, kNoiseFrames = 25, kBurstFrames = 100, kTailFrames = 50;
 
     Phase phase_ = Phase::Idle;
@@ -65,6 +78,9 @@ private:
     double noiseAcc_ = 0;
     uint32_t rng_ = 1;
     CalResult res_;
+    Runner runner_;
+    std::atomic<bool> done_{false};
+    bool cancelled_ = false;
 };
 
 }  // namespace ic

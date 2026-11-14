@@ -56,7 +56,7 @@ speaker mix ----------+   (reference)
 
 ### Auto-tune and manual override (built)
 - Every unit can measure its own room and set its echo-canceller settings:
-  - Start it from the panel (MODE + UP 3 s) or the console (`cal`).
+  - Start it from the panel (UP held 5 s), the console (`cal`) or the web page.
   - It measures delay, reverb time, coupling and noise, then replays the recording to choose settings.
 - Every setting can also be read and changed by hand, then saved, over USB serial or the network.
 - Details are in [firmware/README.md](../firmware/README.md).
@@ -81,7 +81,8 @@ speaker mix ----------+   (reference)
 ## 2. Network and power
 
 - **Room number = IP address.**
-  - The board has no DIP switches. You set the number on the unit: hold a button combo, then step the digits with PB1/PB2/PB4/PB5 (read through the TM1637) while the 3-digit display shows the number.
+  - The board has no DIP switches. You set the number on the unit: hold MODE 3 s, then step the digits with UP/DOWN while the 3-digit display shows the number.
+  - The buttons (PB1/PB2/PB4/PB5) are read through the TM1637's key scan, which reports one key at a time, so the panel uses single-button holds, not combos.
   - The number is stored in flash. Room 214 becomes x.x.x.214, and a letter suffix marks group members (214a, 214b).
   - A fixed IP skips the DHCP wait.
 - **Failover on portable units**
@@ -97,6 +98,8 @@ speaker mix ----------+   (reference)
   - Later, the repeaters may also serve as LoRa weather stations with a radiation sensor. That's a separate project.
 
 ## 3. Office console
+
+**Built** (room grid, all-call, talk to a room, signed commands): `firmware/sim/console`. Alarm and video still to come.
 
 A PC app (Qt, the same toolkit as the simulator):
 - Room grid with online / PoE / Wi-Fi / battery status for each unit.
@@ -168,10 +171,11 @@ The load test simulates the whole school (35–45 units, probably on the server 
   - burn the VDD_SPI eFuses at provisioning, or
   - move those two lines in the next board spin.
 - Ethernet and Wi-Fi on the same subnet with the same IP: lwIP routing and IGMP per interface need a hardware test.
-- Auto-tune analysis takes ~0.5 s on a PC at 1024 taps; on the S3 it must run in a low-priority task.
-- Network console commands need a PIN or key before deployment.
+- ~~Auto-tune analysis in a low-priority task~~: done.
+- ~~Network command PIN or key~~: done (`netkey`, signed and replay-proof).
+- The TM1637 key scan can't see two buttons at once. Auto-tune moved to "UP held 5 s". Real combos would need the buttons on the TCA9555's spare port in a later spin.
 
-Simulator status: see [firmware/README.md](../firmware/README.md).
+Simulator status: see [firmware/README.md](../firmware/README.md). Progress and next steps: [roadmap.md](roadmap.md).
 
 Firmware goes in `firmware/` in this repo, and the simulator goes in `firmware/sim/`.
 The hardware (KiCad files) is still a draft: the placement is done, but the 63 new connections are unrouted.

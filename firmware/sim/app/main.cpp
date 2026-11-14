@@ -5,9 +5,11 @@
 //   intercom-sim --name 101 --headless --auto-talk 3,2 --quit-after 8   scripted, prints SUMMARY
 //   intercom-sim --send "214 cal"           network console: auto-tune unit 214
 //   intercom-sim --send "all get"           show every unit's tuning
+//   intercom-sim --name 214 --web-port 8214 web interface on http://localhost:8214
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QCoreApplication>
+#include <QDateTime>
 #include <QDir>
 #include <QElapsedTimer>
 #include <QHostAddress>
@@ -17,20 +19,24 @@
 
 #include "Packet.h"
 
+#include "Auth.h"
 #include "SimUnit.h"
+#include "SimWebServer.h"
 #include "SimWindow.h"
 
 // --send: a tiny network console client (what an office tool would do).
-static int sendCommand(const QString& arg) {
+static int sendCommand(const QString& arg, const QString& key) {
     QString target = arg.section(' ', 0, 0), cmd = arg.section(' ', 1);
     ic::TextPacket t;
     t.type = ic::PacketType::Command;
     t.from = {0, 0};  // room 0 = console / tool
     if (!ic::parseTarget(target.toStdString(), &t.targetRoom, &t.targetSub) || cmd.isEmpty()) {
-        fprintf(stderr, "usage: --send \"<all|214|214a> <command>\"\n");
+        fprintf(stderr, "usage: --send \"<all|214|214a> <command>\" --key <network key>\n");
         return 2;
     }
     t.text = cmd.toStdString();
+    if (!key.isEmpty()) t.text = ic::netauth::sign(key.toStdString(), uint64_t(QDateTime::currentMSecsSinceEpoch()), t);
+    else fprintf(stderr, "no --key: units will refuse the command\n");
     QUdpSocket sock;
     QHostAddress group(QString::fromLatin1(ic::kMulticastGroup));
     sock.bind(QHostAddress::AnyIPv4, ic::kAudioPort, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
@@ -75,6 +81,10 @@ int main(int argc, char** argv) {
     p.addOption({"battery", "Battery fitted (portable unit)."});
     p.addOption({"no-poe", "Start unplugged."});
     p.addOption({"no-wifi", "Start out of Wi-Fi range."});
+    p.addOption({"web-port", "Serve the unit's web interface on http://localhost:PORT.", "port", "0"});
+    p.addOption({"net-key", "Set the network command key at boot (as if typed on the USB console).", "key"});
+    p.addOption({"key", "Network key for --send.", "key"});
+    p.addOption({"web-pass", "Set the web password at boot (as if typed on the USB console).", "password"});
     p.addOption({"hw-delay", "Simulated speaker->mic hardware latency, ms (auto-tune should find it).", "ms", "12"});
     p.addOption({"send", "Send a console command to units on the network and print replies: \"214a get\", \"all stats\".", "target cmd"});
     p.addOption({"auto-talk", "Hold TALK from START for DUR seconds.", "start,dur"});
@@ -97,7 +107,10 @@ int main(int argc, char** argv) {
     o.poe = !p.isSet("no-poe");
     o.wifi = !p.isSet("no-wifi");
     o.hwDelayMs = p.value("hw-delay").toInt();
-    if (p.isSet("send")) return sendCommand(p.value("send"));
+    o.webPort = p.value("web-port").toInt();
+    o.webPass = p.value("web-pass");
+    o.netKey = p.value("net-key");
+    if (p.isSet("send")) return sendCommand(p.value("send"), p.value("key"));
     if (p.isSet("auto-talk")) {
         QStringList v = p.value("auto-talk").split(',');
         o.autoTalkAt = v.value(0).toDouble();
@@ -117,5 +130,12 @@ int main(int argc, char** argv) {
         }
     }
     unit.start();
+    SimWebServer web(&unit);
+    if (o.webPort > 0) {
+        if (web.listen(o.webPort))
+            unit.log(qPrintable(QString("sim: web interface on http://localhost:%1 (set a password first: webpass <password>)").arg(o.webPort)));
+        else
+            unit.log(qPrintable("sim: web port " + QString::number(o.webPort) + " failed: " + web.error()));
+    }
     return app->exec();
 }

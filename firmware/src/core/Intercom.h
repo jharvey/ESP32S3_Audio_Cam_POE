@@ -5,6 +5,7 @@
 // The platform calls processFrame() once per 20 ms audio frame with the mic samples
 // and sends the returned speaker samples to the amplifier.
 #pragma once
+#include <functional>
 #include <memory>
 #include <string>
 #include <vector>
@@ -21,6 +22,8 @@ namespace ic {
 
 struct IntercomOptions {
     int maxTaps = 2048;  // longest echo filter this platform can run in real time
+    // Runs auto-tune's analysis off the audio thread (seconds on the S3). Empty = run it inline.
+    std::function<void(std::function<void()>)> runBackground;
 };
 
 struct AudioStats {
@@ -28,6 +31,10 @@ struct AudioStats {
     uint32_t concealed = 0;      // missing frames bridged by concealment
     uint32_t lateDrops = 0;      // frames that arrived after their playout time
 };
+
+// Where a console command came from. Some commands are refused from the network or web
+// (the web password can only be set over USB).
+enum class CmdSource : uint8_t { Local = 0, Network = 1, Web = 2 };
 
 struct Peer {
     StatusPacket status;
@@ -43,13 +50,17 @@ public:
 
     // Console: one command line in, reply text out. Same commands over USB serial and the
     // network ("help" lists them). Call from the audio thread (or between frames).
-    std::string command(const std::string& line);
+    std::string command(const std::string& line, CmdSource src = CmdSource::Local);
 
     const TuneParams& params() const { return params_; }
     EchoCanceller& aec() { return aec_; }
     const UnitId& unit() const { return unit_; }
+    PowerState power() const { return hal_.power->read(); }
+    IStore& store() const { return *hal_.store; }
+    bool toneActive() const { return toneFrames_ > 0; }
     LinkType link() const { return link_; }
     bool transmitting() const { return transmitting_; }
+    bool selfTesting() const { return testPhase_ != 0; }
     bool inSetup() const { return setup_.active(); }
     bool calibrating() const { return cal_.active(); }
     int calProgress() const { return cal_.progressPct(); }
@@ -74,6 +85,8 @@ private:
     void logf(const char* fmt, ...);
     void applyParams();
     void startCal(const char* why);
+    void setUnit(const UnitId& id);
+    void selfTestFrame(const int16_t* mic, int16_t* speaker);
     void finishCal();
     void updateLink();
     void receive();
@@ -107,6 +120,14 @@ private:
     std::vector<std::unique_ptr<Talker>> talkers_;
     std::vector<Peer> peers_;
     std::vector<std::pair<uint32_t, uint32_t>> heard_;
+    uint32_t toneFrames_ = 0;  // test tone frames left ("tone" command)
+    uint32_t talkFrames_ = 0;  // "talk" command: transmit as if TALK were held
+    uint64_t lastNonce_ = 0;   // last accepted network command (replay protection)
+    int testPhase_ = 0;        // selftest: 0 idle, 1 quiet, 2 tone
+    int testCount_ = 0;
+    double testQuiet_ = 0, testLoud_ = 0;
+    std::string testBoard_, testResult_;
+    uint32_t tonePhase_ = 0;
     AudioStats retired_;  // counters of talkers already forgotten
 };
 

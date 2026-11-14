@@ -1,20 +1,25 @@
 // ESP32-S3 entry point: board drivers behind the core's HAL interfaces.
 //
-// STATUS: first draft, NOT COMPILED YET (needs the Arduino-ESP32 3.x platform, see
-// platformio.ini). The core in src/core is tested in the PC simulator; the drivers here
-// are written against the Arduino 3.x APIs and are marked TODO where hardware behaviour
-// still has to be confirmed on a real board.
+// STATUS: compiles (Arduino-ESP32 3.2, see platformio.ini), not yet run on a board. The core
+// in src/core is tested in the PC simulator; the drivers here are marked TODO where hardware
+// behaviour still has to be confirmed on a real board.
 #include <Arduino.h>
 #include <ESP_I2S.h>
 #include <ETH.h>
 #include <NetworkUdp.h>
 #include <Preferences.h>
 #include <SPI.h>
+#include <WebServer.h>
 #include <WiFi.h>
 #include <Wire.h>
 
+#include <atomic>
+#include <functional>
+
 #include "Intercom.h"
 #include "NlmsAec.h"
+#include "WebUi.h"
+#include "board/Panel.h"
 #include "board/Pins.h"
 
 namespace {
@@ -22,8 +27,23 @@ namespace {
 // ---- I2C chips ---------------------------------------------------------------------
 constexpr uint8_t kTca9555 = 0x20;
 constexpr uint8_t kPca9685 = 0x40;
+constexpr uint8_t kAxp2101 = 0x34;
+
+// One lock for the I2C bus: the panel task, the audio task (self-test) and setup all use it.
+SemaphoreHandle_t gI2c;
+struct I2cLock {
+    I2cLock() { xSemaphoreTakeRecursive(gI2c, portMAX_DELAY); }
+    ~I2cLock() { xSemaphoreGiveRecursive(gI2c); }
+};
+
+bool i2cPresent(uint8_t addr) {
+    I2cLock lock;
+    Wire.beginTransmission(addr);
+    return Wire.endTransmission() == 0;
+}
 
 void i2cWrite(uint8_t addr, uint8_t reg, uint8_t v) {
+    I2cLock lock;
     Wire.beginTransmission(addr);
     Wire.write(reg);
     Wire.write(v);
@@ -33,25 +53,43 @@ void i2cWrite(uint8_t addr, uint8_t reg, uint8_t v) {
 class Expander {
 public:
     void begin() {
-        out_ = 0;
-        out_ |= 1u << pins::exp::TM_CLK | 1u << pins::exp::TM_DIO;  // TM1637 idle high
+        I2cLock lock;
+        out_ = 0;  // TM1637 CLK/DIO output latches stay 0: they are driven open-drain via cfg_
         out_ |= 1u << pins::exp::ETH_RST | 1u << pins::exp::LORA_RST;
-        out_ |= 1u << pins::exp::PWM_OE;                              // servo/lamp outputs off until PCA9685 is set up
+        out_ |= 1u << pins::exp::PWM_OE;   // servo/lamp outputs off until PCA9685 is set up
         out_ |= 1u << pins::exp::CAM_PWR;  // TODO: confirm Q1 polarity (camera stays powered)
         write();
-        // Port 0 directions: 1 = input. PMU_IRQ and ETH_INT are inputs.
-        i2cWrite(kTca9555, 6, uint8_t(1u << pins::exp::PMU_IRQ | 1u << pins::exp::ETH_INT));
+        // Port 0 directions: 1 = input. PMU_IRQ and ETH_INT are inputs; TM1637 lines start
+        // released (input, pulled up by R38/R39).
+        cfg_ = uint8_t(1u << pins::exp::PMU_IRQ | 1u << pins::exp::ETH_INT | 1u << pins::exp::TM_CLK | 1u << pins::exp::TM_DIO);
+        writeCfg();
         i2cWrite(kTca9555, 7, 0xff);  // port 1 spare: inputs
     }
     void set(int bit, bool on) {
+        I2cLock lock;
         if (on) out_ |= uint8_t(1u << bit);
         else out_ &= uint8_t(~(1u << bit));
         write();
     }
+    // Open-drain line: high = release (input), low = drive the 0 in the output latch.
+    void openDrain(int bit, bool high) {
+        uint8_t c = high ? uint8_t(cfg_ | (1u << bit)) : uint8_t(cfg_ & ~(1u << bit));
+        if (c == cfg_) return;
+        cfg_ = c;
+        writeCfg();
+    }
+    bool input(int bit) {
+        Wire.beginTransmission(kTca9555);
+        Wire.write(0);  // input port 0
+        Wire.endTransmission(false);
+        if (Wire.requestFrom(kTca9555, uint8_t(1)) != 1) return true;
+        return (Wire.read() >> bit) & 1;
+    }
 
 private:
     void write() { i2cWrite(kTca9555, 2, out_); }
-    uint8_t out_ = 0;
+    void writeCfg() { i2cWrite(kTca9555, 6, cfg_); }
+    uint8_t out_ = 0, cfg_ = 0xff;
 };
 
 class Pwm {
@@ -71,6 +109,7 @@ public:
 
 private:
     void reg(int ch, uint16_t on, uint16_t off) {
+        I2cLock lock;
         Wire.beginTransmission(kPca9685);
         Wire.write(uint8_t(0x06 + 4 * ch));
         Wire.write(uint8_t(on));
@@ -83,12 +122,43 @@ private:
 
 Expander gExp;
 Pwm gPwm;
+
+// ---- front panel: TM1637 through the expander, in its own low-priority task -----------
+class ExpanderLines : public board::Tm1637Lines {
+public:
+    void clk(bool high) override { gExp.openDrain(pins::exp::TM_CLK, high); }
+    void dio(bool high) override { gExp.openDrain(pins::exp::TM_DIO, high); }
+    bool readDio() override { return gExp.input(pins::exp::TM_DIO); }
+};
+ExpanderLines gTmLines;
+board::Tm1637 gTm(gTmLines);
+std::atomic<uint8_t> gButtons{0};
+std::atomic<uint32_t> gDisplay{0x00202020};  // 3 chars + dots, written by the audio task
+std::atomic<bool> gDisplayOk{false};
+
+void panelTask(void*) {
+    uint32_t shown = 0xffffffff;
+    for (;;) {
+        {
+            I2cLock lock;
+            uint8_t code = 0xff;
+            if (gTm.readKeys(&code)) gButtons = board::buttonsFromKey(code);
+            uint32_t want = gDisplay.load();
+            if (want != shown) {
+                const char text[3] = {char(want), char(want >> 8), char(want >> 16)};
+                gDisplayOk = gTm.show(text, uint8_t(want >> 24), 4);
+                shown = want;
+            }
+        }
+        vTaskDelay(pdMS_TO_TICKS(30));  // ~25 key scans a second; each one is ~5 ms of I2C
+    }
+}
 I2SClass gMic, gSpk;
 NetworkUDP gUdp;
 Preferences gPrefs;
 
 // ---- HAL for the core ----------------------------------------------------------------
-class Board : public ic::INet, public ic::ILinks, public ic::IPower, public ic::IPanel, public ic::IStore, public ic::ILog {
+class Board : public ic::INet, public ic::ILinks, public ic::IPower, public ic::IPanel, public ic::IStore, public ic::ILog, public ic::IDiag {
 public:
     // Network: one UDP socket on the multicast group.
     // TODO: Ethernet and Wi-Fi as two netifs on the same subnet need care in lwIP (route
@@ -105,13 +175,39 @@ public:
     bool ethernetUp() override { return ETH.linkUp(); }
     bool wifiUp() override { return WiFi.status() == WL_CONNECTED; }
     void useLink(ic::LinkType) override {}  // TODO: set the default netif
+    void setAddress(const ic::UnitId& id) override {
+        uint8_t ip[4];
+        ic::ipForUnit(id, ip);
+        ETH.config(IPAddress(ip[0], ip[1], ip[2], ip[3]), IPAddress(ip[0], ip[1], 0, 1), IPAddress(255, 255, 0, 0));
+        // TODO: Wi-Fi gets the same address once Wi-Fi is brought up.
+    }
 
     ic::PowerState read() override { return ic::PowerState(); }  // TODO: AXP2101 at 0x34
 
-    // TODO: TM1637 display + key scan bit-banged through TCA9555 P00/P01. Each edge is an
-    // I2C write, so run it in its own low-priority task, display only on change.
-    uint8_t buttons() override { return 0; }
-    void show(const char*, uint8_t) override {}
+    // Panel: the panel task does the slow I2C work; these just exchange the latest state.
+    uint8_t buttons() override { return gButtons.load(); }
+    void show(const char* t, uint8_t dots) override {
+        gDisplay = uint32_t(uint8_t(t[0])) | uint32_t(uint8_t(t[1])) << 8 | uint32_t(uint8_t(t[2])) << 16 | uint32_t(dots) << 24;
+    }
+
+    // "selftest": which chips answer and what the links are doing.
+    std::string boardTest() override {
+        std::string r;
+        auto line = [&r](bool ok, const char* what) {
+            r += ok ? "ok " : "FAIL ";
+            r += what;
+            r += "\n";
+        };
+        line(i2cPresent(kTca9555), "I2C: TCA9555 I/O expander (0x20)");
+        line(i2cPresent(kPca9685), "I2C: PCA9685 servo/lamp driver (0x40)");
+        line(i2cPresent(kAxp2101), "I2C: AXP2101 power manager (0x34)");
+        line(gDisplayOk.load(), "TM1637 display answers");
+        line(ETH.linkUp(), "Ethernet link (PoE cable)");
+        char b[96];
+        snprintf(b, sizeof(b), "PSRAM %u KB, free heap %u KB", unsigned(ESP.getPsramSize() / 1024), unsigned(ESP.getFreeHeap() / 1024));
+        line(ESP.getPsramSize() > 0, b);
+        return r;
+    }
 
     ic::UnitId loadUnit() override {
         ic::UnitId id;
@@ -138,12 +234,47 @@ ic::Intercom* gIntercom = nullptr;
 struct ConsoleLine { char text[160]; };
 QueueHandle_t gConsole;
 
+// Web interface on port 80. The WebServer runs in loop(); each request is handed to the audio
+// task (which owns the core) and loop() waits for the answer.
+WebServer gHttp(80);
+ic::WebUi* gWeb = nullptr;
+struct WebJob {
+    const ic::HttpRequest* req;
+    ic::HttpResponse* resp;
+    SemaphoreHandle_t done;
+};
+QueueHandle_t gWebJobs;
+
+void onHttp() {
+    ic::HttpRequest req;
+    req.method = gHttp.method() == HTTP_POST ? "POST" : gHttp.method() == HTTP_GET ? "GET" : "OTHER";
+    req.path = gHttp.uri().c_str();
+    req.authorization = gHttp.header("Authorization").c_str();
+    req.xIntercom = gHttp.header("X-Intercom").c_str();
+    if (gHttp.hasArg("plain")) req.body = gHttp.arg("plain").c_str();
+    ic::HttpResponse resp;
+    resp.status = 503;
+    resp.body = "busy";
+    static SemaphoreHandle_t done = xSemaphoreCreateBinary();
+    WebJob job{&req, &resp, done};
+    if (xQueueSend(gWebJobs, &job, 0) == pdTRUE) xSemaphoreTake(done, portMAX_DELAY);
+    gHttp.sendHeader("Cache-Control", "no-store");
+    gHttp.sendHeader("X-Frame-Options", "DENY");
+    if (resp.askLogin) gHttp.sendHeader("WWW-Authenticate", ("Basic realm=\"" + resp.realm + "\"").c_str());
+    gHttp.send(resp.status, resp.contentType.c_str(), resp.body.c_str());
+}
+
 void audioTask(void*) {
     static int16_t mic[ic::kFrameSamples], spk[ic::kFrameSamples];
     for (;;) {
         ConsoleLine line;
         if (xQueueReceive(gConsole, &line, 0) == pdTRUE) {
             Serial.println(gIntercom->command(line.text).c_str());
+        }
+        WebJob job;
+        if (xQueueReceive(gWebJobs, &job, 0) == pdTRUE) {
+            *job.resp = gWeb->handle(*job.req);
+            xSemaphoreGive(job.done);
         }
         // Blocks until 20 ms of mic samples are in: the I2S clock paces everything.
         if (gMic.readBytes(reinterpret_cast<char*>(mic), sizeof(mic)) != sizeof(mic)) continue;
@@ -157,6 +288,7 @@ void audioTask(void*) {
 void setup() {
     Serial.begin(115200);
     gPrefs.begin("intercom", false);
+    gI2c = xSemaphoreCreateRecursiveMutex();
     Wire.begin(pins::I2C_SDA, pins::I2C_SCL, 400000);
     gExp.begin();
     gPwm.begin();
@@ -175,14 +307,28 @@ void setup() {
     ETH.begin(ETH_PHY_W5500, 1, pins::ETH_CS, -1, -1, SPI3_HOST, pins::SPI_SCLK, pins::SPI_MISO, pins::SPI_MOSI);
 
     // NLMS cost grows with taps; 1024 (64 ms) is the planned real-time limit on the S3 until
-    // ESP-SR replaces it. TODO: auto-tune's analysis (~0.5 s on a PC, several s on the S3) must
-    // move to a low-priority task so it does not stall the audio task.
+    // ESP-SR replaces it.
     ic::IntercomOptions io;
     io.maxTaps = 1024;
     gConsole = xQueueCreate(4, sizeof(ConsoleLine));
-    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, gAec, io);
+    gWebJobs = xQueueCreate(1, sizeof(WebJob));
+    // Auto-tune's analysis runs in a low-priority task on core 0, so audio keeps going.
+    io.runBackground = [](std::function<void()> job) {
+        auto* j = new std::function<void()>(std::move(job));
+        xTaskCreatePinnedToCore(
+            [](void* arg) {
+                auto* f = static_cast<std::function<void()>*>(arg);
+                (*f)();
+                delete f;
+                vTaskDelete(nullptr);
+            },
+            "autotune", 16384, j, 1, nullptr, 0);
+    };
+    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, gAec, io);
     gIntercom = &intercom;
     intercom.begin();
+    static ic::WebUi web(intercom);
+    gWeb = &web;
 
     uint8_t ip[4];
     ic::ipForUnit(intercom.unit(), ip);
@@ -190,6 +336,12 @@ void setup() {
     gUdp.beginMulticast(IPAddress(239, 255, 42, 1), ic::kAudioPort);
 
     xTaskCreatePinnedToCore(audioTask, "audio", 16384, nullptr, 20, nullptr, 1);
+    xTaskCreatePinnedToCore(panelTask, "panel", 4096, nullptr, 2, nullptr, 0);
+
+    static const char* kHeaders[] = {"Authorization", "X-Intercom"};
+    gHttp.collectHeaders(kHeaders, 2);
+    gHttp.onNotFound(onHttp);  // every path goes to WebUi, which routes and checks the login
+    gHttp.begin();
 }
 
 void loop() {
@@ -206,5 +358,6 @@ void loop() {
             line.text[n++] = c;
         }
     }
-    delay(10);
+    gHttp.handleClient();
+    delay(5);
 }
