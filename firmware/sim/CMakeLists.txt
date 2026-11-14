@@ -8,7 +8,6 @@ project(IntercomSim LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_AUTOMOC ON)
 
 get_filename_component(FW ${CMAKE_CURRENT_SOURCE_DIR}/.. ABSOLUTE)
 
@@ -31,6 +30,7 @@ target_compile_options(ic-netsim PRIVATE -O2)
 
 find_package(Qt6 QUIET COMPONENTS Core Network Widgets)
 if(Qt6_FOUND AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/app/main.cpp)
+    set(CMAKE_AUTOMOC ON)  # only the Qt apps need moc; the tests build without Qt (e.g. on Linux)
     add_executable(intercom-sim WIN32
         app/main.cpp
         app/SimUnit.cpp app/SimUnit.h
