@@ -1,3 +1,4 @@
 sim/build/
 .pio/
 __pycache__/
+local-*.ini

@@ -1,0 +1,12 @@
+; Copy to local-windows.ini on the Windows PC (not committed).
+; Toolchain and framework live on the NAS (M:), not C:. Build output stays local (.pio).
+; Kept short: Espressif's library paths are close to Windows' 260-character limit.
+; Windows won't run programs from the NAS share ("Access is denied"), so the compiler is
+; a local copy linked in below (C:/pio-tc). See README "Firmware build".
+
+[platformio]
+core_dir = M:/pio
+
+[env:intercom]
+platform_packages =
+    toolchain-xtensa-esp-elf @ symlink://C:/pio-tc/toolchain-xtensa-esp-elf
