@@ -292,7 +292,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": ""
+      "sch_revision": "R0.1"
     },
     "layer_pairs": [],
     "layer_presets": [],
@@ -938,16 +938,16 @@
       {
         "filename": "ESP32S3_Audio_Cam_POE.kicad_sch",
         "name": "ESP32S3_Audio_Cam_POE",
-        "uuid": "00000000-0000-0000-0000-000000000000"
+        "uuid": "c5870406-763b-471e-b639-251ff1f3739e"
       }
     ],
-    "used_designators": "",
+    "used_designators": "#PWR128,#PWR201,C69-70,R103",
     "variants": []
   },
   "sheets": [
     [
       "c5870406-763b-471e-b639-251ff1f3739e",
-      "Root"
+      "ESP32S3_Audio_Cam_POE"
     ]
   ],
   "text_variables": {},
