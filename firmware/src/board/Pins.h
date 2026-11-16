@@ -48,18 +48,18 @@ constexpr int CAM_D4 = 40, CAM_D5 = 38, CAM_D6 = 17, CAM_D7 = 18;
 namespace exp {
 constexpr int TM_CLK = 0;      // P00  TM1637 CLK (display + key scan)
 constexpr int TM_DIO = 1;      // P01  TM1637 DIO
-constexpr int ETH_RST = 2;     // P02  W5500 reset (via R27)
+constexpr int PWM_OE = 2;      // P02  PCA9685 /OE, high = outputs off
 constexpr int CAM_PWR = 3;     // P03  camera power (Q1 via R15)
 constexpr int LORA_RST = 4;    // P04
 constexpr int PMU_IRQ = 5;     // P05  AXP2101 IRQ, input
-constexpr int PWM_OE = 6;      // P06  PCA9685 /OE, high = outputs off
-constexpr int ETH_INT = 7;     // P07  W5500 INT, input (W5500 runs polled)
+constexpr int ETH_INT = 6;     // P06  W5500 INT, input (W5500 runs polled)
+constexpr int ETH_RST = 7;     // P07  W5500 reset (via R27)
 }  // namespace exp
 
 // PCA9685 (U20) channels, open-drain (MODE2.OUTDRV = 0)
 namespace pwm {
-constexpr int RC_PAN = 0, RC_TILT = 1, RC_ROT = 2, RC_OTHER = 3;  // servo signals, 4.7k pull-ups
-constexpr int RC_PWR = 4;                                          // servo 5 V switch (Q2), low = on
+constexpr int RC_PWR = 0;                                          // servo 5 V switch (Q2), low = on
+constexpr int RC_PAN = 1, RC_TILT = 2, RC_ROT = 3, RC_OTHER = 4;  // servo signals, 4.7k pull-ups
 constexpr int LED_WHITE = 5, LED_IR = 6, LED_OTHER = 7;            // lamp P-FETs, low = on
 constexpr int MISC1 = 8, MISC2 = 9, MISC3 = 10;                    // MISC.OUT P-FETs (laser on one of these)
 }  // namespace pwm

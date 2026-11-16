@@ -35,8 +35,8 @@ Console and flashing use native USB (GPIO19/20). W5500 runs in polled mode (ESP-
 
 | Ch | Net | Load |
 |---|---|---|
-| 0-3 | RC.PAN, RC.TILT, RC.ROT, RC.OTHR | servo signals, 4.7k pull-up to +3V3 |
-| 4 | RC.PWR | Q2 gate (servo 5 V) via existing 1M; low = on, released = off |
+| 0 | RC.PWR | Q2 gate (servo 5 V) via existing 1M; low = on, released = off |
+| 1-4 | RC.PAN, RC.TILT, RC.ROT, RC.OTHR | servo signals, 4.7k pull-up to +3V3 |
 | 5-7 | LED.WH, LED.IR, LED.OTH | Q3-Q5 lamp P-FETs, same scheme |
 | 8-10 | MISC.OUT1-3 | Q6-Q8 P-FETs, same scheme |
 | 11-15 | spare | |
@@ -50,13 +50,16 @@ pull-up takes the gate to the source. /OE is driven by the TCA9555 (high at boot
 |---|---|---|
 | P00 | TM.CLK (TM1637 CLK, keeps R38 pull-up) | out |
 | P01 | TM.DIO (TM1637 DIO, keeps R39 pull-up) | in/out |
-| P02 | ETH.RST_EXP (W5500 RST via R27) | out |
+| P02 | PWM.OE (PCA9685 /OE) | out |
 | P03 | CAM.PWR (Q1 gate via R15) | out |
 | P04 | LORA_RST | out |
 | P05 | PMU.IRQ (AXP2101 IRQ) | in |
-| P06 | PWM.OE (PCA9685 /OE) | out |
-| P07 | ETH.INT_EXP (W5500 INT via R26) | in |
+| P06 | ETH.INT_EXP (W5500 INT via R26) | in |
+| P07 | ETH.RST_EXP (W5500 RST via R27) | out |
 | P10-P17 | spare | |
+
+Channel and port order was chosen to match the PCB placement (fewest crossings): RC.PWR sits next to the
+servo nets on the side towards R47, and PWM.OE sits on P02, directly under U20's /OE pin.
 
 ## Removed
 

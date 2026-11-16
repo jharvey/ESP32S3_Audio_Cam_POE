@@ -40367,13 +40367,33 @@
 	)
 	(wire
 		(pts
-			(xy 86.36 274.32) (xy 99.06 274.32)
+			(xy 86.36 274.32) (xy 88.9 274.32)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "1c5ed811-2300-4ca2-9b09-33913e6f9713")
+		(uuid "2916e178-622b-4cde-9af2-714a5c36fe23")
+	)
+	(wire
+		(pts
+			(xy 93.98 274.32) (xy 99.06 274.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b3d8e472-d7c3-463c-abb3-c16f743aa1b6")
+	)
+	(label "RC.TILT"
+		(at 93.98 274.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9252d107-8eb4-4bf1-b283-721191cf25b1")
 	)
 	(wire
 		(pts
@@ -41057,13 +41077,33 @@
 	)
 	(wire
 		(pts
-			(xy 86.36 271.78) (xy 99.06 271.78)
+			(xy 86.36 271.78) (xy 88.9 271.78)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "360ae0f5-ff16-4448-a0ef-a35cb8bfda29")
+		(uuid "f4174a55-79d8-40eb-8281-fec535fcd09b")
+	)
+	(wire
+		(pts
+			(xy 93.98 271.78) (xy 99.06 271.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a3e26529-f52d-4321-88b3-121d4ea50a4e")
+	)
+	(label "RC.PAN"
+		(at 93.98 271.78 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ef39e622-e41c-4411-a7a8-b7e26772c96c")
 	)
 	(wire
 		(pts
@@ -45207,13 +45247,33 @@
 	)
 	(wire
 		(pts
-			(xy 86.36 276.86) (xy 99.06 276.86)
+			(xy 86.36 276.86) (xy 88.9 276.86)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "bc01a551-9abe-44cc-80f9-7087a0af201f")
+		(uuid "8a49e0b1-564f-4b5b-9150-50685b9e6c77")
+	)
+	(wire
+		(pts
+			(xy 93.98 276.86) (xy 99.06 276.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "11a23d26-afa4-41ac-895a-de4c75f92713")
+	)
+	(label "RC.ROT"
+		(at 93.98 276.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "da748a8f-a5c7-47c0-91dd-b41c7d0db28a")
 	)
 	(wire
 		(pts
@@ -45957,13 +46017,33 @@
 	)
 	(wire
 		(pts
-			(xy 86.36 279.4) (xy 99.06 279.4)
+			(xy 86.36 279.4) (xy 88.9 279.4)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d5309e29-949f-4fa5-9805-aeb850bef8b0")
+		(uuid "af3868b0-721d-404b-9815-463fd4d442cf")
+	)
+	(wire
+		(pts
+			(xy 93.98 279.4) (xy 99.06 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "53268120-d9e3-4567-ac57-4456ea485fd6")
+	)
+	(label "RC.OTHR"
+		(at 93.98 279.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0dd238a0-cefb-4384-882a-5c9ec4bfce6a")
 	)
 	(wire
 		(pts
@@ -48595,7 +48675,7 @@
 		)
 		(uuid "1ce1b432-5b94-4b1b-abf9-db5f916c38bd")
 	)
-	(label "ETH.RST_EXP"
+	(label "PWM.OE"
 		(at 88.9 342.9 0)
 		(effects
 			(font
@@ -48725,7 +48805,7 @@
 		)
 		(uuid "2671cc6f-7f54-4f46-a6de-f0b831bb124f")
 	)
-	(label "RC.PAN"
+	(label "RC.PWR"
 		(at 88.9 271.78 0)
 		(effects
 			(font
@@ -49165,7 +49245,7 @@
 		)
 		(uuid "4cbb6023-8770-4ebc-9859-1ce50e8d6fd1")
 	)
-	(label "PWM.OE"
+	(label "ETH.INT_EXP"
 		(at 88.9 353.06 0)
 		(effects
 			(font
@@ -49455,7 +49535,7 @@
 		)
 		(uuid "5d677de0-d8f4-4aea-8d2c-35d3588dc41e")
 	)
-	(label "RC.TILT"
+	(label "RC.PAN"
 		(at 88.9 274.32 0)
 		(effects
 			(font
@@ -49646,7 +49726,7 @@
 		)
 		(uuid "79048059-f0fe-4465-a502-5ff2d0bc5932")
 	)
-	(label "RC.ROT"
+	(label "RC.TILT"
 		(at 88.9 276.86 0)
 		(effects
 			(font
@@ -49796,7 +49876,7 @@
 		)
 		(uuid "82909962-2a51-4411-9343-c80f0c7f7fb9")
 	)
-	(label "RC.OTHR"
+	(label "RC.ROT"
 		(at 88.9 279.4 0)
 		(effects
 			(font
@@ -50347,7 +50427,7 @@
 		)
 		(uuid "bda942b4-a1cb-4f7d-bac6-17b67eae3564")
 	)
-	(label "RC.PWR"
+	(label "RC.OTHR"
 		(at 88.9 281.94 0)
 		(effects
 			(font
@@ -50887,7 +50967,7 @@
 		)
 		(uuid "f3b7b0e5-590e-4680-86ba-89fd5dde11bd")
 	)
-	(label "ETH.INT_EXP"
+	(label "ETH.RST_EXP"
 		(at 88.9 355.6 0)
 		(effects
 			(font

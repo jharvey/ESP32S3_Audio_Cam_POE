@@ -100,7 +100,10 @@ public:
         i2cWrite(kPca9685, 0x01, 0x00);  // MODE2: OUTDRV = 0, open-drain
         i2cWrite(kPca9685, 0x00, 0x20);  // MODE1: awake, auto-increment
         delay(1);
-        for (int ch = pins::pwm::RC_PWR; ch <= pins::pwm::MISC3; ch++) fullOff(ch);  // released = P-FETs off
+        // Released = P-FETs off: servo power, lamps and MISC outputs.
+        for (int ch : {pins::pwm::RC_PWR, pins::pwm::LED_WHITE, pins::pwm::LED_IR, pins::pwm::LED_OTHER,
+                       pins::pwm::MISC1, pins::pwm::MISC2, pins::pwm::MISC3})
+            fullOff(ch);
     }
     // Open-drain: "full on" pulls the line low (P-FET on); "full off" releases it.
     void fullOn(int ch) { reg(ch, 0x1000, 0x0000); }
