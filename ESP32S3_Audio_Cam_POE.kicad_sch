@@ -48555,7 +48555,7 @@
 		)
 		(uuid "07f87311-54d0-4005-bc19-c98ca1b32f1b")
 	)
-	(label "ETH.MOSI"
+	(label "LORA_CS"
 		(at 182.88 170.18 0)
 		(effects
 			(font
@@ -49145,7 +49145,7 @@
 		)
 		(uuid "422d9238-6e08-46d4-94ec-f6b7ccb67674")
 	)
-	(label "LORA_IRQ"
+	(label "MIC.CLK"
 		(at 182.88 195.58 0)
 		(effects
 			(font
@@ -50177,7 +50177,7 @@
 		)
 		(uuid "a290ace9-07a8-47e7-90d8-e9485b25cc38")
 	)
-	(label "MIC.CLK"
+	(label "LORA_IRQ"
 		(at 182.88 167.64 0)
 		(effects
 			(font
@@ -50787,7 +50787,7 @@
 		)
 		(uuid "e4a1c3c5-d804-4e53-9b63-e224e4d81b63")
 	)
-	(label "LORA_CS"
+	(label "ETH.MOSI"
 		(at 182.88 165.1 0)
 		(effects
 			(font

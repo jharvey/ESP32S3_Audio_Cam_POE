@@ -9,15 +9,15 @@ constexpr int I2C_SCL = 43;
 constexpr int I2C_SDA = 44;
 
 // Shared SPI: W5500 Ethernet (U9) and RFM95 LoRa (U19)
-constexpr int SPI_MOSI = 11;
+constexpr int SPI_MOSI = 9;     // GPIO matrix (not the SPI2 IO_MUX pins)
 constexpr int SPI_MISO = 12;
 constexpr int SPI_SCLK = 13;
 constexpr int ETH_CS = 14;
-constexpr int LORA_CS = 9;
-constexpr int LORA_DIO0 = 15;  // LORA_IRQ
+constexpr int LORA_CS = 11;
+constexpr int LORA_DIO0 = 10;  // LORA_IRQ
 
 // PDM microphones U16/U17 (L/R by JP7/JP8) on I2S0
-constexpr int MIC_CLK = 10;
+constexpr int MIC_CLK = 15;    // XTAL_32K_P, free: no 32 kHz crystal fitted
 constexpr int MIC_DATA = 7;
 
 // Speaker amp MAX98357A (U15) on I2S1

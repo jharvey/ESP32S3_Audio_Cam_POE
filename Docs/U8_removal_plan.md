@@ -18,14 +18,18 @@ on those pins. This change replaces it with two I2C chips on U7, and switches th
 
 ## U7 pin changes
 
+GPIO9/10/11/15 were re-ordered on 15 Nov 2026 to match the PCB fan-out under U7 (pins 14-16 and 21).
+The SPI bus now runs through the GPIO matrix, which is fine for the W5500 at the speeds used.
+
 | GPIO | Was | Now |
 |---|---|---|
 | 43 (U0TXD) | UART to U8 / J3 | I2C.SCL (J3 stays as an I2C/debug header) |
 | 44 (U0RXD) | UART to U8 / J3 | I2C.SDA |
-| 9 | ETH.RST (via R27) | LORA_CS |
-| 15 | CAM.PWR (via R15) | LORA_IRQ (RFM95 DIO0) |
-| 10 | ETH.INT (via R26) | MIC.CLK (PDM clock to both mics) |
-| 11 / 12 / 13 | W5500 MOSI / MISO / SCLK, TM1637 shared 11+13 | SPI bus shared by W5500 and RFM95; TM1637 moved off |
+| 9 | ETH.RST (via R27) | ETH.MOSI (SPI bus shared by W5500 and RFM95) |
+| 15 | CAM.PWR (via R15) | MIC.CLK (PDM clock to both mics) |
+| 10 | ETH.INT (via R26) | LORA_IRQ (RFM95 DIO0) |
+| 11 | W5500 MOSI, TM1637 shared | LORA_CS |
+| 12 / 13 | W5500 MISO / SCLK, TM1637 shared 13 | SPI MISO / SCLK, shared by W5500 and RFM95; TM1637 moved off |
 | 7 | I2S mic data | PDM mic data (both mics, L/R by solder jumper) |
 | 8, 16, 21 | I2S WS / BCLK / DOUT shared with mics | speaker amp only (I2S1) |
 
@@ -87,9 +91,9 @@ until the firmware first writes it. Drive the LED only after boot, and never hol
 
 - I2C on GPIO43/44 at 400 kHz: PCA9685 0x40, TCA9555 0x20, AXP2101 0x34.
 - PCA9685: 50 Hz, OUTDRV=0 (open-drain), use full-on/full-off bits for lamps and outputs.
-- Mics: I2S0 in PDM RX mode, CLK GPIO10, DATA GPIO7, stereo (L/R jumpers JP7/JP8).
+- Mics: I2S0 in PDM RX mode, CLK GPIO15, DATA GPIO7, stereo (L/R jumpers JP7/JP8).
 - Speaker: I2S1 TX, BCLK GPIO16, WS GPIO8, DOUT GPIO21.
-- LoRa (RFM95/SX1276): SPI on GPIO11/12/13 shared with W5500, CS GPIO9, DIO0 GPIO15, RST via TCA9555 P04.
+- LoRa (RFM95/SX1276): SPI MOSI/MISO/SCLK on GPIO9/12/13 shared with W5500, CS GPIO11, DIO0 GPIO10, RST via TCA9555 P04.
 - Vdrive is now VBUS directly (no current sensor).
 - Status LED: WS2812 on GPIO0 via RMT (one pixel, GRB).
 - PCB temperature: LM75B at I2C 0x48, read the 11-bit temperature register (0.125 C per step).
