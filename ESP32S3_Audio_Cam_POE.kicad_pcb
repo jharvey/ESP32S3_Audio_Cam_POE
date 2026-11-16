@@ -26334,6 +26334,19 @@
 				)
 			)
 		)
+		(property "JLCPCB Rotation Offset" "180"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6b5071d2-38fb-475b-afd8-44fd7acf2148")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property "Value" "Red"
 			(at 0 1.43 0)
 			(layer "F.Fab")
