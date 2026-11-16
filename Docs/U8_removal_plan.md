@@ -62,7 +62,23 @@ pull-up takes the gate to the source. /OE is driven by the TCA9555 (high at boot
 
 U8 and everything only it used: U10 flash, Y2, Y3, U8 RF network (ANT2, C98, C99, L10) and +3V3_RF2,
 second USB-C (J2, U4, D2, R12, R13, TST-R4), BOOT2, RST3, J4, JP1, JP2, U2 (MT9221 current sensor),
-U12 (DS18B20), D9 (WS2812), the voltage-sense dividers (R68-R73), U8 decoupling, and U8-only test points.
+the voltage-sense dividers (R68-R73), U8 decoupling, and U8-only test points.
+
+U12 (DS18B20) and D9 (WS2812) were removed here too, then restored (see below).
+
+## Restored after U8 removal
+
+U7 has no free GPIO (GPIO26 and GPIO33-37 belong to the in-package PSRAM), and neither part can run through
+the TCA9555 because of its timing, so:
+
+| Ref | Part | LCSC | Connection |
+|---|---|---|---|
+| D9 | WS2812B 1615 RGB status LED (bottom side, original spot) | C5349954 | DIN on GPIO0 (CHIP_BOOT), shared with the BOOT button. DOUT unused. Powered from +3V3 through TST-R19 (0 ohm), C58 100nF. |
+| U12 | LM75BDP,118 temperature sensor, TSSOP-8 (top side, old DS18B20 spot) | C33099 (Extended) | I2C.SCL/SDA, address 0x48 (A0-A2 low). OS output unused. C49 100nF. Replaces the DS18B20, which needed its own GPIO. |
+
+GPIO0 is a strapping pin: it must read high at reset for a normal boot. The LED's data input is high
+impedance, so the internal pull-up still wins and boot is unaffected; the LED may show a random colour
+until the firmware first writes it. Drive the LED only after boot, and never hold GPIO0 low.
 
 ## Firmware notes
 
@@ -72,3 +88,5 @@ U12 (DS18B20), D9 (WS2812), the voltage-sense dividers (R68-R73), U8 decoupling,
 - Speaker: I2S1 TX, BCLK GPIO16, WS GPIO8, DOUT GPIO21.
 - LoRa (RFM95/SX1276): SPI on GPIO11/12/13 shared with W5500, CS GPIO9, DIO0 GPIO15, RST via TCA9555 P04.
 - Vdrive is now VBUS directly (no current sensor).
+- Status LED: WS2812 on GPIO0 via RMT (one pixel, GRB).
+- PCB temperature: LM75B at I2C 0x48, read the 11-bit temperature register (0.125 C per step).
