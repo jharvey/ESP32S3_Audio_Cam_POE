@@ -9475,6 +9475,19 @@
 				)
 			)
 		)
+		(property "JLCPCB Rotation Offset" "180"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d39f60ad-2b82-4ef2-9546-8f237686a813")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property "Description" "30V 4A 44mΩ@10V,4.3A 1.4W 1.3V@250uA 1 Piece P-Channel SOT-23 MOSFETs ROHS"
 			(at 0 0 0)
 			(unlocked yes)
@@ -10690,6 +10703,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "5ec64b47-04c7-4991-ba82-093089adf174")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "JLCPCB Rotation Offset" "180"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9dfdd573-944c-45f5-9726-0cd595422e00")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -36595,6 +36621,19 @@
 				)
 			)
 		)
+		(property "JLCPCB Rotation Offset" "180"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "845b17bd-2eb7-48f7-8f3c-e35c230dae12")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property "Description" "30V 4A 44mΩ@10V,4.3A 1.4W 1.3V@250uA 1 Piece P-Channel SOT-23 MOSFETs ROHS"
 			(at 0 0 0)
 			(unlocked yes)
@@ -62281,6 +62320,19 @@
 				)
 			)
 		)
+		(property "LCSC" "C14663"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e7dfb950-3f86-4d2d-9a1a-73fdbb8b00c4")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
 			(at 0 0 270)
 			(unlocked yes)
@@ -76882,6 +76934,19 @@
 				)
 			)
 		)
+		(property "JLCPCB Rotation Offset" "180"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8fbb9cea-414c-4fe1-badb-9d6e6668baf6")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property "Description" "30V 4A 44mΩ@10V,4.3A 1.4W 1.3V@250uA 1 Piece P-Channel SOT-23 MOSFETs ROHS"
 			(at 0 0 0)
 			(unlocked yes)
@@ -89172,6 +89237,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "49cc14ca-c46a-4076-8a6d-2635cb46004d")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "JLCPCB Rotation Offset" "180"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "21f62d91-859a-4731-8334-8f9a97b9f1ea")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -102604,6 +102682,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "5fe160de-4bd9-4a2d-a00f-372c864aa596")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "JLCPCB Rotation Offset" "180"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "7df3db72-2e90-4bf9-880b-b79ff5889c4f")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -119588,6 +119679,19 @@
 				)
 			)
 		)
+		(property "JLCPCB Rotation Offset" "180"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "97cb4dbf-87cc-4818-9a8b-473beb831f1d")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property "Description" "30V 4A 44mΩ@10V,4.3A 1.4W 1.3V@250uA 1 Piece P-Channel SOT-23 MOSFETs ROHS"
 			(at 0 0 0)
 			(unlocked yes)
@@ -127603,6 +127707,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "2507d0d2-b627-4523-b86b-9dbcf923742b")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "JLCPCB Rotation Offset" "180"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8745ede2-53c0-436b-ad4b-130664878656")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -142000,6 +142117,20 @@
 				(justify mirror)
 			)
 		)
+		(property "LCSC" "C14663"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "396ef2d7-8cc7-48cd-b54f-a0d2595f8c9a")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
 		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
 			(at 0 0 180)
 			(unlocked yes)
@@ -156229,6 +156360,19 @@
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "49656814-c79c-4f97-aca1-22dceca71c58")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "JLCPCB Rotation Offset" "180"
+			(at 0 0 0)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "2b218c55-a7dc-4954-9480-a3a139fa6585")
 			(effects
 				(font
 					(size 1.27 1.27)
