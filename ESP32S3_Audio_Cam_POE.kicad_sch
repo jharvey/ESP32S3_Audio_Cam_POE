@@ -10,367 +10,6 @@
 		(rev "R0.1")
 	)
 	(lib_symbols
-		(symbol "Sensor_Temperature:LM75B"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "U"
-				(at -6.604 6.35 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "LM75B"
-				(at 2.032 6.35 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" ""
-				(at -2.794 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm75b.pdf"
-				(at -17.018 9.525 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Digital Temperature Sensor & Thermal Watchdog, SOIC-8 and VSSOP-8"
-				(at -17.018 9.525 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "Temperature sensor"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "SOIC*3.9x4.9mm*P1.27mm* VSSOP*3x3mm*P0.65mm*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "LM75B_0_1"
-				(rectangle
-					(start -7.62 5.08)
-					(end 7.62 -5.08)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.556 3.175) (xy -3.556 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.556 3.175) (xy -2.921 3.175)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.556 2.54) (xy -2.921 2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.556 1.905) (xy -2.921 1.905)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.556 1.27) (xy -2.921 1.27)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.556 0.635) (xy -2.921 0.635)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -3.556 0)
-					(end -2.286 -1.905)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(arc
-					(start -3.556 3.175)
-					(mid -2.921 3.8073)
-					(end -2.286 3.175)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center -2.921 -2.54)
-					(radius 1.27)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.286 3.175) (xy -2.286 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "LM75B_1_1"
-				(pin bidirectional line
-					(at 10.16 2.54 180)
-					(length 2.54)
-					(name "SDA"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at 10.16 0 180)
-					(length 2.54)
-					(name "SCL"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin open_collector line
-					(at 10.16 -2.54 180)
-					(length 2.54)
-					(name "O.S."
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 -7.62 90)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -10.16 -2.54 0)
-					(length 2.54)
-					(name "A2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -10.16 0 0)
-					(length 2.54)
-					(name "A1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -10.16 2.54 0)
-					(length 2.54)
-					(name "A0"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 7.62 270)
-					(length 2.54)
-					(name "+Vs"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "0402,0Ω_1"
 			(pin_numbers
 				(hide yes)
@@ -35507,6 +35146,367 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Sensor_Temperature:LM75B"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at -6.604 6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "LM75B"
+				(at 2.032 6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at -2.794 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm75b.pdf"
+				(at -17.018 9.525 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Digital Temperature Sensor & Thermal Watchdog, SOIC-8 and VSSOP-8"
+				(at -17.018 9.525 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "Temperature sensor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "SOIC*3.9x4.9mm*P1.27mm* VSSOP*3x3mm*P0.65mm*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "LM75B_0_1"
+				(rectangle
+					(start -7.62 5.08)
+					(end 7.62 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.556 3.175) (xy -3.556 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.556 3.175) (xy -2.921 3.175)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.556 2.54) (xy -2.921 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.556 1.905) (xy -2.921 1.905)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.556 1.27) (xy -2.921 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.556 0.635) (xy -2.921 0.635)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -3.556 0)
+					(end -2.286 -1.905)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(arc
+					(start -3.556 3.175)
+					(mid -2.921 3.8073)
+					(end -2.286 3.175)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -2.921 -2.54)
+					(radius 1.27)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.286 3.175) (xy -2.286 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "LM75B_1_1"
+				(pin bidirectional line
+					(at 10.16 2.54 180)
+					(length 2.54)
+					(name "SDA"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 10.16 0 180)
+					(length 2.54)
+					(name "SCL"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin open_collector line
+					(at 10.16 -2.54 180)
+					(length 2.54)
+					(name "O.S."
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 -2.54 0)
+					(length 2.54)
+					(name "A2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 0 0)
+					(length 2.54)
+					(name "A1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 2.54 0)
+					(length 2.54)
+					(name "A0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 7.62 270)
+					(length 2.54)
+					(name "+Vs"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:+1V5"
 			(power global)
 			(pin_numbers
@@ -37175,6 +37175,19 @@
 		)
 		(uuid "790a11b8-c2f0-4bf0-bc54-a399ae6dff1e")
 	)
+	(text "RGB STATUS LED (DIN on GPIO0 / BOOT)"
+		(exclude_from_sim no)
+		(at 406.4 268.29 0)
+		(effects
+			(font
+				(size 2 2)
+				(thickness 1)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "79de28e0-f73f-44f2-b9c9-790413e97675")
+	)
 	(text "RF Voltage Filter"
 		(exclude_from_sim no)
 		(at 99.822 208.534 0)
@@ -37280,6 +37293,19 @@
 			(justify left bottom)
 		)
 		(uuid "8a60adda-0f63-438b-b68d-ff1fad6c8f04")
+	)
+	(text "PCB TEMPERATURE (I2C 0x48)"
+		(exclude_from_sim no)
+		(at 474.98 268.29 0)
+		(effects
+			(font
+				(size 2 2)
+				(thickness 1)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "8e7cd8e0-c13c-4e13-9330-123c171924a5")
 	)
 	(text "GPIO37"
 		(exclude_from_sim no)
@@ -39426,12 +39452,20 @@
 		(uuid "9c4c1ea7-933c-4135-a571-14dce2060aa1")
 	)
 	(no_connect
+		(at 497.84 293.37)
+		(uuid "9db1a542-956b-47fc-8bd9-0a22dec39cea")
+	)
+	(no_connect
 		(at 281.94 167.64)
 		(uuid "a89e62ab-7d2e-4a93-a18c-c74ecf53eed5")
 	)
 	(no_connect
 		(at 306.07 233.68)
 		(uuid "b49b02f1-b6d7-44b9-9a72-c30b5cbb991b")
+	)
+	(no_connect
+		(at 426.72 289.56)
+		(uuid "b68f22d0-4261-453c-b175-696c3d3506df")
 	)
 	(no_connect
 		(at 474.98 242.57)
@@ -39513,6 +39547,16 @@
 	)
 	(wire
 		(pts
+			(xy 515.62 287.02) (xy 515.62 284.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "00e1d32b-96f5-4622-9eab-ccfc3502259f")
+	)
+	(wire
+		(pts
 			(xy 173.99 157.48) (xy 201.93 157.48)
 		)
 		(stroke
@@ -39580,6 +39624,16 @@
 			(type default)
 		)
 		(uuid "037573ae-eed1-447c-a146-2c225b313b71")
+	)
+	(wire
+		(pts
+			(xy 411.48 289.56) (xy 408.94 289.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "03ea2bc3-0303-4b33-aaef-1e9eb18efd58")
 	)
 	(wire
 		(pts
@@ -39830,6 +39884,16 @@
 			(type default)
 		)
 		(uuid "0c178b34-45ad-4314-80bb-cecd4e48732b")
+	)
+	(wire
+		(pts
+			(xy 419.1 281.94) (xy 419.1 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0c369a3f-1b6b-4e07-8ae1-0b8244c4d75b")
 	)
 	(wire
 		(pts
@@ -40410,6 +40474,16 @@
 			(type default)
 		)
 		(uuid "2048d09e-8edc-4625-ab74-2de3fa9fde74")
+	)
+	(wire
+		(pts
+			(xy 419.1 297.18) (xy 419.1 299.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2168d6e8-3d4e-42ee-b3a2-5e150a460306")
 	)
 	(wire
 		(pts
@@ -42953,6 +43027,16 @@
 	)
 	(wire
 		(pts
+			(xy 477.52 293.37) (xy 474.98 293.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "757ca7eb-8197-47bf-b006-04255f7a16e6")
+	)
+	(wire
+		(pts
 			(xy 256.54 63.5) (xy 267.97 63.5)
 		)
 		(stroke
@@ -43553,6 +43637,16 @@
 	)
 	(wire
 		(pts
+			(xy 487.68 298.45) (xy 487.68 300.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "864a8c37-3440-4142-973f-38fa9b3b1944")
+	)
+	(wire
+		(pts
 			(xy 483.87 254) (xy 464.82 254)
 		)
 		(stroke
@@ -43710,6 +43804,16 @@
 			(type default)
 		)
 		(uuid "8b955770-1c00-42d2-bffa-dc7c31743447")
+	)
+	(wire
+		(pts
+			(xy 497.84 290.83) (xy 500.38 290.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8bc8a97a-dbb7-491f-a8a9-edf6778e0006")
 	)
 	(wire
 		(pts
@@ -44293,6 +44397,16 @@
 	)
 	(wire
 		(pts
+			(xy 487.68 283.21) (xy 487.68 280.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a06838aa-21b3-4818-963f-8137d6ad6635")
+	)
+	(wire
+		(pts
 			(xy 339.09 104.14) (xy 347.98 104.14)
 		)
 		(stroke
@@ -44470,6 +44584,16 @@
 			(type default)
 		)
 		(uuid "a55b980e-5d94-4119-af1a-5540c2628c21")
+	)
+	(wire
+		(pts
+			(xy 477.52 288.29) (xy 474.98 288.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a65eccbf-e58d-4b48-8b3d-3dc0f8d4f3e8")
 	)
 	(wire
 		(pts
@@ -44910,6 +45034,16 @@
 			(type default)
 		)
 		(uuid "b838e956-0274-4ee9-a766-55e3fe4408b6")
+	)
+	(wire
+		(pts
+			(xy 497.84 288.29) (xy 500.38 288.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b8532a72-142e-45c3-a701-d7c61ba70060")
 	)
 	(wire
 		(pts
@@ -45763,6 +45897,16 @@
 	)
 	(wire
 		(pts
+			(xy 477.52 290.83) (xy 474.98 290.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d40c9bb3-52ce-490e-bac0-67e5ec50f75d")
+	)
+	(wire
+		(pts
 			(xy 415.29 341.63) (xy 419.1 341.63)
 		)
 		(stroke
@@ -45800,6 +45944,16 @@
 			(type default)
 		)
 		(uuid "d4db3002-9cf0-46cd-b9a7-79bb3acba727")
+	)
+	(wire
+		(pts
+			(xy 441.96 285.75) (xy 441.96 283.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d4ea6224-47d9-4359-a507-ee267d398138")
 	)
 	(wire
 		(pts
@@ -45970,6 +46124,16 @@
 			(type default)
 		)
 		(uuid "da167b25-9874-4c42-bc92-8eda3bdf27f7")
+	)
+	(wire
+		(pts
+			(xy 441.96 293.37) (xy 441.96 295.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "da42b998-61a3-4098-b87e-5dcc593a5e86")
 	)
 	(wire
 		(pts
@@ -46683,6 +46847,16 @@
 	)
 	(wire
 		(pts
+			(xy 453.39 293.37) (xy 453.39 295.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f29bf555-de3e-410b-9b99-b91b9948b4a9")
+	)
+	(wire
+		(pts
 			(xy 444.5 364.49) (xy 453.39 364.49)
 		)
 		(stroke
@@ -46990,6 +47164,26 @@
 			(type default)
 		)
 		(uuid "f908949a-0435-49d6-b79c-1a7280b825c0")
+	)
+	(wire
+		(pts
+			(xy 453.39 285.75) (xy 453.39 283.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f91205c0-6f38-43c2-98ae-a8e4359d2184")
+	)
+	(wire
+		(pts
+			(xy 515.62 294.64) (xy 515.62 297.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f991b49c-d6b2-4ec2-87a5-152c90ed9462")
 	)
 	(wire
 		(pts
@@ -48901,6 +49095,16 @@
 		)
 		(uuid "45317817-995e-418d-a55a-e4c5011d3a62")
 	)
+	(label "I2C.SCL"
+		(at 500.38 290.83 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "46d3d943-090b-4845-86dd-bb291bc83e23")
+	)
 	(label "W_TD_OUT_N"
 		(at 353.06 45.72 180)
 		(effects
@@ -49121,6 +49325,16 @@
 		)
 		(uuid "561ec264-3106-4d2d-8c2b-9b35dbbad3a2")
 	)
+	(label "CHIP_BOOT"
+		(at 408.94 289.56 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "564b0ded-1660-4f31-9ba3-ff8b680fc037")
+	)
 	(label "PMU.Va4"
 		(at 214.63 397.51 180)
 		(effects
@@ -49270,6 +49484,16 @@
 			(justify left bottom)
 		)
 		(uuid "63ddd71b-6853-41d0-a83c-4b5b0cd4bdce")
+	)
+	(label "LED.VDD"
+		(at 441.96 283.21 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "63edb483-0f72-4081-ad51-cb9b0b23210f")
 	)
 	(label "USB_D+"
 		(at 101.6 63.5 180)
@@ -49502,6 +49726,16 @@
 		)
 		(uuid "7e7780f0-02c4-41dc-8d92-334f71cb8b92")
 	)
+	(label "LED.VDD"
+		(at 453.39 295.91 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7e89fed9-a7ee-4160-9c0a-a566587ac70b")
+	)
 	(label "CAM.D1"
 		(at 179.07 78.74 0)
 		(effects
@@ -49671,6 +49905,16 @@
 			(justify right bottom)
 		)
 		(uuid "925cdc13-e003-4934-a3c7-2f9814b100f5")
+	)
+	(label "LED.VDD"
+		(at 419.1 279.4 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "925fe3d1-9fa3-4134-b265-b96e5a95f4c7")
 	)
 	(label "FLASH_QSPI_DI"
 		(at 449.58 163.83 180)
@@ -50222,6 +50466,16 @@
 			(justify left bottom)
 		)
 		(uuid "c7869000-6aac-4db3-a860-aebd4a9a0044")
+	)
+	(label "I2C.SDA"
+		(at 500.38 288.29 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c82cdf73-d560-4af8-ac5a-e8543860bc50")
 	)
 	(label "SPK.OutP"
 		(at 504.19 204.47 0)
@@ -52426,6 +52680,104 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "C8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLCPCB-Extended:LED, WS2812B, 1615")
+		(at 419.1 289.56 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "04dc8cfd-3b19-434c-9e5c-9480932ce549")
+		(property "Reference" "D9"
+			(at 408.432 295.402 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "WS2812B"
+			(at 408.178 293.37 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:LED-SMD_4P-L1.6-W1.5_XL-1615RGBC-WS2812B"
+			(at 419.1 299.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20230111/5AD58278EBED6B6650A81C53A19BF314.pdf"
+			(at 416.814 289.433 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "1615 RGB LEDs(Built-in IC) ROHS"
+			(at 419.1 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5349954"
+			(at 419.1 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "1aa7446a-c0f8-4ebc-bb4f-a9f110346c9b")
+		)
+		(pin "4"
+			(uuid "cb54b991-b2fc-467d-928b-75a7c4de7faa")
+		)
+		(pin "1"
+			(uuid "4182d8a3-9487-4948-87b1-e6f97599668a")
+		)
+		(pin "3"
+			(uuid "1099bdad-d1d7-4cb9-92ea-8f1db0abc03b")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "D9")
 					(unit 1)
 				)
 			)
@@ -55850,6 +56202,175 @@
 		)
 	)
 	(symbol
+		(lib_id "power:Earth")
+		(at 474.98 290.83 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "12d15fca-104b-4680-a129-a521864f59e0")
+		(property "Reference" "#PWR0335"
+			(at 474.98 297.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 474.98 294.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 474.98 290.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 474.98 290.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 474.98 290.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e749602a-1bc3-4a71-a2e1-0eabbce6e934")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0335")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLCPCB-Capacitors:0603,100nF")
+		(at 515.62 290.83 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "131430f9-5f60-430b-9b40-ba3b0f7f235b")
+		(property "Reference" "C49"
+			(at 518.16 288.798 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100nF"
+			(at 518.414 292.862 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:C_0603"
+			(at 517.398 290.83 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
+			(at 515.62 290.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+			(at 515.62 290.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 515.62 290.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f0da81b9-b4b1-4d77-bbf2-812d1fd6ce63")
+		)
+		(pin "2"
+			(uuid "1302a852-3555-43f5-ab8e-411ea077e5ae")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "C49")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "JLCPCB-Resistors:0603,20Ω")
 		(at 304.8 50.8 90)
 		(unit 1)
@@ -55934,6 +56455,83 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "R24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 515.62 284.48 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "134b53d5-3b6e-41b2-a7d1-b47a9cea82e5")
+		(property "Reference" "#PWR0339"
+			(at 519.43 284.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 510.032 284.48 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 515.62 284.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 515.62 284.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 515.62 284.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ff7c841f-6dcc-4c1c-9700-6aea8bc9d278")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0339")
 					(unit 1)
 				)
 			)
@@ -61619,6 +62217,175 @@
 		)
 	)
 	(symbol
+		(lib_id "JLCPCB-Capacitors:0603,100nF")
+		(at 441.96 289.56 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "296e7a14-e740-4061-afca-096492f649b2")
+		(property "Reference" "C58"
+			(at 444.246 287.528 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100nF"
+			(at 444.5 291.338 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:C_0603"
+			(at 443.738 289.56 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
+			(at 441.96 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+			(at 441.96 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 441.96 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3cc678df-6980-4101-936a-a71ccd1cc956")
+		)
+		(pin "2"
+			(uuid "34b2345d-9f0d-467b-adbc-4e110a566f56")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "C58")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 515.62 297.18 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "29b64f77-a1ae-44cd-bace-6411dfcba30b")
+		(property "Reference" "#PWR0338"
+			(at 515.62 303.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 515.62 300.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 515.62 297.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 515.62 297.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 515.62 297.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d58e9f40-7b26-451d-9134-e54f35c9afff")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0338")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "JLCPCB-Diodes:Schottky,DSK24")
 		(at 510.54 101.6 90)
 		(unit 1)
@@ -65355,7 +66122,7 @@
 		(dnp no)
 		(uuid "3d567b97-e506-427c-b1ef-04b80e5caabc")
 		(property "Reference" "U21"
-			(at 71.12 355.6 0)
+			(at 76.454 382.524 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -65366,7 +66133,7 @@
 			)
 		)
 		(property "Value" "TCA9555PWR"
-			(at 71.12 360.68 0)
+			(at 60.96 358.648 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -68007,6 +68774,85 @@
 		)
 	)
 	(symbol
+		(lib_id "power:Earth")
+		(at 474.98 293.37 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "47bf1d24-27a1-48ce-b411-1e46e0298559")
+		(property "Reference" "#PWR0334"
+			(at 474.98 299.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 474.98 297.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 474.98 293.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 474.98 293.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 474.98 293.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e61cb24e-ecaf-456d-ab53-3a2c41675a38")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0334")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "JLCPCB-Transistors:PMOS,AO3401A")
 		(at 519.43 321.31 270)
 		(mirror x)
@@ -68946,6 +69792,85 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "C69")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 419.1 299.72 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4e62c177-fea1-462b-a171-bcb72280faf6")
+		(property "Reference" "#PWR0330"
+			(at 419.1 306.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 419.1 303.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 419.1 299.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 419.1 299.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 419.1 299.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "bc0cabfe-7085-428e-9b53-bd9fd10ec47b")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0330")
 					(unit 1)
 				)
 			)
@@ -79339,6 +80264,83 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+3V3")
+		(at 453.39 283.21 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "7fe43d8d-10fd-4d18-b35e-8e24b0a2fdb0")
+		(property "Reference" "#PWR0332"
+			(at 457.2 283.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 447.802 283.21 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 453.39 283.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 453.39 283.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 453.39 283.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d94e6c70-869c-4567-9491-ed29c3f7ac75")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0332")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:AFC01-S24FCC-00 C262276 KC")
 		(at 232.41 57.15 0)
 		(unit 1)
@@ -80155,6 +81157,85 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR0162")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 441.96 295.91 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "83f8c0fb-eacb-43b9-8861-a787a75729e8")
+		(property "Reference" "#PWR0331"
+			(at 441.96 302.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 441.96 299.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 441.96 295.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 441.96 295.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 441.96 295.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a4bc3d0e-96ff-49ff-ad23-ce83c922faf7")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0331")
 					(unit 1)
 				)
 			)
@@ -86122,6 +87203,85 @@
 		)
 	)
 	(symbol
+		(lib_id "power:Earth")
+		(at 474.98 288.29 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a7803dcc-ebcc-41b3-94de-21c0603c6528")
+		(property "Reference" "#PWR0336"
+			(at 474.98 294.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 474.98 292.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 474.98 288.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 474.98 288.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 474.98 288.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5d29c297-e0a7-4323-a638-0490ea5869f3")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0336")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "JLCPCB-Resistors:0603,12kΩ")
 		(at 354.33 88.9 90)
 		(unit 1)
@@ -86974,6 +88134,83 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "C35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 487.68 280.67 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ab17c5d3-9829-41bd-9390-386f0e9c951f")
+		(property "Reference" "#PWR0337"
+			(at 491.49 280.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 482.092 280.67 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 487.68 280.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 487.68 280.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 487.68 280.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "fbe94e3f-3a64-4c7e-916a-41cea1ff6e22")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0337")
 					(unit 1)
 				)
 			)
@@ -98884,6 +100121,85 @@
 		)
 	)
 	(symbol
+		(lib_id "power:Earth")
+		(at 487.68 300.99 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "deacbd43-4623-461e-9f7b-e1ea8c140b63")
+		(property "Reference" "#PWR0333"
+			(at 487.68 307.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 487.68 304.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 487.68 300.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 487.68 300.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 487.68 300.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "81c3b76f-5923-4d96-b07d-436a7907db2b")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0333")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 210.82 55.88 270)
 		(unit 1)
@@ -101354,6 +102670,115 @@
 		)
 	)
 	(symbol
+		(lib_id "Sensor_Temperature:LM75B")
+		(at 487.68 290.83 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e90fe7a0-ded8-404a-b6b5-3a46e833f548")
+		(property "Reference" "U12"
+			(at 487.68 279.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LM75BDP,118"
+			(at 487.68 281.94 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:TSSOP-8_3x3mm_P0.65mm"
+			(at 487.68 290.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.nxp.com/docs/en/data-sheet/LM75B.pdf"
+			(at 487.68 290.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "PCB temperature sensor, I2C address 0x48 (A0-A2 low), -55 to +125 C, 0.125 C resolution"
+			(at 487.68 290.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C33099"
+			(at 487.68 290.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "7"
+			(uuid "048f60e1-6b08-4234-bd0e-b2fb67e17b38")
+		)
+		(pin "6"
+			(uuid "bdc81b28-e140-44f3-9a50-dc826865fcc6")
+		)
+		(pin "8"
+			(uuid "b6117e09-5615-4963-a234-6f0eb24b2a29")
+		)
+		(pin "3"
+			(uuid "09646bf2-563e-473d-b163-9420834e26a8")
+		)
+		(pin "4"
+			(uuid "2d599cb4-95b4-4e6b-ba7a-cb4dd11593a9")
+		)
+		(pin "1"
+			(uuid "669d7270-38e1-4400-9fc8-f78d4e7da558")
+		)
+		(pin "5"
+			(uuid "ea824f4c-04ec-4509-a094-c18ba4fbb154")
+		)
+		(pin "2"
+			(uuid "ee6c2f5d-6070-440d-84af-eb87e51ca9b6")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "U12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "JLCPCB-Diodes:Schottky,DSK24")
 		(at 50.8 31.75 90)
 		(unit 1)
@@ -103062,6 +104487,7 @@
 		)
 		(property "Value" "COM"
 			(at 71.12 384.81 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -104335,6 +105761,96 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR0111")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0603,0Ω")
+		(at 453.39 289.56 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f6495763-e374-486c-8f39-eb6e4716f4c1")
+		(property "Reference" "TST-R19"
+			(at 450.85 289.56 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0Ω"
+			(at 453.39 289.56 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0603"
+			(at 455.168 289.56 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0603WAF0000T5E_C21189.pdf"
+			(at 453.39 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "100mW Thick Film Resistors 75V ±1% 0Ω 0603 Chip Resistor - Surface Mount ROHS"
+			(at 453.39 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C21189"
+			(at 453.39 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3dd6ca98-37fe-4f12-bb3a-4da8b9ef913c")
+		)
+		(pin "2"
+			(uuid "9c91bd7f-038f-4bf0-a786-30971448d0a3")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "TST-R19")
 					(unit 1)
 				)
 			)
@@ -106260,1521 +107776,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "NT8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(text "RGB STATUS LED (DIN on GPIO0 / BOOT)"
-		(exclude_from_sim no)
-		(at 406.4 268.29 0)
-		(effects
-			(font
-				(size 2 2)
-				(thickness 1)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "79de28e0-f73f-44f2-b9c9-790413e97675")
-	)
-	(symbol
-		(lib_id "JLCPCB-Extended:LED, WS2812B, 1615")
-		(at 419.1 289.56 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "04dc8cfd-3b19-434c-9e5c-9480932ce549")
-		(property "Reference" "D9"
-			(at 408.432 295.402 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "WS2812B"
-			(at 408.178 293.37 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLCPCB:LED-SMD_4P-L1.6-W1.5_XL-1615RGBC-WS2812B"
-			(at 419.1 299.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-			)
-		)
-		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20230111/5AD58278EBED6B6650A81C53A19BF314.pdf"
-			(at 416.814 289.433 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Description" "1615 RGB LEDs(Built-in IC) ROHS"
-			(at 419.1 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C5349954"
-			(at 419.1 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "1aa7446a-c0f8-4ebc-bb4f-a9f110346c9b")
-		)
-		(pin "4"
-			(uuid "cb54b991-b2fc-467d-928b-75a7c4de7faa")
-		)
-		(pin "1"
-			(uuid "4182d8a3-9487-4948-87b1-e6f97599668a")
-		)
-		(pin "3"
-			(uuid "1099bdad-d1d7-4cb9-92ea-8f1db0abc03b")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "D9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 411.48 289.56) (xy 408.94 289.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "03ea2bc3-0303-4b33-aaef-1e9eb18efd58")
-	)
-	(label "CHIP_BOOT"
-		(at 408.94 289.56 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "564b0ded-1660-4f31-9ba3-ff8b680fc037")
-	)
-	(no_connect
-		(at 426.72 289.56)
-		(uuid "b68f22d0-4261-453c-b175-696c3d3506df")
-	)
-	(wire
-		(pts
-			(xy 419.1 297.18) (xy 419.1 299.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2168d6e8-3d4e-42ee-b3a2-5e150a460306")
-	)
-	(symbol
-		(lib_id "power:Earth")
-		(at 419.1 299.72 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "4e62c177-fea1-462b-a171-bcb72280faf6")
-		(property "Reference" "#PWR0330"
-			(at 419.1 306.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 419.1 303.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 419.1 299.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 419.1 299.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 419.1 299.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "bc0cabfe-7085-428e-9b53-bd9fd10ec47b")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0330")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 419.1 281.94) (xy 419.1 279.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0c369a3f-1b6b-4e07-8ae1-0b8244c4d75b")
-	)
-	(label "LED.VDD"
-		(at 419.1 279.4 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "925fe3d1-9fa3-4134-b265-b96e5a95f4c7")
-	)
-	(symbol
-		(lib_id "JLCPCB-Capacitors:0603,100nF")
-		(at 441.96 289.56 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "296e7a14-e740-4061-afca-096492f649b2")
-		(property "Reference" "C58"
-			(at 444.246 287.528 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "100nF"
-			(at 444.5 291.338 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 0.8 0.8)
-				)
-			)
-		)
-		(property "Footprint" "JLCPCB:C_0603"
-			(at 443.738 289.56 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
-			(at 441.96 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 441.96 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C14663"
-			(at 441.96 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3cc678df-6980-4101-936a-a71ccd1cc956")
-		)
-		(pin "2"
-			(uuid "34b2345d-9f0d-467b-adbc-4e110a566f56")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "C58")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLCPCB-Resistors:0603,0Ω")
-		(at 453.39 289.56 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f6495763-e374-486c-8f39-eb6e4716f4c1")
-		(property "Reference" "TST-R19"
-			(at 450.85 289.56 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "0Ω"
-			(at 453.39 289.56 90)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 0.8 0.8)
-				)
-			)
-		)
-		(property "Footprint" "JLCPCB:R_0603"
-			(at 455.168 289.56 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0603WAF0000T5E_C21189.pdf"
-			(at 453.39 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "100mW Thick Film Resistors 75V ±1% 0Ω 0603 Chip Resistor - Surface Mount ROHS"
-			(at 453.39 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C21189"
-			(at 453.39 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3dd6ca98-37fe-4f12-bb3a-4da8b9ef913c")
-		)
-		(pin "2"
-			(uuid "9c91bd7f-038f-4bf0-a786-30971448d0a3")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TST-R19")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 441.96 293.37) (xy 441.96 295.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "da42b998-61a3-4098-b87e-5dcc593a5e86")
-	)
-	(symbol
-		(lib_id "power:Earth")
-		(at 441.96 295.91 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "83f8c0fb-eacb-43b9-8861-a787a75729e8")
-		(property "Reference" "#PWR0331"
-			(at 441.96 302.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 441.96 299.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 441.96 295.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 441.96 295.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 441.96 295.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a4bc3d0e-96ff-49ff-ad23-ce83c922faf7")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0331")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 441.96 285.75) (xy 441.96 283.21)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d4ea6224-47d9-4359-a507-ee267d398138")
-	)
-	(label "LED.VDD"
-		(at 441.96 283.21 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "63edb483-0f72-4081-ad51-cb9b0b23210f")
-	)
-	(wire
-		(pts
-			(xy 453.39 293.37) (xy 453.39 295.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f29bf555-de3e-410b-9b99-b91b9948b4a9")
-	)
-	(label "LED.VDD"
-		(at 453.39 295.91 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "7e89fed9-a7ee-4160-9c0a-a566587ac70b")
-	)
-	(wire
-		(pts
-			(xy 453.39 285.75) (xy 453.39 283.21)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f91205c0-6f38-43c2-98ae-a8e4359d2184")
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 453.39 283.21 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "7fe43d8d-10fd-4d18-b35e-8e24b0a2fdb0")
-		(property "Reference" "#PWR0332"
-			(at 457.2 283.21 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 447.802 283.21 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 453.39 283.21 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 453.39 283.21 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 453.39 283.21 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d94e6c70-869c-4567-9491-ed29c3f7ac75")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0332")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(text "PCB TEMPERATURE (I2C 0x48)"
-		(exclude_from_sim no)
-		(at 474.98 268.29 0)
-		(effects
-			(font
-				(size 2 2)
-				(thickness 1)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "8e7cd8e0-c13c-4e13-9330-123c171924a5")
-	)
-	(symbol
-		(lib_id "Sensor_Temperature:LM75B")
-		(at 487.68 290.83 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "e90fe7a0-ded8-404a-b6b5-3a46e833f548")
-		(property "Reference" "U12"
-			(at 487.68 279.4 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "LM75BDP,118"
-			(at 487.68 281.94 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_SO:TSSOP-8_3x3mm_P0.65mm"
-			(at 487.68 290.83 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.nxp.com/docs/en/data-sheet/LM75B.pdf"
-			(at 487.68 290.83 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "PCB temperature sensor, I2C address 0x48 (A0-A2 low), -55 to +125 C, 0.125 C resolution"
-			(at 487.68 290.83 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C33099"
-			(at 487.68 290.83 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "7"
-			(uuid "048f60e1-6b08-4234-bd0e-b2fb67e17b38")
-		)
-		(pin "6"
-			(uuid "bdc81b28-e140-44f3-9a50-dc826865fcc6")
-		)
-		(pin "8"
-			(uuid "b6117e09-5615-4963-a234-6f0eb24b2a29")
-		)
-		(pin "3"
-			(uuid "09646bf2-563e-473d-b163-9420834e26a8")
-		)
-		(pin "4"
-			(uuid "2d599cb4-95b4-4e6b-ba7a-cb4dd11593a9")
-		)
-		(pin "1"
-			(uuid "669d7270-38e1-4400-9fc8-f78d4e7da558")
-		)
-		(pin "5"
-			(uuid "ea824f4c-04ec-4509-a094-c18ba4fbb154")
-		)
-		(pin "2"
-			(uuid "ee6c2f5d-6070-440d-84af-eb87e51ca9b6")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "U12")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 497.84 288.29) (xy 500.38 288.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b8532a72-142e-45c3-a701-d7c61ba70060")
-	)
-	(label "I2C.SDA"
-		(at 500.38 288.29 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "c82cdf73-d560-4af8-ac5a-e8543860bc50")
-	)
-	(wire
-		(pts
-			(xy 497.84 290.83) (xy 500.38 290.83)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8bc8a97a-dbb7-491f-a8a9-edf6778e0006")
-	)
-	(label "I2C.SCL"
-		(at 500.38 290.83 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "46d3d943-090b-4845-86dd-bb291bc83e23")
-	)
-	(no_connect
-		(at 497.84 293.37)
-		(uuid "9db1a542-956b-47fc-8bd9-0a22dec39cea")
-	)
-	(wire
-		(pts
-			(xy 487.68 298.45) (xy 487.68 300.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "864a8c37-3440-4142-973f-38fa9b3b1944")
-	)
-	(symbol
-		(lib_id "power:Earth")
-		(at 487.68 300.99 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "deacbd43-4623-461e-9f7b-e1ea8c140b63")
-		(property "Reference" "#PWR0333"
-			(at 487.68 307.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 487.68 304.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 487.68 300.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 487.68 300.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 487.68 300.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "81c3b76f-5923-4d96-b07d-436a7907db2b")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0333")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 477.52 293.37) (xy 474.98 293.37)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "757ca7eb-8197-47bf-b006-04255f7a16e6")
-	)
-	(symbol
-		(lib_id "power:Earth")
-		(at 474.98 293.37 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "47bf1d24-27a1-48ce-b411-1e46e0298559")
-		(property "Reference" "#PWR0334"
-			(at 474.98 299.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 474.98 297.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 474.98 293.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 474.98 293.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 474.98 293.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e61cb24e-ecaf-456d-ab53-3a2c41675a38")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0334")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 477.52 290.83) (xy 474.98 290.83)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d40c9bb3-52ce-490e-bac0-67e5ec50f75d")
-	)
-	(symbol
-		(lib_id "power:Earth")
-		(at 474.98 290.83 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "12d15fca-104b-4680-a129-a521864f59e0")
-		(property "Reference" "#PWR0335"
-			(at 474.98 297.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 474.98 294.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 474.98 290.83 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 474.98 290.83 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 474.98 290.83 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e749602a-1bc3-4a71-a2e1-0eabbce6e934")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0335")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 477.52 288.29) (xy 474.98 288.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a65eccbf-e58d-4b48-8b3d-3dc0f8d4f3e8")
-	)
-	(symbol
-		(lib_id "power:Earth")
-		(at 474.98 288.29 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a7803dcc-ebcc-41b3-94de-21c0603c6528")
-		(property "Reference" "#PWR0336"
-			(at 474.98 294.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 474.98 292.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 474.98 288.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 474.98 288.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 474.98 288.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5d29c297-e0a7-4323-a638-0490ea5869f3")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0336")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 487.68 283.21) (xy 487.68 280.67)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a06838aa-21b3-4818-963f-8137d6ad6635")
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 487.68 280.67 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "ab17c5d3-9829-41bd-9390-386f0e9c951f")
-		(property "Reference" "#PWR0337"
-			(at 491.49 280.67 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 482.092 280.67 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 487.68 280.67 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 487.68 280.67 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 487.68 280.67 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "fbe94e3f-3a64-4c7e-916a-41cea1ff6e22")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0337")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLCPCB-Capacitors:0603,100nF")
-		(at 515.62 290.83 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "131430f9-5f60-430b-9b40-ba3b0f7f235b")
-		(property "Reference" "C49"
-			(at 518.16 288.798 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "100nF"
-			(at 518.414 292.862 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 0.8 0.8)
-				)
-			)
-		)
-		(property "Footprint" "JLCPCB:C_0603"
-			(at 517.398 290.83 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
-			(at 515.62 290.83 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 515.62 290.83 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C14663"
-			(at 515.62 290.83 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f0da81b9-b4b1-4d77-bbf2-812d1fd6ce63")
-		)
-		(pin "2"
-			(uuid "1302a852-3555-43f5-ab8e-411ea077e5ae")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "C49")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 515.62 294.64) (xy 515.62 297.18)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f991b49c-d6b2-4ec2-87a5-152c90ed9462")
-	)
-	(symbol
-		(lib_id "power:Earth")
-		(at 515.62 297.18 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "29b64f77-a1ae-44cd-bace-6411dfcba30b")
-		(property "Reference" "#PWR0338"
-			(at 515.62 303.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 515.62 300.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 515.62 297.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 515.62 297.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 515.62 297.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d58e9f40-7b26-451d-9134-e54f35c9afff")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0338")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 515.62 287.02) (xy 515.62 284.48)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "00e1d32b-96f5-4622-9eab-ccfc3502259f")
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 515.62 284.48 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "134b53d5-3b6e-41b2-a7d1-b47a9cea82e5")
-		(property "Reference" "#PWR0339"
-			(at 519.43 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 510.032 284.48 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 515.62 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 515.62 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 515.62 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "ff7c841f-6dcc-4c1c-9700-6aea8bc9d278")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0339")
 					(unit 1)
 				)
 			)
