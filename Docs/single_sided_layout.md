@@ -13,8 +13,26 @@ switch. Started from `kicad10-port` at 981c517.
 | Test points | The 60 one-pin 1.00 mm header test points (camera FPC breakout, PMU rails) are now 1 mm SMD test pads (`TestPoint:TestPoint_Pad_D1.0mm`). Same nets, still easy to solder a wire to, and they no longer block the inner and bottom layers. |
 | Board | About 95 x 100 mm, 4 layers: Top / GND / VCC / Bottom. COM pour on Top, Bottom and GND. Solid +3V3 plane on VCC (PMU.Vsys is routed, not a plane split). Copper-pour keepouts at both chip antennas. |
 
-The schematic changes are the two switches, their labels, a note, and the test-point footprint fields. Nothing else
-in the circuit changed.
+| Camera | FPC1 has a clear 14 mm lane from its cable opening to the left board edge, between CN1 and CARD1. An OV2640 on the common 21 mm flex lies flat in the lane on a bare-copper COM pad (11.5 x 13 mm, no solder mask, 30 thermal vias to the GND plane) that works as its heatsink: stick it down with a thermal pad. A longer flex can leave the board edge instead, or fold back over a separate heatsink. The silk "CAMERA HEATSINK (COM)" marks the pad. |
+| Ethernet | J9 (RJ45) now sits on the bottom edge with the cable entering from the bottom, right next to the T1 magnetics (much shorter MDI pairs than before). J1 USB-C, U1 and U3 moved right to make room. |
+| Mounting holes | H1-H3: M3 (3.2 mm, non-plated) at the left edge below the ESP32, top-right and bottom-right corners. They are board-only (not in the schematic or BOM). The top-left corner is the antenna keepout and the bottom-left is the PoE module, so there is no fourth corner hole. U17 moved 8 mm left to clear H2 (mic spacing is now about 75 mm). |
+| Spare IO pads | TP132-TP141, 1 mm pads to solder a wire to (see below). |
+
+The schematic changes are the two switches, their labels, a note, the test-point footprint fields, and the spare IO
+pads. Nothing else in the circuit changed.
+
+### Spare IO / expansion pads
+
+U7 (ESP32-S3R8) has no free GPIO: GPIO33-37 belong to its in-package octal PSRAM and must stay unconnected. The
+spare IO that is easy to bring out comes from the I2C expanders:
+
+| Pads | Signal | Notes |
+|---|---|---|
+| TP132-TP136 | U20 PCA9685 LED11-LED15 | PWM outputs (servo/LED/FET drive), set over I2C |
+| TP137 | U21 TCA9555 INT | open drain, active low; add a pull-up if you use it |
+| TP138-TP141 | I2C SDA, SCL, +3V3, COM | a row next to the servo headers for adding another I2C device |
+
+They are DNP test points, so JLC places nothing on them.
 
 ### Floor and room switches
 
@@ -36,16 +54,17 @@ in the circuit changed.
 | Top corners | U16 and U17 mics, about 80 mm apart (good spacing for the two-mic beamforming) |
 | Right | U19 LoRa module; ANT3 on the right edge with a keepout; servo headers J5-J8 stacked on the right edge; U20 PCA9685 and the lamp FETs inboard |
 | Centre | U18 AXP2101 PMU block; FPC1 camera connector with its test-pad array |
-| Left edge | CN1 audio jack; CARD1 microSD; BOOT1 and RST2 below them |
-| Bottom | U14 PoE module, D5/D6 bridges, D7 TVS, T1 magnetics, U9 W5500, J9 RJ45 on the right edge, J1 USB-C on the bottom edge, U1 buck |
+| Left edge | H1; CN1 audio jack; the camera lane and heatsink pad; CARD1 microSD; BOOT1 and RST2 below them |
+| Bottom | U14 PoE module, D5/D6 bridges, D7 TVS, T1 magnetics, U9 W5500, J9 RJ45 facing down, U1 buck, J1 USB-C, H3 |
 | Lower middle | SW1 (floor) and SW2 (room) switches next to U21 |
 
 ### Things to check in KiCad before ordering
 
 1. **J1 USB-C orientation.** J1 was a bottom part. After flipping it, I rotated it so the opening should face the
    bottom edge. Check it in the 3D view.
-2. **FPC1 orientation.** FPC1 was also flipped from the bottom. Check that the cable entry faces where the camera
-   ribbon will run.
+2. **FPC1 and camera.** FPC1's cable opening faces the left edge. Check, with your camera, that the lens faces up
+   (away from the board) when the flex lies flat in the lane; whether it does depends on which side the flex
+   contacts are on. If not, the flex has to be folded once.
 3. **ANT1 and ANT3 footprints.** In both footprints, pad 1 (feed) overlaps pad 3 (COM), which DRC reports as a
    short. Check against `Docs/C2925417.pdf` and `Docs/C5370061.pdf`.
 4. **Edge connectors.** CN1, CARD1, J9 and J1 sit at the board edge. Check how far each should overhang the outline.
