@@ -6893,7 +6893,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP38"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "9a3562aa-430d-4562-8487-9d9f0230b96a")
 			(effects
 				(font
@@ -6947,17 +6947,6 @@
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "956b5d16-e557-4ba8-90ea-76366d259dcc")
-		)
-		(fp_circle
-			(center 0 0)
 			(end 1 0)
 			(stroke
 				(width 0.05)
@@ -6997,7 +6986,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP86"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "5d31fb8f-af20-4e78-b341-38c6fbf6b9d7")
 			(effects
 				(font
@@ -7047,76 +7036,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b3062874-9aa5-404d-8557-5dbe8162cf25")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "cf33e937-68c5-477b-8642-05a195e7af90")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "24880eb8-0617-46c5-bf0e-53bb50a0fdb7")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "68cc86af-d6fd-4796-ac0c-d425ca652908")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f1de96bf-03b8-43c5-b69d-c5f8d2eec0d2")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b9c752a4-6e34-485e-b41d-1249cfd8fbd2")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8b9000b1-f2b4-4183-abaf-576c23172883")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -8705,7 +8624,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP116"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "aee32bdb-93ca-4156-8718-2559c5259bdb")
 			(effects
 				(font
@@ -8755,76 +8674,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "429f53f0-15d7-4d7b-b45e-827603a46f5e")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "c5bd38c2-9da1-4a4d-80bf-68859fdf8079")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "1afce880-c5b4-44a5-bc46-9b49f939acd9")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "732e396b-2647-441e-ac84-08cb40416fc7")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ae1ceb35-857c-4d8d-b704-ec55e12b83e8")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "121f5605-d830-4bcd-89c3-da9dafb92aed")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "cc717a34-fdfb-40fc-9ab6-ea1a82bbe3ad")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -10170,7 +10019,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP87"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "cd0cf607-9380-4b76-84b1-744103540273")
 			(effects
 				(font
@@ -10220,76 +10069,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "0159b884-9905-4ce9-b4f3-ec3c2935fe9c")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "fb8f1dd0-707d-4629-927d-cc9781cc9760")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "de5031e9-a56b-40ac-942f-449bf27fb20e")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "effc7f5e-dbdd-458e-a74c-c3aaa6e0fb42")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "3067a3e0-8070-49fd-adad-b0ded44dc7f0")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "41e81bc8-1d47-4c22-b90b-227a8c810648")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "83777fef-ee21-4d50-929a-03c99d60a900")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -10423,7 +10202,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP125"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "015264a4-6af9-4108-9501-ea2dbac39beb")
 			(effects
 				(font
@@ -10473,76 +10252,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "2322e853-1c0e-488c-a0c2-df781a3997ff")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "af5d9977-1fba-4032-804b-0bd3bd88ed6a")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8be55735-1863-47db-b305-86e15843d2a4")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "bb6db4d9-0372-408d-ada7-b959f51ca7d2")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "aa6c2c72-dece-4006-b4e7-fe8b2ec77a6a")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "732cbe75-f6b9-4b64-ae79-bc875cd097b6")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d1b0a204-660b-4fce-a3b1-e8b9febe1af2")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -11792,7 +11501,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP79"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "b38dc030-d40d-4ddc-a1fa-3b3031bd703a")
 			(effects
 				(font
@@ -11842,76 +11551,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4c84b4dc-2e1d-4ce3-b1f2-fb87c1a97a18")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "59ed01c0-7968-4f4a-8430-a13464a64033")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8743b9ca-904c-4cd1-8906-ec2ff30697b1")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6a7d0a99-bfe8-4a5b-8b00-767553516fef")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "072a15dc-1fa4-4353-94d4-ef4a931f393d")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6fbdfdba-a8ac-45f7-a306-d3e2576d1f7d")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "80ddad4c-9db5-425f-ad12-06d602a876da")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -13104,7 +12743,7 @@
 		(tags "test point plated hole")
 		(property "Reference" "TP14"
 			(at 0 -2.498 90)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "6267fd76-79f3-4c59-b832-b1e467bb0554")
 			(effects
 				(font
@@ -13429,17 +13068,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -1.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "97531f7d-2fc9-46bc-821f-6769da0e93b9")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1.8 0)
@@ -14356,7 +13984,7 @@
 		(tags "test point plated hole")
 		(property "Reference" "TP52"
 			(at 0.787 -2.8015 90)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "01a0c01c-2989-4c0d-9f59-a241a90a7ef1")
 			(effects
 				(font
@@ -14683,17 +14311,6 @@
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
-			(end 0 -1.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "ebe02cb1-8f03-4f7d-ab85-4f0f381f6d8e")
-		)
-		(fp_circle
-			(center 0 0)
 			(end 1.8 0)
 			(stroke
 				(width 0.05)
@@ -14735,7 +14352,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP91"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "31fd3817-41b2-4799-a4dc-c4176f6c946a")
 			(effects
 				(font
@@ -14785,76 +14402,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "aab82027-6754-4c6a-905a-8b239070db0c")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "009e1e47-6ea9-4fad-8e6d-ef908dea666e")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "041d91ed-84c9-4257-8a02-b51dd0f8ff1c")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a85794da-7c62-44e5-93d0-fc8988da787a")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a37ddac2-72fc-45bf-b446-e47096e3ba50")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "32583d17-c2c5-4f65-a25f-fdba962fcfe3")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "70634739-8b6a-44d0-9154-3adc3a8edb28")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -20470,7 +20017,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP100"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "72311866-f006-4615-9f23-bb6ecfa3eb4c")
 			(effects
 				(font
@@ -20520,76 +20067,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5dbc10e5-1719-49bd-96e0-cde7395774ae")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "83c82a5c-3225-4b7b-9445-09ae1018a3aa")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f3338dae-1a8b-48d1-a6a4-82ad7738a979")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b1e9144f-4d2b-42cf-9fea-5d16334a2f00")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4c235158-addf-42c3-a380-fe57a432bc53")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "89aaea89-e8c9-4549-898f-9c9dee241c18")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b96a281d-0181-4f59-8965-6175a0f2743b")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -21205,7 +20682,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP33"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "cf8725a4-cdaa-4009-88c0-3e61174c0dd2")
 			(effects
 				(font
@@ -21257,17 +20734,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "fe7847f9-fc6f-4a22-bb2a-0d4d8c46f8b6")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -21699,7 +21165,7 @@
 		(descr "TSSOP, 28 Pin (JEDEC MO-153 Var AE https://www.jedec.org/document_search?search_api_views_fulltext=MO-153)")
 		(tags "TSSOP SO")
 		(property "Reference" "U20"
-			(at 0 -5.8 90)
+			(at 0.000001 -7.76825 90)
 			(layer "F.SilkS")
 			(uuid "efb5b066-a12a-430a-ac71-44a0a0cfb2c4")
 			(effects
@@ -22231,7 +21697,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP32"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "57ae2344-abec-4f31-99b4-dfd9c9b0bf97")
 			(effects
 				(font
@@ -22283,17 +21749,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "e0a8fa27-8c7c-460d-903f-9cd5f23756b2")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -23555,7 +23010,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP89"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "080fd99f-31fe-4fd5-8d6e-a0d5910247db")
 			(effects
 				(font
@@ -23605,76 +23060,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "9a6e6618-0589-43b6-aef9-ee9a0c312a28")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d04342e1-1ddf-4529-8162-da0bb5d7377a")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8317f717-afca-4cc4-94cc-b00cded9ddfc")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "027d5349-de76-400d-aac8-b1879be8d672")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "935b3343-b16e-4abe-9520-1d6c5994500a")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "9b70a779-5bd8-4ed3-b3d8-e264f3145c8c")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e892ee44-ed6f-48ac-ba9e-78294e981788")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -23808,7 +23193,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP72"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "caae28ba-6570-4982-9eec-bd10f420d7c1")
 			(effects
 				(font
@@ -23858,76 +23243,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "76a227a7-7ce9-403d-a488-626ec0f1e8fa")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d71fe972-3818-438a-bd05-66474d384e8f")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "06977c28-0c7a-4f90-90ad-59f9f67747dc")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "93ed6085-5480-47e1-af63-968be1cc9074")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "eeef50a0-0e73-434a-bacf-0440a3bcccf8")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "eb358022-c794-4948-9eeb-6838ed2b1091")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ceb4bbbf-4cec-4ed8-9a77-9d6f55b92de3")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -24569,7 +23884,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP84"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "d221290c-8711-4bbc-b5bb-22187c0dac81")
 			(effects
 				(font
@@ -24619,76 +23934,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "12d1d936-0d62-49a8-9f1e-8dc6849b1191")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "1c547df9-e932-41ae-b7f8-008862fe154d")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5e2bb59c-4c17-440c-8057-6ba0cfa94dec")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "61b4a08e-a962-4def-9c39-f079747d31df")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "3fdddd32-fc59-473a-83bc-7de7da960870")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a913f6c8-c532-414c-874c-8c705ac36fac")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7dc3628d-3d9c-4ad6-9cb6-bdfd3f97926b")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -29059,7 +28304,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP81"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "0392e978-d1bd-4e35-a1a3-d4b20c1ff75c")
 			(effects
 				(font
@@ -29109,76 +28354,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "bdedbd14-60ee-4186-b3a1-04a05870dca2")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "681c863e-7c40-428b-b299-1b1c8b8029e6")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "017e50b1-30d5-40bc-9c5a-ed05c1440adf")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b866f971-5efd-4f9b-82bf-170b67bf04b0")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b150cf7b-b84c-47fa-9884-879ca977c194")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "21cf9bfd-a0f3-4162-87ac-9fd53140f820")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "1656e4a8-6d7b-4ee8-b705-d4e16c0c3898")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -29834,7 +29009,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP98"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "6f8a3318-045a-49b0-b0b2-1519099ab574")
 			(effects
 				(font
@@ -29884,76 +29059,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "06fd6346-7e17-40b3-8015-e41794fe34c9")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "0d5e082a-b3fd-43f1-8e63-6e845b4fb7b3")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6f60bc8e-5ed3-4143-8207-710581c217ae")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e9dbe56b-0ad5-4138-a519-8a843a9556d2")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "cd367d6d-6dee-4b5a-ae91-c8cda84f7040")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "c57857db-c505-4ecb-b9cd-afcddca5a131")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6abf7192-ad49-4de2-9b62-bd8a474e11ed")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -30087,7 +29192,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP95"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "39d79bbf-bb32-4c8e-b5e9-d252b4b6cd0c")
 			(effects
 				(font
@@ -30137,76 +29242,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6e0ef715-acea-48ba-95aa-11536bd955a3")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e3de2c04-acb6-478a-b7a9-fe8283004ab1")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "22573514-d030-43d3-8c11-e4df3869f176")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e826b4e1-0638-42c6-aa94-d6e630865360")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "55d77607-b2f3-4875-bf75-f353cb004cf0")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "eecb9dd4-ad1f-4aab-8bad-3a875a032794")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a267ef74-997b-45f4-9a90-b9dae57aaf1e")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -30340,7 +29375,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP76"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "936f5d23-9fbb-4356-97db-e38aaa48809b")
 			(effects
 				(font
@@ -30390,76 +29425,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "091f7946-ccd8-47bd-b063-ebe374c3da6b")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "aa9b428a-e154-403d-ac7c-b9052827bdf5")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7fcfd0f6-fd16-42f1-8234-7e1c31202317")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ba3ab8f6-8bdd-4b1d-ae15-25de15282957")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "345df000-2a9c-41f6-be77-160c73494ff0")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "18dd5de3-fa6a-4567-a273-2e7f52e6c82d")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b2658a0f-32e0-4e01-ad86-dfa8f2c3969f")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -30593,7 +29558,7 @@
 		(tags "test point plated hole")
 		(property "Reference" "TP51"
 			(at -3.2 -2.3185 90)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "bcd30f3a-b4b1-4ee2-b4b4-9c683ba31b05")
 			(effects
 				(font
@@ -30918,17 +29883,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -1.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "0d2f4f56-e3d1-42af-ab51-5ab73ae62450")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1.8 0)
@@ -34283,7 +33237,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP94"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "d197d5b3-1ac8-4ead-85bf-a799a87ef4e6")
 			(effects
 				(font
@@ -34333,76 +33287,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "0550dabc-22c1-4e14-8e48-ec0829cc7756")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "47124bce-b574-454f-be4a-1108bc1bc776")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a8dc4bf3-09c2-4d58-9715-5db09066aea8")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4d63c48e-44d8-49a9-9edd-8a40d263d010")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f0522e84-380f-4828-bece-e6af28b5ca03")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "168f274c-1b18-457f-8d96-8785ce116c57")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "07f89e05-e08a-4b53-8fae-2027dfc73617")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -34533,7 +33417,7 @@
 		(uuid "41a3f611-3752-4670-8410-887c1224784d")
 		(at 144.018 132.207 90)
 		(property "Reference" "J9"
-			(at -9.7025 -5.2545 90)
+			(at -13.604614 2.2635 90)
 			(layer "F.SilkS")
 			(uuid "29f56311-65f8-44a8-9a79-418f4484eb88")
 			(effects
@@ -37717,7 +36601,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP40"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "9c9abaf5-f342-4a74-8bec-7fb8de1d5a05")
 			(effects
 				(font
@@ -37769,17 +36653,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "810afca4-f44e-4f74-82d1-a2ac1c475004")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -38342,7 +37215,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP123"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "85915e95-503b-43fd-b464-46e1247bed86")
 			(effects
 				(font
@@ -38392,76 +37265,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "c785480a-f52a-4b79-95f7-853d83e9f160")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "52cdd58e-5a7f-4729-81b0-b491dc309430")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "787d7370-f37e-4a6a-b4b9-daf535d04c3b")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "955fe117-2c71-4e36-ab95-5785cfdb996d")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4097be77-ed39-4ada-ae96-0607a54339a1")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ee829bf7-c406-4abc-8963-cdefeb25dc0f")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "31f8a7ec-85d3-40d8-81ae-066c1d766df9")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -38595,7 +37398,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP34"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "89f3b7d4-670f-4bf4-aa0f-9a432f1f7727")
 			(effects
 				(font
@@ -38647,17 +37450,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "4c954ee5-fc42-49ff-a390-c8651a0ee35e")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -40132,7 +38924,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP58"
 			(at 0 -1.448 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "e422a38f-7a77-4606-be6f-daa165c360e2")
 			(effects
 				(font
@@ -40184,17 +38976,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "ac6b6269-d3d5-4d77-a380-158a3e84d0ae")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -40402,7 +39183,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP70"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "610a278d-5d07-423d-a700-c110bdfa332d")
 			(effects
 				(font
@@ -40452,76 +39233,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a7c3f728-a0ef-4b92-b752-75bfc89d6573")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f437323f-7f93-4791-b9ee-297ce79b0fb9")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "820f929f-0c14-4e9e-ac48-a82c3b7b2058")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a92352b5-147f-4c62-96c5-2117e267060b")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "989cace3-0d5d-4358-b11b-6aab68dff1ab")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "2ebab49a-2677-4520-b218-1e2193d2c361")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "393d0ef0-3584-4143-a674-fb7c6b897965")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -41129,7 +39840,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP112"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "8d9776ff-d79a-48f4-bec0-b31466d44cdc")
 			(effects
 				(font
@@ -41179,76 +39890,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "32c0f475-77bb-4664-8cd5-472a1266f2d0")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "868124d8-fc0a-48f9-b47a-5d832f5a9f19")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "02bc9e2e-c0ad-4317-90c4-16791f04f2bc")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "82c96f8d-262b-47db-b9e4-8e7de7ce598d")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "998bd826-83fe-430b-9609-9111233ce1cb")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "af83e16b-a893-40fd-ba76-42749e0df673")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "16c757ec-3bea-436e-ba31-6361ff28ecbb")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -41864,7 +40505,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP41"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "4c3dd9b8-0bfa-41f2-90ee-aea35626b12d")
 			(effects
 				(font
@@ -41916,17 +40557,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "c93e8eef-afb2-4a37-a146-f04efdcc8c1b")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -43208,7 +41838,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP119"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "5f813091-3c31-4dc0-b9bd-ac62b9726368")
 			(effects
 				(font
@@ -43258,76 +41888,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8d9b6143-c13b-4604-836e-02d3f4c1499e")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f5534367-b938-4954-916f-a561d35b710a")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5bdf3c4c-51cf-403c-bb3b-05c5e401d524")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "1c9e25f0-5e7e-40f8-a735-c9bb252694fa")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e03beafa-c4e2-44dd-a796-019201f7fad9")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "22c9b785-b4ff-4ecf-a950-5981792f7b14")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e1278721-d8dd-4c22-986c-e9711f3166c4")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -43461,7 +42021,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP105"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "b7af9443-f7bb-44b8-ae45-eb50d2a09eb8")
 			(effects
 				(font
@@ -43511,76 +42071,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "fb621fad-8ee0-46ac-877c-b1988d190fce")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d5891d42-6849-4242-9c0b-9a7c3a1f7642")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b658c1ce-4f81-4475-a2f1-83b59f637e99")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8439e3ca-3dbe-4cc1-967b-411abf9805c2")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ea6c19a3-3982-4555-8934-8fba05d67109")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d13ac49a-0ff5-4863-b4e3-d71064c187b7")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "87aa10f4-0433-4ff3-bab8-12dec7f713d7")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -44659,7 +43149,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP74"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "ba4b7ec3-87af-4444-a411-b82b4e84f7b0")
 			(effects
 				(font
@@ -44709,76 +43199,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "473d1670-14ac-476a-921d-b2c1195f5f5f")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "1e18e6b5-a276-42be-9dc7-01859930cd66")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a79843bc-df20-44ed-8b23-100f3500d25a")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "fc80ec86-1e0a-4a4f-891b-e463471193e2")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "82a2208c-18e5-45fb-873d-cd45d0d22146")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a6538283-e57c-4b37-a81d-c19f5f74359b")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "abd42db5-f857-44f7-9e93-ac97907961d0")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -45703,7 +44123,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP106"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "6a73dbb8-8fe1-4bbd-99f6-ae6cd6552d1c")
 			(effects
 				(font
@@ -45753,76 +44173,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "eb056547-8f84-4260-90a5-7008510f376c")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8bc84694-78ae-41b5-b003-55280a048ecb")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "165f5b3d-530a-482b-b50b-9ea139528228")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "572db584-898b-48cf-af3f-025b8d02131b")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a2c5041d-cf2d-4f7b-aed5-1cfff475c17a")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "3484bc5c-ee74-421d-a559-0cf9cbc0925b")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "968e0bce-7d89-4d1c-8e93-96cb9e8eeae8")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -45956,7 +44306,7 @@
 		(tags "test point plated hole")
 		(property "Reference" "TP13"
 			(at 0 -2.498 90)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "e79348e2-13db-4a96-8b11-d2d053cd5d76")
 			(effects
 				(font
@@ -46281,17 +44631,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -1.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "18ca5d7a-a010-4a4c-8239-cd734239fd1f")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1.8 0)
@@ -52127,7 +50466,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP113"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "f996690d-3735-415e-9646-10c923ededed")
 			(effects
 				(font
@@ -52177,76 +50516,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5cd387b1-6710-44ba-8a81-2e78f3b84a34")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ac03ed07-09a5-4959-b67b-e974e785771d")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "3171392b-3b17-4eab-8fe1-37330c461c44")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "fa0661ef-fd43-4288-82af-011efd500aad")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "db131585-d010-474c-8b7d-f1cbde9313f2")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "acc7169f-80ef-466d-a333-9ffd88195a28")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "77a40ad0-396d-489d-a94b-79e067c2c190")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -53384,7 +51653,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP78"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "693338ea-5b77-42a3-91d1-aecd793406d1")
 			(effects
 				(font
@@ -53434,76 +51703,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "2334c572-f15e-456e-98c3-231a85502da1")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "bbeb7577-0947-4b4f-95c0-01c42bb1b5d8")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ac54bc20-82da-4fb1-8c16-2ffaa833c986")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "fcd2dd39-c43c-4a0c-89da-791b48da803d")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d7b57336-0634-4dd8-ae1d-8a5c7b5f8919")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "746164c4-54ea-47b9-bd19-7a3286df96e1")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7a492a95-351b-427e-b41b-9fc7e4f71406")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -54158,7 +52357,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP90"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "4e0c7bda-6cc3-4605-b364-2dcc2b61af7e")
 			(effects
 				(font
@@ -54208,76 +52407,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "570f752c-bdc9-450f-b331-6711327b88ad")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7fe7d86c-57f2-47c8-981a-8ade03796212")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b866da2c-53c9-46d5-8b5c-187b11d22265")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "75d96697-77b6-490b-8c0a-235be44015dd")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a35bc74e-23df-4dda-a87d-ed9a44d07568")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d578b419-3587-46b0-a13f-b6fd5e86d1fa")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "9013b470-4314-4796-950b-ec674a0bf8c7")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -54893,7 +53022,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP103"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "bad28b5c-3527-4218-85a2-3ad6212f1c4a")
 			(effects
 				(font
@@ -54943,76 +53072,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "76b2068b-8cb8-49a4-822e-6ed65e0c1438")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6013c1bd-6374-4104-b46c-77d4e6e0129e")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e8e8271b-b005-4d22-aaf6-2bc2dabc753f")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b1940fb5-c4d8-49d5-95f8-d7781f8d4506")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "dc1f6bdd-fe7f-4233-8c57-22a190a29a67")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "3111ee44-e955-42bf-9ccc-e1ff4859bda5")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "16d2f1b9-1073-4575-96b8-0be4e80032ad")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -58030,7 +56089,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP42"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "d13d34b0-515e-4ed3-a7da-29d429c1affc")
 			(effects
 				(font
@@ -58084,17 +56143,6 @@
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "583bbf26-2fc3-412f-a1eb-10446b73541d")
-		)
-		(fp_circle
-			(center 0 0)
 			(end 1 0)
 			(stroke
 				(width 0.05)
@@ -58134,7 +56182,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP127"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "6caed025-00fa-4410-ae33-a1b5d5b546e0")
 			(effects
 				(font
@@ -58184,76 +56232,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "96ef8648-dbbf-44f5-8c3d-b3e1f7f1aed3")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5f2d3d6b-2855-4e10-8f01-85d15e9690b4")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "c1e4d2a8-4a03-4630-b428-334b6801757c")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "2b1b47f0-41cc-474e-b7b0-5347fa9fbd95")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "fc41627c-43d5-49a1-ac99-a1293f9f1653")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "25f701d5-d712-4c5c-9efd-4a261baf8133")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "9e98b5ec-bb52-4f59-a0b7-dcd91e1259c5")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -58387,7 +56365,7 @@
 		(tags "test point plated hole")
 		(property "Reference" "TP50"
 			(at 0 -2.498 90)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "7023f82c-e0f9-4e1d-9360-98f627d39f7c")
 			(effects
 				(font
@@ -58712,17 +56690,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -1.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "eb80674c-2212-4b48-baae-4208e7a7f9a1")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1.8 0)
@@ -62195,7 +60162,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP44"
 			(at 0 -1.448 270)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "604241c7-426a-4aeb-a214-1799c23567e4")
 			(effects
 				(font
@@ -62247,17 +60214,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "e876ef4a-df88-49bd-82d8-1d01ae86c20e")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -62493,7 +60449,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP104"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "038a2496-2c67-4f5e-a1b6-77e614438809")
 			(effects
 				(font
@@ -62543,76 +60499,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "98c9279c-f7b6-4602-ae20-ba92f3dcca90")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f6adc4a9-b2d2-435e-9cb7-98e8db663089")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f22e539b-5093-4901-a681-2c3adee20dcf")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "677af93d-43d8-4ed2-80a9-9c2d446c7844")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "1f7a6d5b-cbc6-4a69-ab02-7f07c3857d7c")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "26d76314-b445-46ef-90b2-c9ecc7f63d24")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "11052eb0-9ab2-413f-babf-bb2a42aa649a")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -62746,7 +60632,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP111"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "93f0704c-f294-4f92-a751-18e3bf17070c")
 			(effects
 				(font
@@ -62796,76 +60682,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "42c2ba6a-aca4-4786-ac87-dfe940eb42f4")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a8f8d869-8903-477b-839a-b3a9f1ebc99c")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8fe781bd-2986-47f1-9f17-3e925f009414")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "301298b4-53d2-4299-9e8b-f5e356a145fb")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a6305a07-36b7-4cf0-8753-c44014da2741")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5dce8e24-f579-4549-b711-e10803b76820")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "3835487d-d28c-472d-a0ca-3ecf18dbc257")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -62999,7 +60815,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP37"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "6fbc8c37-7a8b-481c-a340-47820b352099")
 			(effects
 				(font
@@ -63051,17 +60867,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "eef597cd-77ca-479a-862a-e7904b250d98")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -63625,7 +61430,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP102"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "08d8a9f6-3371-4c2c-b580-1c10a6b09f92")
 			(effects
 				(font
@@ -63675,76 +61480,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "daa5190a-3a02-4a59-8462-5a3ca264a576")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6fea2d06-9f13-44fe-b297-a3d0d6d52140")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e04b14d7-f9ec-4755-a33d-6f5245fb2d27")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f664bb9f-3922-4849-bd4a-d8647d7fc956")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5518167c-1ab7-4a79-9e4b-cd7589beaac9")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7bc6961b-c233-40ce-9c60-c65657defe54")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a7499f3e-e6ff-418a-b99a-8422aa4d7082")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -63878,7 +61613,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP110"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "f43716b0-e145-4057-9d1d-4505ffc85963")
 			(effects
 				(font
@@ -63928,76 +61663,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7b941862-d15c-4f33-b6ab-8f354cc9271e")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "79f66d46-a896-41b1-aaa1-1a4a9bb73465")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8e19fbcd-2018-4167-93dc-284ce5153f14")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "345de4d1-307c-4393-87d0-0146d1925280")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d215fdf4-c9c9-484a-8954-2ae5e467bdca")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "999907a1-e5cf-44f2-8e29-25a2084717d6")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "54fc5109-51cd-4792-86bd-b0d5b4f2ec57")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -64131,7 +61796,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP122"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "49ef8122-5d7a-415e-a051-83ba83e972c1")
 			(effects
 				(font
@@ -64181,76 +61846,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ef96ddc4-5268-485f-9889-d49090eddb80")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "1ccab6e4-404a-4cf4-b678-c913bb5524a6")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f415e463-6a6b-493d-9c3b-c7af04075bc7")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "30128c8e-445f-422f-b218-53c9539bbe6f")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "89dbe61d-2a4a-4725-b11d-fe38f51aba04")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "33dd9c4a-46d5-4927-bc45-f3339868f482")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "44a69ca7-7759-4df2-9178-f9dca0317f55")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -64763,7 +62358,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP77"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "1f9f4baa-35a0-45c5-af45-2c1dc5d7b953")
 			(effects
 				(font
@@ -64813,76 +62408,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "03c1eb07-64d8-47c1-9e45-033c9935cc46")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b25119d5-69f2-4759-b8bc-06432acd9872")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ba11d08a-c065-4da2-8015-4069446f844d")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "dc5aa42a-e396-43c1-af6a-abeac704cc81")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "9b116aca-6a59-4a74-95fd-5f6557e68c49")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e771c4c6-77f6-4a14-8d8c-6f12e66f4915")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "709de0f4-b203-4ebe-96c0-34c438f7ede6")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -66196,7 +63721,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP45"
 			(at 0 -1.448 270)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "013df490-c5cf-47bb-a2ea-072c4811bf49")
 			(effects
 				(font
@@ -66248,17 +63773,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "3142d6b7-9e7e-48ac-89e3-b28b5d445d28")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -67292,7 +64806,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP36"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "443a9c33-db82-4961-a980-176fd60afe61")
 			(effects
 				(font
@@ -67346,17 +64860,6 @@
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "c2cab131-657c-4d71-a9e2-4e425e6448a7")
-		)
-		(fp_circle
-			(center 0 0)
 			(end 1 0)
 			(stroke
 				(width 0.05)
@@ -67396,7 +64899,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP96"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "9c6d8100-19dd-4a89-a163-a7ac50ba445f")
 			(effects
 				(font
@@ -67446,76 +64949,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "76115572-ac5a-48ef-9554-fa635f2d135d")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "057b6f01-9e92-452a-8eaf-c680672dc112")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6fc47fab-7bd6-4dfc-998c-cd9b307f7bc7")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "370302db-5618-4a89-aa9f-865155db9c4f")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "26273000-5b30-4ac3-a719-cc7d420a2494")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "880526c0-d52d-4bb4-b422-3e12181e06b6")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ca976c13-4c30-448f-8da6-e8ed1cd90bf4")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -68537,7 +65970,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP128"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "c29d1260-08bd-4838-861f-b45fe09657e0")
 			(effects
 				(font
@@ -68587,76 +66020,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "55664fa4-7092-4715-a9f8-44c887a29ba1")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "cf972224-47ea-4487-8d93-9f6922084090")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8ec97d08-a15d-4c70-bb1a-31e843841995")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "3b416e04-10b8-489a-918e-787c596a7cd3")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "27acc982-7ab4-4fe4-a279-079cdd8bc771")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7533202c-1ddd-4cb0-b2fc-7b168492b1e9")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a2d20e78-5b7a-4a4f-8564-f829fafcd397")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -70882,7 +68245,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP35"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "3a1e0bfd-2292-4536-a4a7-313ce41c382d")
 			(effects
 				(font
@@ -70934,17 +68297,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "3c2c195d-6c81-42ec-a926-8f78532784c8")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -72024,7 +69376,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP120"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "d8de446f-6c0c-4154-8b3a-87a44ad7b787")
 			(effects
 				(font
@@ -72074,76 +69426,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "15da5cc4-2c74-494e-bf6b-3576c8f6c92d")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5c0cfd0d-b7e2-4eff-bfc8-254299b8fb67")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7f530d2b-23e5-4106-b75b-0b8c5a5ae31d")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a18ce507-d5eb-4d30-9c4e-c943eb7bbc5f")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "1e57b8d0-7343-4677-9973-4b342eb3c969")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "2dd57524-c65a-4373-9399-3b5b58cb8ef3")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "811f34e6-36c7-42c5-97da-afe4d42c751e")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -75235,7 +72517,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP83"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "d1391381-5ce4-44fd-979a-b52486b808e0")
 			(effects
 				(font
@@ -75285,76 +72567,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8853e8d1-c8a2-48e1-a9b3-566afa206d02")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "599a69c9-7534-446b-bc65-43f68f517a98")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d7695ea4-866a-4671-ae3b-5d1b06b655b5")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "da23c7b7-742b-4a0e-82ef-8f7e99d37434")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "29ddf483-7dcf-445c-9a31-7fff653a4ccd")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "9b2abb9e-1ba8-4b9f-98a2-adf9445cee65")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6398026f-f38c-4adf-a0fc-55d103938b86")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -75488,7 +72700,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP68"
 			(at 0 -1.448 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "eb74390e-05d9-4430-832e-80da2dae48b2")
 			(effects
 				(font
@@ -75542,17 +72754,6 @@
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "36d92c8a-cc40-46ae-87af-01fd266bb7a1")
-		)
-		(fp_circle
-			(center 0 0)
 			(end 1 0)
 			(stroke
 				(width 0.05)
@@ -75592,7 +72793,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP11"
 			(at 0 -1.448 90)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "a6c6c976-b928-4106-9c30-3ab63edcf5e8")
 			(effects
 				(font
@@ -75644,17 +72845,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "b829133b-8f3f-4e8f-86f0-1725c4db3c33")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -78370,7 +75560,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP124"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "7dea8a90-7aca-4720-9e53-e700462593f1")
 			(effects
 				(font
@@ -78420,76 +75610,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "810eab47-c457-42ac-9546-6eb9ecea2a82")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4f52057b-d7b4-42f4-8187-0169357752a8")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b5823209-6dfc-4573-9fb1-e60d3e112776")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "560a3a0d-6697-4a0a-9bed-0d8052a8da1e")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5aa147be-f766-46c6-b63f-06f9fe8b1e2e")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "65ef4869-2e3d-40c9-a750-a767abe456d8")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4db95ff1-fe74-4dae-8beb-cdf516640914")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -81090,7 +78210,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP80"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "b99fd847-09a0-457e-b7c1-0f9b3ba470e2")
 			(effects
 				(font
@@ -81140,76 +78260,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a573dbc1-004c-4549-b2c3-cb16d5e5d773")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e27e1ada-12ab-43a4-bbbc-648cd449a65b")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a2023f60-475f-47d2-abea-2ce09e9bfb5b")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "50532464-b481-46a2-89d8-5799ebb78f31")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f74d39fc-ac6c-4b9d-9763-a28b2a13dea3")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7d91d784-70c9-47f4-a36f-017f3139df52")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "73759bdc-7f19-40fc-8ad0-f17b9a7cefdd")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -81864,7 +78914,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP126"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "2bfcb739-e75f-441a-8a00-8b4102535b31")
 			(effects
 				(font
@@ -81914,76 +78964,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "064b0ed2-58af-458b-8dc6-24c6546f5b21")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "90b423b8-d7e5-404e-a4a5-f1200565d530")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "976ff8d0-e730-4e5b-86be-53b0b4e945aa")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b64e4c8a-f637-44bf-a6fd-c39260212f39")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "413eb0a2-f5fc-420b-b08d-8a8e5b9f709a")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "fde7a472-6da8-4394-98e0-518da04de29e")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "62df9a12-9ac0-4620-b4cb-23689b9cac53")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -82212,7 +79192,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP46"
 			(at 0 -1.448 270)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "e3cad987-0d0b-4e59-b4ff-ccfb8c6ae8df")
 			(effects
 				(font
@@ -82266,17 +79246,6 @@
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "0e42e44d-d6fc-4fb0-b22f-7ae404b9afbc")
-		)
-		(fp_circle
-			(center 0 0)
 			(end 1 0)
 			(stroke
 				(width 0.05)
@@ -82316,7 +79285,7 @@
 		(tags "test point plated hole")
 		(property "Reference" "TP53"
 			(at 0 -2.498 90)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "ad3a6320-0468-4e5a-b691-f258c6427b8d")
 			(effects
 				(font
@@ -82643,17 +79612,6 @@
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
-			(end 0 -1.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "6cc4eec7-b46a-4cf5-a3f8-425c6cfcb9d3")
-		)
-		(fp_circle
-			(center 0 0)
 			(end 1.8 0)
 			(stroke
 				(width 0.05)
@@ -82695,7 +79653,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP93"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "8d074bcd-6413-4cfd-afac-42c516f4bfa6")
 			(effects
 				(font
@@ -82745,76 +79703,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "13ef9266-9e58-409c-b5e5-4e551ae7fb6a")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5bc66e63-11c2-4f6d-a6d4-c79d5f5c4981")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "885c93c0-e002-48d6-97cd-17bd28a78afb")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4871ab8f-562e-4034-9744-0150b1944eef")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4139afee-6e86-44ae-91c1-c41869d28d4e")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e9b9352a-caec-4cfd-bc98-c6375720d400")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8ef5eb49-3b70-4f0c-998c-3804307ac65e")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -82948,7 +79836,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP56"
 			(at 0 -1.448 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "18dc06ae-e221-488b-9334-37ac7a2d1c17")
 			(effects
 				(font
@@ -83000,17 +79888,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "162eb28d-a68e-4cdb-9f0b-53328fa03121")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -85792,7 +82669,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP82"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "2c4f0f4e-e905-49fa-a33f-03088d529da0")
 			(effects
 				(font
@@ -85842,76 +82719,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d0a0c66b-500a-44a8-9086-9dfa10701f11")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4f6083ed-cd16-42bc-bba5-075d33cdff21")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6a5581cb-8212-4d52-a104-03d849a8eee7")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "33400e13-4806-4332-837a-e83e325025db")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "755e2d27-fa39-47ae-9a2e-30ab6a7f1a6f")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f3a5f546-c814-4bb3-8ab3-a2e8b6e75aa9")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e72bda7d-6f12-423f-84b7-d49d4b6d14fa")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -86790,7 +83597,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP47"
 			(at 0 -1.448 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "0848bd01-75cd-4951-b7f9-e77746be870b")
 			(effects
 				(font
@@ -86842,17 +83649,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "ff43a673-f3ee-44ee-b63d-8b822a800813")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -87276,7 +84072,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP109"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "134f4a29-7b3e-402e-a282-ce92890d1354")
 			(effects
 				(font
@@ -87326,76 +84122,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "26147791-120e-433a-87dc-ceadbed2f541")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "aa3b43d4-3dbb-4c81-905a-2ec19c807ac1")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "26b93c83-49c2-45ac-9b32-ae5ea47cfbd0")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "c8f4041a-0a56-4a21-b51e-c79df9252add")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "0818ea2f-7360-4cb6-b1f7-b5e68dd8ae53")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "9856e7a9-25ec-4914-bfcb-74bbc318bce8")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5fbbbd81-6a88-4848-8aa1-f18c3d1421ad")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -89857,7 +86583,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP69"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "947789a7-d823-42e4-b217-8dc3c1a21a70")
 			(effects
 				(font
@@ -89907,76 +86633,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "712c4b56-82f9-4bdc-812f-fa483214e660")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f9bedaf7-fdb7-4f45-be68-e39c69816fd5")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "c90902f6-0501-46a6-912a-9aa3f88cc419")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "0c8e40ba-e87b-4b48-83e3-d657b96fa2f1")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ce10662d-ba18-4783-8e59-5d227acc08f6")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "c43b7995-e98a-4620-b439-b6554d84b8a4")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b0c30de7-dd6e-46ef-9ceb-2c67f40f5438")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -91637,7 +88293,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP39"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "253fb38d-d6f6-412a-99b0-a8e81536c382")
 			(effects
 				(font
@@ -91689,17 +88345,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "00096113-249b-4835-85fd-8687b065f6fc")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -92536,7 +89181,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP99"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "ba6e6c35-7f5f-447c-98f7-73830fbd43a7")
 			(effects
 				(font
@@ -92586,76 +89231,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "fe1f317d-7574-4534-9412-dfc571316b58")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "184f8de5-2803-439e-a1bc-e5830bd5bef5")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b145d06f-676c-41e8-98fb-01269e538d66")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f5311b71-29a0-4543-9759-c0f2db91674b")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "2194d5af-e4fc-492b-81af-863cbd05d48a")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "2157c892-fba9-4fa6-8652-7c58d50b65d8")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f108d7e9-aec4-4198-839b-5b00f7fc648d")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -94070,7 +90645,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP92"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "a5c1d0c5-bb79-463b-9e62-70be80168e2c")
 			(effects
 				(font
@@ -94120,76 +90695,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "609f866c-4fbd-4544-889d-0d595b64dd49")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7a0ae86e-4fdf-4d47-b15d-9668ed7d6c4c")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4f78c7c8-228f-4663-8a78-70caf425b1a9")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b3827933-d5b6-4f39-b537-54690b76d664")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6b83e773-f42c-44e5-a34b-3d9a7f053a97")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "13cc7e85-8085-4bde-8558-fe6bf8f0c8f7")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "88322f93-526d-4ecf-b331-a2c86f43cfe4")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -101060,7 +97565,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP88"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "bda6cb8a-105d-489c-8e9f-52d4c0a8ba44")
 			(effects
 				(font
@@ -101110,76 +97615,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d2f117ed-8a26-49cc-a63e-1e6033069306")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d08d1aca-d1d1-4983-bd41-16a97ad6ce81")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d7c13567-9567-4d75-ad86-26ef1a8ab5e2")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d3beda14-be70-404d-9ef6-3d8cf89815bb")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8e05e479-09d8-4cb0-93a1-63de98c2f637")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "0b72b6b6-345c-44cb-825e-90f3fc086dc4")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "45f04898-3741-46c9-9f70-84bb78942792")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -102162,7 +98597,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP118"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "95cbdeee-7d68-4a45-9907-c99ad9fa918d")
 			(effects
 				(font
@@ -102212,76 +98647,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e3a74c00-c046-4d4c-a0c1-e5415f6f2926")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "c404007f-1325-4aff-84ef-93f8064e5511")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d7a99770-a1ee-498f-9e31-d609c451edb8")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "37997e98-a0d8-4f73-b025-e0d59b5b042e")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "30afeaf9-ba5f-456b-aac4-7aa27c5b2318")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5f901fe5-225a-4530-b639-b272e3ea5904")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d1b07e9c-d8e1-4051-9d19-2c54238f2c18")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -102415,7 +98780,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP121"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "a8d5ec1d-9dff-4353-b128-46a6a7af6e67")
 			(effects
 				(font
@@ -102465,76 +98830,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "794757ae-5b25-48df-a4fa-19e0a4c055c6")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "30a1ffcc-3898-43ae-8d2f-7cb95499fe10")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "eaf9db5f-2f39-4251-9ca4-30c37652af30")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6db6eddf-8c1a-45ef-bea8-407076a3880d")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e1412a84-80fd-4638-844e-197d16823657")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5bef0b12-3f61-485a-a32c-ee35f7177e21")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ffe6ae52-899b-4bdb-b757-ac96bc705c1a")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -104530,7 +100825,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP85"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "ed425b26-c9f0-4a54-b078-633580598aea")
 			(effects
 				(font
@@ -104584,17 +100879,6 @@
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "6e9b376c-d34e-4c5b-8072-866a7a9a0e92")
-		)
-		(fp_circle
-			(center 0 0)
 			(end 1 0)
 			(stroke
 				(width 0.05)
@@ -104634,7 +100918,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP71"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "d8c899fb-9197-448e-858e-0a34d92e8ddf")
 			(effects
 				(font
@@ -104684,76 +100968,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "bacc3d79-ef8e-47c3-be83-133a4042a2d8")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a6cbe143-4471-41b2-a258-ff54e31199b2")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ff99a47f-b50d-4045-b7fe-adbf0aa89a2a")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e2355d05-5f9b-4d12-8a91-d34104f938d8")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "53f456a3-4654-42b2-8071-33006311502e")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e0a90184-bd61-4e05-bc72-75242a5b637b")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "5644a723-6eec-4349-a5fb-27a9e70661d0")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -105608,7 +101822,7 @@
 		(descr "Through hole straight pin header, 1x02, 1.00mm pitch, single row")
 		(tags "Through hole pin header THT 1x02 1.00mm single row")
 		(property "Reference" "J12"
-			(at 0 -1.61 90)
+			(at 0 3.07325 90)
 			(layer "F.SilkS")
 			(uuid "f2f9fa08-2392-47a7-b95b-3499acf470aa")
 			(effects
@@ -106000,7 +102214,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP15"
 			(at 0 -1.448 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "4785b62f-19ba-42f3-8510-6b02b8094d3f")
 			(effects
 				(font
@@ -106052,17 +102266,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "e41c1332-2ac0-42b9-b3d4-fce37358d6d9")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -106654,7 +102857,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP115"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "05307c02-d8d1-4227-9d2e-679c1e06ad9f")
 			(effects
 				(font
@@ -106704,76 +102907,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "83dce266-c099-4756-a4e5-8b967c74c6b5")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6753ec35-f81a-4776-bd65-c8e37dee7f2a")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "75ccd771-7537-4f74-81d1-8725af4f41d4")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a8ad8c26-af79-41b1-8efb-4cd4f280f318")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "cb9ecd61-c074-4c22-96e8-ae1373935486")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "3a906171-e994-4522-be35-97efc63cc7ea")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "78175c19-9c33-44eb-9e88-8594a6f8b4b5")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -106907,7 +103040,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP57"
 			(at 0 -1.448 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "5b9560be-ceca-42d6-bce7-8f2a01386467")
 			(effects
 				(font
@@ -106959,17 +103092,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "25302e6f-1321-414c-a64f-494609b795b4")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -109652,7 +105774,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP101"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "0b5e7247-f19b-4342-a058-bd51e5650e33")
 			(effects
 				(font
@@ -109702,76 +105824,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a206dc7d-16db-442f-a8b5-9efdb4b09a64")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "d1267976-efce-472d-abf6-013ed6ab7a70")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "77c7da55-e391-4e1a-a7e3-cc30653222d6")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "3cd2ee64-bd6d-4c4a-bdfc-0b966e5c37fb")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "0da76ac5-13a4-4ae3-93ff-25b2e5431a54")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "c7bcbaf2-ba80-4bbf-ba41-d41b0a49f89f")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "44b3e61c-0ff9-453f-a3a6-2e174d222dd4")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -112138,7 +108190,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP108"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "85c91058-b7d6-4e00-9f1c-d28fb2f91a19")
 			(effects
 				(font
@@ -112188,76 +108240,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8af44481-43c6-47ca-82ba-e71ca30b16e9")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "41d74ca0-9b87-4f04-90a5-976b153573a5")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "05593078-48a7-4499-abc5-d4f1ad2c03e9")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7012424a-da8f-459e-a406-b79ce7e78216")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6650381a-d259-4edc-8dbe-23c13002d470")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "47cdaf04-137a-4912-8560-7c7315f6f87b")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "cb2c13d5-1e87-4986-a376-4f9e39ae2df7")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -113722,7 +109704,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP59"
 			(at 0 -1.448 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "7902f6af-bc2f-4179-99da-cf6954f123af")
 			(effects
 				(font
@@ -113774,17 +109756,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "bec7eef0-8a0d-4fed-9dc7-33ce8c5421ee")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -119302,7 +115273,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP65"
 			(at 0 -1.448 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "f44cf299-fda5-450a-b9b8-3149b439342d")
 			(effects
 				(font
@@ -119356,17 +115327,6 @@
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
-			(end 0 0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "434b26fd-07a1-459d-8172-4736d72666f9")
-		)
-		(fp_circle
-			(center 0 0)
 			(end 1 0)
 			(stroke
 				(width 0.05)
@@ -119406,7 +115366,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP117"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "7a681a10-2867-45cd-a4aa-03e8f5797370")
 			(effects
 				(font
@@ -119456,76 +115416,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "bd60f7c1-5535-428f-a209-fac66b12eef5")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "9dcba87c-7aba-469d-995e-e80503b5ae61")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "181ecf8e-7b60-4ab5-9b4e-d3278b6c98a1")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "fea15315-b5c3-417e-b424-c125c7021c1e")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6ae2ce6a-b339-453e-8c9d-a1d8da596677")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "611d9748-8fa5-4018-8535-78d3f2d5c20b")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b572e280-dca2-40f6-a1e3-d3d98371d142")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -122094,7 +117984,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP75"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "ef7d642f-4784-47c0-bcb6-b607ebfeceda")
 			(effects
 				(font
@@ -122144,76 +118034,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "765d6aaf-925b-42e7-b7f2-402e3a8154d0")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "a58f8bf8-8a95-4a21-bd7c-152192c6b3c0")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "e1facf26-7904-48d1-a657-d5ab1e7f4c7a")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "60af3024-521b-4b6b-8445-35a8f61ce3b5")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "2b9ea10a-e96e-478a-8c17-c8421bf2f93b")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7f9011d8-e35b-45b0-86e8-7c30a801ef97")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "28226d41-1969-4e90-af58-782b02caa1dd")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -124548,7 +120368,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP73"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "f96d75d9-24eb-442a-adc9-d567b02bb53b")
 			(effects
 				(font
@@ -124598,76 +120418,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "42d8bd15-3bd4-4f0c-9918-cf638753f211")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "39b79b2b-b9f7-4f96-b80b-4291917ae5b3")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4106805c-2401-4d1a-bf93-906d815adf16")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "553bc9d6-3f6c-4c93-b9a8-94b8c962066c")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4cded866-f292-4377-9dc7-1ad0ecc75c08")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "251c1f20-8878-4352-b3b7-f85aaea2a628")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6d84f3fc-ba49-4151-a208-532e70b5bb06")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -124801,7 +120551,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP97"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "c085bf01-fafd-4be0-9564-dda9faa1f6b3")
 			(effects
 				(font
@@ -124851,76 +120601,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "1661c692-e383-4693-abcb-ce9ba0dabfd0")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "83cbcbf5-6f6f-4b8a-ae55-d41cae4bcc76")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "febaa000-ddc3-434e-846c-c7e3bc0f731c")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "254454dc-c474-4062-9240-a04a53b1f98b")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ff206108-86da-4c5f-bf0b-ae7cd1d2db73")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b43eef6d-de2a-404b-925d-062a46b4418f")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "102f7e06-4429-49a1-b3f5-dd96f2f42cf2")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -125054,7 +120734,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP114"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "1fd52e90-f3db-46b5-855b-8562c82d785a")
 			(effects
 				(font
@@ -125104,76 +120784,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b63addd5-6b6c-4e80-9ee2-fe9113e38f50")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "974338fd-9534-4605-8e5c-f83539a3d23f")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "0b8648c1-3e37-475c-bd5a-fed5e5f6150d")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "738549e5-69f2-44a2-a0eb-0e7191b32a25")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "84be66e2-a279-4485-a5e2-01047a5b40ef")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "7f9e5eea-166b-41f4-b36e-ff3206f42f91")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "06cbef04-caee-4c11-9976-00a146013fa1")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -125307,7 +120917,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP107"
 			(at 0 -1.61 180)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "a0b1bb2c-11bf-4a7c-9d85-fcf0f5802a26")
 			(effects
 				(font
@@ -125357,76 +120967,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "58f87205-8a86-4815-8856-94e9a966ef58")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "2aff8589-9c65-408d-87e1-f941e1c5d9b3")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "b49620b1-4a39-4854-b300-646311818922")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "c4225807-5a8a-4c61-a1d9-14107ade5b85")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "462a4d26-1ede-44ef-a1a8-25c14c713814")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "58248b14-1e66-4915-8eb9-8b2679286141")
-		)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "4d691bc6-9127-435e-bcb2-4f32e832d103")
-		)
 		(fp_line
 			(start 1.14 1)
 			(end 1.14 -1)
@@ -126080,7 +121620,7 @@
 		(descr "Inductor SMD 1008 (2520 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: https://ecsxtal.com/store/pdf/ECS-MPI2520-SMD-POWER-INDUCTOR.pdf), generated with kicad-footprint-generator")
 		(tags "inductor")
 		(property "Reference" "L9"
-			(at 0 -3.8 0)
+			(at 1.000001 2.423251 0)
 			(layer "F.SilkS")
 			(uuid "68bd2eb4-e688-4277-ad3e-ca4d3ce330d8")
 			(effects
@@ -127441,7 +122981,7 @@
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "TP129"
 			(at 0 -1.61 0)
-			(layer "F.SilkS")
+			(layer "F.Fab")
 			(uuid "ae47cdad-ddbd-4805-9ed3-83e2c07faf74")
 			(effects
 				(font
@@ -127491,76 +123031,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr through_hole exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start -0.745 -0.735)
-			(end 0 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "67ac81cc-9701-4f25-9aa6-e2c6fb7e2990")
-		)
-		(fp_line
-			(start -0.745 0)
-			(end -0.745 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "2084f47a-2a36-48a1-a28d-48f7bbf63178")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "9f4fd27e-81b3-4ec5-9bbc-6e19168b8aa3")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end -0.685565 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "f64760ed-ca85-48c7-9e8d-576551c15bed")
-		)
-		(fp_line
-			(start -0.745 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ad893a3d-1c30-44f3-8e26-89f74b0d3757")
-		)
-		(fp_line
-			(start 0.685565 0.735)
-			(end 0.745 0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "255ed206-f5a7-4e5a-8fbc-470ce7fbd386")
-		)
-		(fp_line
-			(start 0.745 0.735)
-			(end 0.745 0.61)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "248c5f65-2f3f-47d9-9e8f-8b7a2dd84dc5")
-		)
 		(fp_line
 			(start -1.14 -1)
 			(end -1.14 1)
@@ -129485,7 +124955,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP64"
 			(at 0 1.448 90)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "62830367-c5f1-4d1b-b561-4e3119ab1206")
 			(effects
 				(font
@@ -129541,17 +125011,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "5ab7db03-0b57-46b9-a7b7-61f58598fc9e")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -129955,7 +125414,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP2"
 			(at 0 1.448 270)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "0138bfda-6388-4d56-bdb0-ca10663cb7ac")
 			(effects
 				(font
@@ -130011,17 +125470,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "d79b537f-1fe5-47af-b6b0-c3d1421897f6")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -134691,7 +130139,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP49"
 			(at 0 1.448 0)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "3b53bf91-6a8d-4eec-af09-5d84923dc8e8")
 			(effects
 				(font
@@ -134747,17 +130195,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "c96206e3-32d3-48cc-b123-b54164227b3f")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -135664,7 +131101,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP3"
 			(at 0 1.448 270)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "22d4b21a-55b0-4588-9095-ac9d08189221")
 			(effects
 				(font
@@ -135720,17 +131157,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "4359a71a-5427-407c-8abf-c547be8ba35a")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -136836,7 +132262,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP10"
 			(at 0 1.448 90)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "f137b12b-4bdf-4a1c-b0a0-9a6fa87c1637")
 			(effects
 				(font
@@ -136892,17 +132318,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "5dcf040c-7021-4661-9880-d679bf3a3805")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -137330,7 +132745,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP63"
 			(at 0 1.448 90)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "544b39ac-2577-4f9d-8e8e-5f3e684166ba")
 			(effects
 				(font
@@ -137386,17 +132801,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "e25cdc7c-5f17-4034-8620-c2b341d34948")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -140152,7 +135556,7 @@
 		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
 		(property "Reference" "C6"
-			(at 1.905 0.127 90)
+			(at 3 -1.473251 90)
 			(layer "B.SilkS")
 			(uuid "6d15b3ce-a06c-4cf2-a089-d1493284b0c5")
 			(effects
@@ -141474,7 +136878,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP131"
 			(at 0 1.448001 225)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "796f6ae6-bed3-4f05-9038-54f537c6a973")
 			(effects
 				(font
@@ -141530,17 +136934,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "a1e1014e-b312-4712-a13e-f36a982a8df2")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -147544,7 +142937,7 @@
 		(descr "Resistor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor")
 		(property "Reference" "TST-R1"
-			(at 0 -1.28 90)
+			(at -4.483333 -1 90)
 			(layer "B.SilkS")
 			(uuid "6d9398cf-f8ab-4f3a-836a-e72ea45e0e2f")
 			(effects
@@ -150942,7 +146335,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP60"
 			(at 0 1.448 180)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "f28cca85-7186-4ea2-9fbb-1830d43dd3b1")
 			(effects
 				(font
@@ -150998,17 +146391,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "2a044828-3011-485e-8782-8aaf30255c5e")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -152336,7 +147718,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP12"
 			(at 0 1.448 90)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "f443de58-00b7-484d-bf14-ac4ed2bc3728")
 			(effects
 				(font
@@ -152392,17 +147774,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "df8f8863-e219-4af7-8047-8b59ecb67bf7")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -156945,7 +152316,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP55"
 			(at 0 1.448 180)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "ad4b3c63-f5c3-42cc-8910-4e4cf4617b7a")
 			(effects
 				(font
@@ -157003,17 +152374,6 @@
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "9ae4d168-f02c-4ed5-85e6-a669a8098260")
-		)
-		(fp_circle
-			(center 0 0)
 			(end 1 0)
 			(stroke
 				(width 0.05)
@@ -157054,7 +152414,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP67"
 			(at 0 1.448 90)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "48968298-6da6-4ab6-9416-96781a9c437d")
 			(effects
 				(font
@@ -157112,17 +152472,6 @@
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "751afb36-bd73-4642-bf06-d1186df74664")
-		)
-		(fp_circle
-			(center 0 0)
 			(end 1 0)
 			(stroke
 				(width 0.05)
@@ -157163,7 +152512,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP1"
 			(at 0 1.448 0)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "daa73373-b4e2-4ed6-af56-3907a53bec29")
 			(effects
 				(font
@@ -157219,17 +152568,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "26085bdd-1073-49fa-9cd7-a3995aed2f17")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -161434,7 +156772,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP66"
 			(at 0 1.448 90)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "ab72ab4b-9d79-49ea-89fe-0aad8f06e081")
 			(effects
 				(font
@@ -161490,17 +156828,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "f2cb33f9-2276-488b-a8aa-05519632e028")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -163908,7 +159235,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP54"
 			(at 0 1.448 180)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "12a6d8a5-a69d-481c-aad4-4accaba30057")
 			(effects
 				(font
@@ -163964,17 +159291,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "efefadc0-0153-41e6-baf2-54641de06278")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)
@@ -164845,7 +160161,7 @@
 		(tags "test point SMD pad")
 		(property "Reference" "TP61"
 			(at 0 1.448 180)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "506cff3c-9cb9-4022-ad54-83b2449a46a8")
 			(effects
 				(font
@@ -164901,17 +160217,6 @@
 		(sheetfile "ESP32S3_Audio_Cam_POE.kicad_sch")
 		(attr exclude_from_pos_files exclude_from_bom dnp)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_circle
-			(center 0 0)
-			(end 0 -0.7)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(fill no)
-			(layer "B.SilkS")
-			(uuid "148980cf-33ae-4ea3-a866-1c69a1f8c4f6")
-		)
 		(fp_circle
 			(center 0 0)
 			(end 1 0)

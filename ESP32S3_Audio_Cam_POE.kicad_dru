@@ -1,0 +1,7 @@
+(version 1)
+
+# Test points are bare pads or unpopulated 1.00 mm header pads: nothing is placed on them,
+# so their courtyards do not need to clear other parts.
+(rule "Test points: no courtyard check"
+	(condition "A.Reference == 'TP*' || B.Reference == 'TP*'")
+	(constraint courtyard_clearance (min -10mm)))
