@@ -10,6 +10,306 @@
 		(rev "R0.1")
 	)
 	(lib_symbols
+		(symbol "Switch:SW_Coded_SH-7010"
+				(pin_names
+					(hide yes)
+				)
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "SW"
+					(at -7.62 8.89 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+						(justify left)
+					)
+				)
+				(property "Value" "SW_Coded_SH-7010"
+					(at -7.62 -8.89 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+						(justify left)
+					)
+				)
+				(property "Footprint" ""
+					(at -7.62 -11.43 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+						(justify left)
+					)
+				)
+				(property "Datasheet" "https://www.nidec-copal-electronics.com/e/catalog/switch/sh-7000.pdf"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "Rotary switch, 4-bit encoding, 10 positions, Real code"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "rotary bcd Real"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_fp_filters" "Nidec*Copal*SH*7010*"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "SW_Coded_SH-7010_0_0"
+					(text "5"
+						(at -5.715 0 900)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(text "6"
+						(at -4.6228 3.3528 540)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(text "4"
+						(at -4.6228 -3.3528 1260)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(text "7"
+						(at -1.778 5.4356 180)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(text "3"
+						(at -1.778 -5.4356 1620)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(text "8"
+						(at 1.778 5.4356 3420)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(text "2"
+						(at 1.778 -5.4356 1980)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(text "9"
+						(at 4.6228 3.3528 3060)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(text "1"
+						(at 4.6228 -3.3528 2340)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(text "0"
+						(at 5.715 0 2700)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(symbol "SW_Coded_SH-7010_0_1"
+					(polyline
+						(pts
+							(xy -0.254 -2.54) (xy -0.254 2.032) (xy -0.762 1.524) (xy -1.27 1.524) (xy 0 2.794) (xy 1.27 1.524)
+							(xy 0.762 1.524) (xy 0.254 2.032) (xy 0.254 -2.54) (xy -0.254 -2.54) (xy -0.254 -2.54)
+						)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(circle
+						(center 0 0)
+						(radius 3.81)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(rectangle
+						(start 7.62 7.62)
+						(end -7.62 -7.62)
+						(stroke
+							(width 0.254)
+							(type default)
+						)
+						(fill
+							(type background)
+						)
+					)
+				)
+				(symbol "SW_Coded_SH-7010_1_1"
+					(pin passive line
+						(at 10.16 2.54 180)
+						(length 2.54)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 10.16 0 180)
+						(length 2.54)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 10.16 -2.54 180)
+						(length 2.54)
+						(name "4"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "4"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 10.16 -5.08 180)
+						(length 2.54)
+						(name "8"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "8"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 10.16 5.08 180)
+						(length 2.54)
+						(name "C"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "C"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
 		(symbol "0402,0Ω_1"
 			(pin_numbers
 				(hide yes)
@@ -39356,10 +39656,6 @@
 		(uuid "0917c25f-1702-4622-b6f2-d382cb02eed3")
 	)
 	(no_connect
-		(at 86.36 363.22)
-		(uuid "133ed006-ddd8-42da-aed7-c421982f820a")
-	)
-	(no_connect
 		(at 370.205 193.04)
 		(uuid "17a76c96-6489-42d4-b0f3-fa077454c653")
 	)
@@ -39374,10 +39670,6 @@
 	(no_connect
 		(at 290.83 233.68)
 		(uuid "2b29b940-4d75-40b2-986b-dc3d35e667aa")
-	)
-	(no_connect
-		(at 86.36 373.38)
-		(uuid "332f10a3-34ec-4364-ab0f-c664e7db851a")
 	)
 	(no_connect
 		(at 370.205 195.58)
@@ -39399,18 +39691,7 @@
 		(at 50.8 342.9)
 		(uuid "504aa463-8d73-43ac-96cc-de359734b396")
 	)
-	(no_connect
-		(at 86.36 375.92)
-		(uuid "5758f3b8-f8d9-478d-8a58-8d0f12c3c00e")
-	)
-	(no_connect
-		(at 86.36 368.3)
-		(uuid "5d1cf6f8-e564-4cad-88a8-d12cf4f640b4")
-	)
-	(no_connect
-		(at 86.36 370.84)
-		(uuid "5e7d747d-9a03-4907-a899-51c0bdbe3057")
-	)
+
 	(no_connect
 		(at 281.94 172.72)
 		(uuid "65b097e6-e25b-4365-9560-53de1ade07b0")
@@ -39430,10 +39711,6 @@
 	(no_connect
 		(at 86.36 307.34)
 		(uuid "73adc229-5a23-42c4-83ca-1d831054f748")
-	)
-	(no_connect
-		(at 86.36 378.46)
-		(uuid "74811aae-cf14-4055-8b36-5c9795e7f877")
 	)
 	(no_connect
 		(at 290.83 226.06)
@@ -39488,10 +39765,6 @@
 		(uuid "ce448ae9-ca2e-4de5-847c-026a772a02f8")
 	)
 	(no_connect
-		(at 86.36 365.76)
-		(uuid "d245c487-216e-44ce-8bb0-0dcb3d732640")
-	)
-	(no_connect
 		(at 323.85 198.12)
 		(uuid "d56d8dd0-fe6f-44f0-a27f-4070dae87d79")
 	)
@@ -39506,10 +39779,6 @@
 	(no_connect
 		(at 317.5 387.35)
 		(uuid "e308836e-7e20-47cb-a046-5e9062d33838")
-	)
-	(no_connect
-		(at 86.36 360.68)
-		(uuid "f047c81b-902b-4430-aff4-b9528c4eeb9c")
 	)
 	(no_connect
 		(at 41.91 62.23)
@@ -52025,7 +52294,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 35.56 0)
 			(hide yes)
 			(show_name no)
@@ -52274,7 +52543,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -53427,7 +53696,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 38.1 0)
 			(hide yes)
 			(show_name no)
@@ -54829,7 +55098,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -55498,7 +55767,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 261.62 354.33 0)
 			(hide yes)
 			(show_name no)
@@ -55577,7 +55846,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -58429,7 +58698,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 38.1 0)
 			(hide yes)
 			(show_name no)
@@ -59110,7 +59379,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -60237,7 +60506,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -60852,7 +61121,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 232.41 356.87 0)
 			(hide yes)
 			(show_name no)
@@ -61179,7 +61448,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 50.8 0)
 			(hide yes)
 			(show_name no)
@@ -62612,7 +62881,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 281.94 359.41 0)
 			(hide yes)
 			(show_name no)
@@ -62860,7 +63129,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 40.64 0)
 			(hide yes)
 			(show_name no)
@@ -62939,7 +63208,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 30.48 0)
 			(hide yes)
 			(show_name no)
@@ -63177,7 +63446,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -64374,7 +64643,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 50.8 0)
 			(hide yes)
 			(show_name no)
@@ -64544,7 +64813,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -65308,7 +65577,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 261.62 361.95 0)
 			(hide yes)
 			(show_name no)
@@ -65751,7 +66020,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 68.58 0)
 			(hide yes)
 			(show_name no)
@@ -66404,7 +66673,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 309.88 356.87 0)
 			(hide yes)
 			(show_name no)
@@ -66992,7 +67261,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -68071,7 +68340,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -68308,7 +68577,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 35.56 0)
 			(hide yes)
 			(show_name no)
@@ -68648,7 +68917,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 25.4 0)
 			(hide yes)
 			(show_name no)
@@ -69331,7 +69600,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 309.88 361.95 0)
 			(hide yes)
 			(show_name no)
@@ -69500,7 +69769,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -72131,7 +72400,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -72182,9 +72451,9 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
-		(in_pos_files yes)
+		(in_pos_files no)
 		(dnp no)
 		(uuid "59f14d3a-9216-4d31-ba74-54c91ad95596")
 		(property "Reference" "BT1"
@@ -72637,7 +72906,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 261.62 356.87 0)
 			(hide yes)
 			(show_name no)
@@ -74643,7 +74912,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -75310,7 +75579,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -76473,7 +76742,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 204.47 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -77086,7 +77355,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -79214,7 +79483,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -79763,7 +80032,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 261.62 359.41 0)
 			(hide yes)
 			(show_name no)
@@ -81595,7 +81864,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 232.41 361.95 0)
 			(hide yes)
 			(show_name no)
@@ -82334,7 +82603,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -82756,7 +83025,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 86.36 0)
 			(hide yes)
 			(show_name no)
@@ -82927,7 +83196,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -83616,7 +83885,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 281.94 361.95 0)
 			(hide yes)
 			(show_name no)
@@ -84127,7 +84396,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 281.94 354.33 0)
 			(hide yes)
 			(show_name no)
@@ -85285,7 +85554,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 33.02 0)
 			(hide yes)
 			(show_name no)
@@ -86972,7 +87241,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -88407,7 +88676,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -88565,7 +88834,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 83.82 0)
 			(hide yes)
 			(show_name no)
@@ -89568,7 +89837,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -94922,7 +95191,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -95001,7 +95270,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 232.41 354.33 0)
 			(hide yes)
 			(show_name no)
@@ -97617,7 +97886,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 309.88 359.41 0)
 			(hide yes)
 			(show_name no)
@@ -99979,7 +100248,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -100412,7 +100681,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -100491,7 +100760,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 309.88 354.33 0)
 			(hide yes)
 			(show_name no)
@@ -100912,7 +101181,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 281.94 356.87 0)
 			(hide yes)
 			(show_name no)
@@ -102301,7 +102570,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -103446,7 +103715,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 68.58 0)
 			(hide yes)
 			(show_name no)
@@ -103525,7 +103794,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 40.64 0)
 			(hide yes)
 			(show_name no)
@@ -103762,7 +104031,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -103920,7 +104189,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 212.09 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -104948,7 +105217,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 210.82 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -106339,7 +106608,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 232.41 359.41 0)
 			(hide yes)
 			(show_name no)
@@ -107225,7 +107494,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 205.74 27.94 0)
 			(hide yes)
 			(show_name no)
@@ -107992,6 +108261,491 @@
 				)
 			)
 		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Coded_SH-7010")
+		(at 106.68 365.76 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "cf08bed5-7cc9-43f4-aeaf-73ebf75a52c6")
+		(property "Reference" "SW1"
+			(at 104.14 356.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SH-7010 BCD 10-pos"
+			(at 104.14 374.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Button_Switch_SMD:Nidec_Copal_SH-7010B"
+			(at 106.68 365.76 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.nidec-copal-electronics.com/e/catalog/switch/sh-7000.pdf"
+			(at 106.68 365.76 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Rotary switch, 4-bit BCD, 10 positions"
+			(at 106.68 365.76 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3bf2b0e5-3fd3-4a2e-86d8-764e5abbc3da")
+		)
+		(pin "2"
+			(uuid "03eed59f-782c-4086-bc00-74a6757b36be")
+		)
+		(pin "4"
+			(uuid "7116fc85-eacd-4d61-b32f-9fddd4f39f20")
+		)
+		(pin "8"
+			(uuid "4c7bcf47-2546-4d8f-9ce7-2668d88a619b")
+		)
+		(pin "C"
+			(uuid "cd2a4cd3-9387-41eb-8e34-64eba14a3141")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "SW1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "FLOOR.1"
+		(at 116.84 363.22 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c73c78ef-b264-4edb-a226-d5793de514f4")
+	)
+	(label "FLOOR.2"
+		(at 116.84 365.76 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ebee1802-e10e-46cc-b4e0-377e63fbeb92")
+	)
+	(label "FLOOR.4"
+		(at 116.84 368.3 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4604b86f-57ef-4bf5-860b-a4c3d18e663b")
+	)
+	(label "FLOOR.8"
+		(at 116.84 370.84 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "80d4b40d-65ff-4d99-889d-d169285367df")
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 116.84 360.68 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9bc019d8-0d73-41a4-9295-cdeb1ad4e8e5")
+		(property "Reference" "#PWR0340"
+			(at 116.84 367.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 116.84 364.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 116.84 360.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 360.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 116.84 360.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9b2ed049-7bcf-45e0-aa90-006138115c64")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0340")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Coded_SH-7010")
+		(at 106.68 388.62 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "0894b463-3323-4e59-a4c8-0aaa1e1de450")
+		(property "Reference" "SW2"
+			(at 104.14 379.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SH-7010 BCD 10-pos"
+			(at 104.14 397.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Button_Switch_SMD:Nidec_Copal_SH-7010B"
+			(at 106.68 388.62 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.nidec-copal-electronics.com/e/catalog/switch/sh-7000.pdf"
+			(at 106.68 388.62 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Rotary switch, 4-bit BCD, 10 positions"
+			(at 106.68 388.62 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7ac9a9bb-4df3-4903-bdf2-ffe74820b677")
+		)
+		(pin "2"
+			(uuid "5473b94f-0ee5-4c1e-b81e-197cf724dbc4")
+		)
+		(pin "4"
+			(uuid "4a926475-fbe9-41de-a796-5171b08c3155")
+		)
+		(pin "8"
+			(uuid "a2ed3daa-8c42-427e-8a15-9cd410e2c625")
+		)
+		(pin "C"
+			(uuid "57a01279-7293-42c4-9e8c-b51fa7fb3ca8")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "SW2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "ROOM.1"
+		(at 116.84 386.08 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "7ba42dcb-06e4-4cd9-9c64-11fc18376fd7")
+	)
+	(label "ROOM.2"
+		(at 116.84 388.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "19cdd213-91c4-4b7c-a6b3-77119f2f2bf4")
+	)
+	(label "ROOM.4"
+		(at 116.84 391.16 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3421d150-7224-4de6-ba8b-551a82d5cd2d")
+	)
+	(label "ROOM.8"
+		(at 116.84 393.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4b1125cc-cb70-4fb7-9871-197540f5a714")
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 116.84 383.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "dfbea99d-5f25-45da-97d7-82aca0e11bbb")
+		(property "Reference" "#PWR0341"
+			(at 116.84 389.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 116.84 387.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 116.84 383.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 383.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 116.84 383.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d5082674-3ea6-4f41-82f1-1b55711b6776")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0341")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "FLOOR.1"
+		(at 86.36 360.68 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "16d572cf-f7b7-4b38-8b7a-7c7b734ef029")
+	)
+	(label "FLOOR.2"
+		(at 86.36 363.22 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "40b21280-c499-4518-bb24-29e45d21b873")
+	)
+	(label "FLOOR.4"
+		(at 86.36 365.76 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1c145319-2e11-4562-aa10-53a020bf4cb8")
+	)
+	(label "FLOOR.8"
+		(at 86.36 368.3 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6b9c651c-9616-4b00-a86c-894eae3d2dbe")
+	)
+	(label "ROOM.1"
+		(at 86.36 370.84 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ac7fdf5d-4205-49a1-8369-97189a215355")
+	)
+	(label "ROOM.2"
+		(at 86.36 373.38 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "45c1f2e1-ca06-4bfd-83c0-8572419a0924")
+	)
+	(label "ROOM.4"
+		(at 86.36 375.92 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cf31bf00-a723-40a1-a19e-ded70a984f1b")
+	)
+	(label "ROOM.8"
+		(at 86.36 378.46 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9331f951-de5b-46ce-aaa1-da8ddf303e38")
+	)
+	(text "FLOOR / ROOM: SW1 = floor (0-9), SW2 = room on that floor (0-9), BCD.\nRead on U21 port 1 (P10-P13 floor, P14-P17 room), active low, switch common to COM.\nCheck TCA9555 internal pull-ups; else add 100k to +3V3."
+		(exclude_from_sim no)
+		(at 96.52 350.52 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6b9e7b0d-c464-4019-a2c4-ae7abd3e853a")
 	)
 	(sheet_instances
 		(path "/"
