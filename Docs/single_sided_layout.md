@@ -11,9 +11,9 @@ switch. Started from `kicad10-port` at 981c517.
 | Battery holder | BT1 (18650 holder) is on the **back** and is meant to be hand-fitted (it is the only part there). It must be removed from the JLC BOM/position file, or JLC will quote a second side. |
 | Floor and room | New SW1 (floor) and SW2 (room on that floor): Nidec Copal SH-7010 style 10-position BCD rotary switches (`Button_Switch_SMD:Nidec_Copal_SH-7010B`). They connect to U21 (TCA9555) port 1, which was unused. No LCSC number yet. |
 | Test points | The 60 one-pin 1.00 mm header test points (camera FPC breakout, PMU rails) are now 1 mm SMD test pads (`TestPoint:TestPoint_Pad_D1.0mm`). Same nets, still easy to solder a wire to, and they no longer block the inner and bottom layers. |
-| Board | About 95 x 100 mm, 4 layers: Top / GND / VCC / Bottom. COM pour on Top, Bottom and GND. Solid +3V3 plane on VCC (PMU.Vsys is routed, not a plane split). Copper-pour keepouts at both chip antennas. |
+| Board | 100 x 112 mm before routing (it may grow), 4 layers: Top / GND / VCC / Bottom. COM pour on Top, Bottom and GND. Solid +3V3 plane on VCC (PMU.Vsys is routed, not a plane split). Copper-pour keepouts at both chip antennas. |
 
-| Camera | FPC1 has a clear 14 mm lane from its cable opening to the left board edge, between CN1 and CARD1. An OV2640 on the common 21 mm flex lies flat in the lane on a bare-copper COM pad (11.5 x 13 mm, no solder mask, 30 thermal vias to the GND plane) that works as its heatsink: stick it down with a thermal pad. A longer flex can leave the board edge instead, or fold back over a separate heatsink. The silk "CAMERA HEATSINK (COM)" marks the pad. |
+| Camera | FPC1 has a clear 20 mm wide lane from its cable opening to the left board edge, between CN1 and CARD1. An OV2640 on the common 21 mm flex lies flat in the lane, lens up, on a bare-copper COM pad (17 x 15 mm, no solder mask, 56 thermal vias to the GND plane) that works as its heatsink: stick it down with a thermal pad. A longer flex can leave the board edge instead, or fold back over a separate heatsink. The silk "CAMERA HEATSINK (COM)" marks the pad. |
 | Ethernet | J9 (RJ45) now sits on the bottom edge with the cable entering from the bottom, right next to the T1 magnetics (much shorter MDI pairs than before). J1 USB-C, U1 and U3 moved right to make room. |
 | Mounting holes | H1-H3: M3 (3.2 mm, non-plated) at the left edge below the ESP32, top-right and bottom-right corners. They are board-only (not in the schematic or BOM). The top-left corner is the antenna keepout and the bottom-left is the PoE module, so there is no fourth corner hole. U17 moved 8 mm left to clear H2 (mic spacing is now about 75 mm). |
 | Spare IO pads | TP132-TP141, 1 mm pads to solder a wire to (see below). |
@@ -62,9 +62,11 @@ They are DNP test points, so JLC places nothing on them.
 
 1. **J1 USB-C orientation.** J1 was a bottom part. After flipping it, I rotated it so the opening should face the
    bottom edge. Check it in the 3D view.
-2. **FPC1 and camera.** FPC1's cable opening faces the left edge. Check, with your camera, that the lens faces up
-   (away from the board) when the flex lies flat in the lane; whether it does depends on which side the flex
-   contacts are on. If not, the flex has to be folded once.
+2. **FPC1 and camera.** Checked against the Union Image ZY-XSF3M2640B drawing (the usual 24-pin OV2640 module):
+   its gold contacts are on the bottom of the flex, opposite the lens, with the stiffener on the lens side. FPC1
+   (AFC01-S24FCC-00) is bottom-contact, so the flex goes in contacts down and the camera lies flat with the lens up.
+   Pin 1 lands on pad 1 and the pinout (1 NC, 2 AGND, 3 SDA, 4 AVDD 2.8 V, ... 24 Y0) matches the schematic.
+   Confirm on your own module that the contacts are on the side opposite the lens.
 3. **ANT1 and ANT3 footprints.** In both footprints, pad 1 (feed) overlaps pad 3 (COM), which DRC reports as a
    short. Check against `Docs/C2925417.pdf` and `Docs/C5370061.pdf`.
 4. **Edge connectors.** CN1, CARD1, J9 and J1 sit at the board edge. Check how far each should overhang the outline.
