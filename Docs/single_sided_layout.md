@@ -80,24 +80,33 @@ They are DNP test points, so JLC places nothing on them.
 
 ## Routing status (18 Nov 2026)
 
-The grid router has stalled at **90 unconnected** items (DRC clean apart from the known ANT1/ANT3 pad overlap):
+The grid router has stalled at **85 unconnected** items (DRC clean apart from the known ANT1/ANT3 pad overlap):
 
 | Group | Count | Notes |
 |---|---|---|
 | RF feeds (/RF1, /RF1-ANT, /LORA1-ANT) | 7 | left for hand routing on purpose (50 ohm feeds) |
-| COM pads and pour islands | 26 | mostly around U18 (AXP2101) and U7, where there is no room for a via to the GND plane |
-| U18 PMU nets (PMU.Vsys, Vo1-4, Va1/Va4, Vb1, LX3, SW, IRQ, PWROK, CHGLED) | ~17 | QFN fan-out into the inductor/capacitor ring |
-| U7 (ESP32-S3) fan-out | ~30 | camera data/sync, LoRa SPI, SD card, flash DO, I2C, I2S, USB D+/D- |
-| Other | a few | W5500 MISO/SCLK/INT, test pads |
+| COM pads | 12 | around U18 (AXP2101) and U7, where there is no room for a via to the GND plane |
+| +3V3 pads | 0 | every +3V3 pad has a via to the In2 plane |
+| U18 PMU nets (PMU.Vsys, Vo/Va/Vb rails, LX2/LX3, SW, VBUS, VRTC, IRQ) | ~20 | QFN fan-out into the inductor/capacitor ring |
+| U7 (ESP32-S3) fan-out | ~40 | camera data/sync, Ethernet/LoRa SPI, SD card, flash, I2C, I2S, mics, USB D+/D- |
+| Other | a few | test pads, 7SEG.GRID1 |
 
-Every +3V3 pad and nearly every COM pad now drops straight to its inner plane with a via, and isolated COM pour
-islands on the outer layers are stitched to the GND plane. Signals may use In2 (and the router was allowed In1 too),
-but the limit around U7 and U18 is via space, not layer space: the area under the remaining ratsnest is already
-full of vias, so no layer change can get out. These last connections need either hand routing with KiCad's
-push-and-shove router (U18 block and the U7 escape) or moving U19, U9 and J1 closer to U7.
+How it was routed: all signal tracks were stripped, U7 and U18 got 1 mm fan-out stubs, then the U7 nets were routed
+first and everything else after, followed by clean-up rounds (delete clearance errors, stitch COM pour islands to
+the GND plane, re-route).
 
-The DRC also reports 116 "solder mask bridge" items at the camera heatsink. They pair the bare-copper mask opening
-with its own COM vias, so the opening only holds COM copper; they are harmless.
+Three versions of that run were compared, differing only in how freely signals may use In2 (the +3V3 plane):
+
+| In2 cost vs outer layers | In2 track segments | Unconnected |
+|---|---|---|
+| 4x (last resort) - **this board** | 20 | 85 |
+| 1.3x | ~70 | 85 |
+| 0.8x (preferred) | ~430, about 1 m of track | 85 |
+
+All three stop at 85, so the limit is not layer space. The stuck pads around U7 and U18 have no room for a 0.6 mm
+via next to them, so they cannot reach any other layer. The board keeps the 4x version because its +3V3 plane
+stays solid. Getting further needs one of: smaller vias (for example 0.45/0.2 mm) and 0.15 mm escape tracks,
+more room around U7 and U18 (spread their passives), or hand routing with KiCad's push-and-shove router.
 
 ## Battery plan: LiFePO4 (proposal, not in the schematic yet)
 
