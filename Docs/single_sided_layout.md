@@ -78,6 +78,27 @@ They are DNP test points, so JLC places nothing on them.
 5. **JLC rotation.** The `JLCPCB Rotation Offset` fields are unchanged. Check the flipped parts (especially U1, D9
    and the mics) in JLC's placement preview.
 
+## Routing status (18 Nov 2026)
+
+The grid router has stalled at **90 unconnected** items (DRC clean apart from the known ANT1/ANT3 pad overlap):
+
+| Group | Count | Notes |
+|---|---|---|
+| RF feeds (/RF1, /RF1-ANT, /LORA1-ANT) | 7 | left for hand routing on purpose (50 ohm feeds) |
+| COM pads and pour islands | 26 | mostly around U18 (AXP2101) and U7, where there is no room for a via to the GND plane |
+| U18 PMU nets (PMU.Vsys, Vo1-4, Va1/Va4, Vb1, LX3, SW, IRQ, PWROK, CHGLED) | ~17 | QFN fan-out into the inductor/capacitor ring |
+| U7 (ESP32-S3) fan-out | ~30 | camera data/sync, LoRa SPI, SD card, flash DO, I2C, I2S, USB D+/D- |
+| Other | a few | W5500 MISO/SCLK/INT, test pads |
+
+Every +3V3 pad and nearly every COM pad now drops straight to its inner plane with a via, and isolated COM pour
+islands on the outer layers are stitched to the GND plane. Signals may use In2 (and the router was allowed In1 too),
+but the limit around U7 and U18 is via space, not layer space: the area under the remaining ratsnest is already
+full of vias, so no layer change can get out. These last connections need either hand routing with KiCad's
+push-and-shove router (U18 block and the U7 escape) or moving U19, U9 and J1 closer to U7.
+
+The DRC also reports 116 "solder mask bridge" items at the camera heatsink. They pair the bare-copper mask opening
+with its own COM vias, so the opening only holds COM copper; they are harmless.
+
 ## Battery plan: LiFePO4 (proposal, not in the schematic yet)
 
 Requirements: rechargeable, at least 2 hours idle plus 30 min talking plus 30 min speaker, long cycle life, low fire
