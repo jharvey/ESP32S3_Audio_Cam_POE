@@ -39762,6 +39762,26 @@
 		(at 41.91 62.23)
 		(uuid "f7568624-6a2f-45c5-bc51-be4b0d6f5105")
 	)
+	(no_connect
+		(at 226.06 27.94)
+		(uuid "94c08786-3ea9-4d8c-90d7-837a37acbe9a")
+	)
+	(no_connect
+		(at 226.06 83.82)
+		(uuid "b6c3eb22-5f45-4265-b200-beab39abf8a9")
+	)
+	(no_connect
+		(at 226.06 86.36)
+		(uuid "1f0a29b1-e77b-41a2-aac3-1075393d4b1c")
+	)
+	(no_connect
+		(at 237.49 20.32)
+		(uuid "fce9697a-83d4-4d47-a3d8-3f82291cf642")
+	)
+	(no_connect
+		(at 237.49 93.98)
+		(uuid "57331738-0f01-49c9-b9b6-130d51070174")
+	)
 	(wire
 		(pts
 			(xy 421.64 101.6) (xy 429.26 101.6)
@@ -52239,85 +52259,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 30.48 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "018e1caa-9272-4eb4-942f-723de5da05a7")
-		(property "Reference" "TP87"
-			(at 215.138 29.464 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 30.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6f575baf-5fa2-47ef-82a5-f2aa39e32aca")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP87")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Capacitors:0603,100nF")
 		(at 222.25 129.54 180)
 		(unit 1)
@@ -52407,164 +52348,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 83.82 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "01bed23f-4566-4471-9ac6-4f0fc3cb179a")
-		(property "Reference" "NT22"
-			(at 208.28 82.804 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 83.82) (xy 210.82 83.82)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "81596162-94e5-44bc-ada7-ef54d209c53d")
-		)
-		(pin "2"
-			(uuid "267b1b49-ad71-4fdd-8488-88b902ab0f55")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT22")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 78.74 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "026ea01c-7ae7-4db8-91ae-3c5b73bcc982")
-		(property "Reference" "TP124"
-			(at 201.168 77.724 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4bce51b7-a689-4e9c-9a08-47bf5855551b")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP124")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "86fb67f2-2c22-41d3-9915-f6789bd9a072")
 	)
 	(symbol
 		(lib_id "power:Earth")
@@ -53635,85 +53427,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR042")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 33.02 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "07d5468d-c19f-47e6-83cc-b3c19e410398")
-		(property "Reference" "TP89"
-			(at 215.138 32.004 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "710e0b4d-9dbd-4b8e-bfaa-ea0bcf163ae7")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP89")
 					(unit 1)
 				)
 			)
@@ -55043,85 +54756,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 76.2 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "0e8307d6-e6b0-46ac-b1e8-539508becf44")
-		(property "Reference" "TP123"
-			(at 215.138 75.184 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0c55f2da-9ce2-4f12-87a0-ad8c80c8133c")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP123")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Resistors:0603,0Ω")
 		(at 455.93 200.66 180)
 		(unit 1)
@@ -55792,85 +55426,6 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 205.74 58.42 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "1108bef0-5c81-47ae-932c-043a3507cdf1")
-		(property "Reference" "TP108"
-			(at 201.168 57.404 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f2444125-974b-46f2-9577-d9d0ddd52773")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP108")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
 		(at 387.35 48.26 90)
 		(unit 1)
 		(body_style 1)
@@ -56128,244 +55683,25 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 53.34 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "11d2e024-24e2-455b-91b6-dec47049b9ad")
-		(property "Reference" "NT10"
-			(at 208.28 52.324 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 53.34) (xy 210.82 53.34)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "ad1bfd94-9806-43d6-bf76-807511e70c2d")
-		)
-		(pin "2"
-			(uuid "7c58005f-b8cb-4fbe-a32c-133f81a88623")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT10")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "ae619256-a1e8-41e7-883b-9a6f07a65a37")
 	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 226.06 86.36 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "11f1c899-14c8-4948-9380-ab34f4e7c845")
-		(property "Reference" "TP12"
-			(at 220.98 86.36 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
+	(wire
+		(pts
+			(xy 205.74 63.5) (xy 210.82 63.5)
 		)
-		(property "Value" "TestPoint"
-			(at 224.0279 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 226.06 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 226.06 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 226.06 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "af7935d2-cd3d-47a1-8612-b212e4960592")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP12")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 63.5 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "1268feae-8a12-4803-a0be-be6a7dbe3925")
-		(property "Reference" "NT14"
-			(at 208.28 62.484 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NetTie_2"
-			(at 208.28 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "8a36f090-c1c2-43ff-be0d-2e4024160925")
-		)
-		(pin "2"
-			(uuid "99fca6c1-72ac-4638-b6cb-1760a618c5de")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT14")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "a69d9a9c-5f4b-4689-851a-d0bf595f9ed1")
 	)
 	(symbol
 		(lib_id "power:Earth")
@@ -58562,164 +57898,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 81.28 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "1805b05f-e187-46c6-84b7-e13bee93c461")
-		(property "Reference" "NT21"
-			(at 208.28 80.264 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 81.28) (xy 210.82 81.28)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "812076a0-bbe1-490f-9bd0-e49042f84dbe")
-		)
-		(pin "2"
-			(uuid "16d15f91-d2fc-41f2-97c7-023cebd171de")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT21")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 43.18 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "18e5c0ca-e9a2-4481-80b8-6912c9a6bac6")
-		(property "Reference" "TP96"
-			(at 201.168 42.164 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 43.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "8dd7a5ef-ec8f-47ce-b353-873b99667b6e")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP96")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "20b125e7-981a-458a-b028-82ba14e11f3d")
 	)
 	(symbol
 		(lib_id "power:+3V3")
@@ -59318,85 +58505,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "R77")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 81.28 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "1c21a49e-125a-4fc4-80b9-03ccb68d2040")
-		(property "Reference" "TP126"
-			(at 201.168 80.264 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f3c1f597-43dd-4248-8e8a-04fb8698b11c")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP126")
 					(unit 1)
 				)
 			)
@@ -60451,85 +59559,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 38.1 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "1e617a67-113a-4d51-b5e2-f6f2d78c12f1")
-		(property "Reference" "TP93"
-			(at 215.138 37.084 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 43.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 43.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "bade56d2-e877-4216-8143-dc10023e2077")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP93")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:Earth")
 		(at 26.67 77.47 0)
 		(unit 1)
@@ -60777,85 +59806,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 60.96 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "21f319c7-b7d5-4958-a54c-1532599a04c4")
-		(property "Reference" "NT13"
-			(at 208.28 59.944 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 60.96) (xy 210.82 60.96)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "500e70df-c123-446e-bb09-e794d67c0fec")
-		)
-		(pin "2"
-			(uuid "75fabfbf-529e-4a95-9c05-6de08193e0b9")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT13")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "6b17a782-8de0-4de2-afbb-b6cb9c0b00c0")
 	)
 	(symbol
 		(lib_id "JLCPCB-Extended:AXP2101_C3036461")
@@ -61394,85 +60353,6 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 205.74 55.88 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "23510a46-74b6-4c0a-b358-f276003a30e8")
-		(property "Reference" "TP106"
-			(at 201.168 54.864 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "45081adc-ee2a-4958-869c-acf95fd375ee")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP106")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
 		(at 93.98 222.25 180)
 		(unit 1)
 		(body_style 1)
@@ -61897,85 +60777,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 55.88 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "25d008a1-d8ec-4891-a88c-5683b5ef275d")
-		(property "Reference" "NT11"
-			(at 208.28 54.864 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 55.88) (xy 210.82 55.88)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f13234c9-4ba6-4441-9e32-9eaf44f407d2")
-		)
-		(pin "2"
-			(uuid "722794d2-be0b-489c-bab3-2dbfe3c1dbcc")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT11")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "b10e517c-66c2-4855-9c08-f9f5c4e6a9a5")
 	)
 	(symbol
 		(lib_id "power:Earth")
@@ -62994,322 +61804,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 237.49 93.98 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "2d687fc9-1f45-4ff1-a602-5b8835ccc0f2")
-		(property "Reference" "TP14"
-			(at 243.332 91.948 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
+	(wire
+		(pts
+			(xy 205.74 35.56) (xy 210.82 35.56)
 		)
-		(property "Value" "TestPoint"
-			(at 239.5221 96.52 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Plated_Hole_D2.0mm"
-			(at 237.49 99.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 237.49 99.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 237.49 93.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "753dbe65-6f6c-4cc7-9ce2-2f0cc6704124")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP14")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 35.56 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "2d6df701-e940-4b02-83ee-61bc6e7ee515")
-		(property "Reference" "TP91"
-			(at 215.138 34.544 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "9d6fc4fd-d8dc-4bad-9e66-11e7276efb2b")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP91")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 35.56 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "2d77015c-06df-4ad0-a71c-886b8911f0b5")
-		(property "Reference" "TP90"
-			(at 201.168 34.544 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 30.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 30.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "30dabb43-5c2e-48ed-a5cf-771f330bbbb7")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP90")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 35.56 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "2e88a907-a0e6-421a-ad0a-b68ff5ebe561")
-		(property "Reference" "NT3"
-			(at 208.28 34.544 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NetTie_2"
-			(at 208.28 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0edca361-5760-4c23-83da-e291df6781cf")
-		)
-		(pin "2"
-			(uuid "b6b724d9-462f-4e36-b4ee-4868db7f8de2")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT3")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "7c818bcc-d698-49ba-bfdf-cfaf33bd90f1")
 	)
 	(symbol
 		(lib_id "power:Earth")
@@ -63385,85 +61888,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR0146")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 53.34 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "2ee5faf6-be82-4e83-9c85-d2f6100af6eb")
-		(property "Reference" "TP104"
-			(at 201.168 52.324 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4adcd5b1-e4cb-4ae5-8ac8-2cb10e0e4566")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP104")
 					(unit 1)
 				)
 			)
@@ -64588,85 +63012,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 45.72 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "347225aa-11aa-436d-be03-1377af2e45e9")
-		(property "Reference" "TP99"
-			(at 215.138 44.704 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "51d82743-fb66-4d39-a367-7e0d049b92fb")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP99")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Diodes:LED,0805,Yellow")
 		(at 208.28 358.14 90)
 		(mirror x)
@@ -64752,85 +63097,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "D14")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 58.42 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "367b531f-cdf9-4c5a-8008-a349d14a9b0a")
-		(property "Reference" "TP109"
-			(at 215.138 57.404 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "fa38d549-bfb8-4f49-bcc9-f45e7b738f07")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP109")
 					(unit 1)
 				)
 			)
@@ -65147,85 +63413,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "TP37")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 194.31 83.82 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "38ee16fd-d343-4bc2-9715-edf8d42e5354")
-		(property "Reference" "TP11"
-			(at 189.23 83.82 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 192.2779 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 194.31 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 194.31 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 194.31 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5de3e126-fae0-4677-adda-97e64993a84d")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP11")
 					(unit 1)
 				)
 			)
@@ -65959,85 +64146,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "L5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 63.5 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "3b892edc-732b-4feb-9827-90ce84652c86")
-		(property "Reference" "TP113"
-			(at 215.138 62.484 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6d1e7a03-d26e-44e3-95f7-af9670f39521")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP113")
 					(unit 1)
 				)
 			)
@@ -67206,85 +65314,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 48.26 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "3ffc53e3-6d05-44c1-8299-40f51ef6f1fc")
-		(property "Reference" "TP101"
-			(at 215.138 47.244 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "7a330109-9d61-4669-8899-f1537b6ded6b")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP101")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Resistors:0603,0Ω")
 		(at 571.5 167.64 180)
 		(unit 1)
@@ -68285,85 +66314,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 60.96 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "460904b1-7284-4acf-aa53-7194570bcf62")
-		(property "Reference" "TP110"
-			(at 201.168 59.944 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "af85246b-878d-4a89-8351-627b76b9a8d8")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP110")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:Earth")
 		(at 337.82 182.88 270)
 		(unit 1)
@@ -68516,85 +66466,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#FLG010")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 40.64 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "46494f5e-7048-4487-8937-9d2c92c13fd5")
-		(property "Reference" "TP94"
-			(at 201.168 39.624 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "63e8944a-2ed3-4c59-879a-7ee6d7a86e8e")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP94")
 					(unit 1)
 				)
 			)
@@ -68856,85 +66727,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "R108")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 30.48 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "467e2f89-01f8-4f59-8828-f195881c48f0")
-		(property "Reference" "TP86"
-			(at 201.168 29.464 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 25.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 25.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 30.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "72743c92-01a1-403a-8738-8e86bd5cb019")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP86")
 					(unit 1)
 				)
 			)
@@ -69708,85 +67500,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "C87")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 60.96 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "4d15f17f-d571-4873-bac5-d7a4a358c207")
-		(property "Reference" "TP111"
-			(at 215.138 59.944 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4d643fd2-199a-490c-b387-0401fd1ed3c9")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP111")
 					(unit 1)
 				)
 			)
@@ -71308,85 +69021,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 237.49 20.32 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "54015876-df35-47c5-bb9b-bd72b658fee5")
-		(property "Reference" "TP13"
-			(at 243.332 18.288 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 239.5221 22.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Plated_Hole_D2.0mm"
-			(at 237.49 25.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 237.49 25.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 237.49 20.32 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6a2e9db3-1196-4a1b-bbbd-83e129b997bc")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:Earth")
 		(at 427.99 349.25 0)
 		(unit 1)
@@ -72339,85 +69973,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "TP44")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 71.12 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "59cfc3aa-d605-42b6-b794-46bcf9f4f99a")
-		(property "Reference" "TP118"
-			(at 201.168 70.104 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "53d58917-b999-4078-af3d-88ee16b12ffd")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP118")
 					(unit 1)
 				)
 			)
@@ -74776,164 +72331,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 71.12 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "63caa369-b115-4ac3-ac44-f94723768b1d")
-		(property "Reference" "NT17"
-			(at 208.28 70.104 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 71.12) (xy 210.82 71.12)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3bea745f-638a-4f0c-8d4d-d29c54b264af")
-		)
-		(pin "2"
-			(uuid "10093514-e680-46dc-9ef5-f56befe23ced")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT17")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 63.5 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "63ccdd1a-7c24-4292-931c-6b55811d8944")
-		(property "Reference" "TP112"
-			(at 201.168 62.484 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a03c9fba-5283-4262-8a9f-ced2e77662a6")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP112")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "e2b99cdf-1156-4472-bbba-266e35f71220")
 	)
 	(symbol
 		(lib_id "power:Earth")
@@ -75274,85 +72680,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 33.02 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "65adff83-77f6-42b1-a8df-7a0b3032a5e3")
-		(property "Reference" "NT2"
-			(at 208.28 32.004 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 33.02) (xy 210.82 33.02)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 30.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f3a6d957-f362-4158-82da-93f511ce1844")
-		)
-		(pin "2"
-			(uuid "4f28d805-a5fc-4451-aa34-21cb426548dd")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT2")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "b6954eee-2253-465a-b6e0-744dfe101819")
 	)
 	(symbol
 		(lib_id "power:Earth")
@@ -75524,85 +72860,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 50.8 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "65d924ed-80ca-4a3c-99f0-c08317897e0b")
-		(property "Reference" "TP102"
-			(at 201.168 49.784 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "1d44459e-1930-4dcb-a8c8-5b651ed9d133")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP102")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:Earth")
 		(at 500.38 189.23 90)
 		(unit 1)
@@ -75765,85 +73022,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 30.48 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "66b294d9-dce8-493e-aa52-88f54f01f212")
-		(property "Reference" "NT1"
-			(at 208.28 29.464 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 30.48) (xy 210.82 30.48)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 30.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 30.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 30.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e3e95d50-d25c-4c4f-8138-874debd71a1f")
-		)
-		(pin "2"
-			(uuid "21801c8b-fcc0-4b3d-9c92-833387ac4128")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT1")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "b3cb72b9-badd-49eb-9e90-4cd198c2c64f")
 	)
 	(symbol
 		(lib_id "power:Earth")
@@ -76688,85 +73875,6 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 204.47 83.82 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "6a857ee9-2d1d-4948-9360-e5498f6dfee9")
-		(property "Reference" "TP128"
-			(at 199.898 82.804 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 202.4379 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 204.47 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 204.47 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 204.47 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e5797cbe-814c-49a3-b8d8-45bc6e096f63")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP128")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
 		(at 378.46 129.54 0)
 		(unit 1)
 		(body_style 1)
@@ -77300,85 +74408,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 71.12 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "6dc5d711-4f75-42de-bcad-1e3cab191f24")
-		(property "Reference" "TP119"
-			(at 215.138 70.104 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "564379d8-344d-488c-a9a5-8b3b29312c7b")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP119")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Resistors:0402,10kΩ")
 		(at 415.29 372.11 0)
 		(mirror y)
@@ -77654,85 +74683,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 68.58 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "6e8a179f-e7fd-4ed2-9784-e1d2675c57ea")
-		(property "Reference" "NT16"
-			(at 208.28 67.564 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 68.58) (xy 210.82 68.58)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0b5edae2-fba6-4403-ae92-b791960aa21e")
-		)
-		(pin "2"
-			(uuid "1d1f0a33-0cd8-427e-b9a1-eed4fbac72aa")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT16")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "d9abdfa6-c6c2-4bf2-8f9e-1984c9aab8e8")
 	)
 	(symbol
 		(lib_id "power:Earth")
@@ -79427,164 +76386,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 76.2 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "7a75d464-e0f7-49f3-99ab-ecae0fb19068")
-		(property "Reference" "TP122"
-			(at 201.168 75.184 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
+	(wire
+		(pts
+			(xy 205.74 78.74) (xy 210.82 78.74)
 		)
-		(property "Value" "TestPoint"
-			(at 203.7079 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "40055a1d-55a8-454d-af2d-912538a58603")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP122")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 78.74 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "7ac2a178-7783-4175-b0b6-aa45117f0a81")
-		(property "Reference" "NT20"
-			(at 208.28 77.724 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NetTie_2"
-			(at 208.28 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e55edd79-f183-4cbd-b503-53610f8ff735")
-		)
-		(pin "2"
-			(uuid "15dbd206-6680-4045-b08c-59cacac8397c")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT20")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "ec83394c-8d55-421c-8b90-c4b179a649b3")
 	)
 	(symbol
 		(lib_id "JLCPCB-Extended:DP9900M-5V C5380106")
@@ -82548,85 +79358,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 66.04 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "8c657c9e-bf1b-4cc1-86d5-21ab42dedb14")
-		(property "Reference" "TP114"
-			(at 201.168 65.024 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "37b0c6d3-1792-4086-b2a3-01c304cbecf1")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP114")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Capacitors:0805,22uF")
 		(at 506.73 107.95 0)
 		(unit 1)
@@ -82719,85 +79450,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 45.72 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "8d1ba85a-6545-4f03-aec2-87a38577b2d3")
-		(property "Reference" "NT7"
-			(at 208.28 44.704 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 45.72) (xy 210.82 45.72)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 43.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f41fbcf4-003e-4f4a-90a2-76e714687caa")
-		)
-		(pin "2"
-			(uuid "e9da123a-a7f2-49ae-924b-ca29c1706d8a")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT7")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "3602dc62-6a68-4aea-8904-e5eb20edb03e")
 	)
 	(symbol
 		(lib_id "JLCPCB-Capacitors:0603,220nF")
@@ -82970,85 +79631,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 81.28 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "8ee940a4-2f50-4f0f-bbcc-6332483db504")
-		(property "Reference" "TP127"
-			(at 215.138 80.264 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "7a357ebf-8a7f-4085-a1be-4da22727d6cd")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP127")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Capacitors:0603,1uF")
 		(at 424.18 142.24 0)
 		(unit 1)
@@ -83135,85 +79717,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "C48")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 68.58 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "901474ba-e41b-4cf6-ba09-082207c545c7")
-		(property "Reference" "TP117"
-			(at 215.138 67.564 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6b9936e3-d57e-49b0-ba78-81d6ee08258d")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP117")
 					(unit 1)
 				)
 			)
@@ -85500,85 +82003,6 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 205.74 38.1 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "9a099d93-8784-4f24-b920-a255d5e543b1")
-		(property "Reference" "TP92"
-			(at 201.168 37.084 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4c4cc0d3-65fa-4723-8e57-9ee31df76b55")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP92")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
 		(at 339.09 91.44 270)
 		(unit 1)
 		(body_style 1)
@@ -87186,85 +83610,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 66.04 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "a6413652-abc8-4a6f-aee4-fdd192b77e76")
-		(property "Reference" "TP115"
-			(at 215.138 65.024 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "726ccf7f-7b5b-4249-ad6c-295f6fbcec95")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP115")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:Earth")
 		(at 34.29 132.08 0)
 		(unit 1)
@@ -88621,85 +84966,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 50.8 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "ab17fe8e-683f-4ab4-833a-52798217a112")
-		(property "Reference" "TP103"
-			(at 215.138 49.784 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b3ab3b51-60e8-406b-8b13-5960e2fe142f")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP103")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:Earth")
 		(at 196.85 387.35 270)
 		(unit 1)
@@ -88778,164 +85044,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 78.74 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "ab6d8a93-507f-4ee9-be5a-1f9140b6b93b")
-		(property "Reference" "TP125"
-			(at 215.138 77.724 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
+	(wire
+		(pts
+			(xy 205.74 58.42) (xy 210.82 58.42)
 		)
-		(property "Value" "TestPoint"
-			(at 212.8521 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "bd829dee-a53c-4896-a402-e50c292bf061")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP125")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 58.42 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "ac99f7f3-f638-4300-8b23-c9b74fb747bd")
-		(property "Reference" "NT12"
-			(at 208.28 57.404 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NetTie_2"
-			(at 208.28 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f4338db9-efb2-4fcd-b0b9-75990c5b974f")
-		)
-		(pin "2"
-			(uuid "3aff469e-5c43-4655-9f6d-15d036e59896")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT12")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "32737a21-1fa9-4ecb-a078-698faf55dc8a")
 	)
 	(symbol
 		(lib_id "JLCPCB-Resistors:0603,0Ω")
@@ -89776,85 +85893,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR0134")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 73.66 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "affa85ef-cc17-4e93-8efd-8a9067e82e0e")
-		(property "Reference" "TP121"
-			(at 215.138 72.644 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e98d9fc3-76ed-4bf5-b181-d22446cf62dc")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP121")
 					(unit 1)
 				)
 			)
@@ -90861,85 +86899,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 66.04 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "b5d4c663-f737-446a-b32c-e27ff0651dd7")
-		(property "Reference" "NT15"
-			(at 208.28 65.024 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 66.04) (xy 210.82 66.04)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "49fa522a-e47e-45a9-938a-000c61ced8c7")
-		)
-		(pin "2"
-			(uuid "94d29675-71cf-4896-9b3f-11e8796574c6")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT15")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "811f86b9-addc-43b9-bca8-b950996d7da3")
 	)
 	(symbol
 		(lib_id "power:VBUS")
@@ -92056,85 +88024,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 76.2 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "b913baac-c349-4bc0-8394-650b098d7612")
-		(property "Reference" "NT19"
-			(at 208.28 75.184 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 76.2) (xy 210.82 76.2)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3fad42f6-ec7e-4f9e-bb77-824960132a73")
-		)
-		(pin "2"
-			(uuid "5b94b62d-5305-4575-804d-0e7a5619456e")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT19")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "47f1c0ee-74de-41d1-8407-4a65880df7b4")
 	)
 	(symbol
 		(lib_name "0402,100kΩ_1")
@@ -94165,85 +90063,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 226.06 27.94 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "c2375439-3f97-4b63-887d-41c2e61b29ab")
-		(property "Reference" "TP10"
-			(at 220.98 27.94 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 224.0279 25.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 226.06 22.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 226.06 22.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 226.06 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d8db12d3-dee8-471f-af2c-2e1d78cdc36a")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP10")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Resistors:0603,47Ω")
 		(at 452.12 58.42 90)
 		(unit 1)
@@ -95130,85 +90949,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR326")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 43.18 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "c605a748-b31f-4218-867a-a9b9ca93f2d5")
-		(property "Reference" "TP97"
-			(at 215.138 42.164 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 43.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b0358285-363e-4dbb-8865-2a3621765b9d")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP97")
 					(unit 1)
 				)
 			)
@@ -98250,85 +93990,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 40.64 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "d586bbcc-2b40-4384-85fe-dbae939b36db")
-		(property "Reference" "NT5"
-			(at 208.28 39.624 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 40.64) (xy 210.82 40.64)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d78cc9d7-b8fd-4f8b-81c4-74513d320ddb")
-		)
-		(pin "2"
-			(uuid "82a03e1a-3a86-4b63-9bea-231815ecf4cd")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT5")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "4da89553-a85e-445b-b260-3aa984ba33c2")
 	)
 	(symbol
 		(lib_id "power:PWR_FLAG")
@@ -98619,85 +94289,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 38.1 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "d6c2a22e-f1dc-44fa-8558-43c21a01a93b")
-		(property "Reference" "NT4"
-			(at 208.28 37.084 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 38.1) (xy 210.82 38.1)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "76a8476e-1f0a-413f-ad03-203de8afd96f")
-		)
-		(pin "2"
-			(uuid "40077a2a-8712-4b14-98f3-7160ed872017")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT4")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "ec25703f-dcfd-4e08-a904-6238eafc2693")
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
@@ -100021,85 +95621,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 50.8 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "dd5a85f0-5b2a-4c09-a0d7-9b468026c069")
-		(property "Reference" "NT9"
-			(at 208.28 49.784 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 50.8) (xy 210.82 50.8)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3d96be9d-4ba4-4fb5-a46f-9cffff2bb977")
-		)
-		(pin "2"
-			(uuid "3e35af08-6ade-4e1b-b9d1-74d340d564ef")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT9")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "a97f3d5d-ef97-4824-a9c6-063cb18b69e1")
 	)
 	(symbol
 		(lib_id "JLCPCB-Resistors:0603,0Ω")
@@ -100187,85 +95717,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "TST-R26")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 53.34 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "ddaa7976-0261-45fa-a192-d2c64744e992")
-		(property "Reference" "TP105"
-			(at 215.138 52.324 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "689281dc-24cd-4fb0-8d7c-dbd2d70c85dd")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP105")
 					(unit 1)
 				)
 			)
@@ -100627,85 +96078,6 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 210.82 55.88 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "df2b77d8-1521-4177-a8a3-c766700aa136")
-		(property "Reference" "TP107"
-			(at 215.138 54.864 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "918d3989-2206-4963-9bae-06265c9956e2")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP107")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
 		(at 309.88 349.25 270)
 		(unit 1)
 		(body_style 1)
@@ -100783,85 +96155,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 73.66 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "dfb38d22-54d6-4622-a1ee-fba5e49fe395")
-		(property "Reference" "NT18"
-			(at 208.28 72.644 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 73.66) (xy 210.82 73.66)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "ab01a2e3-9070-4d31-ad1a-94c5a44d5b03")
-		)
-		(pin "2"
-			(uuid "2405ba59-cb5b-41ce-b87f-be068cfd5809")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT18")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "74fcc02c-6443-467f-9a03-7138a1a605b7")
 	)
 	(symbol
 		(lib_id "power:Earth")
@@ -101283,85 +96585,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 43.18 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "e1d71d89-9f22-417b-b67b-e6248640618a")
-		(property "Reference" "NT6"
-			(at 208.28 42.164 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 43.18) (xy 210.82 43.18)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 43.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 43.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 43.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f6d0d075-fe21-429e-8686-2e0a49d42fb6")
-		)
-		(pin "2"
-			(uuid "e9186d34-5262-41ee-94b0-99fdfee7fe00")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT6")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "91f62fea-9da2-4ab7-9390-50314d8dd896")
 	)
 	(symbol
 		(lib_id "JLCPCB-Capacitors:0402,220pF")
@@ -102515,85 +97747,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 68.58 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "e5062e1a-3486-4fe5-bf41-60b99a5ebc78")
-		(property "Reference" "TP116"
-			(at 201.168 67.564 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d98d74d0-efcd-4870-8050-95cfbea1b72b")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP116")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Resistors:0603,0Ω")
 		(at 327.66 133.35 180)
 		(unit 1)
@@ -103660,164 +98813,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 73.66 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "ea898847-35d6-4a05-983c-125bd7ecbb73")
-		(property "Reference" "TP120"
-			(at 201.168 72.644 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e3603d15-3327-403b-89f2-6c9d0707ddf3")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP120")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 45.72 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "eb0e19e9-b88c-4024-95c9-3aecca66a56f")
-		(property "Reference" "TP98"
-			(at 201.168 44.704 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 43.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "10b92fa1-d6b6-48fd-a40f-19fd370ddc0d")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP98")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:Earth")
 		(at 196.85 389.89 270)
 		(unit 1)
@@ -103976,85 +98971,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 48.26 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "eb427f72-8dfe-43e7-95c0-ab0872bf6e60")
-		(property "Reference" "TP100"
-			(at 201.168 47.244 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 43.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 43.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d7e7bb7d-d7ed-4375-9573-c63f4b27fd1d")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP100")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:Earth")
 		(at 224.79 210.82 0)
 		(unit 1)
@@ -104128,85 +99044,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR052")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 212.09 83.82 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "ebc3417c-1b6f-4647-96c1-bf7b0fb44ce2")
-		(property "Reference" "TP129"
-			(at 216.408 82.804 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 214.1221 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 212.09 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 212.09 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 212.09 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "637730ca-ce8a-4456-a145-eafbe39b36c9")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP129")
 					(unit 1)
 				)
 			)
@@ -105156,85 +99993,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "R55")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 210.82 40.64 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "f1848b5e-75be-40f8-bbcd-60c3e5cfb2c7")
-		(property "Reference" "TP95"
-			(at 215.138 39.624 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 212.8521 43.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 210.82 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 210.82 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4963ca11-e815-4983-ad21-db65e311ef90")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP95")
 					(unit 1)
 				)
 			)
@@ -107439,85 +102197,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 205.74 33.02 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "fc5012f6-cf16-48ea-81dc-ff2bce9c3185")
-		(property "Reference" "TP88"
-			(at 201.168 32.004 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 203.7079 30.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 205.74 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 205.74 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "fe825c5e-7167-48a8-aa3c-ba43a16ffcf7")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP88")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-ICs:Digital Tube Drivers C2962580")
 		(at 360.68 246.38 0)
 		(unit 1)
@@ -108160,85 +102839,15 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 208.28 48.26 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "ffc13dac-043c-4572-9172-fe0d165a6c56")
-		(property "Reference" "NT8"
-			(at 208.28 47.244 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+	(wire
+		(pts
+			(xy 205.74 48.26) (xy 210.82 48.26)
 		)
-		(property "Value" "NetTie_2"
-			(at 208.28 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 208.28 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 208.28 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 208.28 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "9fc1da99-da85-4f7f-97b5-43a4957b4895")
-		)
-		(pin "2"
-			(uuid "c6b92ab7-4096-491c-9ba5-2966888e9e41")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "NT8")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "acbb50e7-7806-43ad-a902-888a8c84f365")
 	)
 	(symbol
 		(lib_id "Switch:SW_Coded_SH-7010")

@@ -10,7 +10,8 @@ switch. Started from `kicad10-port` at 981c517.
 | Assembly | All SMD parts on the top (front) side. 93 former bottom parts were moved to the top and re-placed. |
 | Battery holder | BT1 (18650 holder) is on the **back** and is meant to be hand-fitted (it is the only part there). It must be removed from the JLC BOM/position file, or JLC will quote a second side. |
 | Floor and room | New SW1 (floor) and SW2 (room on that floor): Nidec Copal SH-7010 style 10-position BCD rotary switches (`Button_Switch_SMD:Nidec_Copal_SH-7010B`). They connect to U21 (TCA9555) port 1, which was unused. No LCSC number yet. |
-| Test points | The 60 one-pin 1.00 mm header test points (camera FPC breakout, PMU rails) are now 1 mm SMD test pads (`TestPoint:TestPoint_Pad_D1.0mm`). Same nets, still easy to solder a wire to, and they no longer block the inner and bottom layers. |
+| Test points | The one-pin 1.00 mm header test points (PMU rails and others) are now 1 mm SMD test pads (`TestPoint:TestPoint_Pad_D1.0mm`). Same nets, still easy to solder a wire to, and they no longer block the inner and bottom layers. |
+| Camera breakout | The camera FPC breakout is gone: net ties NT1-NT22 are now plain wires and their 49 test pads (TP10-TP14, TP86-TP129) are deleted, so each FPC1 pin goes straight to its circuit. The unused FPC1 pins (1, 23, 24 and the two mounting tabs) have no-connect flags. This removed about 70 hard-to-route connections around FPC1. To re-map pins for a different camera, cut and jumper the traces instead. |
 | Board | 100 x 112 mm before routing (it may grow), 4 layers: Top / GND / VCC / Bottom. COM pour on Top, Bottom and GND. Solid +3V3 plane on VCC (PMU.Vsys is routed, not a plane split). Copper-pour keepouts at both chip antennas. |
 
 | Camera | FPC1 has a clear 20 mm wide lane from its cable opening to the left board edge, between CN1 and CARD1. An OV2640 on the common 21 mm flex lies flat in the lane, lens up, on a bare-copper COM pad (17 x 15 mm, no solder mask, 56 thermal vias to the GND plane) that works as its heatsink: stick it down with a thermal pad. A longer flex can leave the board edge instead, or fold back over a separate heatsink. The silk "CAMERA HEATSINK (COM)" marks the pad. |
@@ -18,8 +19,12 @@ switch. Started from `kicad10-port` at 981c517.
 | Mounting holes | H1-H3: M3 (3.2 mm, non-plated) at the left edge below the ESP32, top-right and bottom-right corners. They are board-only (not in the schematic or BOM). The top-left corner is the antenna keepout and the bottom-left is the PoE module, so there is no fourth corner hole. U17 moved 8 mm left to clear H2 (mic spacing is now about 75 mm). |
 | Spare IO pads | TP132-TP141, 1 mm pads to solder a wire to (see below). |
 
-The schematic changes are the two switches, their labels, a note, the test-point footprint fields, and the spare IO
-pads. Nothing else in the circuit changed.
+The schematic changes are the two switches, their labels, a note, the test-point footprint fields, the spare IO
+pads, and the removed camera breakout (net ties and their test pads). Nothing else in the circuit changed.
+
+USB-C (J1) stays on the bottom edge next to its power parts. The ESP32 is in the top-left corner and the left edge
+near it is taken by H1, CN1 and the camera lane, so there is no edge spot near U7. The ESP32-S3 USB is full speed
+(12 Mbit/s), which tolerates the roughly 100 mm route.
 
 ### Spare IO / expansion pads
 
@@ -53,7 +58,7 @@ They are DNP test points, so JLC places nothing on them.
 | Top centre | DISP1 3-digit display with U11 TM1637; the button row PB1/PB2/PB4/PB5/PB3 underneath |
 | Top corners | U16 and U17 mics, about 80 mm apart (good spacing for the two-mic beamforming) |
 | Right | U19 LoRa module; ANT3 on the right edge with a keepout; servo headers J5-J8 stacked on the right edge; U20 PCA9685 and the lamp FETs inboard |
-| Centre | U18 AXP2101 PMU block; FPC1 camera connector with its test-pad array |
+| Centre | U18 AXP2101 PMU block; FPC1 camera connector |
 | Left edge | H1; CN1 audio jack; the camera lane and heatsink pad; CARD1 microSD; BOOT1 and RST2 below them |
 | Bottom | U14 PoE module, D5/D6 bridges, D7 TVS, T1 magnetics, U9 W5500, J9 RJ45 facing down, U1 buck, J1 USB-C, H3 |
 | Lower middle | SW1 (floor) and SW2 (room) switches next to U21 |
