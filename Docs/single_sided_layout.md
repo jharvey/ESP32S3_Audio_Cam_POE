@@ -80,33 +80,39 @@ They are DNP test points, so JLC places nothing on them.
 
 ## Routing status (18 Nov 2026)
 
-The grid router has stalled at **85 unconnected** items (DRC clean apart from the known ANT1/ANT3 pad overlap):
+The board now uses In2 (the +3V3 plane layer) freely for signals. The grid router stops at **82 unconnected**
+items (DRC clean apart from the known ANT1/ANT3 pad overlap; schematic parity 0):
 
 | Group | Count | Notes |
 |---|---|---|
-| RF feeds (/RF1, /RF1-ANT, /LORA1-ANT) | 7 | left for hand routing on purpose (50 ohm feeds) |
-| COM pads | 12 | around U18 (AXP2101) and U7, where there is no room for a via to the GND plane |
-| +3V3 pads | 0 | every +3V3 pad has a via to the In2 plane |
-| U18 PMU nets (PMU.Vsys, Vo/Va/Vb rails, LX2/LX3, SW, VBUS, VRTC, IRQ) | ~20 | QFN fan-out into the inductor/capacitor ring |
-| U7 (ESP32-S3) fan-out | ~40 | camera data/sync, Ethernet/LoRa SPI, SD card, flash, I2C, I2S, mics, USB D+/D- |
-| Other | a few | test pads, 7SEG.GRID1 |
+| RF feeds (/RF1, /RF1-ANT, /LORA1-ANT) | 8 | left for hand routing on purpose (50 ohm feeds) |
+| COM pads | 10 | around U18 (AXP2101) and U7, where there is no room for a via to the GND plane |
+| +3V3 pads | 1 | |
+| U18 PMU nets (PMU.Vsys 7, Vo/Va/Vb rails, LX2/LX3, SW, VBUS, VRTC, Vref, IRQ) | ~22 | QFN fan-out into the inductor/capacitor ring |
+| U7 (ESP32-S3) fan-out and others | ~41 | I2C, CHIP_PU, USB D+/D-, camera sync/MCLK/SDA, SD, Ethernet/LoRa SPI, I2S, mic |
+
+Copper in use: F.Cu 2.8 m of track, B.Cu 1.0 m, In2 1.1 m (428 segments), In1 none (solid GND plane), 540 vias.
 
 How it was routed: all signal tracks were stripped, U7 and U18 got 1 mm fan-out stubs, then the U7 nets were routed
-first and everything else after, followed by clean-up rounds (delete clearance errors, stitch COM pour islands to
-the GND plane, re-route).
+first and everything else after, followed by five clean-up rounds (delete clearance errors, stitch COM pour islands
+to the GND plane, re-route).
 
-Three versions of that run were compared, differing only in how freely signals may use In2 (the +3V3 plane):
+Three versions of that run were compared, differing only in how freely signals may use In2:
 
 | In2 cost vs outer layers | In2 track segments | Unconnected |
 |---|---|---|
-| 4x (last resort) - **this board** | 20 | 85 |
-| 1.3x | ~70 | 85 |
-| 0.8x (preferred) | ~430, about 1 m of track | 85 |
+| 4x (last resort), commit 163f930 | 20 | 85 |
+| 1.3x | ~70 | 84 |
+| 0.8x (preferred) - **this board** | 428, about 1.1 m of track | 82 |
 
-All three stop at 85, so the limit is not layer space. The stuck pads around U7 and U18 have no room for a 0.6 mm
-via next to them, so they cannot reach any other layer. The board keeps the 4x version because its +3V3 plane
-stays solid. Getting further needs one of: smaller vias (for example 0.45/0.2 mm) and 0.15 mm escape tracks,
-more room around U7 and U18 (spread their passives), or hand routing with KiCad's push-and-shove router.
+Using In2 gains only 3 connections, so layer space is not the main limit. The stuck pads around U7 and U18 have no
+room for a 0.6 mm via next to them, so they cannot reach any other layer. Getting further needs one of: smaller
+vias (for example 0.45/0.2 mm) and 0.15 mm escape tracks, more room around U7 and U18 (spread their passives), or
+hand routing with KiCad's push-and-shove router.
+
+Trade-off to check before fabrication: the In2 tracks cut slots in the +3V3 plane. DRC shows the plane still
+connects every +3V3 pad but one, but the narrow necks between slots have not been reviewed, and signals on F.Cu
+that cross a slot lose their return path on In2 (In1 GND is still solid underneath).
 
 ## Battery plan: LiFePO4 (proposal, not in the schematic yet)
 
