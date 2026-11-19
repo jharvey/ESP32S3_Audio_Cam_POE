@@ -78,41 +78,43 @@ They are DNP test points, so JLC places nothing on them.
 5. **JLC rotation.** The `JLCPCB Rotation Offset` fields are unchanged. Check the flipped parts (especially U1, D9
    and the mics) in JLC's placement preview.
 
-## Routing status (18 Nov 2026)
+## Routing status (19 Nov 2026)
 
-The board now uses In2 (the +3V3 plane layer) freely for signals. The grid router stops at **82 unconnected**
-items (DRC clean apart from the known ANT1/ANT3 pad overlap; schematic parity 0):
+The grid router now stops at **61 unconnected** items (was 82). DRC is clean apart from the known ANT1/ANT3 pad
+overlap; schematic parity 0. Via size is unchanged (0.6/0.3 mm) and tracks are 0.2/0.3 mm.
 
 | Group | Count | Notes |
 |---|---|---|
 | RF feeds (/RF1, /RF1-ANT, /LORA1-ANT) | 8 | left for hand routing on purpose (50 ohm feeds) |
-| COM pads | 10 | around U18 (AXP2101) and U7, where there is no room for a via to the GND plane |
-| +3V3 pads | 1 | |
-| U18 PMU nets (PMU.Vsys 7, Vo/Va/Vb rails, LX2/LX3, SW, VBUS, VRTC, Vref, IRQ) | ~22 | QFN fan-out into the inductor/capacitor ring |
-| U7 (ESP32-S3) fan-out and others | ~41 | I2C, CHIP_PU, USB D+/D-, camera sync/MCLK/SDA, SD, Ethernet/LoRa SPI, I2S, mic |
+| COM pads | 5 | |
+| U18 PMU nets (PMU.Vsys 2, Va1/Va3/Va4, Vb1/Vb2, LX3, SW, CHGLED) | 10 | |
+| U7 (ESP32-S3) and others | 38 | I2C.SCL 3, USB D+/D-, camera, flash QSPI, Ethernet SPI, speaker, single links |
 
-Copper in use: F.Cu 2.8 m of track, B.Cu 1.0 m, In2 1.1 m (428 segments), In1 none (solid GND plane), 540 vias.
+Copper in use: F.Cu 2.8 m of track, B.Cu 1.5 m, In2 (+3V3 plane) 1.1 m in 579 segments, In1 (GND plane) 0.5 m in
+158 segments, 635 vias.
 
-How it was routed: all signal tracks were stripped, U7 and U18 got 1 mm fan-out stubs, then the U7 nets were routed
-first and everything else after, followed by five clean-up rounds (delete clearance errors, stitch COM pour islands
-to the GND plane, re-route).
+What changed from the 82 board (commit 8e28288):
 
-Three versions of that run were compared, differing only in how freely signals may use In2:
+1. **Parts spaced out.** 43 small passives that sat 1.0-1.4 mm from the U7 and U18 pins were pushed straight out
+   to about 3 mm (parts behind them pushed along, no courtyard overlaps). They used to close the pin rows in.
+2. **Fan-out first, vias away from the chips.** Each U7/U18 signal pin gets a track that only runs outward to a
+   via at least 1.0 mm outside the pad row, with vias at least 1.25 mm apart. 75 of 89 pins escape this way before
+   anything else is routed.
+3. **Both inner layers open to signals** (In2 cost 0.8x, In1 1.0x of an outer layer).
+4. **Rip-up.** After every second clean-up round, each blocked connection is routed through existing tracks, the
+   tracks in the way are deleted and re-routed in the next round.
 
-| In2 cost vs outer layers | In2 track segments | Unconnected |
-|---|---|---|
-| 4x (last resort), commit 163f930 | 20 | 85 |
-| 1.3x | ~70 | 84 |
-| 0.8x (preferred) - **this board** | 428, about 1.1 m of track | 82 |
+A run with the vias 1.5 mm from the chips ended at 68, and further rip-up cycles on both runs stayed between 60
+and 68, so this method levels off at about 60.
 
-Using In2 gains only 3 connections, so layer space is not the main limit. The stuck pads around U7 and U18 have no
-room for a 0.6 mm via next to them, so they cannot reach any other layer. Getting further needs one of: smaller
-vias (for example 0.45/0.2 mm) and 0.15 mm escape tracks, more room around U7 and U18 (spread their passives), or
-hand routing with KiCad's push-and-shove router.
+Things to review on this board:
 
-Trade-off to check before fabrication: the In2 tracks cut slots in the +3V3 plane. DRC shows the plane still
-connects every +3V3 pad but one, but the narrow necks between slots have not been reviewed, and signals on F.Cu
-that cross a slot lose their return path on In2 (In1 GND is still solid underneath).
+- In1 is no longer a solid ground plane: 0.5 m of signal track cuts slots in it, some of them long (for example
+  across the top of the board and down the middle). Return paths for fast signals crossing those slots need a look.
+- In2 (+3V3) carries 1.1 m of signal track, so the +3V3 plane is cut up in the same way.
+- Short local links (decoupling capacitors, PMU inductor nodes) were routed after the fan-out and some go through
+  vias; they have not been checked one by one.
+- The moved passives are further from their chip pins than before (about 3 mm instead of 1-1.4 mm).
 
 ## Battery plan: LiFePO4 (proposal, not in the schematic yet)
 
