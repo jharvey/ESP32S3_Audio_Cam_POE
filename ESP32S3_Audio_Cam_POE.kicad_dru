@@ -5,3 +5,9 @@
 (rule "Test points: no courtyard check"
 	(condition "A.Reference == 'TP*' || B.Reference == 'TP*'")
 	(constraint courtyard_clearance (min -10mm)))
+
+# RF feeds are 0.38 mm microstrip (50 ohm over the In1 ground plane, 0.21 mm prepreg).
+# Keep the ground pour 0.4 mm away so the pour does not pull the impedance down.
+(rule "RF feeds: pour gap"
+	(condition "A.Type == 'Zone' && (B.NetName == '/RF1' || B.NetName == '/RF1-ANT' || B.NetName == '/LORA1' || B.NetName == '/LORA1-ANT')")
+	(constraint clearance (min 0.4mm)))

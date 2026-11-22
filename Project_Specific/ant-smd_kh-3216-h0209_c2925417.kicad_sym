@@ -523,24 +523,6 @@
 					)
 				)
 			)
-			(pin unspecified line
-				(at 2.54 -3.81 90)
-				(length 2.54)
-				(name "ANT"
-					(effects
-						(font
-							(size 0.0254 0.0254)
-						)
-					)
-				)
-				(number "3"
-					(effects
-						(font
-							(size 0.0254 0.0254)
-						)
-					)
-				)
-			)
 		)
 		(embedded_fonts no)
 	)

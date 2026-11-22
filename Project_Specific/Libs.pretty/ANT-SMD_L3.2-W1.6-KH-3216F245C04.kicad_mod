@@ -589,8 +589,8 @@
 		(uuid "0457a0b4-874b-4f09-8d24-f2a8d1dd90a9")
 	)
 	(pad "1" smd rect
-		(at -1.45 0.45)
-		(size 0.5 0.9)
+		(at -1.45 0)
+		(size 0.5 1.8)
 		(layers "F.Cu" "F.Mask" "F.Paste")
 		(uuid "2b0c4a2c-6bf8-423e-93c1-dba845379002")
 	)
@@ -599,12 +599,6 @@
 		(size 0.5 1.8)
 		(layers "F.Cu" "F.Mask" "F.Paste")
 		(uuid "15e5431e-6a16-4fc5-be6c-1cf9fb882b11")
-	)
-	(pad "3" smd rect
-		(at -1.45 -0.45)
-		(size 0.5 0.9)
-		(layers "F.Cu" "F.Mask" "F.Paste")
-		(uuid "931b611d-334b-4ddd-b9ab-d84807b2b768")
 	)
 	(embedded_fonts no)
 	(model "${KIPRJMOD}/JLCPCB-Kicad-Library/3dmodels/JLCPCB.3dshapes/ANT-SMD_L3.2-W1.6-KH-3216F245C04.step"

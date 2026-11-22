@@ -1463,24 +1463,6 @@
 						)
 					)
 				)
-				(pin unspecified line
-					(at 2.54 -3.81 90)
-					(length 2.54)
-					(name "ANT"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-				)
 			)
 			(embedded_fonts no)
 		)
@@ -1998,24 +1980,6 @@
 						)
 					)
 					(number "2"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at 2.54 -3.81 90)
-					(length 2.54)
-					(name "ANT"
-						(effects
-							(font
-								(size 0.0254 0.0254)
-							)
-						)
-					)
-					(number "3"
 						(effects
 							(font
 								(size 0.0254 0.0254)
@@ -48297,7 +48261,7 @@
 		)
 		(uuid "07f87311-54d0-4005-bc19-c98ca1b32f1b")
 	)
-	(label "LORA_CS"
+	(label "ETH.MOSI"
 		(at 182.88 170.18 0)
 		(effects
 			(font
@@ -48327,7 +48291,7 @@
 		)
 		(uuid "0cb01f3c-a42f-47d4-b556-b1c11f4ca411")
 	)
-	(label "LED.OTH"
+	(label "EXP.PWM12"
 		(at 88.9 289.56 0)
 		(effects
 			(font
@@ -48347,7 +48311,7 @@
 		)
 		(uuid "0dd238a0-cefb-4384-882a-5c9ec4bfce6a")
 	)
-	(label "CAM.D3"
+	(label "ETH.CS"
 		(at 248.92 187.96 0)
 		(effects
 			(font
@@ -48367,7 +48331,7 @@
 		)
 		(uuid "0e998db9-3f8b-4f26-aa4b-6d65f7c9426d")
 	)
-	(label "SD.MOSI"
+	(label "LORA_IRQ"
 		(at 182.88 157.48 0)
 		(effects
 			(font
@@ -48397,7 +48361,7 @@
 		)
 		(uuid "161fa174-b6a3-4d00-b87a-58b3c087bde4")
 	)
-	(label "FLOOR.1"
+	(label "ROOM.1"
 		(at 86.36 360.68 0)
 		(effects
 			(font
@@ -48437,7 +48401,7 @@
 		)
 		(uuid "1b83be17-e324-44c7-b5af-5112ab136c62")
 	)
-	(label "FLOOR.4"
+	(label "FLOOR.1"
 		(at 86.36 365.76 0)
 		(effects
 			(font
@@ -48457,7 +48421,7 @@
 		)
 		(uuid "1ce1b432-5b94-4b1b-abf9-db5f916c38bd")
 	)
-	(label "PWM.OE"
+	(label "ETH.RST_EXP"
 		(at 88.9 342.9 0)
 		(effects
 			(font
@@ -48507,7 +48471,7 @@
 		)
 		(uuid "2017ae08-40ba-482a-bc1e-699d1fe3c2c3")
 	)
-	(label "ETH.CS"
+	(label "SPK.DIN"
 		(at 182.88 177.8 0)
 		(effects
 			(font
@@ -48557,7 +48521,7 @@
 		)
 		(uuid "234cba06-ae92-4239-87ed-85ca4336c0c1")
 	)
-	(label "CAM.D6"
+	(label "CAM.D1"
 		(at 182.88 180.34 0)
 		(effects
 			(font
@@ -48587,7 +48551,7 @@
 		)
 		(uuid "24adf0af-1ab1-46b0-ba11-fa4d6b977200")
 	)
-	(label "SD.MISO"
+	(label "CAM.PCLK"
 		(at 182.88 152.4 0)
 		(effects
 			(font
@@ -48847,7 +48811,7 @@
 		)
 		(uuid "396e7017-8f0b-4e4f-957d-6674666c245f")
 	)
-	(label "ETH.MISO"
+	(label "ETH.SCLK"
 		(at 182.88 172.72 0)
 		(effects
 			(font
@@ -48867,7 +48831,7 @@
 		)
 		(uuid "39ee142e-082e-4310-bbfb-2b8593fd9d57")
 	)
-	(label "LED.WH"
+	(label "EXP.PWM14"
 		(at 88.9 284.48 0)
 		(effects
 			(font
@@ -48907,7 +48871,7 @@
 		)
 		(uuid "3cbee1ca-cbd8-4834-94fb-714adbdbb7b1")
 	)
-	(label "MISC.OUT3"
+	(label "EXP.PWM11"
 		(at 88.9 297.18 0)
 		(effects
 			(font
@@ -48927,7 +48891,7 @@
 		)
 		(uuid "405a1f24-943a-46d6-bfd4-7ac7166bcf0a")
 	)
-	(label "FLOOR.2"
+	(label "ROOM.4"
 		(at 86.36 363.22 0)
 		(effects
 			(font
@@ -48967,7 +48931,7 @@
 		)
 		(uuid "422d9238-6e08-46d4-94ec-f6b7ccb67674")
 	)
-	(label "MIC.CLK"
+	(label "CAM.D2"
 		(at 182.88 195.58 0)
 		(effects
 			(font
@@ -48997,7 +48961,7 @@
 		)
 		(uuid "45317817-995e-418d-a55a-e4c5011d3a62")
 	)
-	(label "ROOM.2"
+	(label "FLOOR.8"
 		(at 86.36 373.38 0)
 		(effects
 			(font
@@ -49057,7 +49021,7 @@
 		)
 		(uuid "4a0879b0-7360-42fc-bf0c-70fd365586e5")
 	)
-	(label "SD.CLK"
+	(label "CAM.D4"
 		(at 182.88 154.94 0)
 		(effects
 			(font
@@ -49097,7 +49061,7 @@
 		)
 		(uuid "4cbb6023-8770-4ebc-9859-1ce50e8d6fd1")
 	)
-	(label "ETH.INT_EXP"
+	(label "TM.CLK"
 		(at 88.9 353.06 0)
 		(effects
 			(font
@@ -49127,7 +49091,7 @@
 		)
 		(uuid "4e2fe3a3-1373-402e-aabb-51c577811f01")
 	)
-	(label "CAM.D5"
+	(label "CAM.SCL"
 		(at 248.92 177.8 0)
 		(effects
 			(font
@@ -49177,7 +49141,7 @@
 		)
 		(uuid "4fe8983a-4fd8-42e8-b88f-328141e46fc0")
 	)
-	(label "CAM.D4"
+	(label "SD.MISO"
 		(at 248.92 182.88 0)
 		(effects
 			(font
@@ -49187,7 +49151,7 @@
 		)
 		(uuid "5039c4ca-4179-4d30-99d0-077964638a53")
 	)
-	(label "TM.DIO"
+	(label "PMU.IRQ"
 		(at 88.9 340.36 0)
 		(effects
 			(font
@@ -49277,7 +49241,7 @@
 		)
 		(uuid "58282951-1189-428c-96ab-a3100c990c41")
 	)
-	(label "EXP.PWM14"
+	(label "LED.OTH"
 		(at 86.36 307.34 0)
 		(effects
 			(font
@@ -49467,7 +49431,7 @@
 		)
 		(uuid "65b8c55a-512e-4ca3-bce4-46059b34c755")
 	)
-	(label "CAM.D1"
+	(label "CAM.MCLK"
 		(at 248.92 195.58 0)
 		(effects
 			(font
@@ -49497,7 +49461,7 @@
 		)
 		(uuid "6977aa44-d01f-4641-b6d7-cfca36ba0620")
 	)
-	(label "FLOOR.8"
+	(label "FLOOR.4"
 		(at 86.36 368.3 0)
 		(effects
 			(font
@@ -49527,7 +49491,7 @@
 		)
 		(uuid "71668eb6-31ee-4c4b-9d4a-8785b703354b")
 	)
-	(label "CAM.HREF"
+	(label "CAM.D6"
 		(at 182.88 147.32 0)
 		(effects
 			(font
@@ -49618,7 +49582,7 @@
 		)
 		(uuid "79048059-f0fe-4465-a502-5ff2d0bc5932")
 	)
-	(label "RC.TILT"
+	(label "EXP.PWM15"
 		(at 88.9 276.86 0)
 		(effects
 			(font
@@ -49788,7 +49752,7 @@
 		)
 		(uuid "82909962-2a51-4411-9343-c80f0c7f7fb9")
 	)
-	(label "RC.ROT"
+	(label "RC.TILT"
 		(at 88.9 279.4 0)
 		(effects
 			(font
@@ -49808,7 +49772,7 @@
 		)
 		(uuid "85312bca-df3e-43ba-8dfd-e0efeee2ee38")
 	)
-	(label "EXP.PWM12"
+	(label "EXP.PWM13"
 		(at 86.36 302.26 0)
 		(effects
 			(font
@@ -49828,7 +49792,7 @@
 		)
 		(uuid "86e67afd-1cfd-4810-85f7-04123c0b0761")
 	)
-	(label "CAM.D0"
+	(label "SD.MOSI"
 		(at 248.92 185.42 0)
 		(effects
 			(font
@@ -49868,7 +49832,7 @@
 		)
 		(uuid "8c6d7745-76ae-4100-b95f-eef00c631886")
 	)
-	(label "LED.IR"
+	(label "RC.OTHR"
 		(at 88.9 287.02 0)
 		(effects
 			(font
@@ -50089,7 +50053,7 @@
 		)
 		(uuid "9fbcce7d-df33-422c-be2c-ebde27520459")
 	)
-	(label "TM.CLK"
+	(label "PWM.OE"
 		(at 88.9 337.82 0)
 		(effects
 			(font
@@ -50099,7 +50063,7 @@
 		)
 		(uuid "a067b2bc-bd2e-42b2-b8de-a4b1d5c50034")
 	)
-	(label "CAM.PWR"
+	(label "ETH.INT_EXP"
 		(at 88.9 345.44 0)
 		(effects
 			(font
@@ -50129,7 +50093,7 @@
 		)
 		(uuid "a28dd16a-1051-4c1e-895a-763f560336ff")
 	)
-	(label "SPK.DIN"
+	(label "CAM.D0"
 		(at 182.88 190.5 0)
 		(effects
 			(font
@@ -50139,7 +50103,7 @@
 		)
 		(uuid "a290ace9-07a8-47e7-90d8-e9485b25cc38")
 	)
-	(label "LORA_IRQ"
+	(label "ETH.MISO"
 		(at 182.88 167.64 0)
 		(effects
 			(font
@@ -50189,7 +50153,7 @@
 		)
 		(uuid "a9d44bdc-54ea-4e34-b664-012e9304246c")
 	)
-	(label "LORA_RST"
+	(label "CAM.PWR"
 		(at 88.9 347.98 0)
 		(effects
 			(font
@@ -50229,7 +50193,7 @@
 		)
 		(uuid "abb480cf-acb7-4aad-b1a1-87d6554b56b1")
 	)
-	(label "ROOM.1"
+	(label "FLOOR.2"
 		(at 86.36 370.84 0)
 		(effects
 			(font
@@ -50249,7 +50213,7 @@
 		)
 		(uuid "acb60bfe-cbab-4f2d-97aa-cb3ff7e26033")
 	)
-	(label "ETH.SCLK"
+	(label "LORA_CS"
 		(at 182.88 175.26 0)
 		(effects
 			(font
@@ -50289,7 +50253,7 @@
 		)
 		(uuid "b57626a0-1672-4301-bd82-60fe78b92645")
 	)
-	(label "EXP.PWM11"
+	(label "MISC.OUT3"
 		(at 86.36 299.72 0)
 		(effects
 			(font
@@ -50409,7 +50373,7 @@
 		)
 		(uuid "bda942b4-a1cb-4f7d-bac6-17b67eae3564")
 	)
-	(label "RC.OTHR"
+	(label "RC.ROT"
 		(at 88.9 281.94 0)
 		(effects
 			(font
@@ -50449,7 +50413,7 @@
 		)
 		(uuid "bf57b6a9-46a4-4466-8c6b-40817d5e7047")
 	)
-	(label "PMU.IRQ"
+	(label "LORA_RST"
 		(at 88.9 350.52 0)
 		(effects
 			(font
@@ -50489,7 +50453,7 @@
 		)
 		(uuid "c1a59785-fae4-49c6-b4f6-caea6551ada8")
 	)
-	(label "CAM.MCLK"
+	(label "CAM.D5"
 		(at 182.88 149.86 0)
 		(effects
 			(font
@@ -50579,7 +50543,7 @@
 		)
 		(uuid "cbd0adc1-8531-4021-8300-3e7cbb59ef90")
 	)
-	(label "EXP.PWM15"
+	(label "LED.IR"
 		(at 86.36 309.88 0)
 		(effects
 			(font
@@ -50589,7 +50553,7 @@
 		)
 		(uuid "cda537e5-1357-4862-a6c4-86112ab08c62")
 	)
-	(label "ROOM.4"
+	(label "ROOM.2"
 		(at 86.36 375.92 0)
 		(effects
 			(font
@@ -50609,7 +50573,7 @@
 		)
 		(uuid "cfb74be3-5864-4c0a-bf49-a7b766b7f664")
 	)
-	(label "CAM.PCLK"
+	(label "CAM.SDA"
 		(at 248.92 180.34 0)
 		(effects
 			(font
@@ -50649,7 +50613,7 @@
 		)
 		(uuid "d38f9078-25a6-4f85-97f8-eeda3eaaf22b")
 	)
-	(label "CAM.D7"
+	(label "CAM.D3"
 		(at 182.88 182.88 0)
 		(effects
 			(font
@@ -50749,7 +50713,7 @@
 		)
 		(uuid "de30623f-65ba-4b29-8ca1-3570e06bd7ba")
 	)
-	(label "EXP.PWM13"
+	(label "LED.WH"
 		(at 86.36 304.8 0)
 		(effects
 			(font
@@ -50839,7 +50803,7 @@
 		)
 		(uuid "e4a1c3c5-d804-4e53-9b63-e224e4d81b63")
 	)
-	(label "ETH.MOSI"
+	(label "MIC.CLK"
 		(at 182.88 165.1 0)
 		(effects
 			(font
@@ -50869,7 +50833,7 @@
 		)
 		(uuid "e7102bc2-88e1-4d96-b778-24f88a8f3ce8")
 	)
-	(label "CAM.D2"
+	(label "SD.CLK"
 		(at 248.92 198.12 0)
 		(effects
 			(font
@@ -50979,7 +50943,7 @@
 		)
 		(uuid "ef39e622-e41c-4411-a7a8-b7e26772c96c")
 	)
-	(label "CAM.SDA"
+	(label "CAM.D7"
 		(at 248.92 160.02 0)
 		(effects
 			(font
@@ -51039,7 +51003,7 @@
 		)
 		(uuid "f3b7b0e5-590e-4680-86ba-89fd5dde11bd")
 	)
-	(label "ETH.RST_EXP"
+	(label "TM.DIO"
 		(at 88.9 355.6 0)
 		(effects
 			(font
@@ -51049,7 +51013,7 @@
 		)
 		(uuid "f3d2baa0-b6f1-4488-a3ff-801587f52058")
 	)
-	(label "CAM.SCL"
+	(label "CAM.HREF"
 		(at 248.92 162.56 0)
 		(effects
 			(font
@@ -54467,9 +54431,6 @@
 		)
 		(pin "1"
 			(uuid "2128e988-278b-41b1-8227-6780e586402f")
-		)
-		(pin "3"
-			(uuid "2cfe3afd-c626-47c2-b6e6-7a713dd530f1")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"
@@ -71576,85 +71537,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:Earth")
-		(at 400.05 200.66 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "5f999020-df32-4661-b741-a03a9076b1f5")
-		(property "Reference" "#PWR0191"
-			(at 400.05 207.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 400.05 204.47 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 400.05 200.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 400.05 200.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 400.05 200.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b91329eb-4a9d-4d62-918f-3238a07efad6")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0191")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:VBUS")
 		(at 510.54 311.15 0)
 		(unit 1)
@@ -83670,85 +83552,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:Earth")
-		(at 158.75 121.92 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a4f6ae96-5e68-46ac-8290-8dacc99a1112")
-		(property "Reference" "#PWR0190"
-			(at 158.75 128.27 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 158.75 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 158.75 121.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 158.75 121.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 158.75 121.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "29183bc8-6e33-421c-a747-dd8fdaeb1be8")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0190")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Resistors:0402,33Ω")
 		(at 190.5 81.28 90)
 		(unit 1)
@@ -90081,9 +89884,6 @@
 		)
 		(pin "1"
 			(uuid "9a3fbdce-0c04-4c58-8043-e8b21cde257e")
-		)
-		(pin "3"
-			(uuid "a5936bc8-1805-49d5-8a62-7f69568eca71")
 		)
 		(pin "2"
 			(uuid "677a4d94-2a6a-45be-b9a0-19264900a295")

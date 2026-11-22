@@ -78,7 +78,130 @@ They are DNP test points, so JLC places nothing on them.
 5. **JLC rotation.** The `JLCPCB Rotation Offset` fields are unchanged. Check the flipped parts (especially U1, D9
    and the mics) in JLC's placement preview.
 
-## Routing status (20 Nov 2026)
+## RF layout and pin remap (22 Nov 2026)
+
+Done on the hand-placed board (commit 9f7a1d5). Nothing else is routed yet.
+
+### Antenna footprints were wrong
+
+Both antenna symbols had a third pin, wired to ground, whose pad shared the feed terminal of the part. Both parts
+have only two terminals (feed, and a far end that goes to ground through a tuning part), so the feed was shorted
+to ground. Pin 3 is removed from both symbols, and both footprints now have two full-width pads as in the
+datasheets (Docs/C2925417.pdf for ANT1, Docs/C5370061.pdf for ANT3).
+
+### ANT3 (915 MHz, H2U646MHLQ0200) and U19
+
+- Antenna on the right board edge, 0.3 mm in, feed end towards U19's antenna pin.
+- Keep-out (no pour, no vias, all four layers): 10 mm deep x 12.8 mm along the edge, as in the layout guide.
+- C106 (far-end tuning capacitor) at the top end of the antenna, its ground pad on the keep-out boundary.
+- Matching in line directly below the feed pad: C105 (shunt), R85 (series), C104 (shunt).
+- Feed about 14 mm long. C13 was nudged 0.4 mm to clear the keep-out.
+
+### ANT1 (2.4 GHz, KH-3216-H0209) and U7
+
+- ANT1 was parked in the top-left corner, about 85 mm from the ESP32's RF pin. It is now on the right board edge
+  between ANT3 and RST2, about 30 mm of feed from U7 pin 1.
+- Keep-out 5.0 mm deep x 5.9 mm along the edge (datasheet layout 1). R86 (far end to ground) at the top end.
+- C12 (shunt) and L3 (series) sit at U7 pin 1; C15 (shunt) sits at the antenna feed, just outside the keep-out.
+- C30, C23 and TST-R10 were moved 1.9-3.4 mm to make room for C12/L3 at the pin.
+- Not checked: the two keep-outs are 8.5 mm apart on the same edge, and ANT1's keep-out ends 0.7 mm above RST2.
+
+### Feeds
+
+- 0.38 mm track on F.Cu over the In1 ground plane (0.21 mm prepreg, er 4.5), calculated at about 50 ohm. Not
+  verified with the board house's impedance calculator.
+- A design rule keeps the ground pour 0.4 mm from the feeds so the pour does not lower the impedance.
+- 0.6/0.3 mm ground vias fence both feeds at 1.5 mm pitch wherever parts allow, and stitch the ground around both
+  keep-outs (54 vias).
+- The matching values are the schematic's; they need tuning on a network analyser on the real board.
+
+### Pin remap (schematic, board pad nets and firmware/src/board/Pins.h; no routing)
+
+Nets were re-assigned to pins so that the straight lines from each pin to the nearest pad of its net have the
+shortest total length, which removes crossings. Ratsnest crossings at each chip:
+
+| Chip | Before | After |
+|---|---|---|
+| U7 ESP32-S3 | 125 | 31 |
+| U20 PCA9685 | 6 | 0 |
+| U21 TCA9555 | 26 | 0 |
+
+Rules used: USB, flash, boot and crystal pins stay. U7 pins 12, 13 and 22 (wired straight to R99, R100, R96) and
+pins 49, 50 (I2C, wired straight to J3) stay; most of U7's remaining 31 crossings come from these. GPIO45 and
+GPIO46 (strapping pins) now carry only CAM.MCLK and SD.CLK, which the ESP32 alone drives; this also removes the
+old boot risk from camera D1/D2 on those pins. On U21 the control lines stay on port 0 and the floor/room
+switches on port 1, as the firmware expects.
+
+U7:
+
+| Pin | GPIO | Was | Now |
+|---|---|---|---|
+| 7 | GPIO2 | CAM.HREF | CAM.D6 |
+| 8 | GPIO3 | CAM.MCLK | CAM.D5 |
+| 9 | GPIO4 | SD.MISO | CAM.PCLK |
+| 10 | GPIO5 | SD.CLK | CAM.D4 |
+| 11 | GPIO6 | SD.MOSI | LORA_IRQ |
+| 14 | GPIO9 | ETH.MOSI | MIC.CLK |
+| 15 | GPIO10 | LORA_IRQ | ETH.MISO |
+| 16 | GPIO11 | LORA_CS | ETH.MOSI |
+| 17 | GPIO12 | ETH.MISO | ETH.SCLK |
+| 18 | GPIO13 | ETH.SCLK | LORA_CS |
+| 19 | GPIO14 | ETH.CS | SPK.DIN |
+| 21 | GPIO15 | MIC.CLK | CAM.D2 |
+| 23 | GPIO17 | CAM.D6 | CAM.D1 |
+| 24 | GPIO18 | CAM.D7 | CAM.D3 |
+| 27 | GPIO21 | SPK.DIN | CAM.D0 |
+| 36 | GPIO47 | CAM.SDA | CAM.D7 |
+| 37 | GPIO48 | CAM.SCL | CAM.HREF |
+| 43 | GPIO38 | CAM.D5 | CAM.SCL |
+| 44 | GPIO39 | CAM.PCLK | CAM.SDA |
+| 45 | GPIO40 | CAM.D4 | SD.MISO |
+| 47 | GPIO41 | CAM.D0 | SD.MOSI |
+| 48 | GPIO42 | CAM.D3 | ETH.CS |
+| 51 | GPIO45 | CAM.D1 | CAM.MCLK |
+| 52 | GPIO46 | CAM.D2 | SD.CLK |
+
+U20:
+
+| Pin | Output | Was | Now |
+|---|---|---|---|
+| 8 | LED2 | RC.TILT | EXP.PWM15 |
+| 9 | LED3 | RC.ROT | RC.TILT |
+| 10 | LED4 | RC.OTHR | RC.ROT |
+| 11 | LED5 | LED.WH | EXP.PWM14 |
+| 12 | LED6 | LED.IR | RC.OTHR |
+| 13 | LED7 | LED.OTH | EXP.PWM12 |
+| 17 | LED10 | MISC.OUT3 | EXP.PWM11 |
+| 18 | LED11 | EXP.PWM11 | MISC.OUT3 |
+| 19 | LED12 | EXP.PWM12 | EXP.PWM13 |
+| 20 | LED13 | EXP.PWM13 | LED.WH |
+| 21 | LED14 | EXP.PWM14 | LED.OTH |
+| 22 | LED15 | EXP.PWM15 | LED.IR |
+
+U21:
+
+| Pin | Port bit | Was | Now |
+|---|---|---|---|
+| 4 | P00 | TM.CLK | PWM.OE |
+| 5 | P01 | TM.DIO | PMU.IRQ |
+| 6 | P02 | PWM.OE | ETH.RST_EXP |
+| 7 | P03 | CAM.PWR | ETH.INT_EXP |
+| 8 | P04 | LORA_RST | CAM.PWR |
+| 9 | P05 | PMU.IRQ | LORA_RST |
+| 10 | P06 | ETH.INT_EXP | TM.CLK |
+| 11 | P07 | ETH.RST_EXP | TM.DIO |
+| 13 | P10 | FLOOR.1 | ROOM.1 |
+| 14 | P11 | FLOOR.2 | ROOM.4 |
+| 15 | P12 | FLOOR.4 | FLOOR.1 |
+| 16 | P13 | FLOOR.8 | FLOOR.4 |
+| 17 | P14 | ROOM.1 | FLOOR.2 |
+| 18 | P15 | ROOM.2 | FLOOR.8 |
+| 19 | P16 | ROOM.4 | ROOM.2 |
+
+The firmware pin map is updated to match but has not been compiled or run.
+
+## Earlier routing status (20 Nov 2026, superseded by the hand placement of 21 Nov)
+
 
 The grid router now stops at **50 unconnected** items (82 -> 61 -> 50). DRC is clean apart from the known
 ANT1/ANT3 pad overlap; schematic parity 0. Via size is unchanged (0.6/0.3 mm) and tracks are 0.2/0.3 mm.
