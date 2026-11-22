@@ -78,6 +78,47 @@ They are DNP test points, so JLC places nothing on them.
 5. **JLC rotation.** The `JLCPCB Rotation Offset` fields are unchanged. Check the flipped parts (especially U1, D9
    and the mics) in JLC's placement preview.
 
+## Camera bus, routed by hand (22 Nov 2026)
+
+The camera lines are drawn as a planned bus, not auto-routed. Everything else is still unrouted.
+
+**Why parts moved.** The series resistors sat in rows 0.5 mm apart (0.09 mm clearance for a trace between pads), and
+the passives around U7 were 0.4-1.3 mm from its pin rows. U7 is an ESP32-S3R8, so GPIO26 and GPIO33-37 (the side
+facing the camera) belong to the in-package PSRAM and cannot be used.
+
+**Pin assignment (U7).** Only six free pins can reach the camera on the top layer without crossing a fixed net.
+They carry MCLK (pin 27), D7 (36), HREF (37), VSYNC (43), SCL (44), SDA (45). The other eight lines use the top pin
+row: D2 (15), D1 (16), D3 (17), D0 (18), D4 (19), PCLK (21), D5 (23), D6 (24). The nets they displaced moved to
+freed pins: SD.MISO (6), SPK.DIN (7), ETH.MISO (8), ETH.MOSI (9), LORA_CS (10), ETH.SCLK (51, GPIO45).
+
+**Parts re-placed.**
+- R88-R95, R97, R98: one column at x = 96.25, rows 0.8 mm apart with wider gaps where a line passes straight through.
+- R19, R18, C21 (PWDN/RST parts), R17, R16 (I2C pull-ups), TST-R7/8/9 (moved below the bus to y = 111.5).
+- At U7: C24, C25, R96, C22 moved up and away from the top pin row; L2, TST-R5, C11 moved down 0.95 mm and J3 down
+  1.3 mm to open three trace lanes under the bottom pin row.
+
+**Routing.**
+- FPC1 to the resistor column: every line fans up at 45 degrees from the 0.5 mm pin pitch.
+- D0-D6 and PCLK drop to B.Cu through a via right after their resistor, run as one 8-trace bus at 0.4 mm pitch
+  (y 94.2-97.0), and come up in a single via row at y = 97.6, 3 mm above U7's top pins. The top pins fan out to that
+  row so each via sits at least 0.55 mm from its neighbours.
+- MCLK, D7 and HREF stay on F.Cu in the corridor above the camera regulators; VSYNC, SCL and SDA stay on F.Cu below them.
+- B.Cu runs over the +3V3 plane (In2); the "ESP32 3V3 island" zone was removed so the bus does not cross a plane split.
+- The fan-out stubs for the non-camera pins between the camera pins (USB D+/D-, MIC.SCK, the 3.3 V pin) are drawn too.
+
+| Net | Length | Vias |
+|---|---|---|
+| D0-D6 | 29.6-38.0 mm | 2 each |
+| PCLK | 37.4 mm | 2 |
+| D7, HREF | 23.6, 23.8 mm | 0 |
+| MCLK | 29.0 mm | 0 |
+| VSYNC, SCL, SDA | 26.3-29.7 mm | 0 |
+
+Data-to-clock length spread is about 14 mm (roughly 0.1 ns), not length-matched.
+
+Not done / to check: FPC1's power and ground pins (they leave to the left, under the connector); the pull-up rail
+Net-(R16-Pad1); /GPIO26 to TP15 (not usable on the R8 chip); pin map in Pins.h updated but not compiled.
+
 ## Zones (22 Nov 2026, before signal routing, for review)
 
 Already present: COM pour on F.Cu, B.Cu and In1 (ground plane), +3V3 plane on In2, both over the whole board.

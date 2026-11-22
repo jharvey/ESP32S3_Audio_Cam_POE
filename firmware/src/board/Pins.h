@@ -10,11 +10,11 @@ constexpr int I2C_SCL = 43;
 constexpr int I2C_SDA = 44;
 
 // Shared SPI: W5500 Ethernet (U9) and RFM95 LoRa (U19)
-constexpr int SPI_MOSI = 11;    // GPIO matrix
-constexpr int SPI_MISO = 10;
-constexpr int SPI_SCLK = 12;
+constexpr int SPI_MOSI = 4;     // GPIO matrix
+constexpr int SPI_MISO = 3;
+constexpr int SPI_SCLK = 45;   // strapping pin: driven only by the ESP32, no pull-up
 constexpr int ETH_CS = 42;
-constexpr int LORA_CS = 13;
+constexpr int LORA_CS = 5;
 constexpr int LORA_DIO0 = 6;   // LORA_IRQ
 
 // PDM microphones U16/U17 (L/R by JP7/JP8) on I2S0
@@ -24,25 +24,25 @@ constexpr int MIC_DATA = 7;
 // Speaker amp MAX98357A (U15) on I2S1
 constexpr int SPK_BCLK = 16;  // net /ESP.MIC.SCK (XTAL_32K_N, free: no 32 kHz crystal fitted)
 constexpr int SPK_WS = 8;     // net /ESP.I2S.WS
-constexpr int SPK_DOUT = 14;  // net /SPK.DIN
+constexpr int SPK_DOUT = 2;   // net /SPK.DIN
 
 // SD card, SDMMC 1-bit (DAT3 pulled up by R29, not on a GPIO)
 constexpr int SD_CLK = 46;   // strapping pin: driven only by the ESP32, no pull-up
 constexpr int SD_CMD = 41;
-constexpr int SD_D0 = 40;
+constexpr int SD_D0 = 1;
 
 // Camera (OV2640 / OV5640). No PWDN/RESET GPIOs; power via TCA9555 P03.
-constexpr int CAM_XCLK = 45;  // strapping pin: driven only by the ESP32, no pull-up
-constexpr int CAM_SIOD = 39;  // CAM.SDA
-constexpr int CAM_SIOC = 38;  // CAM.SCL
-constexpr int CAM_VSYNC = 1;
+constexpr int CAM_XCLK = 21;
+constexpr int CAM_SIOD = 40;  // CAM.SDA
+constexpr int CAM_SIOC = 39;  // CAM.SCL
+constexpr int CAM_VSYNC = 38;
 constexpr int CAM_HREF = 48;
-constexpr int CAM_PCLK = 4;
-constexpr int CAM_D0 = 21, CAM_D1 = 17, CAM_D2 = 15, CAM_D3 = 18;
-constexpr int CAM_D4 = 5, CAM_D5 = 3, CAM_D6 = 2, CAM_D7 = 47;
-// GPIO45 and GPIO46 are strapping pins. After the remap they carry CAM.MCLK and SD.CLK, which only the
+constexpr int CAM_PCLK = 15;
+constexpr int CAM_D0 = 13, CAM_D1 = 11, CAM_D2 = 10, CAM_D3 = 12;
+constexpr int CAM_D4 = 14, CAM_D5 = 17, CAM_D6 = 18, CAM_D7 = 47;
+// GPIO45 and GPIO46 are strapping pins. After the remap they carry ETH.SCLK and SD.CLK, which only the
 // ESP32 drives and which have no pull-ups, so nothing can hold them high during a reset.
-// GPIO3 (CAM.D5) is the JTAG-source strap; it is ignored unless the STRAP_JTAG_SEL eFuse is burned.
+// GPIO3 (ETH.MISO) is the JTAG-source strap; it is ignored unless the STRAP_JTAG_SEL eFuse is burned.
 
 // TCA9555 (U21) port bits
 namespace exp {

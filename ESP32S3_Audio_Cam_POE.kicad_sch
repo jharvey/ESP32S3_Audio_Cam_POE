@@ -48261,7 +48261,7 @@
 		)
 		(uuid "07f87311-54d0-4005-bc19-c98ca1b32f1b")
 	)
-	(label "ETH.MOSI"
+	(label "CAM.D1"
 		(at 182.88 170.18 0)
 		(effects
 			(font
@@ -48471,7 +48471,7 @@
 		)
 		(uuid "2017ae08-40ba-482a-bc1e-699d1fe3c2c3")
 	)
-	(label "SPK.DIN"
+	(label "CAM.D4"
 		(at 182.88 177.8 0)
 		(effects
 			(font
@@ -48521,7 +48521,7 @@
 		)
 		(uuid "234cba06-ae92-4239-87ed-85ca4336c0c1")
 	)
-	(label "CAM.D1"
+	(label "CAM.D5"
 		(at 182.88 180.34 0)
 		(effects
 			(font
@@ -48551,7 +48551,7 @@
 		)
 		(uuid "24adf0af-1ab1-46b0-ba11-fa4d6b977200")
 	)
-	(label "CAM.PCLK"
+	(label "ETH.MOSI"
 		(at 182.88 152.4 0)
 		(effects
 			(font
@@ -48601,7 +48601,7 @@
 		)
 		(uuid "2778c31f-7ff4-42ba-9a38-f8690d482a05")
 	)
-	(label "CAM.VSYNC"
+	(label "SD.MISO"
 		(at 182.88 144.78 0)
 		(effects
 			(font
@@ -48811,7 +48811,7 @@
 		)
 		(uuid "396e7017-8f0b-4e4f-957d-6674666c245f")
 	)
-	(label "ETH.SCLK"
+	(label "CAM.D3"
 		(at 182.88 172.72 0)
 		(effects
 			(font
@@ -48931,7 +48931,7 @@
 		)
 		(uuid "422d9238-6e08-46d4-94ec-f6b7ccb67674")
 	)
-	(label "CAM.D2"
+	(label "CAM.PCLK"
 		(at 182.88 195.58 0)
 		(effects
 			(font
@@ -49021,7 +49021,7 @@
 		)
 		(uuid "4a0879b0-7360-42fc-bf0c-70fd365586e5")
 	)
-	(label "CAM.D4"
+	(label "LORA_CS"
 		(at 182.88 154.94 0)
 		(effects
 			(font
@@ -49091,7 +49091,7 @@
 		)
 		(uuid "4e2fe3a3-1373-402e-aabb-51c577811f01")
 	)
-	(label "CAM.SCL"
+	(label "CAM.VSYNC"
 		(at 248.92 177.8 0)
 		(effects
 			(font
@@ -49141,7 +49141,7 @@
 		)
 		(uuid "4fe8983a-4fd8-42e8-b88f-328141e46fc0")
 	)
-	(label "SD.MISO"
+	(label "CAM.SDA"
 		(at 248.92 182.88 0)
 		(effects
 			(font
@@ -49431,7 +49431,7 @@
 		)
 		(uuid "65b8c55a-512e-4ca3-bce4-46059b34c755")
 	)
-	(label "CAM.MCLK"
+	(label "ETH.SCLK"
 		(at 248.92 195.58 0)
 		(effects
 			(font
@@ -49491,7 +49491,7 @@
 		)
 		(uuid "71668eb6-31ee-4c4b-9d4a-8785b703354b")
 	)
-	(label "CAM.D6"
+	(label "SPK.DIN"
 		(at 182.88 147.32 0)
 		(effects
 			(font
@@ -50093,7 +50093,7 @@
 		)
 		(uuid "a28dd16a-1051-4c1e-895a-763f560336ff")
 	)
-	(label "CAM.D0"
+	(label "CAM.MCLK"
 		(at 182.88 190.5 0)
 		(effects
 			(font
@@ -50103,7 +50103,7 @@
 		)
 		(uuid "a290ace9-07a8-47e7-90d8-e9485b25cc38")
 	)
-	(label "ETH.MISO"
+	(label "CAM.D2"
 		(at 182.88 167.64 0)
 		(effects
 			(font
@@ -50213,7 +50213,7 @@
 		)
 		(uuid "acb60bfe-cbab-4f2d-97aa-cb3ff7e26033")
 	)
-	(label "LORA_CS"
+	(label "CAM.D0"
 		(at 182.88 175.26 0)
 		(effects
 			(font
@@ -50453,7 +50453,7 @@
 		)
 		(uuid "c1a59785-fae4-49c6-b4f6-caea6551ada8")
 	)
-	(label "CAM.D5"
+	(label "ETH.MISO"
 		(at 182.88 149.86 0)
 		(effects
 			(font
@@ -50573,7 +50573,7 @@
 		)
 		(uuid "cfb74be3-5864-4c0a-bf49-a7b766b7f664")
 	)
-	(label "CAM.SDA"
+	(label "CAM.SCL"
 		(at 248.92 180.34 0)
 		(effects
 			(font
@@ -50613,7 +50613,7 @@
 		)
 		(uuid "d38f9078-25a6-4f85-97f8-eeda3eaaf22b")
 	)
-	(label "CAM.D3"
+	(label "CAM.D6"
 		(at 182.88 182.88 0)
 		(effects
 			(font
