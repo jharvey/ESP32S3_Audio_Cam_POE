@@ -78,6 +78,26 @@ They are DNP test points, so JLC places nothing on them.
 5. **JLC rotation.** The `JLCPCB Rotation Offset` fields are unchanged. Check the flipped parts (especially U1, D9
    and the mics) in JLC's placement preview.
 
+## W5500 pairs and USB D+/D-, routed by hand (22 Nov 2026)
+
+**W5500 to transformer.** U9 has RX above TX on its pins and T1 has TX above RX, so the pairs must cross.
+- RX stays on F.Cu: U9 pins 6/5 to R49/R48 and on through C51/C50 to T1 pins 6/8. RX- runs down a 0.2 mm lane
+  between U9's pin ends and R49, then under C53.
+- TX leaves U9 pins 2/1 inward, drops through two vias under the chip, runs as a pair on B.Cu and comes up in vias
+  beside R46 and R44, 1.5 mm from T1 pins 1/3. No parts were moved for this.
+- Both centre-tap nodes are connected. The TX one (R45 to C52/T1 pin 2) runs over the top of R46 and reaches T1
+  pin 2 from under the transformer, because C52's ground pad blocks the direct path.
+- The +3V3A island on In2 was widened to x = 95.3 so the B.Cu pair stays over one plane.
+- To keep 1.75 mm between that centre-tap track and the cable side, the three line-side verticals under T1 moved
+  0.6 mm right (x = 99.4, 99.8, 100.2), and one Bob Smith via moved to the right of R60.
+
+**USB.** ESP32 pins 26/25 to U3, R11/R10 and J1, all on F.Cu over the In1 ground plane, no vias, 0.2 mm tracks with
+0.2 mm gap. The pair runs up the left side of the LoRa module, across above it at y = 75, up at x = 135 and into
+U3 from below. D+ goes to U3 pin 4 and on from pin 3 over the top of U3 to R11. D- goes up a 0.6 mm slot between
+TST-R3 and D1 to U3 pin 6 and R10. The two pins of each line on U3 are linked under the part. At J1 the four
+D+/D- contacts are joined around the ends of the pads. One ground stitching via (139.2, 69.8) was removed to let
+the pair turn. The ESP32-S3's USB is full-speed (12 Mbit/s); the pair is about 60 mm long and not length-tuned.
+
 ## Ethernet / PoE line side, routed by hand (22 Nov 2026)
 
 Everything inside the PoE isolation area is routed. The W5500 side of the transformer is not (see the end).
@@ -96,9 +116,7 @@ Everything inside the PoE isolation area is routed. The W5500 side of the transf
 - **Unused transformer taps** (T1 pins 12, 13) go to their bottom test points with a via in each test point.
 - The isolation outline gained the strip between T1's underside and the RJ45 pins (96.2-98.6 x 144.6-148.9).
 
-Not routed yet, and why: on the W5500 side the TX and RX pairs cross. U9 has RX above TX (pins 5/6 above 1/2) and
-T1 has TX above RX, and the termination parts (R48, R49, C53, R45) leave a 1.5 mm gap beside U9's pins, which is not
-enough for a pair to change layer there. It needs R45, R48, R49 and C53 moved 1-2 mm and one pair on B.Cu.
+The W5500 side is described in the section above.
 
 ## Camera bus, routed by hand (22 Nov 2026)
 
