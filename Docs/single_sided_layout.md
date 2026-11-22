@@ -78,6 +78,24 @@ They are DNP test points, so JLC places nothing on them.
 5. **JLC rotation.** The `JLCPCB Rotation Offset` fields are unchanged. Check the flipped parts (especially U1, D9
    and the mics) in JLC's placement preview.
 
+## Rest of the PoE / Ethernet area (22 Nov 2026)
+
+The short local nets were routed with the zone-aware grid router, restricted to these nets only: W5500 crystal,
+LED resistors, EXRES, 1V2/TOCAP capacitors, the series resistors on its SPI/INT/RST pins, its test points, every
++3V3A pad (each drops a via into the +3V3A island on In2), and the PoE module's 5 V output (/POE_5V, D11 to
+TST-R25). 52 of 56 connections routed; no new DRC errors; none of the hand-routed tracks was touched.
+
+Left open on purpose (all four are links to bottom-side test points):
+- Net-(T1-Pad4), Net-(T1-Pad5) to TP61/TP60: these test points sit under the transformer, 1 mm from the
+  cable-side tracks, so a via there would break the isolation distance.
+- Net-(TP37-Pad1) (U9 pin 40 to TP37) and Net-(U14-ADJ) to TP65: no room for a via beside the pin; TP65 also
+  already clashes with BT1's bottom pad.
+
+Still unrouted in this area because they belong to board-wide nets: the ESP32-side SPI lines (ETH.SCLK, MOSI, MISO,
+CS, INT, RST from R22-R27 to U7/U21), COM pads, +3V3, VBUS and Vdrive.
+
+Board totals now: 434 unconnected items; 0.78 m of track on F.Cu, 0.36 m on B.Cu, none on In1 or In2; 117 vias.
+
 ## W5500 pairs and USB D+/D-, routed by hand (22 Nov 2026)
 
 **W5500 to transformer.** U9 has RX above TX on its pins and T1 has TX above RX, so the pairs must cross.
