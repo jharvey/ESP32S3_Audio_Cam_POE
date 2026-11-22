@@ -78,6 +78,20 @@ They are DNP test points, so JLC places nothing on them.
 5. **JLC rotation.** The `JLCPCB Rotation Offset` fields are unchanged. Check the flipped parts (especially U1, D9
    and the mics) in JLC's placement preview.
 
+## RF and U20 update (22 Nov 2026, later)
+
+After the right-edge parts were moved down (commit 66f6d82):
+
+- **ANT1** now sits on the right edge below RST2, level with U7 pin 1. Keep-out 145-150 x 106.0-111.9 mm, feed pad
+  at the top end, R86 at the bottom end. The feed is one straight 20.7 mm run along y = 107.1 from L3 to the
+  antenna, with C15 on it just outside the keep-out and fence vias on both sides. This replaces the ANT1 position
+  and feed described in the next section. ANT3 and its feed are unchanged.
+- **U20/U21 remap.** Letting signals change chip was tried for the plain on/off outputs (RC.PWR, MISC.OUT1-3,
+  CAM.PWR, LORA_RST, ETH.RST): it left 1 crossing, against 0 when every signal stays on its own chip, so nothing
+  changed chip. U21 is unchanged. U20 outputs are now: LED0 EXP.PWM15, LED1 RC.PAN, LED2 RC.TILT, LED3 EXP.PWM14,
+  LED4 RC.ROT, LED5 RC.OTHR, LED6 EXP.PWM12, LED7 EXP.PWM11, LED8-10 MISC.OUT1-3, LED11 LED.WH, LED12 LED.OTH,
+  LED13 EXP.PWM13, LED14 LED.IR, LED15 RC.PWR. This replaces the U20 table below. Pins.h is updated, not compiled.
+
 ## RF layout and pin remap (22 Nov 2026)
 
 Done on the hand-placed board (commit 9f7a1d5). Nothing else is routed yet.

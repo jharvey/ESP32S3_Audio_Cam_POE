@@ -48291,7 +48291,7 @@
 		)
 		(uuid "0cb01f3c-a42f-47d4-b556-b1c11f4ca411")
 	)
-	(label "EXP.PWM12"
+	(label "EXP.PWM11"
 		(at 88.9 289.56 0)
 		(effects
 			(font
@@ -48571,7 +48571,7 @@
 		)
 		(uuid "2671cc6f-7f54-4f46-a6de-f0b831bb124f")
 	)
-	(label "RC.PWR"
+	(label "EXP.PWM15"
 		(at 88.9 271.78 0)
 		(effects
 			(font
@@ -48831,7 +48831,7 @@
 		)
 		(uuid "39ee142e-082e-4310-bbfb-2b8593fd9d57")
 	)
-	(label "EXP.PWM14"
+	(label "RC.OTHR"
 		(at 88.9 284.48 0)
 		(effects
 			(font
@@ -48871,7 +48871,7 @@
 		)
 		(uuid "3cbee1ca-cbd8-4834-94fb-714adbdbb7b1")
 	)
-	(label "EXP.PWM11"
+	(label "MISC.OUT3"
 		(at 88.9 297.18 0)
 		(effects
 			(font
@@ -49241,7 +49241,7 @@
 		)
 		(uuid "58282951-1189-428c-96ab-a3100c990c41")
 	)
-	(label "LED.OTH"
+	(label "LED.IR"
 		(at 86.36 307.34 0)
 		(effects
 			(font
@@ -49582,7 +49582,7 @@
 		)
 		(uuid "79048059-f0fe-4465-a502-5ff2d0bc5932")
 	)
-	(label "EXP.PWM15"
+	(label "RC.TILT"
 		(at 88.9 276.86 0)
 		(effects
 			(font
@@ -49752,7 +49752,7 @@
 		)
 		(uuid "82909962-2a51-4411-9343-c80f0c7f7fb9")
 	)
-	(label "RC.TILT"
+	(label "EXP.PWM14"
 		(at 88.9 279.4 0)
 		(effects
 			(font
@@ -49772,7 +49772,7 @@
 		)
 		(uuid "85312bca-df3e-43ba-8dfd-e0efeee2ee38")
 	)
-	(label "EXP.PWM13"
+	(label "LED.OTH"
 		(at 86.36 302.26 0)
 		(effects
 			(font
@@ -49832,7 +49832,7 @@
 		)
 		(uuid "8c6d7745-76ae-4100-b95f-eef00c631886")
 	)
-	(label "RC.OTHR"
+	(label "EXP.PWM12"
 		(at 88.9 287.02 0)
 		(effects
 			(font
@@ -50253,7 +50253,7 @@
 		)
 		(uuid "b57626a0-1672-4301-bd82-60fe78b92645")
 	)
-	(label "MISC.OUT3"
+	(label "LED.WH"
 		(at 86.36 299.72 0)
 		(effects
 			(font
@@ -50543,7 +50543,7 @@
 		)
 		(uuid "cbd0adc1-8531-4021-8300-3e7cbb59ef90")
 	)
-	(label "LED.IR"
+	(label "RC.PWR"
 		(at 86.36 309.88 0)
 		(effects
 			(font
@@ -50713,7 +50713,7 @@
 		)
 		(uuid "de30623f-65ba-4b29-8ca1-3570e06bd7ba")
 	)
-	(label "LED.WH"
+	(label "EXP.PWM13"
 		(at 86.36 304.8 0)
 		(effects
 			(font

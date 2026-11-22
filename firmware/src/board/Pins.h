@@ -61,11 +61,11 @@ constexpr int FLOOR_2 = 12, FLOOR_8 = 13, ROOM_2 = 14, ROOM_8 = 15;  // P14..P17
 
 // PCA9685 (U20) channels, open-drain (MODE2.OUTDRV = 0)
 namespace pwm {
-constexpr int RC_PWR = 0;                                          // servo 5 V switch (Q2), low = on
-constexpr int RC_PAN = 1, RC_TILT = 3, RC_ROT = 4, RC_OTHER = 6;  // servo signals, 4.7k pull-ups
-constexpr int LED_WHITE = 13, LED_IR = 15, LED_OTHER = 14;          // lamp P-FETs, low = on
-constexpr int MISC1 = 8, MISC2 = 9, MISC3 = 11;                    // MISC.OUT P-FETs (laser on one of these)
-constexpr int EXP11 = 10, EXP12 = 7, EXP13 = 12, EXP14 = 5, EXP15 = 2;  // spare outputs on the expansion header
+constexpr int RC_PWR = 15;                                         // servo 5 V switch (Q2), low = on
+constexpr int RC_PAN = 1, RC_TILT = 2, RC_ROT = 4, RC_OTHER = 5;  // servo signals, 4.7k pull-ups
+constexpr int LED_WHITE = 11, LED_IR = 14, LED_OTHER = 12;          // lamp P-FETs, low = on
+constexpr int MISC1 = 8, MISC2 = 9, MISC3 = 10;                    // MISC.OUT P-FETs (laser on one of these)
+constexpr int EXP11 = 7, EXP12 = 6, EXP13 = 13, EXP14 = 3, EXP15 = 0;  // spare outputs on the expansion header
 }  // namespace pwm
 
 }  // namespace pins
