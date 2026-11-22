@@ -78,6 +78,36 @@ They are DNP test points, so JLC places nothing on them.
 5. **JLC rotation.** The `JLCPCB Rotation Offset` fields are unchanged. Check the flipped parts (especially U1, D9
    and the mics) in JLC's placement preview.
 
+## Zones (22 Nov 2026, before signal routing, for review)
+
+Already present: COM pour on F.Cu, B.Cu and In1 (ground plane), +3V3 plane on In2, both over the whole board.
+
+Added:
+
+| Zone | Layers | Outline (mm) | Purpose |
+|---|---|---|---|
+| PoE isolation (rule area, no pour; tracks, vias and pads allowed) | F.Cu, In1, In2, B.Cu | 14-point outline: under the cable side of T1 from x 98.6, right to 129.2 (just past U14 pins 5-8), down to the board edge, left to J9 and the Bob Smith parts (to x 85.0) | keeps the ground and +3V3 planes out from under the line side |
+| Vsys island, net /PMU.Vsys | In2 | 64-80 x 146-158 | all 17 Vsys pads sit above it |
+| 3V3A island, net +3V3A | In2 | 73-94 x 132.5-143.5 | all 13 +3V3A pads (W5500) sit above it |
+| ESP32 3V3 island, net Net-(U7-VDD3P3_RTC) | In2 | 117-129 x 97-110 | all 11 pads of the ESP32's filtered 3.3 V rail sit above it |
+
+The islands have priority 2 over the +3V3 plane (priority 1) and are not connected to anything until routing adds
+vias, so DRC lists them as isolated copper for now (16 notes). No +3V3 pad that needs the plane lies inside an island
+except one at U7.
+
+Line-side nets (inside the cut-out): /W_TD_P, /W_TD_N, /W_RD_P, /W_RD_N, /W_VP, /W_VN, /W_TXCM, /W_RXCM,
+Net-(C65-Pad2), Net-(C68-Pad1), Net-(D5-+), Net-(D5--), /FGND1.
+
+Open points found while drawing the cut-out:
+
+- C61, C64, D11 and TST-R25 (the PoE module's 5 V output parts, nets /POE_5V, COM, VBUS) sit inside the line side,
+  between D6 and U14 pins 7/8, about 1 mm from Net-(D5--). They belong on the output side of U14 (pins 1/2, x = 140).
+- C59, C60, C62, C63 (100 nF) connect /FGND1 to COM, and C68 (100 nF) connects the Bob Smith node to COM. These
+  bridge the isolation barrier, so they need a voltage rating to match (typically 2 kV parts); the BOM values were
+  not checked.
+- BT1's B.Cu pad for Net-(J14-Pin_1) and two bottom test points lie under T1 inside the cut-out.
+- /FGND1 has no pour of its own; a small frame-ground pour around J9 could be added.
+
 ## RF and U20 update (22 Nov 2026, later)
 
 After the right-edge parts were moved down (commit 66f6d82):
