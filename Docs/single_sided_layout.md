@@ -78,6 +78,30 @@ They are DNP test points, so JLC places nothing on them.
 5. **JLC rotation.** The `JLCPCB Rotation Offset` fields are unchanged. Check the flipped parts (especially U1, D9
    and the mics) in JLC's placement preview.
 
+## USB stitching, Ethernet SPI, U20 and U21 (22 Nov 2026)
+
+- **USB stitching vias.** 27 ground vias (0.6/0.3 mm) along both sides of the D+/D- pair at about 2.5 mm pitch,
+  0.95 mm or more from the pair centre, placed wherever pads, tracks and keep-outs allow.
+- **Ethernet SPI and control lines** (zone-aware router, these nets only): ETH.SCLK, ETH.CS, ETH.INT_EXP and
+  ETH.RST_EXP are complete; ETH.MOSI and ETH.MISO reach the LoRa module and the W5500 resistors but not U7 pins
+  9 and 8 (see below).
+- **U20 and U21** (router restricted to connections touching these two chips, including their supply and ground
+  pins): 42 of 46 connections.
+- The router was not allowed to delete any hand-routed net; all of them are still complete and DRC shows no new errors.
+
+Open after this step:
+
+| Net | Where it stops | Why |
+|---|---|---|
+| ETH.MOSI, ETH.MISO | U7 pins 9, 8 (right side) | R99, R100, C30, C23 sit 1.4 mm from the pins; needs a hand fan-out like the top row |
+| FLOOR.1, FLOOR.2, FLOOR.8 | SW1 to U21 pins 13-18 | not analysed yet |
+| PMU.IRQ | U21 pin 5 to U18 pin 14 | 60 mm run across the board; search limit reached |
+| +3V3 | one pad at U20/U21 | no free spot for a plane via beside it |
+
+Note: this step put 0.12 m of signal track on In2 (the +3V3 plane layer) in 32 segments. In1 is still untouched.
+
+Board totals now: 393 unconnected items; F.Cu 1.20 m, B.Cu 0.71 m, In2 0.12 m, In1 none; 193 vias.
+
 ## Rest of the PoE / Ethernet area (22 Nov 2026)
 
 The short local nets were routed with the zone-aware grid router, restricted to these nets only: W5500 crystal,
