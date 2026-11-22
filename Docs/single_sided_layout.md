@@ -78,6 +78,28 @@ They are DNP test points, so JLC places nothing on them.
 5. **JLC rotation.** The `JLCPCB Rotation Offset` fields are unchanged. Check the flipped parts (especially U1, D9
    and the mics) in JLC's placement preview.
 
+## Ethernet / PoE line side, routed by hand (22 Nov 2026)
+
+Everything inside the PoE isolation area is routed. The W5500 side of the transformer is not (see the end).
+
+- **Data pairs.** Each pair leaves T1's cable-side pads inward, runs under the transformer and drops straight onto
+  the RJ45 pins: TD+/TD- to pins 1/2, RD+ to pin 3, RD- to pin 6. No vias. Going around the outside of T1 would
+  have crossed the pairs, because T1's pin order is the reverse of the RJ45's. The verticals stay 1.5 mm from T1's
+  W5500-side pads. There is no plane under these pairs (the isolation area has none), so they are not
+  impedance-controlled; the runs are 17-21 mm.
+- **Centre taps** (TXCM, RXCM) to bridge D6 on F.Cu, 0.3 mm.
+- **Spare pairs** (VP on pins 4/5, VN on pins 7/8) join at the RJ45, pick up R60/R59, then go to bridge D5 on B.Cu
+  (0.4 mm) through one via at each end, because pins 4/5 sit between the RD+ and RD- drops.
+- **Bob Smith node** (R59, R60 to C65, R61, R62) on B.Cu, passing above the RJ45's locating-peg cut-out.
+- **Rectifier outputs** D5/D6/D7/C107 to U14 pins 5-8: 0.5 mm tracks on F.Cu, no vias.
+- **Frame ground:** the two RJ45 shield tabs are joined on B.Cu; C59/C60/C62/C63/C65 connect to the tabs.
+- **Unused transformer taps** (T1 pins 12, 13) go to their bottom test points with a via in each test point.
+- The isolation outline gained the strip between T1's underside and the RJ45 pins (96.2-98.6 x 144.6-148.9).
+
+Not routed yet, and why: on the W5500 side the TX and RX pairs cross. U9 has RX above TX (pins 5/6 above 1/2) and
+T1 has TX above RX, and the termination parts (R48, R49, C53, R45) leave a 1.5 mm gap beside U9's pins, which is not
+enough for a pair to change layer there. It needs R45, R48, R49 and C53 moved 1-2 mm and one pair on B.Cu.
+
 ## Camera bus, routed by hand (22 Nov 2026)
 
 The camera lines are drawn as a planned bus, not auto-routed. Everything else is still unrouted.
