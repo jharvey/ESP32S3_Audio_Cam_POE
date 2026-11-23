@@ -70,6 +70,19 @@ D16-D18 then became green 0805s: `tools\pcb_misc_led_green.py` swaps the footpri
 (they ran between the old IR pads) below the LEDs, and adds a ground via at the D16/D18 cathodes. On a routed copy it
 warns if those two tracks are routed differently. Left: a thermal-spoke warning on J18 pin 2.
 
+## Protected outputs and rotary switches removed, 23 Nov 2026
+
+The seven P-FET output switches (Q2 servo power, Q3 white, Q4 IR, Q5 J11, Q6-Q8 MISC1-3) are now SY6288AAAC
+current-limited power switches (SOT-23-5, C111829): 0.6 A, limit 0.8-1.6 A, thermal shutdown, soft start,
+EN active high with a 100 kOhm pull-down (off at power-up with no firmware), OCB fault flag. The old gate-source
+resistors are the EN pull-downs (now 100 kOhm, to COM through the old 0-ohm links TST-R17/22/23/24/30/31/32, whose
+supply end is now COM); the gate series resistors are 1 kOhm. SW1/SW2 (rotary switches) are gone; U21 P10-P16 are
+the fault lines /FLT.WH, /FLT.IR, /FLT.OTH, /FLT.M1, /FLT.M2, /FLT.M3, /FLT.RC (TCA9555 internal pull-ups), P17 is
+spare (/EXP.P17). Scripts: tools/sch_protected_outputs.py (done), tools/pcb_protected_outputs.py and
+tools/pcb_drop_drc_conflicts.py (re-run on a routed copy). After this: unconnected 115 (was 74); new DRC items
+only three thermal-spoke warnings on the grounded 0-ohm links. Needs routing: each switch's IN (Vdrive), GND,
+OUT, EN, and the seven fault lines to U21.
+
 ## Open, needs hand work
 - New front-panel buttons PB6-PB12 and their 1 kΩ resistors R109-R115 (commit 73bbe0d): 21 short connections
   near the display (K1/K2, BTNn, SEGn), plus CHIP_BOOT under PB8 (two router segments removed). Not routed yet.

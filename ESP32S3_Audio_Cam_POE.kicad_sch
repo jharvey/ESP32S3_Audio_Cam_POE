@@ -10,6 +10,27 @@
 		(rev "R0.1")
 	)
 	(lib_symbols
+		(symbol "Project:SY6288"
+			(pin_names (offset 0.254))
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U" (at 1.27 6.985 0) (effects (font (size 1.27 1.27))))
+			(property "Value" "SY6288" (at 1.27 -6.985 0) (effects (font (size 1.27 1.27))))
+			(property "Footprint" "" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))
+			(property "Datasheet" "" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))
+			(property "Description" "Current-limited power distribution switch, EN, open-drain fault flag OCB" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))
+			(symbol "SY6288_0_1"
+				(rectangle (start -2.54 3.81) (end 5.08 -3.81) (stroke (width 0.254) (type default)) (fill (type background)))
+			)
+			(symbol "SY6288_1_1"
+				(pin input line (at -5.08 0 0) (length 2.54) (name "EN" (effects (font (size 0.762 0.762)))) (number "4" (effects (font (size 0.762 0.762)))))
+				(pin open_collector line (at -5.08 2.54 0) (length 2.54) (name "OCB" (effects (font (size 0.762 0.762)))) (number "3" (effects (font (size 0.762 0.762)))))
+				(pin power_out line (at 2.54 5.08 270) (length 1.27) (name "OUT" (effects (font (size 0.762 0.762)))) (number "1" (effects (font (size 0.762 0.762)))))
+				(pin power_in line (at 7.62 2.54 180) (length 2.54) (name "IN" (effects (font (size 0.762 0.762)))) (number "5" (effects (font (size 0.762 0.762)))))
+				(pin power_in line (at 7.62 -2.54 180) (length 2.54) (name "GND" (effects (font (size 0.762 0.762)))) (number "2" (effects (font (size 0.762 0.762)))))
+			)
+		)
 		(symbol "JLCPCB-Resistors:0402,1kΩ"
 		(pin_numbers hide)
 		(pin_names
@@ -48626,7 +48647,7 @@
 		)
 		(uuid "161fa174-b6a3-4d00-b87a-58b3c087bde4")
 	)
-	(label "ROOM.1"
+	(label "FLT.WH"
 		(at 86.36 360.68 0)
 		(effects
 			(font
@@ -48646,16 +48667,6 @@
 		)
 		(uuid "17078e1d-bd2a-4c7c-8057-858a0343bad2")
 	)
-	(label "ROOM.2"
-		(at 116.84 388.62 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "19cdd213-91c4-4b7c-a6b3-77119f2f2bf4")
-	)
 	(label "W_RD_OUT_P"
 		(at 447.04 38.1 180)
 		(effects
@@ -48666,7 +48677,7 @@
 		)
 		(uuid "1b83be17-e324-44c7-b5af-5112ab136c62")
 	)
-	(label "FLOOR.1"
+	(label "FLT.OTH"
 		(at 86.36 365.76 0)
 		(effects
 			(font
@@ -49016,16 +49027,6 @@
 		)
 		(uuid "338b51d2-9f19-48b1-a67f-dd003fbac36c")
 	)
-	(label "ROOM.4"
-		(at 116.84 391.16 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "3421d150-7224-4de6-ba8b-551a82d5cd2d")
-	)
 	(label "SD.CS"
 		(at 341.63 137.16 0)
 		(effects
@@ -49156,7 +49157,7 @@
 		)
 		(uuid "405a1f24-943a-46d6-bfd4-7ac7166bcf0a")
 	)
-	(label "ROOM.4"
+	(label "FLT.IR"
 		(at 86.36 363.22 0)
 		(effects
 			(font
@@ -49226,7 +49227,7 @@
 		)
 		(uuid "45317817-995e-418d-a55a-e4c5011d3a62")
 	)
-	(label "FLOOR.8"
+	(label "FLT.M3"
 		(at 86.36 373.38 0)
 		(effects
 			(font
@@ -49235,16 +49236,6 @@
 			(justify left bottom)
 		)
 		(uuid "45c1f2e1-ca06-4bfd-83c0-8572419a0924")
-	)
-	(label "FLOOR.4"
-		(at 116.84 368.3 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "4604b86f-57ef-4bf5-860b-a4c3d18e663b")
 	)
 	(label "I2C.SCL"
 		(at 500.38 290.83 0)
@@ -49295,16 +49286,6 @@
 			(justify left bottom)
 		)
 		(uuid "4a62b812-5695-4b7f-96ee-bfc690586a5d")
-	)
-	(label "ROOM.8"
-		(at 116.84 393.7 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "4b1125cc-cb70-4fb7-9871-197540f5a714")
 	)
 	(label "ETH.SCLK"
 		(at 323.85 190.5 0)
@@ -49726,7 +49707,7 @@
 		)
 		(uuid "6977aa44-d01f-4641-b6d7-cfca36ba0620")
 	)
-	(label "FLOOR.4"
+	(label "FLT.M1"
 		(at 86.36 368.3 0)
 		(effects
 			(font
@@ -49897,16 +49878,6 @@
 		)
 		(uuid "7b2bfa14-1426-4933-a081-3f1e81376895")
 	)
-	(label "ROOM.1"
-		(at 116.84 386.08 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "7ba42dcb-06e4-4cd9-9c64-11fc18376fd7")
-	)
 	(label "W_VP"
 		(at 388.62 76.2 0)
 		(effects
@@ -49946,16 +49917,6 @@
 			(justify right bottom)
 		)
 		(uuid "7e89fed9-a7ee-4160-9c0a-a566587ac70b")
-	)
-	(label "FLOOR.8"
-		(at 116.84 370.84 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "80d4b40d-65ff-4d99-889d-d169285367df")
 	)
 	(label "CAM.D1"
 		(at 179.07 78.74 0)
@@ -50177,7 +50138,7 @@
 		)
 		(uuid "92fa1af2-57e3-4209-990d-809703c8c194")
 	)
-	(label "ROOM.8"
+	(label "EXP.P17"
 		(at 86.36 378.46 0)
 		(effects
 			(font
@@ -50458,7 +50419,7 @@
 		)
 		(uuid "abb480cf-acb7-4aad-b1a1-87d6554b56b1")
 	)
-	(label "FLOOR.2"
+	(label "FLT.M2"
 		(at 86.36 370.84 0)
 		(effects
 			(font
@@ -50748,16 +50709,6 @@
 		)
 		(uuid "c6687333-4d89-4457-936b-232d19a58dc8")
 	)
-	(label "FLOOR.1"
-		(at 116.84 363.22 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "c73c78ef-b264-4edb-a226-d5793de514f4")
-	)
 	(label "MIC.L"
 		(at 575.31 176.53 0)
 		(effects
@@ -50818,7 +50769,7 @@
 		)
 		(uuid "cda537e5-1357-4862-a6c4-86112ab08c62")
 	)
-	(label "ROOM.2"
+	(label "FLT.RC"
 		(at 86.36 375.92 0)
 		(effects
 			(font
@@ -51148,16 +51099,6 @@
 		)
 		(uuid "ea4640a1-572a-41d2-afeb-549ac5baa821")
 	)
-	(label "FLOOR.2"
-		(at 116.84 365.76 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ebee1802-e10e-46cc-b4e0-377e63fbeb92")
-	)
 	(label "MIC.CLK"
 		(at 618.49 128.27 0)
 		(effects
@@ -51437,6 +51378,1168 @@
 			(type default)
 		)
 		(uuid "dd5ea5d5-0af3-402c-9062-dc7b1f95274e")
+	)
+	(symbol
+		(lib_id "power:VBUS")
+		(at 521.97 313.69 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "7937757e-a7fb-4613-8973-4280137342c4")
+		(property "Reference" "#PWR0347"
+			(at 521.97 313.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Vdrive"
+			(at 521.97 313.69 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 521.97 313.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 521.97 313.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VBUS\""
+			(at 521.97 313.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8fbf3864-30ca-4074-8ba9-aedeb673f938")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0347")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 516.89 313.69 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6a3c64f4-5cf4-467f-be31-d637573c51cf")
+		(property "Reference" "#PWR0348"
+			(at 516.89 313.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 516.89 313.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 516.89 313.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 516.89 313.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 516.89 313.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "aebda137-f04a-4430-822e-d0e1821efd17")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0348")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "FLT.WH"
+		(at 521.97 326.39 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4c5cea69-f1cf-409a-839f-65483e9cb4a9")
+	)
+	(symbol
+		(lib_id "power:VBUS")
+		(at 521.97 340.36 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "c7829ed7-68ae-4b87-b82b-1ca84bc8a0c9")
+		(property "Reference" "#PWR0349"
+			(at 521.97 340.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Vdrive"
+			(at 521.97 340.36 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 521.97 340.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 521.97 340.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VBUS\""
+			(at 521.97 340.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0427430e-ce5a-41ec-af4d-9d6408ffacec")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0349")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 516.89 340.36 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0d3f2fce-a190-4fcc-9d97-390e99a55dde")
+		(property "Reference" "#PWR0350"
+			(at 516.89 340.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 516.89 340.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 516.89 340.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 516.89 340.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 516.89 340.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ec386a5a-b72f-493f-8f5b-139320bd59c9")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0350")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "FLT.IR"
+		(at 521.97 353.06 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d8a5391a-7334-4a78-a968-93f6f6af6881")
+	)
+	(symbol
+		(lib_id "power:VBUS")
+		(at 528.32 367.03 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "afb96a51-8485-4d57-926e-95201410170f")
+		(property "Reference" "#PWR0351"
+			(at 528.32 367.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Vdrive"
+			(at 528.32 367.03 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 528.32 367.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 528.32 367.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VBUS\""
+			(at 528.32 367.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "906b80d4-baec-4df7-b8f7-4f9f3ae06037")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0351")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 523.24 367.03 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b67901ad-e8e1-421c-a3e6-a8096d01a019")
+		(property "Reference" "#PWR0352"
+			(at 523.24 367.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 523.24 367.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 523.24 367.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 523.24 367.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 523.24 367.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7d1386ff-83a5-4777-b8a6-9faacab08512")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0352")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "FLT.OTH"
+		(at 528.32 379.73 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "632078ae-7189-453a-a9e6-4fc0d67539a9")
+	)
+	(symbol
+		(lib_id "power:VBUS")
+		(at 407.67 363.22 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "0a6b2e0e-84d6-4289-930d-9442b2b26cfd")
+		(property "Reference" "#PWR0353"
+			(at 407.67 363.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Vdrive"
+			(at 407.67 363.22 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 407.67 363.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 407.67 363.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VBUS\""
+			(at 407.67 363.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d22dcf7d-aa5a-494e-8bf5-0b253580fda4")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0353")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 402.59 363.22 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "fc4045ec-7809-4243-9c68-54d4dd98474b")
+		(property "Reference" "#PWR0354"
+			(at 402.59 363.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 402.59 363.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 402.59 363.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 402.59 363.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 402.59 363.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "62917223-eb27-48b0-af8b-4f85d37d73bd")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0354")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "FLT.M1"
+		(at 407.67 375.92 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2ac38678-5c3d-4365-a166-8334b11aff97")
+	)
+	(symbol
+		(lib_id "power:VBUS")
+		(at 407.67 336.55 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8aa6e7dd-bf7f-4998-aaf2-d32bcf4e5e68")
+		(property "Reference" "#PWR0355"
+			(at 407.67 336.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Vdrive"
+			(at 407.67 336.55 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 407.67 336.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 407.67 336.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VBUS\""
+			(at 407.67 336.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "397aa078-4c7d-4875-a2cb-03da7c68a430")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0355")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 402.59 336.55 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a96799ad-b9aa-40b7-9bdc-8fb9a6050816")
+		(property "Reference" "#PWR0356"
+			(at 402.59 336.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 402.59 336.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 402.59 336.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 402.59 336.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 402.59 336.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7ad1cee0-d709-4ab7-bcd3-4b34f70dcc7b")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0356")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "FLT.M2"
+		(at 407.67 349.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4c9a6686-1647-4d28-bac0-5882039f0fe7")
+	)
+	(symbol
+		(lib_id "power:VBUS")
+		(at 407.67 311.15 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "c0b3ced6-e034-4e57-a75f-0c6a9f935e0d")
+		(property "Reference" "#PWR0357"
+			(at 407.67 311.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Vdrive"
+			(at 407.67 311.15 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 407.67 311.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 407.67 311.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VBUS\""
+			(at 407.67 311.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7abf6c55-bc8c-4ff0-a250-e68a6d1d7b4f")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0357")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 402.59 311.15 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "96955aa8-d761-4cb8-92f1-d72070d8445d")
+		(property "Reference" "#PWR0358"
+			(at 402.59 311.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 402.59 311.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 402.59 311.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 402.59 311.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 402.59 311.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7ea5c2d3-b617-4ba5-a979-e712437cd591")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0358")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "FLT.M3"
+		(at 407.67 323.85 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d12d093d-1305-4692-9691-cbb675276ea5")
+	)
+	(symbol
+		(lib_id "power:VBUS")
+		(at 455.93 351.79 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "fb3706c5-98e1-428a-9e17-4d3fea96a447")
+		(property "Reference" "#PWR0359"
+			(at 455.93 351.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Vdrive"
+			(at 455.93 351.79 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 455.93 351.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 455.93 351.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VBUS\""
+			(at 455.93 351.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "84259356-61f6-421c-8f4a-d8c9b27100f7")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0359")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 450.85 351.79 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a8e6ea1b-aa1e-43ac-81fa-1e708d094947")
+		(property "Reference" "#PWR0360"
+			(at 450.85 351.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 450.85 351.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 450.85 351.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 450.85 351.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 450.85 351.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0b0dfb38-ad53-4f3e-8e92-0366359de423")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0360")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "FLT.RC"
+		(at 455.93 364.49 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "87504d4b-911a-4077-99fc-657e70b4b5b0")
 	)
 	(symbol
 		(lib_id "power:+3V3")
@@ -53084,7 +54187,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,10MΩ")
+		(lib_id "JLCPCB-Resistors:0402,100kΩ")
 		(at 444.5 360.68 0)
 		(unit 1)
 		(body_style 1)
@@ -53106,7 +54209,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10MΩ"
+		(property "Value" "100kΩ"
 			(at 444.5 360.68 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -53149,7 +54252,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26082"
+		(property "LCSC" "C25741"
 			(at 444.5 360.68 0)
 			(hide yes)
 			(show_name no)
@@ -53443,7 +54546,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,10MΩ")
+		(lib_id "JLCPCB-Resistors:0402,100kΩ")
 		(at 396.24 345.44 0)
 		(unit 1)
 		(body_style 1)
@@ -53465,7 +54568,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10MΩ"
+		(property "Value" "100kΩ"
 			(at 396.24 345.44 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -53508,7 +54611,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26082"
+		(property "LCSC" "C25741"
 			(at 396.24 345.44 0)
 			(hide yes)
 			(show_name no)
@@ -53608,94 +54711,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR042")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_Coded_SH-7010")
-		(at 106.68 388.62 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "0894b463-3323-4e59-a4c8-0aaa1e1de450")
-		(property "Reference" "SW2"
-			(at 104.14 379.73 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SH-7010 BCD 10-pos"
-			(at 104.14 397.51 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Button_Switch_SMD:Nidec_Copal_SH-7010B"
-			(at 106.68 388.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.nidec-copal-electronics.com/e/catalog/switch/sh-7000.pdf"
-			(at 106.68 388.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Rotary switch, 4-bit BCD, 10 positions"
-			(at 106.68 388.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "7ac9a9bb-4df3-4903-bdf2-ffe74820b677")
-		)
-		(pin "2"
-			(uuid "5473b94f-0ee5-4c1e-b81e-197cf724dbc4")
-		)
-		(pin "4"
-			(uuid "4a926475-fbe9-41de-a796-5171b08c3155")
-		)
-		(pin "8"
-			(uuid "a2ed3daa-8c42-427e-8a15-9cd410e2c625")
-		)
-		(pin "C"
-			(uuid "57a01279-7293-42c4-9e8c-b51fa7fb3ca8")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "SW2")
 					(unit 1)
 				)
 			)
@@ -54215,7 +55230,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Transistors:PMOS,AO3401A")
+		(lib_id "Project:SY6288")
 		(at 453.39 359.41 270)
 		(mirror x)
 		(unit 1)
@@ -54236,7 +55251,7 @@
 				)
 			)
 		)
-		(property "Value" "AO3401A"
+		(property "Value" "SY6288AAAC"
 			(at 453.39 353.06 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -54246,7 +55261,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:Q_SOT-23"
+		(property "Footprint" "JLCPCB:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BL"
 			(at 453.39 361.188 90)
 			(hide yes)
 			(show_name no)
@@ -54257,7 +55272,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1810171817_Alpha---Omega-Semicon-AO3401A_C15127.pdf"
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C111829.html"
 			(at 453.39 359.41 0)
 			(hide yes)
 			(show_name no)
@@ -54268,7 +55283,7 @@
 				)
 			)
 		)
-		(property "Description" "30V 4A 44mΩ@10V,4.3A 1.4W 1.3V@250uA 1 Piece P-Channel SOT-23 MOSFETs ROHS"
+		(property "Description" "SY6288AAAC current-limited power switch (0.6 A, limit 0.8-1.6 A), EN active high, OCB fault flag"
 			(at 453.39 359.41 0)
 			(hide yes)
 			(show_name no)
@@ -54290,7 +55305,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15127"
+		(property "LCSC" "C111829"
 			(at 453.39 359.41 0)
 			(hide yes)
 			(show_name no)
@@ -54301,14 +55316,20 @@
 				)
 			)
 		)
+		(pin "1"
+			(uuid "40d4d8a5-d081-4158-a891-24e109b4c47f")
+		)
 		(pin "2"
-			(uuid "598a9404-a595-46ad-99f1-a315ea68627d")
+			(uuid "7acb1f72-fe20-4925-8f5c-08d38848f7e1")
 		)
 		(pin "3"
-			(uuid "041b66de-977e-4492-bd03-8b6988bca49f")
+			(uuid "6345c44c-6497-4110-a79d-98e3fa3df3df")
 		)
-		(pin "1"
-			(uuid "056279fb-e0e2-41dd-a561-cf86e5678993")
+		(pin "4"
+			(uuid "f4219be9-ffe5-4a65-900e-c48eaedf1156")
+		)
+		(pin "5"
+			(uuid "da99b59c-9437-404f-babb-0a17339d1708")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"
@@ -55535,7 +56556,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VBUS")
+		(lib_id "power:Earth")
 		(at 441.96 349.25 0)
 		(unit 1)
 		(body_style 1)
@@ -55556,7 +56577,7 @@
 				)
 			)
 		)
-		(property "Value" "Vdrive"
+		(property "Value" "COM"
 			(at 441.96 345.694 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -56614,7 +57635,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,1MΩ")
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
 		(at 525.78 383.54 0)
 		(unit 1)
 		(body_style 1)
@@ -56636,7 +57657,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1MΩ"
+		(property "Value" "1kΩ"
 			(at 525.78 383.54 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -56668,7 +57689,7 @@
 				)
 			)
 		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1MΩ 0402 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
 			(at 525.78 383.54 0)
 			(hide yes)
 			(show_name no)
@@ -56679,7 +57700,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26083"
+		(property "LCSC" "C11702"
 			(at 525.78 383.54 0)
 			(hide yes)
 			(show_name no)
@@ -57667,7 +58688,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,10MΩ")
+		(lib_id "JLCPCB-Resistors:0402,100kΩ")
 		(at 510.54 322.58 0)
 		(unit 1)
 		(body_style 1)
@@ -57689,7 +58710,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10MΩ"
+		(property "Value" "100kΩ"
 			(at 510.54 322.58 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -57732,7 +58753,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26082"
+		(property "LCSC" "C25741"
 			(at 510.54 322.58 0)
 			(hide yes)
 			(show_name no)
@@ -58053,7 +59074,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,1MΩ")
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
 		(at 405.13 327.66 0)
 		(unit 1)
 		(body_style 1)
@@ -58075,7 +59096,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1MΩ"
+		(property "Value" "1kΩ"
 			(at 405.13 327.66 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -58107,7 +59128,7 @@
 				)
 			)
 		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1MΩ 0402 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
 			(at 405.13 327.66 0)
 			(hide yes)
 			(show_name no)
@@ -58118,7 +59139,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26083"
+		(property "LCSC" "C11702"
 			(at 405.13 327.66 0)
 			(hide yes)
 			(show_name no)
@@ -58734,7 +59755,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,1MΩ")
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
 		(at 405.13 379.73 0)
 		(unit 1)
 		(body_style 1)
@@ -58756,7 +59777,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1MΩ"
+		(property "Value" "1kΩ"
 			(at 405.13 379.73 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -58788,7 +59809,7 @@
 				)
 			)
 		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1MΩ 0402 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
 			(at 405.13 379.73 0)
 			(hide yes)
 			(show_name no)
@@ -58799,7 +59820,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26083"
+		(property "LCSC" "C11702"
 			(at 405.13 379.73 0)
 			(hide yes)
 			(show_name no)
@@ -64242,7 +65263,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,1MΩ")
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
 		(at 519.43 356.87 0)
 		(unit 1)
 		(body_style 1)
@@ -64264,7 +65285,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1MΩ"
+		(property "Value" "1kΩ"
 			(at 519.43 356.87 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -64296,7 +65317,7 @@
 				)
 			)
 		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1MΩ 0402 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
 			(at 519.43 356.87 0)
 			(hide yes)
 			(show_name no)
@@ -64307,7 +65328,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26083"
+		(property "LCSC" "C11702"
 			(at 519.43 356.87 0)
 			(hide yes)
 			(show_name no)
@@ -67514,7 +68535,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Transistors:PMOS,AO3401A")
+		(lib_id "Project:SY6288")
 		(at 519.43 321.31 270)
 		(mirror x)
 		(unit 1)
@@ -67535,7 +68556,7 @@
 				)
 			)
 		)
-		(property "Value" "AO3401A"
+		(property "Value" "SY6288AAAC"
 			(at 519.43 314.96 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -67545,7 +68566,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:Q_SOT-23"
+		(property "Footprint" "JLCPCB:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BL"
 			(at 519.43 323.088 90)
 			(hide yes)
 			(show_name no)
@@ -67556,7 +68577,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1810171817_Alpha---Omega-Semicon-AO3401A_C15127.pdf"
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C111829.html"
 			(at 519.43 321.31 0)
 			(hide yes)
 			(show_name no)
@@ -67567,7 +68588,7 @@
 				)
 			)
 		)
-		(property "Description" "30V 4A 44mΩ@10V,4.3A 1.4W 1.3V@250uA 1 Piece P-Channel SOT-23 MOSFETs ROHS"
+		(property "Description" "SY6288AAAC current-limited power switch (0.6 A, limit 0.8-1.6 A), EN active high, OCB fault flag"
 			(at 519.43 321.31 0)
 			(hide yes)
 			(show_name no)
@@ -67589,7 +68610,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15127"
+		(property "LCSC" "C111829"
 			(at 519.43 321.31 0)
 			(hide yes)
 			(show_name no)
@@ -67600,14 +68621,20 @@
 				)
 			)
 		)
+		(pin "1"
+			(uuid "30d1c4bd-eda9-454e-9238-c53077b3be9d")
+		)
 		(pin "2"
-			(uuid "3aa295ae-10a6-4420-8269-02b33b345f85")
+			(uuid "12a8045e-f1f1-4690-bcc4-93f4581d6cfe")
 		)
 		(pin "3"
-			(uuid "a5ce10eb-7f79-4725-bff9-f2b8b1c4574d")
+			(uuid "f2b5af63-56db-4c24-999b-d5dca250cb47")
 		)
-		(pin "1"
-			(uuid "4d5d3a40-1966-4240-bde8-81b14b030744")
+		(pin "4"
+			(uuid "eb2b4b96-3694-4f45-831a-a23ddaf482c3")
+		)
+		(pin "5"
+			(uuid "204cb4d1-da4d-482d-b872-3289d5592252")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"
@@ -70029,7 +71056,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Transistors:PMOS,AO3401A")
+		(lib_id "Project:SY6288")
 		(at 525.78 374.65 270)
 		(mirror x)
 		(unit 1)
@@ -70050,7 +71077,7 @@
 				)
 			)
 		)
-		(property "Value" "AO3401A"
+		(property "Value" "SY6288AAAC"
 			(at 525.78 368.3 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -70060,7 +71087,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:Q_SOT-23"
+		(property "Footprint" "JLCPCB:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BL"
 			(at 525.78 376.428 90)
 			(hide yes)
 			(show_name no)
@@ -70071,7 +71098,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1810171817_Alpha---Omega-Semicon-AO3401A_C15127.pdf"
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C111829.html"
 			(at 525.78 374.65 0)
 			(hide yes)
 			(show_name no)
@@ -70082,7 +71109,7 @@
 				)
 			)
 		)
-		(property "Description" "30V 4A 44mΩ@10V,4.3A 1.4W 1.3V@250uA 1 Piece P-Channel SOT-23 MOSFETs ROHS"
+		(property "Description" "SY6288AAAC current-limited power switch (0.6 A, limit 0.8-1.6 A), EN active high, OCB fault flag"
 			(at 525.78 374.65 0)
 			(hide yes)
 			(show_name no)
@@ -70104,7 +71131,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15127"
+		(property "LCSC" "C111829"
 			(at 525.78 374.65 0)
 			(hide yes)
 			(show_name no)
@@ -70115,14 +71142,20 @@
 				)
 			)
 		)
+		(pin "1"
+			(uuid "9acb32f6-5520-47c2-8b98-d08ee66f9070")
+		)
 		(pin "2"
-			(uuid "25b315c0-b103-4766-879b-541f5e11d9d5")
+			(uuid "c2033549-2225-4a1b-b884-0ac81d0a8682")
 		)
 		(pin "3"
-			(uuid "37504142-1de6-4b1c-b7f1-4a1e3a79d60f")
+			(uuid "034f3faf-8695-4490-afad-091453af9708")
 		)
-		(pin "1"
-			(uuid "ac8297c5-4d5e-4a0f-9b2b-adbb9c4f617f")
+		(pin "4"
+			(uuid "50aacdbb-2d6c-4b0f-b418-3432afad5423")
+		)
+		(pin "5"
+			(uuid "a1269b77-c1f0-42f9-a0b3-c9073be666f5")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"
@@ -71949,7 +72982,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VBUS")
+		(lib_id "power:Earth")
 		(at 510.54 311.15 0)
 		(unit 1)
 		(body_style 1)
@@ -71970,7 +73003,7 @@
 				)
 			)
 		)
-		(property "Value" "Vdrive"
+		(property "Value" "COM"
 			(at 513.842 308.102 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -72263,7 +73296,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,10MΩ")
+		(lib_id "JLCPCB-Resistors:0402,100kΩ")
 		(at 516.89 375.92 0)
 		(unit 1)
 		(body_style 1)
@@ -72285,7 +73318,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10MΩ"
+		(property "Value" "100kΩ"
 			(at 516.89 375.92 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -72328,7 +73361,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26082"
+		(property "LCSC" "C25741"
 			(at 516.89 375.92 0)
 			(hide yes)
 			(show_name no)
@@ -73523,7 +74556,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Transistors:PMOS,AO3401A")
+		(lib_id "Project:SY6288")
 		(at 405.13 370.84 270)
 		(mirror x)
 		(unit 1)
@@ -73544,7 +74577,7 @@
 				)
 			)
 		)
-		(property "Value" "AO3401A"
+		(property "Value" "SY6288AAAC"
 			(at 405.13 364.49 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -73554,7 +74587,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:Q_SOT-23"
+		(property "Footprint" "JLCPCB:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BL"
 			(at 405.13 372.618 90)
 			(hide yes)
 			(show_name no)
@@ -73565,7 +74598,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1810171817_Alpha---Omega-Semicon-AO3401A_C15127.pdf"
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C111829.html"
 			(at 405.13 370.84 0)
 			(hide yes)
 			(show_name no)
@@ -73576,7 +74609,7 @@
 				)
 			)
 		)
-		(property "Description" "30V 4A 44mΩ@10V,4.3A 1.4W 1.3V@250uA 1 Piece P-Channel SOT-23 MOSFETs ROHS"
+		(property "Description" "SY6288AAAC current-limited power switch (0.6 A, limit 0.8-1.6 A), EN active high, OCB fault flag"
 			(at 405.13 370.84 0)
 			(hide yes)
 			(show_name no)
@@ -73598,7 +74631,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15127"
+		(property "LCSC" "C111829"
 			(at 405.13 370.84 0)
 			(hide yes)
 			(show_name no)
@@ -73609,14 +74642,20 @@
 				)
 			)
 		)
+		(pin "1"
+			(uuid "e934dcc3-0574-4fff-83a0-5bc2972836f1")
+		)
 		(pin "2"
-			(uuid "6a3b083e-fe97-4ce3-994e-7b0c58a8f287")
+			(uuid "e7f12d78-84e8-448d-a20f-bd3c1b370302")
 		)
 		(pin "3"
-			(uuid "344a6a96-b8cb-438e-9d35-28d2308c007d")
+			(uuid "0439da4f-476f-408e-a56b-6b648837500d")
 		)
-		(pin "1"
-			(uuid "6ac942fa-db34-4b04-a189-2c023b34e592")
+		(pin "4"
+			(uuid "88580eb2-7da7-4d82-846f-d16491ad8f97")
+		)
+		(pin "5"
+			(uuid "6660c352-cbd9-47d9-8705-9236c4c60f63")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"
@@ -76083,7 +77122,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Transistors:PMOS,AO3401A")
+		(lib_id "Project:SY6288")
 		(at 405.13 344.17 270)
 		(mirror x)
 		(unit 1)
@@ -76104,7 +77143,7 @@
 				)
 			)
 		)
-		(property "Value" "AO3401A"
+		(property "Value" "SY6288AAAC"
 			(at 405.13 337.82 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -76114,7 +77153,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:Q_SOT-23"
+		(property "Footprint" "JLCPCB:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BL"
 			(at 405.13 345.948 90)
 			(hide yes)
 			(show_name no)
@@ -76125,7 +77164,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1810171817_Alpha---Omega-Semicon-AO3401A_C15127.pdf"
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C111829.html"
 			(at 405.13 344.17 0)
 			(hide yes)
 			(show_name no)
@@ -76136,7 +77175,7 @@
 				)
 			)
 		)
-		(property "Description" "30V 4A 44mΩ@10V,4.3A 1.4W 1.3V@250uA 1 Piece P-Channel SOT-23 MOSFETs ROHS"
+		(property "Description" "SY6288AAAC current-limited power switch (0.6 A, limit 0.8-1.6 A), EN active high, OCB fault flag"
 			(at 405.13 344.17 0)
 			(hide yes)
 			(show_name no)
@@ -76158,7 +77197,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15127"
+		(property "LCSC" "C111829"
 			(at 405.13 344.17 0)
 			(hide yes)
 			(show_name no)
@@ -76169,14 +77208,20 @@
 				)
 			)
 		)
+		(pin "1"
+			(uuid "7ca04a76-e33b-458f-a531-725bb0249def")
+		)
 		(pin "2"
-			(uuid "d5aca36e-ae29-44d3-ac9b-3fe0eba687d0")
+			(uuid "b0fb3da0-1331-4d91-9038-008ac56790d0")
 		)
 		(pin "3"
-			(uuid "fd62862d-9ed0-4e58-b362-82191248bce4")
+			(uuid "785add6f-b2cb-4cf4-a4e0-29b371985be6")
 		)
-		(pin "1"
-			(uuid "c97c5583-8132-4beb-8deb-79c371d81996")
+		(pin "4"
+			(uuid "d294d8dc-4a30-412c-b74e-1d3d56406461")
+		)
+		(pin "5"
+			(uuid "43b83f1c-9f2f-4df4-ac42-0b3b9416b14a")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"
@@ -81281,7 +82326,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,1MΩ")
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
 		(at 405.13 353.06 0)
 		(unit 1)
 		(body_style 1)
@@ -81303,7 +82348,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1MΩ"
+		(property "Value" "1kΩ"
 			(at 405.13 353.06 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -81335,7 +82380,7 @@
 				)
 			)
 		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1MΩ 0402 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
 			(at 405.13 353.06 0)
 			(hide yes)
 			(show_name no)
@@ -81346,7 +82391,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26083"
+		(property "LCSC" "C11702"
 			(at 405.13 353.06 0)
 			(hide yes)
 			(show_name no)
@@ -82464,7 +83509,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VBUS")
+		(lib_id "power:Earth")
 		(at 509.27 372.11 0)
 		(unit 1)
 		(body_style 1)
@@ -82486,7 +83531,7 @@
 				)
 			)
 		)
-		(property "Value" "Vdrive"
+		(property "Value" "COM"
 			(at 509.27 367.03 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -82694,85 +83739,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR031")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:Earth")
-		(at 116.84 360.68 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "9bc019d8-0d73-41a4-9295-cdeb1ad4e8e5")
-		(property "Reference" "#PWR0340"
-			(at 116.84 367.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 116.84 364.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 116.84 360.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 116.84 360.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 116.84 360.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "9b2ed049-7bcf-45e0-aa90-006138115c64")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0340")
 					(unit 1)
 				)
 			)
@@ -83886,7 +84852,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VBUS")
+		(lib_id "power:Earth")
 		(at 396.24 360.68 270)
 		(unit 1)
 		(body_style 1)
@@ -83908,7 +84874,7 @@
 				)
 			)
 		)
-		(property "Value" "Vdrive"
+		(property "Value" "COM"
 			(at 400.05 360.6799 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -86588,7 +87554,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VBUS")
+		(lib_id "power:Earth")
 		(at 396.24 334.01 270)
 		(unit 1)
 		(body_style 1)
@@ -86610,7 +87576,7 @@
 				)
 			)
 		)
-		(property "Value" "Vdrive"
+		(property "Value" "COM"
 			(at 400.05 334.0099 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -89459,7 +90425,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,10MΩ")
+		(lib_id "JLCPCB-Resistors:0402,100kΩ")
 		(at 396.24 372.11 0)
 		(unit 1)
 		(body_style 1)
@@ -89481,7 +90447,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10MΩ"
+		(property "Value" "100kΩ"
 			(at 396.24 372.11 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -89524,7 +90490,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26082"
+		(property "LCSC" "C25741"
 			(at 396.24 372.11 0)
 			(hide yes)
 			(show_name no)
@@ -90401,7 +91367,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VBUS")
+		(lib_id "power:Earth")
 		(at 396.24 308.61 270)
 		(unit 1)
 		(body_style 1)
@@ -90423,7 +91389,7 @@
 				)
 			)
 		)
-		(property "Value" "Vdrive"
+		(property "Value" "COM"
 			(at 400.05 308.6099 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -93485,7 +94451,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Transistors:PMOS,AO3401A")
+		(lib_id "Project:SY6288")
 		(at 519.43 347.98 270)
 		(mirror x)
 		(unit 1)
@@ -93506,7 +94472,7 @@
 				)
 			)
 		)
-		(property "Value" "AO3401A"
+		(property "Value" "SY6288AAAC"
 			(at 519.43 341.63 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -93516,7 +94482,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:Q_SOT-23"
+		(property "Footprint" "JLCPCB:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BL"
 			(at 519.43 349.758 90)
 			(hide yes)
 			(show_name no)
@@ -93527,7 +94493,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1810171817_Alpha---Omega-Semicon-AO3401A_C15127.pdf"
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C111829.html"
 			(at 519.43 347.98 0)
 			(hide yes)
 			(show_name no)
@@ -93538,7 +94504,7 @@
 				)
 			)
 		)
-		(property "Description" "30V 4A 44mΩ@10V,4.3A 1.4W 1.3V@250uA 1 Piece P-Channel SOT-23 MOSFETs ROHS"
+		(property "Description" "SY6288AAAC current-limited power switch (0.6 A, limit 0.8-1.6 A), EN active high, OCB fault flag"
 			(at 519.43 347.98 0)
 			(hide yes)
 			(show_name no)
@@ -93560,7 +94526,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15127"
+		(property "LCSC" "C111829"
 			(at 519.43 347.98 0)
 			(hide yes)
 			(show_name no)
@@ -93571,14 +94537,20 @@
 				)
 			)
 		)
+		(pin "1"
+			(uuid "3425927d-068c-4bda-bf43-e904e103bf02")
+		)
 		(pin "2"
-			(uuid "42772ad0-8944-435c-9648-ed5635f4d84c")
+			(uuid "ce2e5134-33fb-49c5-838d-d77a589631a1")
 		)
 		(pin "3"
-			(uuid "93fa3a19-55ed-482b-b1ed-c3d828a791ad")
+			(uuid "bd63ae8b-add6-4463-bf5c-7cc96c8de78e")
 		)
-		(pin "1"
-			(uuid "778da1c2-3f73-4be6-ba9f-35c60e7839d7")
+		(pin "4"
+			(uuid "7fa780e0-4b29-4181-95ea-e8288d431c6a")
+		)
+		(pin "5"
+			(uuid "067b89ec-6d84-48bf-8875-5bc259df379f")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"
@@ -93680,7 +94652,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,1MΩ")
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
 		(at 519.43 330.2 0)
 		(unit 1)
 		(body_style 1)
@@ -93702,7 +94674,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1MΩ"
+		(property "Value" "1kΩ"
 			(at 519.43 330.2 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -93734,7 +94706,7 @@
 				)
 			)
 		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1MΩ 0402 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
 			(at 519.43 330.2 0)
 			(hide yes)
 			(show_name no)
@@ -93745,7 +94717,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26083"
+		(property "LCSC" "C11702"
 			(at 519.43 330.2 0)
 			(hide yes)
 			(show_name no)
@@ -93851,7 +94823,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VBUS")
+		(lib_id "power:Earth")
 		(at 510.54 337.82 270)
 		(unit 1)
 		(body_style 1)
@@ -93873,7 +94845,7 @@
 				)
 			)
 		)
-		(property "Value" "Vdrive"
+		(property "Value" "COM"
 			(at 514.35 337.8199 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -95269,94 +96241,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "BOOT1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_Coded_SH-7010")
-		(at 106.68 365.76 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "cf08bed5-7cc9-43f4-aeaf-73ebf75a52c6")
-		(property "Reference" "SW1"
-			(at 104.14 356.87 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SH-7010 BCD 10-pos"
-			(at 104.14 374.65 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Button_Switch_SMD:Nidec_Copal_SH-7010B"
-			(at 106.68 365.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.nidec-copal-electronics.com/e/catalog/switch/sh-7000.pdf"
-			(at 106.68 365.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Rotary switch, 4-bit BCD, 10 positions"
-			(at 106.68 365.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3bf2b0e5-3fd3-4a2e-86d8-764e5abbc3da")
-		)
-		(pin "2"
-			(uuid "03eed59f-782c-4086-bc00-74a6757b36be")
-		)
-		(pin "4"
-			(uuid "7116fc85-eacd-4d61-b32f-9fddd4f39f20")
-		)
-		(pin "8"
-			(uuid "4c7bcf47-2546-4d8f-9ce7-2668d88a619b")
-		)
-		(pin "C"
-			(uuid "cd2a4cd3-9387-41eb-8e34-64eba14a3141")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "SW1")
 					(unit 1)
 				)
 			)
@@ -97605,7 +98489,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,10MΩ")
+		(lib_id "JLCPCB-Resistors:0402,100kΩ")
 		(at 396.24 320.04 0)
 		(unit 1)
 		(body_style 1)
@@ -97627,7 +98511,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10MΩ"
+		(property "Value" "100kΩ"
 			(at 396.24 320.04 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -97670,7 +98554,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26082"
+		(property "LCSC" "C25741"
 			(at 396.24 320.04 0)
 			(hide yes)
 			(show_name no)
@@ -98897,85 +99781,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR080")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:Earth")
-		(at 116.84 383.54 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "dfbea99d-5f25-45da-97d7-82aca0e11bbb")
-		(property "Reference" "#PWR0341"
-			(at 116.84 389.89 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 116.84 387.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 116.84 383.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 116.84 383.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 116.84 383.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d5082674-3ea6-4f41-82f1-1b55711b6776")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0341")
 					(unit 1)
 				)
 			)
@@ -102634,7 +103439,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,10MΩ")
+		(lib_id "JLCPCB-Resistors:0402,100kΩ")
 		(at 510.54 349.25 0)
 		(unit 1)
 		(body_style 1)
@@ -102656,7 +103461,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10MΩ"
+		(property "Value" "100kΩ"
 			(at 510.54 349.25 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -102699,7 +103504,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26082"
+		(property "LCSC" "C25741"
 			(at 510.54 349.25 0)
 			(hide yes)
 			(show_name no)
@@ -104708,7 +105513,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,1MΩ")
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
 		(at 453.39 368.3 0)
 		(unit 1)
 		(body_style 1)
@@ -104730,7 +105535,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1MΩ"
+		(property "Value" "1kΩ"
 			(at 453.39 368.3 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -104762,7 +105567,7 @@
 				)
 			)
 		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1MΩ 0402 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
 			(at 453.39 368.3 0)
 			(hide yes)
 			(show_name no)
@@ -104773,7 +105578,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C26083"
+		(property "LCSC" "C11702"
 			(at 453.39 368.3 0)
 			(hide yes)
 			(show_name no)
@@ -104977,7 +105782,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Transistors:PMOS,AO3401A")
+		(lib_id "Project:SY6288")
 		(at 405.13 318.77 270)
 		(mirror x)
 		(unit 1)
@@ -104998,7 +105803,7 @@
 				)
 			)
 		)
-		(property "Value" "AO3401A"
+		(property "Value" "SY6288AAAC"
 			(at 405.13 312.42 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -105008,7 +105813,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:Q_SOT-23"
+		(property "Footprint" "JLCPCB:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BL"
 			(at 405.13 320.548 90)
 			(hide yes)
 			(show_name no)
@@ -105019,7 +105824,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1810171817_Alpha---Omega-Semicon-AO3401A_C15127.pdf"
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C111829.html"
 			(at 405.13 318.77 0)
 			(hide yes)
 			(show_name no)
@@ -105030,7 +105835,7 @@
 				)
 			)
 		)
-		(property "Description" "30V 4A 44mΩ@10V,4.3A 1.4W 1.3V@250uA 1 Piece P-Channel SOT-23 MOSFETs ROHS"
+		(property "Description" "SY6288AAAC current-limited power switch (0.6 A, limit 0.8-1.6 A), EN active high, OCB fault flag"
 			(at 405.13 318.77 0)
 			(hide yes)
 			(show_name no)
@@ -105052,7 +105857,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15127"
+		(property "LCSC" "C111829"
 			(at 405.13 318.77 0)
 			(hide yes)
 			(show_name no)
@@ -105063,14 +105868,20 @@
 				)
 			)
 		)
+		(pin "1"
+			(uuid "e133559d-b8b8-4a60-9685-24114a675eb2")
+		)
 		(pin "2"
-			(uuid "c07a62b6-0ee0-4a49-903f-f70d4513a4dd")
+			(uuid "fce05ba8-214c-45b9-8d9e-1c72f64ce9c1")
 		)
 		(pin "3"
-			(uuid "4e21f986-7715-4e40-aff7-7b82d1002dd4")
+			(uuid "dc6fc4f3-5bb8-47c6-9f0c-b58c5657f0d5")
 		)
-		(pin "1"
-			(uuid "6d8d1b5f-b2dc-4fd5-82a5-4c59bbf88b4a")
+		(pin "4"
+			(uuid "66e72a1b-7b47-408d-a363-22149efd73c3")
+		)
+		(pin "5"
+			(uuid "e40116e5-f727-4d2c-9d3f-f07e3dd8e65c")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"

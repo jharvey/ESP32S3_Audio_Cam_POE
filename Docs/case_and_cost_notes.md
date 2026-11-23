@@ -84,3 +84,8 @@ Suggestions for the 3D-printed case and for lowering the JLCPCB order cost. Boar
 - Lamp-output indicators: D12 white (white lamp, J13), D13 IR (IR illuminator, J12), J11 has none. D16-D18 (MISC1-3
   outputs, J17-J19) are now plain green 0805 KT-0805G (C2297, a basic part already on the board) instead of IR LEDs:
   they just show the output is on.
+- Output switches (23 Nov 2026): SY6288AAAC current-limited switches instead of bare P-FETs on all seven outputs
+  (lamps, MISC, servo power). A shorted output draws at most its limit (0.8-1.6 A) and then cycles on thermal
+  shutdown, and the firmware switches it off on the fault flag, so a cable short does not take down the 5 V rail.
+  0.6 A parts because the PoE module (DP9900M-5V) gives about 1.8 A at 5 V in total (9 W, 6 W at 70 C). Rotary
+  switches SW1/SW2 removed (room number is set on the panel); their expander inputs read the fault flags.
