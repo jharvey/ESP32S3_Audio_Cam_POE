@@ -8,6 +8,8 @@
 #include <ETH.h>
 #include <NetworkUdp.h>
 #include <Preferences.h>
+#include <SD_MMC.h>
+#include <Update.h>
 #include <SPI.h>
 #include <WebServer.h>
 #include <WiFi.h>
@@ -15,6 +17,10 @@
 
 #include <atomic>
 #include <functional>
+
+#include <esp_netif.h>
+#include <esp_system.h>
+#include <esp_task_wdt.h>
 
 #include "Intercom.h"
 #include "NlmsAec.h"
@@ -49,6 +55,45 @@ void i2cWrite(uint8_t addr, uint8_t reg, uint8_t v) {
     Wire.write(v);
     Wire.endTransmission();
 }
+
+uint8_t i2cRead(uint8_t addr, uint8_t reg, bool* ok) {
+    I2cLock lock;
+    Wire.beginTransmission(addr);
+    Wire.write(reg);
+    *ok = Wire.endTransmission(false) == 0 && Wire.requestFrom(addr, uint8_t(1)) == 1;
+    return *ok ? uint8_t(Wire.read()) : 0;
+}
+
+// AXP2101 power manager. Register use from the datasheet; to confirm on the first board.
+//   0x00 status 1: bit 5 = VBUS good (PoE or USB power present), bit 3 = battery present
+//   0x18 bit 3 = fuel gauge on;  0xA4 = battery percent (fuel gauge)
+class Pmu {
+public:
+    void begin() {
+        bool ok;
+        uint8_t v = i2cRead(kAxp2101, 0x18, &ok);
+        if (ok) i2cWrite(kAxp2101, 0x18, uint8_t(v | 0x08));
+        ok_ = ok;
+    }
+    ic::PowerState read() {
+        ic::PowerState s;
+        bool ok;
+        uint8_t st = i2cRead(kAxp2101, 0x00, &ok);
+        if (!ok) return s;  // no answer: report PoE, no battery (the safe default)
+        s.source = (st & 0x20) ? ic::PowerSource::PoE : ic::PowerSource::Battery;
+        s.hasBattery = st & 0x08;
+        if (s.hasBattery) {
+            uint8_t pct = i2cRead(kAxp2101, 0xA4, &ok);
+            s.batteryPct = ok ? std::min<uint8_t>(pct, 100) : 0;
+        }
+        return s;
+    }
+    bool ok() const { return ok_; }
+
+private:
+    bool ok_ = false;
+};
+Pmu gPmu;
 
 class Expander {
 public:
@@ -163,9 +208,10 @@ Preferences gPrefs;
 // ---- HAL for the core ----------------------------------------------------------------
 class Board : public ic::INet, public ic::ILinks, public ic::IPower, public ic::IPanel, public ic::IStore, public ic::ILog, public ic::IDiag {
 public:
-    // Network: one UDP socket on the multicast group.
-    // TODO: Ethernet and Wi-Fi as two netifs on the same subnet need care in lwIP (route
-    // and IGMP join per interface). First hardware test: Ethernet only.
+    // Network: one UDP socket on the multicast group. Ethernet and Wi-Fi carry the same IP
+    // (10.42.<floor>.<room>); useLink() makes the active one lwIP's default interface, which is
+    // where multicast goes out, and re-joins the group so IGMP is sent on it.
+    // To check on hardware: unicast replies (web page) while both links are up.
     void send(const uint8_t* d, size_t n) override {
         gUdp.beginPacket(IPAddress(239, 255, 42, 1), ic::kAudioPort);
         gUdp.write(d, n);
@@ -176,16 +222,40 @@ public:
         return n > 0 ? size_t(gUdp.read(buf, cap)) : 0;
     }
     bool ethernetUp() override { return ETH.linkUp(); }
-    bool wifiUp() override { return WiFi.status() == WL_CONNECTED; }
-    void useLink(ic::LinkType) override {}  // TODO: set the default netif
+    bool wifiUp() override { return wifiOn_ && WiFi.status() == WL_CONNECTED; }
+    void useLink(ic::LinkType link) override {
+        esp_netif_t* nif = nullptr;
+        if (link == ic::LinkType::Ethernet) nif = esp_netif_get_handle_from_ifkey("ETH_DEF");
+        if (link == ic::LinkType::WiFi) nif = esp_netif_get_handle_from_ifkey("WIFI_STA_DEF");
+        if (nif) esp_netif_set_default_netif(nif);
+        gUdp.stop();
+        gUdp.beginMulticast(IPAddress(239, 255, 42, 1), ic::kAudioPort);
+    }
     void setAddress(const ic::UnitId& id) override {
         uint8_t ip[4];
         ic::ipForUnit(id, ip);
-        ETH.config(IPAddress(ip[0], ip[1], ip[2], ip[3]), IPAddress(ip[0], ip[1], 0, 1), IPAddress(255, 255, 0, 0));
-        // TODO: Wi-Fi gets the same address once Wi-Fi is brought up.
+        IPAddress me(ip[0], ip[1], ip[2], ip[3]), gw(ip[0], ip[1], 0, 1), mask(255, 255, 0, 0);
+        ETH.config(me, gw, mask);
+        if (wifiOn_) WiFi.config(me, gw, mask);
     }
+    void setWifi(const std::string& ssid, const std::string& pass) override {
+        WiFi.disconnect(true);
+        wifiOn_ = !ssid.empty();
+        if (!wifiOn_) {
+            WiFi.mode(WIFI_OFF);
+            return;
+        }
+        WiFi.mode(WIFI_STA);
+        WiFi.setSleep(false);  // power save adds 100+ ms of latency to multicast
+        WiFi.setAutoReconnect(true);
+        uint8_t ip[4];
+        ic::ipForUnit(gIntercomUnit, ip);
+        WiFi.config(IPAddress(ip[0], ip[1], ip[2], ip[3]), IPAddress(ip[0], ip[1], 0, 1), IPAddress(255, 255, 0, 0));
+        WiFi.begin(ssid.c_str(), pass.c_str());  // stays connected in the background for fast failover
+    }
+    ic::UnitId gIntercomUnit;  // the unit's current id, for the Wi-Fi address
 
-    ic::PowerState read() override { return ic::PowerState(); }  // TODO: AXP2101 at 0x34
+    ic::PowerState read() override { return gPmu.read(); }
 
     // Panel: the panel task does the slow I2C work; these just exchange the latest state.
     uint8_t buttons() override { return gButtons.load(); }
@@ -204,6 +274,13 @@ public:
         line(i2cPresent(kTca9555), "I2C: TCA9555 I/O expander (0x20)");
         line(i2cPresent(kPca9685), "I2C: PCA9685 servo/lamp driver (0x40)");
         line(i2cPresent(kAxp2101), "I2C: AXP2101 power manager (0x34)");
+        {
+            ic::PowerState p = gPmu.read();
+            char pb[80];
+            snprintf(pb, sizeof(pb), "power: %s, battery %s %u %%", p.source == ic::PowerSource::PoE ? "PoE/USB" : "battery",
+                     p.hasBattery ? "present" : "absent", unsigned(p.batteryPct));
+            line(true, pb);
+        }
         line(gDisplayOk.load(), "TM1637 display answers");
         line(ETH.linkUp(), "Ethernet link (PoE cable)");
         char b[96];
@@ -215,16 +292,19 @@ public:
     ic::UnitId loadUnit() override {
         ic::UnitId id;
         id.room = gPrefs.getUShort("room", 0);
-        id.sub = gPrefs.getUChar("sub", 0);
+        gIntercomUnit = id;
         return id;
     }
     void saveUnit(const ic::UnitId& id) override {
         gPrefs.putUShort("room", id.room);
-        gPrefs.putUChar("sub", id.sub);
+        gIntercomUnit = id;
     }
     std::string loadText(const char* key) override { return gPrefs.getString(key, "").c_str(); }
     void saveText(const char* key, const std::string& v) override { gPrefs.putString(key, v.c_str()); }
     void log(const char* m) override { Serial.println(m); }
+
+private:
+    bool wifiOn_ = false;
 };
 
 Board gBoard;
@@ -269,7 +349,9 @@ void onHttp() {
 
 void audioTask(void*) {
     static int16_t mic[ic::kFrameSamples], spk[ic::kFrameSamples];
+    esp_task_wdt_add(nullptr);  // a hung audio loop restarts the unit (see setup)
     for (;;) {
+        esp_task_wdt_reset();
         ConsoleLine line;
         if (xQueueReceive(gConsole, &line, 0) == pdTRUE) {
             Serial.println(gIntercom->command(line.text).c_str());
@@ -286,15 +368,53 @@ void audioTask(void*) {
     }
 }
 
+const char* resetReason() {
+    switch (esp_reset_reason()) {
+        case ESP_RST_POWERON: return "power on";
+        case ESP_RST_SW: return "software restart";
+        case ESP_RST_PANIC: return "crash";
+        case ESP_RST_INT_WDT: case ESP_RST_TASK_WDT: case ESP_RST_WDT: return "watchdog";
+        case ESP_RST_BROWNOUT: return "brown-out (power dip)";
+        case ESP_RST_EXT: return "reset button";
+        default: return "other";
+    }
+}
+
+// Firmware update from the SD card: /firmware.bin is written to the other OTA slot, renamed to
+// /firmware.done (or /firmware.bad), and the unit restarts into it. No card or no file: nothing.
+void sdUpdate() {
+    SD_MMC.setPins(pins::SD_CLK, pins::SD_CMD, pins::SD_D0);
+    if (!SD_MMC.begin("/sdcard", true)) return;  // 1-bit mode
+    File f = SD_MMC.open("/firmware.bin");
+    if (!f) {
+        SD_MMC.end();
+        return;
+    }
+    size_t size = f.size();
+    Serial.printf("SD card: updating from /firmware.bin (%u bytes)\n", unsigned(size));
+    bool ok = Update.begin(size) && Update.writeStream(f) == size && Update.end(true);
+    f.close();
+    SD_MMC.rename("/firmware.bin", ok ? "/firmware.done" : "/firmware.bad");
+    SD_MMC.end();
+    Serial.printf("SD card: update %s\n", ok ? "written, restarting" : (String("FAILED: ") + Update.errorString()).c_str());
+    if (ok) {
+        delay(200);
+        ESP.restart();
+    }
+}
+
 }  // namespace
 
 void setup() {
     Serial.begin(115200);
+    Serial.printf("intercom firmware %s, reset: %s\n", ic::kFirmwareVersion, resetReason());
+    sdUpdate();
     gPrefs.begin("intercom", false);
     gI2c = xSemaphoreCreateRecursiveMutex();
     Wire.begin(pins::I2C_SDA, pins::I2C_SCL, 400000);
     gExp.begin();
     gPwm.begin();
+    gPmu.begin();
     gExp.set(pins::exp::PWM_OE, false);  // enable PCA9685 outputs (all released)
 
     gMic.setPinsPdmRx(pins::MIC_CLK, pins::MIC_DATA);
@@ -313,6 +433,8 @@ void setup() {
     // ESP-SR replaces it.
     ic::IntercomOptions io;
     io.maxTaps = 1024;
+    uint64_t mac = ESP.getEfuseMac();
+    io.unitUid = uint32_t(mac ^ (mac >> 32));  // unique per board: finds two units set to the same room
     gConsole = xQueueCreate(4, sizeof(ConsoleLine));
     gWebJobs = xQueueCreate(1, sizeof(WebJob));
     // Auto-tune's analysis runs in a low-priority task on core 0, so audio keeps going.
@@ -338,6 +460,9 @@ void setup() {
     ETH.config(IPAddress(ip[0], ip[1], ip[2], ip[3]), IPAddress(ip[0], ip[1], 0, 1), IPAddress(255, 255, 0, 0));
     gUdp.beginMulticast(IPAddress(239, 255, 42, 1), ic::kAudioPort);
 
+    // Task watchdog: the audio task must check in every frame; 3 s without it restarts the unit.
+    esp_task_wdt_config_t wdt = {3000, 0, true};
+    esp_task_wdt_reconfigure(&wdt);
     xTaskCreatePinnedToCore(audioTask, "audio", 16384, nullptr, 20, nullptr, 1);
     xTaskCreatePinnedToCore(panelTask, "panel", 4096, nullptr, 2, nullptr, 0);
 

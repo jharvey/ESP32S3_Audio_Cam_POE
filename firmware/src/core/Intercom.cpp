@@ -24,6 +24,8 @@ constexpr uint32_t kFaultCycle = 175;    // faults: room number 3 s, then the co
 constexpr uint32_t kFaultShow = 25;
 constexpr uint8_t kLowBatteryPct = 15;
 const char* kGroupKey = "group";
+const char* kWifiSsidKey = "wifi_ssid";
+const char* kWifiPassKey = "wifi_pass";
 const char* kTuneKey = "tune";
 const char* kTunePrevKey = "tune_prev";
 
@@ -47,6 +49,7 @@ const char* kHelp =
     "  version              firmware version\n"
     "  netkey <key>         set the network command key (USB only; \"netkey off\" refuses all network commands)\n"
     "  webpass <password>   set the web interface password (USB only; \"webpass off\" turns it off)\n"
+    "  wifi <ssid> <pass>   Wi-Fi for failover and portable units (USB only; \"wifi off\"; same IP as Ethernet)\n"
     "parameters:\n";
 }  // namespace
 
@@ -69,6 +72,7 @@ void Intercom::begin() {
     unit_.sub = 0;  // letters are gone since protocol 2
     group_ = uint16_t(std::strtoul(hal_.store->loadText(kGroupKey).c_str(), nullptr, 10));
     refreshPower();
+    hal_.links->setWifi(hal_.store->loadText(kWifiSsidKey), hal_.store->loadText(kWifiPassKey));
     lastNonce_ = netauth::loadNonce(*hal_.store);
     params_ = TuneParams();
     params_.taps = std::min(params_.taps, opt_.maxTaps);
@@ -258,6 +262,26 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         if (secs > 30) secs = 30;
         toneFrames_ = uint32_t(secs * 1000 / kFrameMs);
         return toneFrames_ ? "playing a 1 kHz test tone" : "tone stopped";
+    }
+    if (c == "wifi") {
+        if (src != CmdSource::Local) return "wifi only works from the USB console";
+        if (a.size() == 2 && a[1] == "off") {
+            hal_.store->saveText(kWifiSsidKey, "");
+            hal_.store->saveText(kWifiPassKey, "");
+            hal_.links->setWifi("", "");
+            return "wifi off";
+        }
+        if (a.size() == 3) {
+            if (a[2].size() < 8) return "password too short (WPA2 needs at least 8 characters)";
+            hal_.store->saveText(kWifiSsidKey, a[1]);
+            hal_.store->saveText(kWifiPassKey, a[2]);
+            hal_.links->setWifi(a[1], a[2]);
+            logf("Wi-Fi set to \"%s\"", a[1].c_str());
+            return "wifi set to \"" + a[1] + "\"; it connects in the background";
+        }
+        std::string ssid = hal_.store->loadText(kWifiSsidKey);
+        if (ssid.empty()) return "wifi off (usage: wifi <ssid> <password>; names with spaces are not supported)";
+        return "wifi \"" + ssid + "\" " + (hal_.links->wifiUp() ? "connected" : "not connected");
     }
     if (c == "webpass") {
         if (src != CmdSource::Local) return "webpass only works from the USB console";

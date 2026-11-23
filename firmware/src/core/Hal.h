@@ -27,6 +27,8 @@ public:
     virtual void useLink(LinkType link) = 0;
     // The room number changed: move both links to the unit's new IP address.
     virtual void setAddress(const UnitId& id) { (void)id; }
+    // Wi-Fi network for portable units and Ethernet failover (empty ssid = Wi-Fi off).
+    virtual void setWifi(const std::string& ssid, const std::string& pass) { (void)ssid; (void)pass; }
 };
 
 struct PowerState {
