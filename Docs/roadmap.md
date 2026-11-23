@@ -37,7 +37,7 @@ tested in the simulator before boards exist. Item numbers refer to the tables fu
 | R1.5 Install and support | Console: TALK held, remote mute, faults and dUP in red (done in sim); web status; USB tool for Wi-Fi and groups; code card | 1.8b, 1.13c, 1.17-1.20 | Simulator and PC | next |
 | R1.6 Compression | Opus, 16 kHz mono, 20 ms frames, about 24 kbit/s; packet-loss concealment and FEC for Wi-Fi; PCM kept for debugging | 1.21 | Simulator, then board (CPU) | done in code: sim tested (21.5 kbit/s, mixed PCM/Opus units), firmware builds; CPU to measure on the board |
 | R1.7 Web console | Office PC browser -> office unit: room grid with status, talk to one room / floor / all with the PC mic, hear the reply | 1.22 | Simulator (localhost), then board (HTTPS) | next |
-| R2.0 Room calls | Office calls a room or floor, call tone, answer to office, call-the-office button | 2.1-2.8 | Simulator | |
+| R2.0 Room calls | Office calls a room or floor, call tone, answer to office, call-the-office button | 2.1-2.8 | Simulator | done in code (branch fw/r2-room-calls); 2.7, 2.8a open |
 | R2.1 Timed events | Time sync, schedule on each unit, chimes, days off, quiet hours | 2.9-2.15 | Simulator | |
 | R3.0 Video in the simulator | Simulated units stream test video; console video grid; audio ahead of video | 3.4-3.6 | Simulator | |
 | R3.1 Camera on the board | Camera driver, Q1 power, cover servo | 3.1-3.2 | Board | |
@@ -150,11 +150,11 @@ boards and adds what a teacher needs around it.
 | # | Feature | Status |
 |---|---|---|
 | 2.1 | Office calls one room: only that room (all units with its number, e.g. 299a-d) plays the call | done (sim) / code |
-| 2.2 | Office calls several rooms, a floor (2xx) or a group from a rooms file | new |
-| 2.3 | Call tone before a room call, so the room knows it's for them, and a display code while it lasts (e.g. `CAL`) | new |
-| 2.4 | Room answers: TALK during or just after a room call replies to the office only, not the whole school | new |
-| 2.5 | Call-the-office button: one press rings only the office, for non-urgent calls; the console shows who's calling | new |
-| 2.6 | All-call still wins: an all-call or emergency interrupts a room call everywhere | new |
+| 2.2 | Office calls a floor (2xx; audio flag `kAudioFloor`) or a room group (`kAudioGroupCall`: the console calls the gym's group automatically). Several chosen rooms at once: later | done (sim) / code |
+| 2.3 | Call tone before a room call (880 / 660 Hz, 0.6 s, made in code) and `CAL` on the display while TALK would answer | done (sim) / code |
+| 2.4 | Room answers: TALK during a room call or within 10 s after replies to the caller only (`kAudioReply`; target 0 = the office console). Works between two units as well (`talk 5 room 214` on the office unit) | done (sim) / code |
+| 2.5 | Call the office: DOWN held 2 s (no extra button needed; a dedicated CALL key can go on a free key-scan position, K1+SEG7) or `callofc`. Status flag `kStatusCalling`; the display alternates `oFC`; the console shows the room blue with a beep; cleared when the office calls back, cancelled by DOWN again, gives up after 5 min | done (sim) / code |
+| 2.6 | All-call still wins: while an office all-call plays, room calls and answers aren't played (emergency: R3) | done (sim) / code |
 | 2.7 | Console: room-call history with times, missed calls from rooms | new |
 | 2.8 | Privacy: no listening to a room without the room seeing it; listen-in stays out unless the school decides otherwise | decide |
 | 2.8a | **Visual call indicator:** a room call pulses the lamp output LED.OTH slowly (red or amber LED) and shows `CAL` until answered; steady glow during an all-call. Flashing at most 2 per second; never white-strobe like the fire alarm | new |

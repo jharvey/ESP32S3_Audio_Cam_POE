@@ -23,7 +23,8 @@ not in the units yet.
 | `Lo` flashing briefly | Battery low (portable units) | Plug it into its PoE cable |
 | `dUP` and the number alternating | Another unit has the same room number | Tell the office; one unit needs its number changed |
 | `---` | No room number set yet | Set the number (see below) |
-| `CAL` *(planned)* | The office is calling your room | Hold TALK to answer |
+| `CAL` (after a short two-note chime) | The office is calling your room | Hold TALK to answer: only the office hears you, for up to 10 s after the call |
+| `oFC` and the number alternating | Your room is calling the office | Wait; it clears when the office calls back (or hold DOWN 2 s to cancel) |
 | `ALr` *(planned)* | Lockdown / emergency | Follow the school's emergency plan |
 
 A light on the unit *(planned)* pulses slowly for a call to your room and flashes for an emergency.
@@ -38,6 +39,9 @@ A light on the unit *(planned)* pulses slowly for a call to your room and flashe
 
 If the display then shows `dUP`, another unit already uses that number: pick the right one.
 
-## Calling the office *(planned)*
+## Calling the office
 
-Press the CALL button: only the office hears it, not the whole school.
+Hold **DOWN** for 2 seconds. The display alternates `oFC` with the room number and the office console shows
+your room as calling, with a beep. Only the office is told, not the whole school. When the office calls your room
+back you hear the chime and see `CAL`: hold TALK to talk to the office. Hold DOWN 2 s again to cancel; the call
+gives up by itself after 5 minutes.

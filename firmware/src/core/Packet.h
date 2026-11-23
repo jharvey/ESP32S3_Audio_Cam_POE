@@ -40,13 +40,20 @@ constexpr uint8_t kVersion = 2;  // 2: status carries the unit id and room group
 constexpr size_t kHeaderBytes = 16;
 constexpr size_t kMaxPacketBytes = kHeaderBytes + kFrameSamples * 2;
 
-enum AudioFlags : uint8_t { kAudioAllCall = 0x01, kAudioFromConsole = 0x02 };
+enum AudioFlags : uint8_t {
+    kAudioAllCall = 0x01,
+    kAudioFromConsole = 0x02,
+    kAudioFloor = 0x04,      // target = a floor (room / 100): every unit on that floor plays it
+    kAudioGroupCall = 0x08,  // target = a room group: every unit in the group plays it
+    kAudioReply = 0x10,      // an answer to a call: only the caller (target = its room; 0 = the office console)
+};
 enum StatusFlags : uint8_t {
     kStatusTalking = 0x01,
     kStatusEmergency = 0x02,
     kStatusCameraOk = 0x04,
     kStatusMuted = 0x08,     // the office muted this unit's TALK ("mute" command)
     kStatusTalkHeld = 0x10,  // TALK held for over 2 minutes: stuck button or something on it
+    kStatusCalling = 0x20,   // the room is calling the office (DOWN held 2 s)
 };
 // Status fault byte: what the unit's display is flashing.
 enum class Fault : uint8_t { None = 0, NoEthernet = 1, NoNetwork = 2, LowBattery = 3, Duplicate = 4 };
@@ -54,7 +61,7 @@ enum class Fault : uint8_t { None = 0, NoEthernet = 1, NoNetwork = 2, LowBattery
 struct AudioHeader {
     UnitId from;
     uint8_t flags = kAudioAllCall;
-    uint16_t target = 0;  // 0 = everyone, else a room number
+    uint16_t target = 0;  // 0 = everyone, else a room number (or floor / group, see flags)
     uint16_t seq = 0;
     uint8_t level = 0;    // loudness 0..100 (dBFS + 100)
     Codec codec = Codec::Pcm16;

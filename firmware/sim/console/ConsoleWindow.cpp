@@ -68,8 +68,11 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     auto* talkBox = new QGroupBox("Talk (hold the button)");
     auto* tl = new QHBoxLayout(talkBox);
     allBtn_ = new QPushButton("All-call");
-    roomBtn_ = new QPushButton("Talk to selected room");
-    for (QPushButton* b : {allBtn_, roomBtn_}) b->setMinimumHeight(44);
+    roomBtn_ = new QPushButton("Call selected room");
+    floorBtn_ = new QPushButton("Call its floor");
+    roomBtn_->setToolTip("Only that room hears you (every unit of a room group, e.g. the gym); it hears a chime first and can answer");
+    floorBtn_->setToolTip("Every room on the selected room's floor (214 -> floor 2)");
+    for (QPushButton* b : {allBtn_, roomBtn_, floorBtn_}) b->setMinimumHeight(44);
     allBtn_->setStyleSheet("font-weight:600");
     micSrc_ = new QComboBox;
     micSrc_->addItems({"PC microphone", "Test voice"});
@@ -79,15 +82,16 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     talkState_ = new QLabel;
     tl->addWidget(allBtn_);
     tl->addWidget(roomBtn_);
+    tl->addWidget(floorBtn_);
     tl->addWidget(new QLabel("Mic:"));
     tl->addWidget(micSrc_);
     tl->addWidget(listen_);
     tl->addWidget(talkState_, 1);
     root->addWidget(talkBox);
-    connect(allBtn_, &QPushButton::pressed, this, [this] { startTalk(true); });
-    connect(roomBtn_, &QPushButton::pressed, this, [this] { startTalk(false); });
-    connect(allBtn_, &QPushButton::released, this, &ConsoleWindow::stopTalk);
-    connect(roomBtn_, &QPushButton::released, this, &ConsoleWindow::stopTalk);
+    connect(allBtn_, &QPushButton::pressed, this, [this] { startTalk(kTalkAll); });
+    connect(roomBtn_, &QPushButton::pressed, this, [this] { startTalk(kTalkRoom); });
+    connect(floorBtn_, &QPushButton::pressed, this, [this] { startTalk(kTalkFloor); });
+    for (QPushButton* b : {allBtn_, roomBtn_, floorBtn_}) connect(b, &QPushButton::released, this, &ConsoleWindow::stopTalk);
     connect(listen_, &QCheckBox::toggled, this, [this](bool on) {
         if (on && !out_.isOpen() && !out_.open()) appendLog("no PC speaker available");
         if (!on) out_.close();
@@ -184,22 +188,38 @@ QString ConsoleWindow::selectedUnit() const {
     return table_->item(sel.first()->row(), 0)->text();
 }
 
-void ConsoleWindow::startTalk(bool allCall) {
-    if (!allCall) {
+void ConsoleWindow::startTalk(int kind) {
+    QString what = "everyone";
+    talkTarget_ = 0;
+    talkFlags_ = ic::kAudioAllCall;
+    if (kind != kTalkAll) {
         QString u = selectedUnit();
         if (u.isEmpty()) return appendLog("select a room in the table first");
         ic::UnitId id;
         ic::parseTarget(u.toStdString(), &id.room, &id.sub);
-        talkTarget_ = id.room;
-    } else {
-        talkTarget_ = 0;
+        if (id.sub == ic::kTargetAnySub) id.sub = 0;
+        uint16_t group = units_.contains(id.key()) ? units_[id.key()].status.group : 0;
+        if (kind == kTalkFloor) {
+            talkTarget_ = uint16_t(id.room / 100);
+            talkFlags_ = ic::kAudioFloor;
+            what = QString("floor %1").arg(talkTarget_);
+        } else if (group) {  // a room with several units (the gym): call all of them
+            talkTarget_ = group;
+            talkFlags_ = ic::kAudioGroupCall;
+            what = QString("room group %1").arg(group);
+        } else {
+            talkTarget_ = id.room;
+            talkFlags_ = 0;
+            what = QString("room %1").arg(id.room);
+        }
     }
     if (micSrc_->currentIndex() == 0 && !in_.isOpen() && !in_.open()) {
         appendLog("no PC microphone: using the test voice");
         micSrc_->setCurrentIndex(1);
     }
     talking_ = true;
-    talkState_->setText(talkTarget_ ? QString("TALKING to room %1").arg(talkTarget_) : QString("TALKING to everyone"));
+    talkState_->setText(kind == kTalkAll ? QString("TALKING to everyone")
+                                         : QString("CALLING %1 (it hears a chime first; it can answer for 10 s)").arg(what));
     talkState_->setStyleSheet("color:#c62828;font-weight:600");
 }
 
@@ -226,7 +246,7 @@ void ConsoleWindow::tick() {
                 for (int r = 0; r < table_->rowCount(); r++)
                     if (table_->item(r, 0)->text() == opt_.autoTalkTarget) table_->selectRow(r);
             }
-            startTalk(opt_.autoTalkTarget == "all");
+            startTalk(opt_.autoTalkTarget == "all" ? kTalkAll : kTalkRoom);
         } else if (talking_ && t >= opt_.autoTalkAt + opt_.autoTalkFor) {
             stopTalk();
             opt_.autoTalkAt = -1;
@@ -254,7 +274,7 @@ void ConsoleWindow::frame() {
         }
         ic::AudioHeader h;
         h.from = {0, 0};  // room 0 = office console
-        h.flags = ic::kAudioAllCall | ic::kAudioFromConsole;
+        h.flags = uint8_t(talkFlags_ | ic::kAudioFromConsole);
         h.target = talkTarget_;
         h.seq = seq_++;
         h.level = ic::frameLevel(pcm, ic::kFrameSamples);
@@ -314,6 +334,11 @@ void ConsoleWindow::receive() {
             }
             if ((s.flags & ic::kStatusTalkHeld) && !u.heldLogged) appendLog(unitName(s.from) + ": TALK held over 2 minutes (stuck button?) - Mute TALK stops it");
             u.heldLogged = s.flags & ic::kStatusTalkHeld;
+            if ((s.flags & ic::kStatusCalling) && !u.callingLogged) {
+                appendLog(unitName(s.from) + " is CALLING THE OFFICE - select it and hold \"Call selected room\" to answer");
+                QApplication::beep();
+            }
+            u.callingLogged = s.flags & ic::kStatusCalling;
             if ((s.flags & ic::kStatusMuted) != (u.status.flags & ic::kStatusMuted) && u.lastSeen >= 0)
                 appendLog(unitName(s.from) + ((s.flags & ic::kStatusMuted) ? ": TALK muted" : ": TALK unmuted"));
             bool wasOffline = u.lastSeen >= 0 && clock_.elapsed() - u.lastSeen > kOfflineMs;
@@ -326,9 +351,12 @@ void ConsoleWindow::receive() {
             size_t plen;
             if (!ic::decodeAudioData(buf, size_t(len), &h, &payload, &plen) || !ic::codecAvailable(h.codec)) continue;
             if (h.from.room == 0) continue;  // our own (or another console's) audio
+            if (h.target != 0) continue;      // a call between two rooms, not for the office
             auto& t = talkers_[h.from.key()];
             if (!t) t = std::make_shared<Talker>();
             t->jb.push(h.seq, h.codec, payload, plen, h.level);
+            if ((h.flags & ic::kAudioReply) && !t->answerLogged) appendLog(unitName(h.from) + " answers the office");
+            t->answerLogged = h.flags & ic::kAudioReply;
             t->lastPacket = clock_.elapsed();
         } else if (type == ic::PacketType::Reply) {
             ic::TextPacket r;
@@ -372,8 +400,12 @@ void ConsoleWindow::refreshTable() {
             if (s.flags & ic::kStatusMuted) notes << "muted";
             if (dup) notes << faults[4];
             else if (s.fault != ic::Fault::None) notes << faults[int(s.fault)];
+            if (s.flags & ic::kStatusCalling) notes.prepend("CALLING THE OFFICE");
             if (!notes.isEmpty()) state = (talk ? QString("talking, ") : QString()) + notes.join(", ");
-            if (dup || (s.flags & ic::kStatusTalkHeld) || s.fault == ic::Fault::LowBattery) {
+            if (s.flags & ic::kStatusCalling) {
+                bg = QColor(170, 205, 255);  // blue: a room wants the office
+                problems++;
+            } else if (dup || (s.flags & ic::kStatusTalkHeld) || s.fault == ic::Fault::LowBattery) {
                 bg = QColor(255, 160, 160);  // red: needs someone now
                 problems++;
             } else if (s.fault != ic::Fault::None || (s.flags & ic::kStatusMuted)) {

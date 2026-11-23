@@ -961,6 +961,163 @@ static void testWeb() {
     CHECK(web.handle(req).status == 403, "webpass off turns the web interface off");
 }
 
+// The office console on the test bus: sends targeted audio as room 0, counts answers, sees "calling".
+struct FakeOffice {
+    Bus* bus;
+    std::deque<std::vector<uint8_t>> rx;
+    sim::TestVoice voice{110.0f, 7};
+    uint16_t seq = 0;
+    int replies = 0;
+    UnitId lastReplyFrom;
+    std::vector<uint16_t> calling;  // rooms whose last status says "calling the office"
+    explicit FakeOffice(Bus* b) : bus(b) { bus->queues.push_back(&rx); }
+    void talk(uint16_t target, uint8_t flags) {
+        int16_t pcm[kFrameSamples];
+        voice.render(pcm, kFrameSamples);
+        AudioHeader h;
+        h.from = UnitId();
+        h.flags = uint8_t(flags | kAudioFromConsole);
+        h.target = target;
+        h.seq = seq++;
+        h.level = frameLevel(pcm, kFrameSamples);
+        uint8_t buf[kMaxPacketBytes];
+        size_t n = encodeAudio(h, pcm, buf);
+        for (auto* q : bus->queues)
+            if (q != &rx) q->push_back(std::vector<uint8_t>(buf, buf + n));
+    }
+    void drain() {
+        for (; !rx.empty(); rx.pop_front()) {
+            const std::vector<uint8_t>& p = rx.front();
+            bool ok;
+            PacketType t = peekType(p.data(), p.size(), &ok);
+            if (!ok) continue;
+            if (t == PacketType::Audio) {
+                AudioHeader h;
+                const uint8_t* d;
+                size_t n;
+                if (decodeAudioData(p.data(), p.size(), &h, &d, &n) && (h.flags & kAudioReply) && h.target == 0) {
+                    replies++;
+                    lastReplyFrom = h.from;
+                }
+            } else if (t == PacketType::Status) {
+                StatusPacket s;
+                if (!decodeStatus(p.data(), p.size(), &s)) continue;
+                auto it = std::find(calling.begin(), calling.end(), s.from.room);
+                if ((s.flags & kStatusCalling) && it == calling.end()) calling.push_back(s.from.room);
+                if (!(s.flags & kStatusCalling) && it != calling.end()) calling.erase(it);
+            }
+        }
+    }
+    bool isCalling(uint16_t room) const { return std::find(calling.begin(), calling.end(), room) != calling.end(); }
+};
+
+static void testRoomCalls() {
+    printf("room calls (R2.0): office, floors, groups, answers, call the office\n");
+    Bus bus;
+    FakeUnit r101(&bus, {101, 0}, 120), r102(&bus, {102, 0}, 135), r214(&bus, {214, 0}, 160), gymA(&bus, {299, 0}, 190),
+        gymB(&bus, {298, 0}, 230);
+    FakeOffice office(&bus);
+    std::vector<FakeUnit*> all = {&r101, &r102, &r214, &gymA, &gymB};
+    int officeTalk = 0;
+    uint16_t officeTarget = 0;
+    uint8_t officeFlags = 0;
+    auto run = [&](int frames) {
+        for (int k = 0; k < frames; k++) {
+            if (officeTalk > 0) {
+                office.talk(officeTarget, officeFlags);
+                officeTalk--;
+            }
+            for (auto* u : all) u->step();
+            office.drain();
+        }
+    };
+    auto officeCall = [&](uint16_t target, uint8_t flags, int frames) {
+        officeTarget = target;
+        officeFlags = flags;
+        officeTalk = frames;
+        run(frames + 10);
+    };
+    const UnitId kOffice;
+    run(20);
+    gymA.ic->command("group 299");
+    gymB.ic->command("group 299");
+    run(60);  // status beacons carry the groups
+
+    // The office calls room 214: only 214 hears it, with a chime and CAL.
+    officeTarget = 214, officeFlags = 0, officeTalk = 50;
+    run(3);
+    CHECK(r214.ic->chiming() && r214.ic->inCall(), "214 chimes and shows CAL when the office calls it");
+    run(57);
+    CHECK(r214.heardFrom(kOffice) > 40 && r101.heardFrom(kOffice) == 0 && gymA.heardFrom(kOffice) == 0,
+          "room call: 214 heard the office (%u frames), 101 and 299 did not", r214.heardFrom(kOffice));
+    // 214 answers with TALK within 10 s: only the office hears it.
+    r214.held = 1;
+    run(50);
+    r214.held = 0;
+    run(10);
+    CHECK(office.replies > 40 && office.lastReplyFrom == r214.id, "214's answer went to the office (%d frames)", office.replies);
+    CHECK(r101.heardFrom(r214.id) == 0 && gymA.heardFrom(r214.id) == 0, "nobody else heard the answer");
+    run(520);  // more than 10 s after the call
+    CHECK(!r214.ic->canAnswer(), "the answer window closes 10 s after the call");
+    r214.held = 1;
+    run(30);
+    r214.held = 0;
+    run(10);
+    CHECK(r101.heardFrom(r214.id) > 15, "after that, TALK is an all-call again");
+
+    // Floor 1: 101 and 102, not 214.
+    uint32_t h214 = r214.heardFrom(kOffice);
+    officeCall(1, kAudioFloor, 50);
+    CHECK(r101.heardFrom(kOffice) > 40 && r102.heardFrom(kOffice) > 40 && r214.heardFrom(kOffice) == h214,
+          "floor call 1: 101 and 102 heard it, 214 did not");
+    // Group 299: both gym units, nobody else.
+    run(520);
+    uint32_t h101 = r101.heardFrom(kOffice);
+    officeCall(299, kAudioGroupCall, 50);
+    CHECK(gymA.heardFrom(kOffice) > 40 && gymB.heardFrom(kOffice) > 40 && r101.heardFrom(kOffice) == h101,
+          "group call 299: both gym units heard it, 101 did not");
+    run(520);
+
+    // Unit to unit (office unit / bring-up): 101 calls 214, 214 answers 101 only.
+    CHECK(r101.ic->command("talk 1 room 214").find("to room 214") != std::string::npos, "\"talk 1 room 214\" accepted");
+    uint32_t h102 = r102.heardFrom(r101.id), h214b = r214.heardFrom(r101.id);
+    run(60);
+    CHECK(r214.heardFrom(r101.id) > h214b + 40 && r102.heardFrom(r101.id) == h102, "101's room call reached 214 only");
+    uint32_t r101from214 = r101.heardFrom(r214.id), r102from214 = r102.heardFrom(r214.id);
+    r214.held = 1;
+    run(50);
+    r214.held = 0;
+    run(10);
+    CHECK(r101.heardFrom(r214.id) > r101from214 + 40 && r102.heardFrom(r214.id) == r102from214, "214's answer reached 101 only");
+    run(520);
+
+    // An office all-call wins: a room call during it isn't played.
+    h214b = r214.heardFrom(r101.id);
+    officeTarget = 0, officeFlags = kAudioAllCall, officeTalk = 80;
+    run(10);
+    r101.ic->command("talk 1 room 214");
+    run(60);
+    CHECK(r214.heardFrom(r101.id) == h214b, "a room call during an office all-call is not played");
+    run(540);
+
+    // Call the office: DOWN held 2 s; the office sees it; answering clears it.
+    r214.held = 1u << kBtnDown;
+    run(105);
+    r214.held = 0;
+    run(55);
+    CHECK(r214.ic->callingOffice() && office.isCalling(214), "DOWN held 2 s: 214 calls the office (status flag)");
+    officeCall(214, 0, 20);
+    run(55);
+    CHECK(!r214.ic->callingOffice() && !office.isCalling(214), "the office calling back clears it");
+    run(520);
+    r101.ic->command("callofc");
+    run(55);
+    CHECK(office.isCalling(101), "\"callofc\" calls the office");
+    r101.ic->command("callofc off");
+    run(55);
+    CHECK(!office.isCalling(101), "\"callofc off\" cancels");
+}
+
 int main() {
     testTuning();
     testAutoTune();
@@ -974,6 +1131,7 @@ int main() {
     testJitter();
     testMixer();
     testIntercom();
+    testRoomCalls();
     testAec();
     testCrossRoom();
     printf(g_fail ? "\n%d FAILED\n" : "\nALL PASS\n", g_fail);

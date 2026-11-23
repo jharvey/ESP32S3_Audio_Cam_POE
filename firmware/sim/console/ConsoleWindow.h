@@ -52,10 +52,12 @@ private:
         quint32 otherUid = 0;    // a second board heard with the same number
         qint64 otherSeen = -1;   // when that was
         bool heldLogged = false;
+        bool callingLogged = false;
     };
     struct Talker {
         ic::JitterBuffer jb;
         qint64 lastPacket = 0;
+        bool answerLogged = false;
     };
 
     void tick();
@@ -64,7 +66,8 @@ private:
     void refreshTable();
     void sendCommand();
     void sendText(const QString& target, const QString& cmd);
-    void startTalk(bool allCall);
+    enum TalkKind { kTalkAll = 0, kTalkRoom = 1, kTalkFloor = 2 };
+    void startTalk(int kind);
     void stopTalk();
     void appendLog(const QString& line);
     QString selectedUnit() const;
@@ -85,11 +88,13 @@ private:
 
     bool talking_ = false;
     uint16_t talkTarget_ = 0;  // 0 = all-call
+    uint8_t talkFlags_ = 0;
     uint16_t seq_ = 0;
 
     QTableWidget* table_;
     QPushButton* allBtn_;
     QPushButton* roomBtn_;
+    QPushButton* floorBtn_;
     QComboBox* micSrc_;
     QCheckBox* listen_;
     QLabel* talkState_;

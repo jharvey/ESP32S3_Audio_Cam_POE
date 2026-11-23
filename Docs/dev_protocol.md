@@ -21,15 +21,17 @@ Types: 1 Audio, 2 Status, 3 Command, 4 Reply.
 
 | Byte | Field |
 |---|---|
-| 7 | flags: 0x01 all-call, 0x02 from the office console |
-| 8-9 | target: 0 = everyone, else a room number (room calls) |
+| 7 | flags: 0x01 all-call, 0x02 from the office console, 0x04 floor call, 0x08 group call, 0x10 answer to a call |
+| 8-9 | target: 0 = everyone; else a room, or a floor (0x04), or a room group (0x08); for an answer (0x10) the caller's room, 0 = the office console |
 | 10-11 | sequence number (wraps) |
 | 12 | level: loudness 0-100 (dBFS + 100), for the loudest-N mix |
 | 13 | codec: 0 PCM, 1 Opus |
 | 14-15 | PCM: number of samples (320); Opus: payload bytes |
 | 16- | payload: PCM 16-bit samples, or one Opus frame (20 ms, 16 kHz mono) |
 
-A unit ignores audio from its own room group (unless it's from the console) and room calls for other rooms.
+A unit ignores audio from its own room group (unless it's from the console) and calls for other rooms. A targeted
+call starts a chime and `CAL`; TALK within 10 s answers the caller only. While an office all-call plays, targeted
+audio is dropped.
 
 ## Status (24 bytes), once a second and on changes
 
@@ -38,7 +40,7 @@ A unit ignores audio from its own room group (unless it's from the console) and 
 | 7 | link: 0 none, 1 Ethernet, 2 Wi-Fi |
 | 8 | power: 0 PoE, 1 battery |
 | 9 | battery % (0 if none) |
-| 10 | flags: 0x01 talking, 0x02 emergency, 0x04 camera OK, 0x08 TALK muted by the office, 0x10 TALK held over 2 min |
+| 10 | flags: 0x01 talking, 0x02 emergency, 0x04 camera OK, 0x08 TALK muted by the office, 0x10 TALK held over 2 min, 0x20 calling the office |
 | 11 | fault shown on the display: 0 none, 1 `E1` no Ethernet, 2 `E2` no network, 3 `Lo` battery, 4 `dUP` |
 | 12-15 | uptime, s |
 | 16-19 | unit ID (from the board's MAC); two units with the same room and different IDs = duplicate (`dUP`) |
@@ -65,5 +67,5 @@ encrypted: keep the intercom on its own VLAN.
 
 ## Planned
 
-Room calls with floor targets and replies (R2.0), call-office packets, time and schedule (R2.1), RTSP / ONVIF
+Time and schedule (R2.1), RTSP / ONVIF
 camera streams (R3), LoRa messages (R4): see `release_designs.md`.

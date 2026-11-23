@@ -38,6 +38,12 @@ struct AudioStats {
 // (the web password can only be set over USB).
 enum class CmdSource : uint8_t { Local = 0, Network = 1, Web = 2 };
 
+// Who TALK reaches (office unit / bring-up). A unit answering a call always replies to the caller only.
+struct TalkTarget {
+    enum Kind : uint8_t { All = 0, Room = 1, Floor = 2, Group = 3 } kind = All;
+    uint16_t n = 0;  // room, floor or group number
+};
+
 struct Peer {
     StatusPacket status;
     uint32_t lastFrame = 0;
@@ -80,6 +86,14 @@ public:
     Fault faultCode() const;
     bool muted() const { return muteUntil_ != 0; }
     bool talkHeld() const { return talkSince_ && frame_ - talkSince_ >= kTalkHeldFrames; }
+    // Room calls (R2.0).
+    void setTalkTarget(const TalkTarget& t) { talkTarget_ = t; }
+    const TalkTarget& talkTarget() const { return talkTarget_; }
+    bool inCall() const;            // a call to this room is playing (display CAL)
+    bool canAnswer() const;         // TALK now answers the caller only (during a call and 10 s after)
+    const UnitId& caller() const { return callFrom_; }
+    bool callingOffice() const { return callingOffice_; }
+    bool chiming() const { return chimeFrames_ > 0; }
     Codec sendCodec() const { return encoder_ ? encoder_->codec() : Codec::Pcm16; }
     AudioStats audioStats() const;
     // Talkers heard since start, for tests: (unit key, frames played).
@@ -106,6 +120,8 @@ private:
     void updatePanel();
     Talker* talkerFor(const UnitId& id);
     bool sameGroup(const UnitId& from) const;
+    bool isForMe(const AudioHeader& h) const;
+    void setCallingOffice(bool on, const char* why);
     void refreshPower();
 
     Hal hal_;
@@ -143,6 +159,15 @@ private:
     static constexpr uint32_t kTalkHeldFrames = 120000 / kFrameMs;  // 2 minutes
     uint32_t muteUntil_ = 0;  // frame the office mute ends; 0 = not muted
     uint32_t talkSince_ = 0;  // frame TALK went down; 0 = not talking
+    TalkTarget talkTarget_;
+    uint16_t txTarget_ = 0;       // target and flags of the transmission in progress
+    uint8_t txFlags_ = kAudioAllCall;
+    UnitId callFrom_;             // last unit that called this room
+    uint32_t callLast_ = 0;       // frame of its last packet; 0 = no call yet
+    uint32_t allCallUntil_ = 0;   // an office all-call is playing: room calls wait
+    uint32_t chimeFrames_ = 0, chimePos_ = 0;
+    bool callingOffice_ = false;
+    uint32_t callingSince_ = 0, downSince_ = 0;
     uint32_t talkFrames_ = 0;  // "talk" command: transmit as if TALK were held
     uint64_t lastNonce_ = 0;   // last accepted network command (replay protection)
     int testPhase_ = 0;        // selftest: 0 idle, 1 quiet, 2 tone

@@ -19,6 +19,13 @@ constexpr size_t kMaxTalkers = 16;
 constexpr uint32_t kComboFrames = 150;   // MODE + UP held 3 s = auto-tune
 constexpr uint32_t kUpHoldFrames = 250;  // or UP alone held 5 s (one-key panels)
 constexpr uint32_t kResultFrames = 250;  // show the auto-tune result for 5 s
+// Room calls (R2.0).
+constexpr uint32_t kCallFrames = 50;        // a call is "on" while its packets keep coming (1 s gap ends it)
+constexpr uint32_t kAnswerFrames = 500;     // TALK answers the caller during a call and 10 s after
+constexpr uint32_t kChimeFrames = 30;       // two-tone chime before a call, 0.6 s
+constexpr uint32_t kAllCallHoldFrames = 25; // an office all-call keeps room calls out until 0.5 s after it
+constexpr uint32_t kCallHoldFrames = 100;   // DOWN held 2 s = call the office (again = cancel)
+constexpr uint32_t kCallingTimeoutFrames = 15000;  // a call to the office gives up after 5 min
 constexpr uint32_t kDupHoldFrames = 150; // "dUP" stays 3 s after the other unit was last heard
 constexpr uint32_t kFaultCycle = 175;    // faults: room number 3 s, then the code for 0.5 s
 constexpr uint32_t kFaultShow = 25;
@@ -45,7 +52,9 @@ const char* kHelp =
     "  group [299|off]      room group: units in one room (the gym: 299, 298 ...) do not play each other\n"
     "  tone [seconds]       play a 1 kHz test tone on this unit's speaker (default 2 s, 0 stops)\n"
     "  mute [minutes|off]   stop this unit's TALK for a while (office: stuck button, misuse); it still hears\n"
-    "  talk [seconds|off]   transmit as if TALK were held (USB only; default 5 s, bring-up without the panel)\n"
+    "  callofc [off]        call the office (as DOWN held 2 s; the console shows it until answered)\n"
+    "  talk [seconds|off] [room N|floor N|group N]\n"
+    "                       transmit as if TALK were held, to everyone or a target (USB only; default 5 s)\n"
     "  selftest [result]    check the board and the speaker->mic path (plays a short tone)\n"
     "  version              firmware version\n"
     "  netkey <key>         set the network command key (USB only; \"netkey off\" refuses all network commands)\n"
@@ -254,9 +263,26 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         }
         float secs = a.size() > 1 ? std::strtof(a[1].c_str(), nullptr) : 5.0f;
         secs = std::max(0.0f, std::min(secs, 60.0f));
+        TalkTarget t;
+        if (a.size() > 2) {
+            unsigned long n = a.size() > 3 ? std::strtoul(a[3].c_str(), nullptr, 10) : 0;
+            if (a[2] == "room") t.kind = TalkTarget::Room;
+            else if (a[2] == "floor") t.kind = TalkTarget::Floor;
+            else if (a[2] == "group") t.kind = TalkTarget::Group;
+            else n = 0;
+            if (n < 1 || n > 999) return "usage: talk [seconds] [room N|floor N|group N]";
+            t.n = uint16_t(n);
+        }
+        talkTarget_ = t;
         talkFrames_ = uint32_t(secs * 1000 / kFrameMs);
-        snprintf(buf, sizeof(buf), "talking for %.0f s (\"talk off\" stops)", double(secs));
+        static const char* kinds[] = {"everyone", "room", "floor", "group"};
+        std::string num = t.kind ? " " + std::to_string(t.n) : std::string();
+        snprintf(buf, sizeof(buf), "talking for %.0f s to %s%s (\"talk off\" stops)", double(secs), kinds[t.kind], num.c_str());
         return buf;
+    }
+    if (c == "callofc") {
+        setCallingOffice(!(a.size() > 1 && a[1] == "off"), src == CmdSource::Local ? "USB" : "console");
+        return callingOffice_ ? "calling the office" : "not calling the office";
     }
     if (c == "selftest") {
         if (a.size() > 1 && a[1] == "result") return testResult_.empty() ? "no self-test run yet" : testResult_;
@@ -441,7 +467,24 @@ void Intercom::receive() {
             if (!decodeAudioData(buf, n, &h, &payload, &plen) || !codecAvailable(h.codec)) continue;
             if (h.from == unit_) continue;                                               // our own multicast echo
             if (sameGroup(h.from) && !(h.flags & kAudioFromConsole)) continue;            // same room group: heard acoustically
-            if (h.target != 0 && h.target != unit_.room) continue;                       // a call for another room
+            if (!isForMe(h)) continue;                                                     // a call for another room
+            if (h.target == 0 && !(h.flags & kAudioReply) && (h.flags & kAudioFromConsole))
+                allCallUntil_ = frame_ + kAllCallHoldFrames;
+            if (h.target != 0 || (h.flags & kAudioReply)) {
+                if (frame_ < allCallUntil_) continue;  // an office all-call is on: it wins
+                if (!inCall()) {
+                    char u[8];
+                    formatUnit(h.from, u);
+                    logf("call from %s", h.from.room ? u : "the office");
+                    if (!canAnswer()) {  // a new call, not the next sentence of one
+                        chimeFrames_ = kChimeFrames;
+                        chimePos_ = 0;
+                    }
+                }
+                callFrom_ = h.from;
+                callLast_ = frame_;
+                if (h.flags & kAudioFromConsole) setCallingOffice(false, "the office answered");
+            }
             if (Talker* t = talkerFor(h.from)) {
                 t->jb.push(h.seq, h.codec, payload, plen, h.level);
                 t->lastFrame = frame_;
@@ -502,7 +545,8 @@ void Intercom::sendStatus() {
     s.link = link_;
     s.power = pw.source;
     s.battery = pw.hasBattery ? pw.batteryPct : 0;
-    s.flags = uint8_t((transmitting_ ? kStatusTalking : 0) | (muted() ? kStatusMuted : 0) | (talkHeld() ? kStatusTalkHeld : 0));
+    s.flags = uint8_t((transmitting_ ? kStatusTalking : 0) | (muted() ? kStatusMuted : 0) | (talkHeld() ? kStatusTalkHeld : 0) |
+                      (callingOffice_ ? kStatusCalling : 0));
     s.fault = faultCode();
     s.uptimeS = frame_ * kFrameMs / 1000;
     s.unitUid = opt_.unitUid;
@@ -539,6 +583,11 @@ void Intercom::updatePanel() {
         text[1] = r >= 10 ? char('0' + (r / 10) % 10) : ' ';
         text[2] = char('0' + r % 10);
         if (r == 0) text[0] = text[1] = text[2] = '-';  // no room number set yet
+        if (canAnswer() && !transmitting_) {  // a call for this room: CAL (TALK answers the caller)
+            std::memcpy(text, "CAL", 3);
+        } else if (callingOffice_ && !transmitting_ && (frame_ / 50) % 2) {  // calling the office: oFC / number
+            std::memcpy(text, "oFC", 3);
+        }
         if (transmitting_) dots |= 0x01;
         if (playing_) dots |= 0x02;
         // The room number stays the main thing shown. A duplicate number alternates with "dUP" every
@@ -571,6 +620,25 @@ Fault Intercom::faultCode() const {
     if (f[0] == 'E') return f[1] == '1' ? Fault::NoEthernet : Fault::NoNetwork;
     if (f[0] == 'L') return Fault::LowBattery;
     return Fault::None;
+}
+
+bool Intercom::isForMe(const AudioHeader& h) const {
+    if (h.flags & kAudioReply) return h.target != 0 && h.target == unit_.room;  // 0 = an answer to the office console
+    if (h.target == 0) return true;
+    if (h.flags & kAudioFloor) return unit_.room / 100 == h.target;
+    if (h.flags & kAudioGroupCall) return group() == h.target || unit_.room == h.target;
+    return h.target == unit_.room;
+}
+
+bool Intercom::inCall() const { return callLast_ && frame_ - callLast_ < kCallFrames; }
+bool Intercom::canAnswer() const { return callLast_ && frame_ - callLast_ < kAnswerFrames; }
+
+void Intercom::setCallingOffice(bool on, const char* why) {
+    if (on == callingOffice_) return;
+    callingOffice_ = on;
+    callingSince_ = frame_;
+    logf(on ? "calling the office (%s)" : "call to the office ended (%s)", why);
+    sendStatus();
 }
 
 bool Intercom::sameGroup(const UnitId& from) const {
@@ -648,18 +716,37 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     UnitId id = unit_;
     uint8_t setupHeld = comboSince_ ? uint8_t(held & ~(1u << kBtnMode)) : held;
     if (setup_.update(setupHeld, frame_, &id) && id != unit_) setUnit(id);
-    if (talkFrames_) talkFrames_--;
+    if (talkFrames_ && --talkFrames_ == 0) talkTarget_ = TalkTarget();  // "talk ... room N" is for that once
     if (muteUntil_ && frame_ >= muteUntil_) {
         muteUntil_ = 0;
         logf("mute ended");
         sendStatus();
     }
     bool talk = ((held & talkBit) || talkFrames_) && !setup_.active() && !muted();
+    // DOWN held 2 s (outside setup) = call the office; again = cancel. It gives up after 5 minutes.
+    if (held == (1u << kBtnDown) && !setup_.active()) {
+        if (!downSince_) downSince_ = frame_;
+        else if (frame_ - downSince_ == kCallHoldFrames) setCallingOffice(!callingOffice_, "DOWN");
+    } else {
+        downSince_ = 0;
+    }
+    if (callingOffice_ && frame_ - callingSince_ >= kCallingTimeoutFrames) setCallingOffice(false, "no answer in 5 min");
     if (talk != transmitting_) {
         transmitting_ = talk;
         talkSince_ = talk ? frame_ : 0;
+        if (talk) {  // who this transmission goes to
+            if (canAnswer()) {
+                txTarget_ = callFrom_.room;  // 0 = the office console
+                txFlags_ = kAudioReply;
+            } else {
+                static const uint8_t flags[] = {kAudioAllCall, 0, kAudioFloor, kAudioGroupCall};
+                txTarget_ = talkTarget_.kind == TalkTarget::All ? 0 : talkTarget_.n;
+                txFlags_ = flags[talkTarget_.kind];
+            }
+        }
         sendStatus();
     }
+    if (talk && txFlags_ == kAudioReply) callLast_ = frame_;  // keep the conversation open while answering
     if (talkSince_ && frame_ - talkSince_ == kTalkHeldFrames) {
         logf("TALK held for over 2 minutes (stuck button?)");
         sendStatus();
@@ -677,6 +764,8 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         }
         AudioHeader h;
         h.from = unit_;
+        h.flags = txFlags_;
+        h.target = txTarget_;
         h.seq = seq_++;
         h.level = sentLevel_ = frameLevel(clean, kFrameSamples);
         uint8_t coded[kMaxCodedBytes], buf[kMaxPacketBytes];
@@ -727,6 +816,17 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         const float w = 2.0f * 3.14159265f * 1000.0f / kSampleRate;
         for (int i = 0; i < kFrameSamples; i++, tonePhase_++) {
             int v = speaker[i] + int(8200.0f * std::sin(w * float(tonePhase_ % kSampleRate)));
+            speaker[i] = int16_t(v > 32767 ? 32767 : v < -32767 ? -32767 : v);
+        }
+    }
+    if (chimeFrames_) {  // call chime: 880 Hz then 660 Hz, -14 dBFS, with a short fade at each end
+        chimeFrames_--;
+        const uint32_t half = kChimeFrames * kFrameSamples / 2;
+        for (int i = 0; i < kFrameSamples; i++, chimePos_++) {
+            float f = chimePos_ < half ? 880.0f : 660.0f;
+            uint32_t k = chimePos_ % half;
+            float env = std::min(1.0f, std::min(float(k), float(half - k)) / 160.0f);
+            int v = speaker[i] + int(6500.0f * env * std::sin(2.0f * 3.14159265f * f * float(chimePos_) / kSampleRate));
             speaker[i] = int16_t(v > 32767 ? 32767 : v < -32767 ? -32767 : v);
         }
     }

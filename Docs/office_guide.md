@@ -12,7 +12,13 @@ Today: the PC office console (`firmware/sim/console`), a Windows program. *(Plan
   (on Wi-Fi with PoE power, muted). Units listed in the rooms file but never heard are shown too. The line above
   the grid counts the units that need attention.
 - **All-call:** hold the button to talk to every room with the PC microphone.
-- **Talk to a room:** select a room and hold the button; only that room hears you.
+- **Call selected room:** select a room and hold the button; only that room hears you (all units of a room group,
+  such as the gym). The room hears a two-note chime and shows `CAL`; start speaking after the chime (about half a
+  second). When the room holds TALK within 10 s, only the office hears the answer ("214 answers the office" in
+  the log).
+- **Call its floor:** every room on the selected room's floor (214 -> all 2xx rooms).
+- **Rooms calling the office:** a room that holds DOWN 2 s shows blue, "CALLING THE OFFICE", with a beep. Call
+  it back to answer; that clears it.
 - **Commands:** send a console command to one unit, a room or all units (signed with the network key), for example
   `get`, `set volume_db -6`, `save`, `cal`, `selftest result`.
 - **Open web page** of the selected unit.
@@ -39,8 +45,6 @@ A page on the office unit, opened in Chrome, Edge or Firefox on the office PC:
 
 ## Planned
 
-- **Room calls (R2.0):** call one room, a floor or a group; the room hears a chime and sees `CAL`; its reply comes
-  only to the office. Rooms can call the office with a CALL button.
 - **Timed events (R2.1):** lunch chime, bells, class changes; a schedule kept on every unit, days off, quiet hours.
 - **Emergency mode (R3):** an alarm button opens the camera covers, starts the video to the NVR and flashes the
   alarm light in every room.
