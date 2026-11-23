@@ -1,5 +1,9 @@
 # Firmware plan (draft)
 
+> Decisions since this plan was written (addressing, gym groups, display codes, Opus, web console, camera stream,
+> lights) are listed in [README.md](README.md#decisions-23-nov-2026); progress is in [roadmap.md](roadmap.md). Where this
+> plan and those differ, they win (for example the IP plan is now 10.42.<floor>.<room>).
+
 ## Goals
 
 - **Site:** OVCS, Cornish, Maine. A small K-12 school in a wood building: 3 floors, about 35 rooms.
