@@ -12,10 +12,10 @@ hardware; **living** = kept current as work goes on; **to write**; **frozen at R
 | [roadmap.md](roadmap.md) | Every feature by release and increment, with status | living |
 | [release_designs.md](release_designs.md) | Designs for the coming increments | living |
 | [README.md](README.md) (decisions) | Decision log | living |
-| Architecture (`firmware/README.md` + to write: `dev_architecture.md`) | Core / HAL / board / simulator split, threads, data flow per frame | to write |
-| Protocol spec (`dev_protocol.md`) | Packet formats (audio, status v2, commands, replies), multicast, signing; from `Packet.h` / `Auth.cpp` | to write |
-| Build and test (`dev_build_test.md`) | Firmware build (VM100, Windows NAS toolchain), simulator (Qt, libopus), `ic-selftest`, `ic-netsim`, `record-walkthroughs.ps1` | to write |
-| Release process (`dev_release.md`) | Versioning, `unit_tool.py release`, release folders, SD-card file, what's tested before a release | to write |
+| [dev_architecture.md](dev_architecture.md) | Core / HAL / board / simulator split, threads, data flow per frame | draft |
+| [dev_protocol.md](dev_protocol.md) | Packet formats (audio, status v2, commands, replies), multicast, signing | draft |
+| [dev_build_test.md](dev_build_test.md) | Firmware build (VM100, Windows), simulator (Qt, libopus), tests, videos, echo prediction | draft |
+| [dev_release.md](dev_release.md) | Branches, versions, release checks, making and installing a release | draft |
 | [echo_prediction.md](echo_prediction.md) | Echo from the board layout; between rooms | living |
 | [network_sim_results.md](network_sim_results.md) | Network load test | done |
 | Hardware: [single_sided_layout.md](single_sided_layout.md), [routing_handoff.md](routing_handoff.md), [case_and_cost_notes.md](case_and_cost_notes.md), [bring-up.md](bring-up.md) | Layout, routing state, case and cost, first-board checks | living |

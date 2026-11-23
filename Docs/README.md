@@ -25,6 +25,15 @@ How the documents are organised (development vs final, per release): [documentat
 | [echo_prediction.md](echo_prediction.md) | Echo predicted from the board layout; echo between rooms, simulated |
 | [network_sim_results.md](network_sim_results.md) | Whole-school network load test (35-40 units, emergency video) |
 
+## Development
+
+| Document | What |
+|---|---|
+| [dev_architecture.md](dev_architecture.md) | How the firmware is put together |
+| [dev_protocol.md](dev_protocol.md) | Network packets and command signing |
+| [dev_build_test.md](dev_build_test.md) | Building, the simulator, tests, videos |
+| [dev_release.md](dev_release.md) | Branches, versions, releasing |
+
 ## Hardware
 
 | Document | What |
