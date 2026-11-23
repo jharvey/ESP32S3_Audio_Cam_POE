@@ -25,6 +25,7 @@
 #include "Intercom.h"
 #include "NlmsAec.h"
 #include "WebUi.h"
+#include "board/EspSrAec.h"
 #include "board/Panel.h"
 #include "board/Pins.h"
 
@@ -308,8 +309,10 @@ private:
 };
 
 Board gBoard;
-// TODO: replace with the ESP-SR AFE (AEC + NS + AGC) once it builds; NLMS is the fallback.
-ic::NlmsAec gAec(1024, 0);
+// Echo canceller: ESP-SR's esp_aec, with the portable NLMS canceller as the fallback if it can't
+// start. Next step (roadmap 1.6a): the full ESP-SR audio front end with both mics.
+ic::NlmsAec gNlms(1024, 0);
+board::EspSrAec* gEspAec = nullptr;
 ic::Intercom* gIntercom = nullptr;
 
 // USB serial console: loop() collects lines, the audio task runs them between frames so the
@@ -449,7 +452,10 @@ void setup() {
             },
             "autotune", 16384, j, 1, nullptr, 0);
     };
-    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, gAec, io);
+    gEspAec = new board::EspSrAec();
+    ic::EchoCanceller& aec = gEspAec->ok() ? static_cast<ic::EchoCanceller&>(*gEspAec) : gNlms;
+    Serial.printf("echo canceller: %s\n", gEspAec->ok() ? "ESP-SR" : "NLMS (ESP-SR did not start)");
+    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, aec, io);
     gIntercom = &intercom;
     intercom.begin();
     static ic::WebUi web(intercom);

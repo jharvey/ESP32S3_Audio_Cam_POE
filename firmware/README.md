@@ -21,13 +21,13 @@ the same code. The plan is in [Docs/firmware_plan.md](../Docs/firmware_plan.md).
 ## What works today (in the simulator)
 
 - Push-to-talk all-call: every unit hears whoever holds TALK, and several talkers at once are mixed (loudest 4).
-- Room groups: several units with the same room number (`150a`, `150b` in the gym) don't play each other back.
+- Room groups: several units in one room (the gym: 299, 298, ...) set to one group with `group 299` don't play each other back.
 - Echo cancellation on every unit, tested against simulated echo. With residual-echo suppression:
   - Classroom: about 16 dB, 20 dB with suppression.
   - Gym (2 s reverb): about 8 dB, 20 dB with suppression.
   - People talking in the room still come through while the far end plays.
 - PoE / Wi-Fi failover: unplugging a battery unit moves it to Wi-Fi in one 20 ms frame. Plugging in moves it back after 200 ms.
-- Room number = IP address, set on the unit's buttons: room 214 → 10.42.20.14, 214a → 10.42.21.14.
+- Room number = IP address, set on the unit's buttons: room 214 → 10.42.2.14 (10.42.<floor>.<room>). Two units on one number both show `dUP`.
 - Status beacons: every unit lists the others with link, power and battery.
 
 ## Echo canceller tuning: auto-tune plus manual override
@@ -94,7 +94,9 @@ The same text commands work in three places:
 | `save`, `load`, `defaults`, `undo` | keep, revert, factory reset, restore previous |
 | `cal`, `cal result` | auto-tune, and the last measurements |
 | `stats` | live ERLE, double-talk, link, levels |
-| `unit 214a` | set the room number (and IP) without using the buttons |
+| `unit 214` | set the room number (and IP) without using the buttons |
+| `group 299` | put this unit in room group 299 (`group off` = its own room) |
+| `wifi <ssid> <pass>` | Wi-Fi for failover and portable units (USB only; `wifi off`) |
 | `tone [seconds]` | play a 1 kHz test tone on the unit's speaker |
 | `talk [seconds\|off]` | transmit as if TALK were held (default 5 s). For bring-up before the panel works. **USB only.** |
 | `selftest`, `selftest result` | board check: which chips answer, Ethernet link, PSRAM, and a tone the mic must hear |
@@ -125,7 +127,7 @@ intercom-sim --send "214 set mu 0.1 nlp_db -18" --key <network key>
 intercom-sim --send "all cal result" --key <network key>
 ```
 
-The target is `all`, a room (`214`, every unit in it) or one unit (`214a`).
+The target is `all` or a room number (`214`).
 
 **Network key.** Units refuse network commands until a key is set over USB (`netkey`).
 - Every command is signed with the key (HMAC-SHA256), including its target, so it can't be changed or re-addressed.
@@ -136,7 +138,7 @@ The target is `all`, a room (`214`, every unit in it) or one unit (`214a`).
 
 ## Web interface
 
-Each unit serves its own page at its IP address, for example `http://10.42.20.14` for room 214.
+Each unit serves its own page at its IP address, for example `http://10.42.2.14` for room 214.
 
 ![web interface](sim/docs/sim-web.jpg)
 

@@ -67,26 +67,26 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 |---|---|---|
 | 1.5 | Hold TALK: raw PCM (16 kHz, 20 ms) on UDP multicast; every unit mixes and plays | done (sim) / code |
 | 1.6 | NLMS echo cancelling on the board (the fallback once 1.6a works) | done (sim) / code |
-| 1.6a | **Advanced echo cancelling:** ESP-SR audio front end with both mics: echo cancelling, beamforming, noise suppression, auto gain, voice detection. First check it builds under Arduino-ESP32 / PlatformIO (else ESP-IDF) | new |
+| 1.6a | **Advanced echo cancelling:** ESP-SR audio front end with both mics: echo cancelling, beamforming, noise suppression, auto gain, voice detection. First check it builds under Arduino-ESP32 / PlatformIO (else ESP-IDF) | code: ESP-SR echo canceller (`EspSrAec`) builds and is the default; front end with both mics, NS, AGC next |
 | 1.6b | **Auto-tune on the board:** run the built auto-tune with the real speaker, mics and case; pick settings for ESP-SR as well as NLMS; re-run after install | done (sim) / new (board) |
 | 1.6c | **Cross-room echo, own voice:** while a unit talks, cancel its own voice coming back from neighbouring rooms' speakers, using its sent audio (delayed by the network and jitter buffer) as a second echo reference | new |
 | 1.6d | **Cross-room echo, neighbours' speakers:** a longer canceller tail or extra suppression for room-to-room paths; ducking of nearby units while one talks, if needed | new |
 | 1.6e | **Coupling map:** at install, each unit chirps in turn while the others listen; the result shows which rooms hear each other and sets 1.6c/1.6d per unit; shown on the console | new |
 | 1.6f | Gym and corridor test with real units: residual echo measured per room and between rooms | new (needs boards) |
-| 1.7 | Watchdog and automatic restart; log the reset reason | new |
+| 1.7 | Watchdog and automatic restart; log the reset reason | code: audio-task watchdog (3 s), reset reason logged |
 | 1.8 | Confirm the button mapping (`Panel.h`) against the case labels | new |
 
 ### Network, power and addressing
 | # | Feature | Status |
 |---|---|---|
-| 1.9 | Room number = IP address, fixed IP (no DHCP wait): 10.42.&lt;floor&gt;.&lt;room on that floor&gt;, so 214 → 10.42.2.14, netmask 255.255.0.0 (decided 23 Nov; was 10.42.&lt;floor·10&gt;.&lt;room&gt;). No letters. The 10.42 prefix can be changed over USB | new (change from the built scheme) |
-| 1.9a | Room groups without letters: units that hear each other loudly in the coupling map (1.6e) are one room and don't play each other back; manual override over USB | new |
-| 1.10 | Setup over USB: room number, IP prefix, Wi-Fi name and password, stored in flash (panel setup stays) | code (room) / new (rest) |
-| 1.11 | Wi-Fi brought up with the same IP; Wi-Fi units hear and talk like wired ones (multicast first, wired relay if too lossy) | new |
-| 1.12 | Link rules. PoE power and Ethernet link: wired. PoE power, no Ethernet link: Wi-Fi, display alternates room and `E1`. No PoE (battery): Wi-Fi. `E2` if Wi-Fi is down too. Switch within 1 s | done (logic) / new (board) |
-| 1.13 | AXP2101: power source, battery %, charging in the status beacons; `Lo` on the display | new |
-| 1.13a | Fault display: the room number stays on; every 3 s the code flashes for 0.5 s (`E1` no cable link, `E2` no network at all, `Lo` battery low) | new |
-| 1.13b | Duplicate number: a unit ID (from the MAC) in every status beacon. A unit that hears its own number and letter from a different ID alternates `dUP` and the number every second, within about 1 s, until one is renumbered; the console shows it in red | new |
+| 1.9 | Room number = IP address, fixed IP (no DHCP wait): 10.42.&lt;floor&gt;.&lt;room on that floor&gt;, so 214 → 10.42.2.14, netmask 255.255.0.0 (decided 23 Nov; was 10.42.&lt;floor·10&gt;.&lt;room&gt;). No letters. The 10.42 prefix can be changed over USB | done (sim) / code |
+| 1.9a | Room groups without letters: units that hear each other loudly in the coupling map (1.6e) are one room and don't play each other back; manual override over USB | code: `group 299` over USB (manual); automatic from the coupling map: new |
+| 1.10 | Setup over USB: room number, IP prefix, Wi-Fi name and password, stored in flash (panel setup stays) | code: room, Wi-Fi (`wifi <ssid> <pass>`); IP prefix: new |
+| 1.11 | Wi-Fi brought up with the same IP; Wi-Fi units hear and talk like wired ones (multicast first, wired relay if too lossy) | code: Wi-Fi with the same IP, default interface follows the link; Wi-Fi audio to test on boards |
+| 1.12 | Link rules. PoE power and Ethernet link: wired. PoE power, no Ethernet link: Wi-Fi, display alternates room and `E1`. No PoE (battery): Wi-Fi. `E2` if Wi-Fi is down too. Switch within 1 s | done (sim) / code |
+| 1.13 | AXP2101: power source, battery %, charging in the status beacons; `Lo` on the display | code (register map to confirm on the board) |
+| 1.13a | Fault display: the room number stays on; every 3 s the code flashes for 0.5 s (`E1` no cable link, `E2` no network at all, `Lo` battery low) | done (sim) / code |
+| 1.13b | Duplicate number: a unit ID (from the MAC) in every status beacon. A unit that hears its own number and letter from a different ID alternates `dUP` and the number every second, within about 1 s, until one is renumbered; the console shows it in red | done (sim) / code; console red marking: new |
 | 1.13c | Code card: the codes printed on the case or a card by the display, and spelled out on the web page and console | new |
 | 1.14 | Check parking-lot Wi-Fi coverage (may need an outdoor access point) | new (site) |
 
@@ -94,7 +94,7 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 | # | Feature | Status |
 |---|---|---|
 | 1.15 | Firmware updates over USB (`update-unit.bat`): newest release, checks version and room after, keeps settings, logs | code |
-| 1.16 | Firmware updates from SD card: `firmware.bin` applied at boot, then renamed | new |
+| 1.16 | Firmware updates from SD card: `firmware.bin` applied at boot, then renamed | code |
 | 1.17 | Intercom VLAN with IGMP snooping and audio priority (DSCP); separate WPA2/WPA3 Wi-Fi for it | new (network setup) |
 | 1.18 | Move the web interface's first-login password check out of the audio task | new |
 | 1.19 | 3D-printed case with separate speaker and mic chambers; re-run auto-tune in the case | new |
