@@ -11,7 +11,7 @@ Last updated: 23 Nov 2026.
 |---|---|---|
 | R0 Foundations | (done, on `single-sided` and earlier) | Intercom core, PC simulator, office console, tools, network load test |
 | R1 Intercom | `fw/r1-intercom` | A PoE intercom: hold TALK and every unit hears you, wired or Wi-Fi |
-| R2 Room calls | `fw/r2-room-calls`, cut from R1 | The office calls one room (or a few); a room calls the office |
+| R2 Room calls and timed events | `fw/r2-room-calls`, cut from R1 | The office calls one room (or a few); a room calls the office; scheduled chimes such as lunch |
 | R3 Camera | `fw/r3-camera`, cut from R2 | Camera, cover servo, emergency video |
 | R4 LoRa | `fw/r4-lora`, cut from R3 | LoRa alerts and repeaters; role still to define |
 | Later | | Tracking, laser, Opus, encryption, console extras |
@@ -107,7 +107,7 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 - **Display codes (23 Nov):** the room number stays the main thing shown; codes flash briefly (1.13a). Codes:
   `E1`, `E2`, `Lo`, `dUP`.
 
-## R2 Room calls (after R1, before the camera)
+## R2 Room calls and timed events (after R1, before the camera)
 
 Individual addressing: the office talks to one room instead of the whole school. The audio packets already carry a
 target room, and the office console's "Talk to selected room" works in the simulator; this release brings it to the
@@ -123,6 +123,17 @@ boards and adds what a teacher needs around it.
 | 2.6 | All-call still wins: an all-call or emergency interrupts a room call everywhere | new |
 | 2.7 | Console: room-call history with times, missed calls from rooms | new |
 | 2.8 | Privacy: no listening to a room without the room seeing it; listen-in stays out unless the school decides otherwise | decide |
+
+### Timed events
+| # | Feature | Status |
+|---|---|---|
+| 2.9 | Time sync: NTP from the school network, or the office console as the time source; time in logs | new |
+| 2.10 | Schedule kept on each unit (pushed from the console, signed), so chimes still play with the office PC off | new |
+| 2.11 | Chimes and bells: lunch, start and end of day, class changes; played by all rooms or chosen rooms/floors | new |
+| 2.12 | Weekday tables, days off (holidays, snow days) and a one-tap "skip today" on the console | new |
+| 2.13 | Chime sounds and short recorded messages stored on the SD card (or sent from the console) | new |
+| 2.14 | Priority: an all-call, room call or emergency cuts a chime; a chime never interrupts them | new |
+| 2.15 | Quiet hours: no chimes nights and weekends unless the schedule says so | new |
 
 ## R3 Camera (middle)
 
@@ -163,7 +174,6 @@ Covers the old phase 5 and the console's alarm.
 | Lockdown / all-clear tones | A distinct sound plus a display code everyone recognises, from the office or any unit |
 | Fire alarm / bell input | Mute the intercom or start emergency mode from a dry contact on a MISC input |
 | Emergency audio recording at the console | A record for after-action review; check school policy first |
-| Time sync (NTP or from the console) | Timestamps in logs and recordings |
 
 ## Security
 
