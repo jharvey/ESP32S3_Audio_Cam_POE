@@ -102,7 +102,7 @@ public:
         I2cLock lock;
         out_ = 0;  // TM1637 CLK/DIO output latches stay 0: they are driven open-drain via cfg_
         out_ |= 1u << pins::exp::ETH_RST | 1u << pins::exp::LORA_RST;
-        out_ |= 1u << pins::exp::PWM_OE;   // servo/lamp outputs off until PCA9685 is set up
+        out_ |= 1u << pins::exp::PWM_OE;   // /OE high: PCA9685 outputs released (MODE2 OUTNE = 10, set by safeOff)
         out_ |= 1u << pins::exp::CAM_PWR;  // TODO: confirm Q1 polarity (camera stays powered)
         write();
         // Port 0 directions: 1 = input. PMU_IRQ and ETH_INT are inputs; TM1637 lines start
@@ -140,10 +140,20 @@ private:
 
 class Pwm {
 public:
+    // The PCA9685 powers up with every output driven LOW (datasheet 7.5: totem pole, all "full
+    // off"), and LOW turns every P-FET on: lamps, MISC outputs (laser) and servo power. This is
+    // the first thing setup() does. Switching to open-drain releases all outputs at once (full
+    // off = released for a P-FET driver), and OUTNE = 10 makes /OE high release them too (the
+    // default OUTNE = 00 drives them LOW, i.e. on, while /OE is high).
+    void safeOff() {
+        i2cWrite(kPca9685, 0xFD, 0x10);  // ALL_LED_OFF_H: full off on every channel (the reset value)
+        i2cWrite(kPca9685, 0x01, 0x02);  // MODE2: OUTDRV = 0 open-drain, OUTNE = 10
+    }
     void begin() {
+        safeOff();
         i2cWrite(kPca9685, 0x00, 0x10);  // MODE1: sleep (prescale can only be set asleep)
         i2cWrite(kPca9685, 0xFE, 121);   // 25 MHz / (4096 * 50 Hz) - 1
-        i2cWrite(kPca9685, 0x01, 0x00);  // MODE2: OUTDRV = 0, open-drain
+        i2cWrite(kPca9685, 0x01, 0x02);  // MODE2: open-drain, /OE high = released
         i2cWrite(kPca9685, 0x00, 0x20);  // MODE1: awake, auto-increment
         delay(1);
         // Released = P-FETs off: servo power, lamps and MISC outputs.
@@ -409,12 +419,16 @@ void sdUpdate() {
 }  // namespace
 
 void setup() {
+    // Lamps, MISC outputs and servo power off before anything else (see Pwm::safeOff): the
+    // PCA9685 turns them all on at power-up. Until a board revision adds an inverting stage, they
+    // are on from power-up until here (ESP32 boot, about 0.3 s).
+    gI2c = xSemaphoreCreateRecursiveMutex();
+    Wire.begin(pins::I2C_SDA, pins::I2C_SCL, 400000);
+    gPwm.safeOff();
     Serial.begin(115200);
     Serial.printf("intercom firmware %s, reset: %s\n", ic::kFirmwareVersion, resetReason());
     sdUpdate();
     gPrefs.begin("intercom", false);
-    gI2c = xSemaphoreCreateRecursiveMutex();
-    Wire.begin(pins::I2C_SDA, pins::I2C_SCL, 400000);
     gExp.begin();
     gPwm.begin();
     gPmu.begin();
