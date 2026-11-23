@@ -72,7 +72,7 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 ### Network, power and addressing
 | # | Feature | Status |
 |---|---|---|
-| 1.9 | Room number = last digits of the IP. Default 10.10.10.&lt;room&gt;/24, fixed IP. Room 1-254 (replaces 10.42.&lt;floor·10+sub&gt;.&lt;room&gt;) | new |
+| 1.9 | Room number = IP address, fixed IP (no DHCP wait): 10.42.&lt;floor·10 + letter&gt;.&lt;room % 100&gt;, so 214 → 10.42.20.14 and 299b → 10.42.22.99. Kept as built (decided 23 Nov); the 10.42 prefix can be changed over USB | done (sim) / code |
 | 1.10 | Setup over USB: room number, IP prefix, Wi-Fi name and password, stored in flash (panel setup stays) | code (room) / new (rest) |
 | 1.11 | Wi-Fi brought up with the same IP; Wi-Fi units hear and talk like wired ones (multicast first, wired relay if too lossy) | new |
 | 1.12 | Link rules. PoE power and Ethernet link: wired. PoE power, no Ethernet link: Wi-Fi, display alternates room and `E1`. No PoE (battery): Wi-Fi. `E2` if Wi-Fi is down too. Switch within 1 s | done (logic) / new (board) |
@@ -90,9 +90,9 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 | 1.20 | Pilot: 3-5 rooms for a few weeks | new |
 
 ### R1 decisions
-- **Gym room groups.** Today a group is a letter suffix (150a, 150b) that lands in the IP's third number. With the
-  room as the IP's last number, two units in one room need different numbers. Options: a group ID set over USB, or
-  groups in R1.x. Proposed: R1.x.
+- **Addressing (decided 23 Nov):** keep 10.42 and the built scheme; teachers set the room number on the panel.
+- **Gym (decided 23 Nov):** gym units are 299a, 299b, 299c, 299d, set on the panel like any room (the letter is
+  the fourth field). Same number = one room group, so they don't play each other back. Up to 4 units; no new code.
 - **Floor/room switches (SW1/SW2).** One digit each, so they can't hold a 3-digit room. Proposed: ignore in R1.
 - **Display codes.** Proposed: `E1`, `E2`, `Lo` as above.
 
@@ -125,7 +125,6 @@ Covers the old phase 5 and the console's alarm.
 |---|---|
 | Opus codec | Cuts audio bandwidth about 10× |
 | ESP-SR audio front end with both mics | Beamforming, noise suppression, AGC; NLMS stays as the fallback |
-| Room groups with the new addressing | See R1 decisions |
 | Signed audio packets, then encrypted audio | Stops spoofed all-calls, then eavesdropping |
 | Listen-in from the office | Needs a privacy decision first |
 | Pan/tilt person tracking and a Class 2 laser | ESP-DL on the unit |
