@@ -716,7 +716,8 @@ static void testPanelDriver() {
 
     struct Case { uint8_t code; Button b; const char* name; };
     const Case cases[] = {{0xF7, kBtnTalk, "PB1 TALK"}, {0xEF, kBtnMode, "PB2 MODE"}, {0xF5, kBtnUp, "PB4 UP"}, {0xEE, kBtnDown, "PB5 DOWN"},
-                          {0xF6, kBtnSetup, "PB6 SETUP"}, {0xF4, kBtnTalk, "PB7 TALK"}, {0xED, kBtnTalk, "PB8 TALK"}, {0xEC, kBtnTalk, "PB9 TALK"}};
+                          {0xF6, kBtnSetup, "PB6 SETUP"}, {0xF4, kBtnTalk, "PB7 TALK"}, {0xED, kBtnTalk, "PB8 TALK"}, {0xEC, kBtnTalk, "PB9 TALK"},
+                          {0xF3, kBtnTalk, "PB10 TALK"}, {0xEB, kBtnTalk, "PB11 TALK"}, {0xF2, kBtnTalk, "PB12 TALK"}};
     for (const Case& c : cases) {
         chip.keyCode = c.code;
         uint8_t got = 0;

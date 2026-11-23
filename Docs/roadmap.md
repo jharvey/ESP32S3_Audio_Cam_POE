@@ -75,7 +75,7 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 | 1.6f | Gym and corridor test with real units: residual echo measured per room and between rooms | new (needs boards) |
 | 1.7 | Watchdog and automatic restart; log the reset reason | code: audio-task watchdog (3 s), reset reason logged |
 | 1.8 | Confirm the button mapping (`Panel.h`) against the case labels | new |
-| 1.8a | Extra buttons on the TM1637 key scan (board 7caf1eb): PB7, PB8, PB9 = TALK (any one talks), PB6 = hidden SETUP under the front cover; room setup only from SETUP held 3 s, so MODE on the front can't change the room. Free for later: K1+SEG5-8, K2+SEG5-8 | done (sim) / code; board placed, not routed |
+| 1.8a | Extra buttons on the TM1637 key scan (board cc3eacb): PB7-PB12 = TALK (any one talks; PB10-PB12 in a column left of the display), PB6 = hidden SETUP under the front cover; room setup only from SETUP held 3 s. Free for later: K1+SEG7-8, K2+SEG6-8. A D-pad doesn't fit beside the display | done (sim) / code; board placed, not routed |
 | 1.8b | No TALK timeout (decided 23 Nov): an emergency may need TALK held a long time. Instead, after about 2 min held the console shows the room as "TALK held", and the office can mute that unit with a signed command until its button is released and pressed again | new |
 
 ### Network, power and addressing

@@ -2,10 +2,11 @@
 //
 // PCB wiring (from the board file):  PB1 = K1 + SEG1   PB2 = K2 + SEG1   PB4 = K1 + SEG3   PB5 = K2 + SEG2
 //                                    PB6 = K1 + SEG2   PB7 = K1 + SEG4   PB8 = K2 + SEG3   PB9 = K2 + SEG4
+//                                    PB10 = K1 + SEG5  PB11 = K2 + SEG5  PB12 = K1 + SEG6 (column left of the display)
 //                                    (PB3 is the AXP2101 power button, not on the scan)
 // Function of each button: ASSUMED (PB1 TALK, PB2 MODE, PB4 UP, PB5 DOWN; PB6 hidden SETUP under the
-// front cover; PB7-PB9 more TALK buttons, any one talks). Change the table if the case differs.
-// Free key positions for later buttons: K1 + SEG5-8, K2 + SEG5-8.
+// front cover; PB7-PB12 more TALK buttons, any one talks). Change the table if the case differs.
+// Free key positions for later buttons: K1 + SEG7-8, K2 + SEG6-8.
 #pragma once
 #include <cstdint>
 
@@ -27,6 +28,9 @@ constexpr KeyMap kPanelKeys[] = {
     {1, 4, ic::kBtnTalk},  // PB7
     {2, 3, ic::kBtnTalk},  // PB8
     {2, 4, ic::kBtnTalk},  // PB9
+    {1, 5, ic::kBtnTalk},  // PB10
+    {2, 5, ic::kBtnTalk},  // PB11
+    {1, 6, ic::kBtnTalk},  // PB12
 };
 
 // TM1637 key code -> the core's button bits. Only one key at a time (chip limitation).
