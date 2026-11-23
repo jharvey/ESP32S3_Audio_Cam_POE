@@ -26,6 +26,26 @@ State of the single-sided board and how to pick the work up in a fresh session. 
   copper pad (pad 57 on B.Cu) was trimmed from 4.5 to 4.3 mm on this board to make room; the top pad is unchanged.
   The SD card keeps its own bus, separate from the W5500.
 
+## U7 right side and U18 fan-out, 23 Nov 2026 (52 open)
+- U7 right side: C30/C23 1 mm right; LoRa IRQ/CS lanes east above C30; inner vias at x 123.9 for ETH.MOSI,
+  ETH.MISO, SD.MISO, CHIP_PU (In2 under the chip); outer vias for SPK.DIN, CHIP_BOOT. Routed: CHIP_PU, LORA_RST,
+  LORA_IRQ, VDD3P3_RTC.
+- U18 top: cap row C79-C89 moved 1.2 mm up and spread to 0.8 mm pitch over the pins; F.Cu fan; one via per rail
+  with its test point moved to two rows on B.Cu (TP76 to the right at 75.1, 146.6).
+- U18 right: L5 0.15 mm down, C92 turned sideways between the lanes, C73 flipped, C76 moved right, Vo3 via B.Cu,
+  CHGLED via B.Cu. C91 parked at (80.6, 151.0) for the router.
+- U18 left: C93 sideways between the Vsys lanes, C90 and D15 next to their lanes, C96 0.05 mm down, PB3 via.
+  C94 parked at (58.5, 150.5) for the router.
+- Some new courtyard overlaps around U18 (C92/U18, C73/L5/C75, R66/L5); check in KiCad.
+- Still open at U18: the bottom row (pins 31-40). L9/C97 sit too close; plan: move L9, C95 1 mm down and C97 to
+  the left of L9, then fan J16/VDCDC5 left, SW down between, and vias for J14, Vsys 34/36, VBUS, IRQ, SCL, SDA.
+- Other open: SPK.DIN and I2S.WS into U15 (fine-pitch amp, needs a hand fan-out like U7/U18), LORA_CS (lane end
+  boxed in at 130.0, 103.66), FLASH_QSPI_DO (pin 34), RC.PAN, VBUS (R108 to the far side), Vsys and C91/C94.
+- ETH.MISO/MOSI to the W5500: In2 below U7 is walled off by the SD and flash lines, so route the W5500 branch
+  from the LoRa module pins (U19 pads 10/11 at 120.95, 80.75/82.75), which share the bus.
+- Router change: `route9.py` on VM105 takes `ANCH="net@x,y,layers;..."` to move a net's end onto a hand-drawn
+  stub end instead of a fine-pitch pad.
+
 ## Whole-board run on VM105 (finished; `ssh kicad-vm`, folder `~/pcb/ss`)
 - `all.sh WA N1`: six whole-board rounds (route, clean, stitch ground islands, rip-up after rounds 2 and 4).
   Progress is in `all.out`; it prints `ALLDONE` at the end. It cannot delete or rip the hand-routed nets.
