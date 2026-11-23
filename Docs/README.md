@@ -3,6 +3,8 @@
 The classroom intercom for OVCS: an ESP32-S3 board on PoE with two-way audio, a covered emergency camera, and an
 office console. Firmware lives in `firmware/` (PC simulator in `firmware/sim/`).
 
+How the documents are organised (development vs final, per release): [documentation_plan.md](documentation_plan.md).
+
 ## For people using and running it
 
 | Document | For |
@@ -52,5 +54,5 @@ office console. Firmware lives in `firmware/` (PC simulator in `firmware/sim/`).
 | Web console | Office PC (Chrome, Edge, Firefox) on the office unit over HTTPS; 40 rooms |
 | Camera stream | RTSP / ONVIF, MJPEG VGA 10-15 fps, AAC-LC stereo from the two mics (G.711 fallback); go2rtc for H.264-only NVRs |
 | Gym noise | ESP-SR noise suppression and AGC on sent audio; automatic speaker volume from room noise |
-| Lights | LED.OTH (red or amber) pulses for room calls, flashes (at most 2 per second) for alarms; never like the fire strobe |
+| Lights | Lamps plug into the lamp headers: J11 (LED.OTH, a red or amber JLC LED or beacon) pulses for room calls and flashes (at most 2 per second) for alarms, never like the fire strobe; J12 (LED.IR) can drive an IR illuminator for night vision; J13 (LED.WH) the white lamp |
 | Vias | 0.6 mm / 0.3 mm drill minimum, enforced in the design rules |

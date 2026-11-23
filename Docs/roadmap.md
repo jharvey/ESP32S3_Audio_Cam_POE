@@ -181,6 +181,7 @@ Covers the old phase 5 and the console's alarm.
 | 3.3 | Cover self-test: snapshot of the printed room number compared with a reference; fault to the console | new |
 | 3.4 | Emergency mode from the console alarm or a unit's button | new |
 | 3.4a | **Alarm light:** lockdown / emergency flashes LED.OTH in its own pattern (at most 2 per second) with `ALr` on the display, for anyone who can't hear the call | new |
+| 3.4b | **Night vision:** an IR illuminator (850 nm, hundreds of mA) on J12 (LED.IR), switched on for night snapshots and emergency video; needs a camera module without a fixed IR-cut filter | new (hardware choice) |
 | 3.5 | MJPEG/RTSP (VGA, 10-15 fps) to the NVR; audio always sent before video | new |
 | 3.6 | Console: alarm button, failed camera checks, units that need auto-tune | new |
 | 3.7 | Optional local recording to the SD card during an emergency | new |
