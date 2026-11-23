@@ -28,6 +28,7 @@
 #include "board/EspSrAec.h"
 #include "board/Panel.h"
 #include "board/Pins.h"
+#include "board/Tm1637.h"
 
 namespace {
 
@@ -221,6 +222,7 @@ board::Tm1637 gTm(gTmLines);
 std::atomic<uint8_t> gButtons{0};
 std::atomic<uint32_t> gDisplay{0x00202020};  // 3 chars + dots, written by the audio task
 std::atomic<bool> gDisplayOk{false};
+std::atomic<bool> gButtonsOk{false};
 
 // Output switch faults: each SY6288 pulls its OCB line low on over-current or thermal shutdown
 // (shorted lamp cable, stalled servos). The switch already limits the current; firmware then turns
@@ -263,8 +265,19 @@ void panelTask(void*) {
         checkOutputFaults();
         {
             I2cLock lock;
-            uint8_t code = 0xff;
-            if (gTm.readKeys(&code)) gButtons = board::buttonsFromKey(code);
+            // Buttons: U22 input ports 0 and 1 in one read (pressed = 0).
+            Wire.beginTransmission(board::kButtonExpanderAddr);
+            Wire.write(0);
+            Wire.endTransmission(false);
+            if (Wire.requestFrom(board::kButtonExpanderAddr, uint8_t(2)) == 2) {
+                uint16_t in = uint16_t(Wire.read());
+                in = uint16_t(in | uint16_t(Wire.read()) << 8);
+                gButtons = board::buttonsFromInputs(in);
+                gButtonsOk = true;
+            } else {
+                gButtons = 0;  // U22 missing: no stuck TALK
+                gButtonsOk = false;
+            }
             uint32_t want = gDisplay.load();
             if (want != shown) {
                 const char text[3] = {char(want), char(want >> 8), char(want >> 16)};
@@ -272,7 +285,7 @@ void panelTask(void*) {
                 shown = want;
             }
         }
-        vTaskDelay(pdMS_TO_TICKS(30));  // ~25 key scans a second; each one is ~5 ms of I2C
+        vTaskDelay(pdMS_TO_TICKS(30));  // ~30 button reads a second; each one is a 2-byte I2C read
     }
 }
 I2SClass gMic, gSpk;
@@ -346,6 +359,7 @@ public:
             r += "\n";
         };
         line(i2cPresent(kTca9555), "I2C: TCA9555 I/O expander (0x20)");
+        line(i2cPresent(board::kButtonExpanderAddr), "I2C: TCA9555 button expander U22 (0x21)");
         line(i2cPresent(kPca9685), "I2C: PCA9685 servo/lamp driver (0x40)");
         {
             uint8_t p1 = gExp.port1();
