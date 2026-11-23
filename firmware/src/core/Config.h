@@ -5,7 +5,7 @@
 
 namespace ic {
 
-constexpr const char* kFirmwareVersion = "0.2.0";
+constexpr const char* kFirmwareVersion = "0.3.0";
 
 constexpr int kSampleRate = 16000;                          // Hz, mono
 constexpr int kFrameMs = 20;
@@ -18,8 +18,9 @@ constexpr int kMaxMixTalkers = 4;        // loudest N talkers are mixed
 constexpr int kStatusEveryFrames = 50;   // status packet once a second
 constexpr int kPeerTimeoutFrames = 175;  // peer dropped after 3.5 s without status
 
-// IP plan: 10.42.<floor*10 + sub>.<room % 100>
-//   room 214  -> 10.42.20.14     room 214a -> 10.42.21.14     room 7 -> 10.42.0.7
+// IP plan: 10.42.<floor>.<room on that floor>, netmask 255.255.0.0
+//   room 214 -> 10.42.2.14     room 299 -> 10.42.2.99     room 7 -> 10.42.0.7     room 200 -> 10.42.2.100
+// Several units in one room (the gym: 299, 298, ...) are a room group set with "group 299".
 constexpr uint8_t kIpPrefix0 = 10;
 constexpr uint8_t kIpPrefix1 = 42;
 

@@ -24,6 +24,7 @@ struct IntercomOptions {
     int maxTaps = 2048;  // longest echo filter this platform can run in real time
     // Runs auto-tune's analysis off the audio thread (seconds on the S3). Empty = run it inline.
     std::function<void(std::function<void()>)> runBackground;
+    uint32_t unitUid = 0;  // unique per board (the ESP32's MAC); finds two units set to the same room
 };
 
 struct AudioStats {
@@ -55,7 +56,7 @@ public:
     const TuneParams& params() const { return params_; }
     EchoCanceller& aec() { return aec_; }
     const UnitId& unit() const { return unit_; }
-    PowerState power() const { return hal_.power->read(); }
+    PowerState power() const { return power_; }
     IStore& store() const { return *hal_.store; }
     bool toneActive() const { return toneFrames_ > 0; }
     LinkType link() const { return link_; }
@@ -71,6 +72,10 @@ public:
     uint8_t sentLevel() const { return sentLevel_; }
     uint8_t speakerLevel() const { return spkLevel_; }
     uint32_t frame() const { return frame_; }
+    uint16_t group() const { return group_ ? group_ : unit_.room; }
+    bool duplicate() const { return frame_ < dupUntil_; }
+    // What the display shows besides the room number: "dUP", "E1 ", "E2 ", "Lo ", or empty.
+    const char* fault() const;
     AudioStats audioStats() const;
     // Talkers heard since start, for tests: (unit key, frames played).
     const std::vector<std::pair<uint32_t, uint32_t>>& heard() const { return heard_; }
@@ -94,6 +99,8 @@ private:
     void sendReply(const TextPacket& to, const std::string& text);
     void updatePanel();
     Talker* talkerFor(const UnitId& id);
+    bool sameGroup(const UnitId& from) const;
+    void refreshPower();
 
     Hal hal_;
     EchoCanceller& aec_;
@@ -106,6 +113,11 @@ private:
     Mixer mixer_;
     RoomSetup setup_;
     UnitId unit_;
+    uint16_t group_ = 0;       // room group, 0 = this unit's own room number
+    uint32_t dupUntil_ = 0;    // another unit with our room number was heard until this frame
+    uint32_t dupUid_ = 0;
+    PowerState power_;         // read every second (I2C on the board), not every frame
+    bool ethUp_ = false;
     LinkType link_ = LinkType::None;
     uint32_t frame_ = 0;
     int ethStable_ = 0;

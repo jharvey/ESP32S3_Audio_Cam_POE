@@ -48,7 +48,7 @@ class IPanel {
 public:
     virtual ~IPanel() = default;
     virtual uint8_t buttons() = 0;  // bit n = Button n held
-    // 3 characters: '0'-'9', 'a'-'f', 'L', 'r', 'n', 'o', 'P', 'u', '-', ' '. dots: bit n lights the decimal point after digit n.
+    // 3 characters: '0'-'9', 'a'-'f', 'E', 'L', 'r', 'n', 'o', 'P', 'u', 'U', '-', ' '. dots: bit n lights the decimal point after digit n.
     virtual void show(const char text[3], uint8_t dots) = 0;
 };
 

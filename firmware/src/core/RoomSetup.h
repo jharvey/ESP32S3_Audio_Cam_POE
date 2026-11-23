@@ -1,10 +1,9 @@
-// Setting the room number on the unit itself (the board has no DIP switches).
+// Setting the room number on the unit itself (the SW1/SW2 dials on the board are not read).
 //
 //   Hold MODE 3 s        enter setup; the first digit blinks
 //   UP / DOWN            change the blinking digit
-//   MODE (short)         next digit; after the 3 digits comes the sub-unit letter
-//                        ("--" plus '-', a, b, c, d), for several units in one room
-//   MODE on the letter   save; the unit takes its new IP address
+//   MODE (short)         next digit; MODE on the last digit saves and the unit takes
+//                        its new IP address (10.42.<floor>.<room>)
 //   20 s without input   cancel, nothing changes
 #pragma once
 #include <cstdint>
@@ -24,9 +23,8 @@ public:
 
 private:
     bool active_ = false;
-    int field_ = 0;          // 0..2 digits, 3 = sub letter
+    int field_ = 0;          // digit being set, 0..2
     int digits_[3] = {};
-    int sub_ = 0;
     uint8_t prev_ = 0;
     uint32_t modeDownAt_ = 0;
     bool modeLong_ = false;

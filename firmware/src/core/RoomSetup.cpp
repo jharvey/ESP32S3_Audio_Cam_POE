@@ -7,7 +7,6 @@ namespace ic {
 namespace {
 constexpr uint32_t kLongPressFrames = 150;  // 3 s
 constexpr uint32_t kTimeoutFrames = 1000;   // 20 s
-constexpr int kMaxSub = 4;                  // a..d
 }  // namespace
 
 bool RoomSetup::update(uint8_t held, uint32_t frame, UnitId* id) {
@@ -28,7 +27,6 @@ bool RoomSetup::update(uint8_t held, uint32_t frame, UnitId* id) {
             digits_[0] = (id->room / 100) % 10;
             digits_[1] = (id->room / 10) % 10;
             digits_[2] = id->room % 10;
-            sub_ = id->sub;
             lastInput_ = frame;
         }
         return false;
@@ -42,17 +40,14 @@ bool RoomSetup::update(uint8_t held, uint32_t frame, UnitId* id) {
     int step = 0;
     if (pressed & (1u << kBtnUp)) step = 1;
     if (pressed & (1u << kBtnDown)) step = -1;
-    if (step) {
-        if (field_ < 3) digits_[field_] = (digits_[field_] + step + 10) % 10;
-        else sub_ = (sub_ + step + kMaxSub + 1) % (kMaxSub + 1);
-    }
+    if (step) digits_[field_] = (digits_[field_] + step + 10) % 10;
     if ((released & mode) && !modeLong_) {
-        if (field_ < 3) {
+        if (field_ < 2) {
             field_++;
         } else {
             active_ = false;
             id->room = uint16_t(digits_[0] * 100 + digits_[1] * 10 + digits_[2]);
-            id->sub = uint8_t(sub_);
+            id->sub = 0;
             return true;
         }
     }
@@ -62,17 +57,9 @@ bool RoomSetup::update(uint8_t held, uint32_t frame, UnitId* id) {
 void RoomSetup::render(uint32_t frame, char text[3], uint8_t* dots) const {
     bool blinkOff = (frame / 15) % 2;  // ~1.7 Hz
     *dots = 0;
-    if (field_ < 3) {
-        for (int i = 0; i < 3; i++) text[i] = char('0' + digits_[i]);
-        if (blinkOff) text[field_] = ' ';
-        *dots = 0x04;  // dot on the last digit = "setup"
-    } else {
-        text[0] = '-';
-        text[1] = '-';
-        text[2] = sub_ ? char('a' + sub_ - 1) : '-';
-        if (blinkOff) text[2] = ' ';
-        *dots = 0x04;
-    }
+    for (int i = 0; i < 3; i++) text[i] = char('0' + digits_[i]);
+    if (blinkOff) text[field_] = ' ';
+    *dots = 0x04;  // dot on the last digit = "setup"
 }
 
 }  // namespace ic

@@ -4,8 +4,9 @@
 //   'I' 'C' ver type | room u16 | sub u8 | flags u8 | target u16 | seq u16 | level u8 | codec u8 | nsamples u16
 // Command / Reply (16-byte header + text, console over the network):
 //   'I' 'C' ver type | room u16 | sub u8 | target sub u8 (0xff any) | target room u16 (0xffff all) | 6 rsvd | text
-// Status (16 bytes):
+// Status (24 bytes):
 //   'I' 'C' ver type | room u16 | sub u8 | link u8 | power u8 | battery u8 | flags u8 | rsvd u8 | uptime_s u32
+//   | unit_id u32 (from the MAC: tells two units with the same room number apart) | group u16 | rsvd u16
 #pragma once
 #include <cstddef>
 #include <cstdint>
@@ -17,7 +18,7 @@ namespace ic {
 
 struct UnitId {
     uint16_t room = 0;  // 0..999
-    uint8_t sub = 0;    // 0 = none, 1 = 'a', 2 = 'b' ...
+    uint8_t sub = 0;    // unused since protocol 2 (was 'a', 'b' ... for several units in one room)
     uint32_t key() const { return (uint32_t(room) << 8) | sub; }
     bool operator==(const UnitId& o) const { return room == o.room && sub == o.sub; }
     bool operator!=(const UnitId& o) const { return !(*this == o); }
@@ -25,7 +26,7 @@ struct UnitId {
 
 // "214", "214a"; buf must hold 8 bytes.
 void formatUnit(const UnitId& id, char* buf);
-// "10.42.21.14"; buf must hold 16 bytes.
+// "10.42.2.14"; buf must hold 16 bytes.
 void formatIp(const UnitId& id, char* buf);
 void ipForUnit(const UnitId& id, uint8_t ip[4]);
 
@@ -34,7 +35,7 @@ enum class Codec : uint8_t { Pcm16 = 0, Opus = 1 };
 enum class LinkType : uint8_t { None = 0, Ethernet = 1, WiFi = 2 };
 enum class PowerSource : uint8_t { PoE = 0, Battery = 1 };
 
-constexpr uint8_t kVersion = 1;
+constexpr uint8_t kVersion = 2;  // 2: status carries the unit id and room group; IP 10.42.<floor>.<room>
 constexpr size_t kHeaderBytes = 16;
 constexpr size_t kMaxPacketBytes = kHeaderBytes + kFrameSamples * 2;
 
@@ -58,6 +59,8 @@ struct StatusPacket {
     uint8_t battery = 0;  // percent, 0 if no battery
     uint8_t flags = 0;
     uint32_t uptimeS = 0;
+    uint32_t unitUid = 0;  // unique per board (MAC); 0 = unknown
+    uint16_t group = 0;    // room group (0 = its own room number)
 };
 
 constexpr uint16_t kTargetAllRooms = 0xffff;

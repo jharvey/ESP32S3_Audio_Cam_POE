@@ -26,9 +26,9 @@ void formatUnit(const UnitId& id, char* buf) {
 void ipForUnit(const UnitId& id, uint8_t ip[4]) {
     ip[0] = kIpPrefix0;
     ip[1] = kIpPrefix1;
-    ip[2] = uint8_t((id.room / 100) * 10 + (id.sub % 10));
+    ip[2] = uint8_t(id.room / 100);
     ip[3] = uint8_t(id.room % 100);
-    if (ip[3] == 0) ip[3] = 100;  // .0 is not a usable host address: room 100 -> x.x.10.100
+    if (ip[3] == 0) ip[3] = 100;  // .0 is not a usable host address: room 200 -> x.x.2.100
 }
 
 void formatIp(const UnitId& id, char* buf) {
@@ -57,7 +57,10 @@ size_t encodeStatus(const StatusPacket& s, uint8_t* out) {
     out[10] = s.flags;
     out[11] = 0;
     put32(out + 12, s.uptimeS);
-    return 16;
+    put32(out + 16, s.unitUid);
+    put16(out + 20, s.group);
+    put16(out + 22, 0);
+    return 24;
 }
 
 PacketType peekType(const uint8_t* buf, size_t len, bool* ok) {
@@ -84,7 +87,7 @@ bool decodeAudio(const uint8_t* buf, size_t len, AudioHeader* h, int16_t* pcm) {
 
 bool decodeStatus(const uint8_t* buf, size_t len, StatusPacket* s) {
     bool ok;
-    if (peekType(buf, len, &ok) != PacketType::Status || !ok) return false;
+    if (peekType(buf, len, &ok) != PacketType::Status || !ok || len < 24) return false;
     s->from.room = get16(buf + 4);
     s->from.sub = buf[6];
     s->link = LinkType(buf[7]);
@@ -92,6 +95,8 @@ bool decodeStatus(const uint8_t* buf, size_t len, StatusPacket* s) {
     s->battery = buf[9];
     s->flags = buf[10];
     s->uptimeS = get32(buf + 12);
+    s->unitUid = get32(buf + 16);
+    s->group = get16(buf + 20);
     return true;
 }
 

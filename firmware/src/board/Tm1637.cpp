@@ -29,6 +29,7 @@ uint8_t Tm1637::segments(char c) {
         case 'd': case 'D': return 0x5E;
         case 'e': case 'E': return 0x79;
         case 'f': case 'F': return 0x71;
+        case 'U': return 0x3E;
         case 'L': return 0x38;
         case 'r': return 0x50;
         case 'n': return 0x54;

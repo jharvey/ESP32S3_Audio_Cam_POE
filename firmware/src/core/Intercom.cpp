@@ -19,6 +19,11 @@ constexpr size_t kMaxTalkers = 16;
 constexpr uint32_t kComboFrames = 150;   // MODE + UP held 3 s = auto-tune
 constexpr uint32_t kUpHoldFrames = 250;  // or UP alone held 5 s (one-key panels)
 constexpr uint32_t kResultFrames = 250;  // show the auto-tune result for 5 s
+constexpr uint32_t kDupHoldFrames = 150; // "dUP" stays 3 s after the other unit was last heard
+constexpr uint32_t kFaultCycle = 175;    // faults: room number 3 s, then the code for 0.5 s
+constexpr uint32_t kFaultShow = 25;
+constexpr uint8_t kLowBatteryPct = 15;
+const char* kGroupKey = "group";
 const char* kTuneKey = "tune";
 const char* kTunePrevKey = "tune_prev";
 
@@ -34,7 +39,8 @@ const char* kHelp =
     "  cal                  auto-tune the echo canceller (~5 s, room quiet, unit plays a noise burst)\n"
     "  cal result           last auto-tune measurements\n"
     "  stats                echo canceller and link state\n"
-    "  unit [214a]          show or set the room number (sets the IP address)\n"
+    "  unit [214]           show or set the room number (sets the IP address 10.42.<floor>.<room>)\n"
+    "  group [299|off]      room group: units in one room (the gym: 299, 298 ...) do not play each other\n"
     "  tone [seconds]       play a 1 kHz test tone on this unit's speaker (default 2 s, 0 stops)\n"
     "  talk [seconds|off]   transmit as if TALK were held (USB only; default 5 s, bring-up without the panel)\n"
     "  selftest [result]    check the board and the speaker->mic path (plays a short tone)\n"
@@ -60,6 +66,9 @@ void Intercom::logf(const char* fmt, ...) {
 
 void Intercom::begin() {
     unit_ = hal_.store->loadUnit();
+    unit_.sub = 0;  // letters are gone since protocol 2
+    group_ = uint16_t(std::strtoul(hal_.store->loadText(kGroupKey).c_str(), nullptr, 10));
+    refreshPower();
     lastNonce_ = netauth::loadNonce(*hal_.store);
     params_ = TuneParams();
     params_.taps = std::min(params_.taps, opt_.maxTaps);
@@ -69,8 +78,8 @@ void Intercom::begin() {
     char u[8], ip[16];
     formatUnit(unit_, u);
     formatIp(unit_, ip);
-    logf("unit %s, ip %s, aec %s, %s tuning: %s", u, ip, aec_.name(), saved.empty() ? "default" : "saved",
-         params_.toString().c_str());
+    logf("unit %s, ip %s, group %u, id %08lx, aec %s, %s tuning: %s", u, ip, unsigned(group()), (unsigned long)opt_.unitUid,
+         aec_.name(), saved.empty() ? "default" : "saved", params_.toString().c_str());
 }
 
 void Intercom::applyParams() {
@@ -179,16 +188,33 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         if (a.size() > 1) {
             uint16_t room;
             uint8_t sub;
-            if (!parseTarget(a[1], &room, &sub) || room == kTargetAllRooms) return "usage: unit 214 | unit 214a";
+            if (!parseTarget(a[1], &room, &sub) || room == kTargetAllRooms || sub != kTargetAnySub || room == 0)
+                return "usage: unit 214 (1-999, no letters; several units in one room: own numbers plus group)";
             UnitId id;
             id.room = room;
-            id.sub = sub == kTargetAnySub ? 0 : sub;
             setUnit(id);
         }
         char u[8], ip[16];
         formatUnit(unit_, u);
         formatIp(unit_, ip);
-        snprintf(buf, sizeof(buf), "unit %s ip %s", u, ip);
+        snprintf(buf, sizeof(buf), "unit %s ip %s group %u%s", u, ip, unsigned(group()),
+                 duplicate() ? " DUPLICATE: another unit uses this number" : "");
+        return buf;
+    }
+    if (c == "group") {
+        if (a.size() > 1) {
+            if (a[1] == "off") {
+                group_ = 0;
+            } else {
+                unsigned long g = std::strtoul(a[1].c_str(), nullptr, 10);
+                if (g < 1 || g > 999) return "usage: group 299 | group off";
+                group_ = uint16_t(g == unit_.room ? 0 : g);
+            }
+            hal_.store->saveText(kGroupKey, group_ ? std::to_string(group_) : "");
+            logf("room group set to %u", unsigned(group()));
+            sendStatus();
+        }
+        snprintf(buf, sizeof(buf), "group %u%s", unsigned(group()), group_ ? "" : " (own room)");
         return buf;
     }
     if (c == "version") return std::string("firmware ") + kFirmwareVersion;
@@ -271,7 +297,7 @@ void Intercom::sendReply(const TextPacket& to, const std::string& text) {
 
 // ---- network ---------------------------------------------------------------------------
 void Intercom::updateLink() {
-    bool eth = hal_.links->ethernetUp();
+    bool eth = ethUp_ = hal_.links->ethernetUp();
     bool wifi = hal_.links->wifiUp();
     ethStable_ = eth ? ethStable_ + 1 : 0;
 
@@ -364,7 +390,7 @@ void Intercom::receive() {
             AudioHeader h;
             if (!decodeAudio(buf, n, &h, pcm)) continue;
             if (h.from == unit_) continue;                                               // our own multicast echo
-            if (h.from.room == unit_.room && !(h.flags & kAudioFromConsole)) continue;   // same room group: heard acoustically
+            if (sameGroup(h.from) && !(h.flags & kAudioFromConsole)) continue;            // same room group: heard acoustically
             if (h.target != 0 && h.target != unit_.room) continue;                       // a call for another room
             if (Talker* t = talkerFor(h.from)) {
                 t->jb.push(h.seq, pcm, h.level);
@@ -372,7 +398,16 @@ void Intercom::receive() {
             }
         } else if (type == PacketType::Status) {
             StatusPacket s;
-            if (!decodeStatus(buf, n, &s) || s.from == unit_) continue;
+            if (!decodeStatus(buf, n, &s)) continue;
+            if (s.from == unit_) {  // our own multicast echo, or another unit set to our room number
+                if (s.unitUid && opt_.unitUid && s.unitUid != opt_.unitUid) {
+                    if (!duplicate() || s.unitUid != dupUid_)
+                        logf("DUPLICATE: unit %08lx also uses room %u", (unsigned long)s.unitUid, unsigned(unit_.room));
+                    dupUntil_ = frame_ + kDupHoldFrames;
+                    dupUid_ = s.unitUid;
+                }
+                continue;
+            }
             Peer* p = nullptr;
             for (auto& q : peers_)
                 if (q.status.from == s.from) p = &q;
@@ -410,7 +445,8 @@ void Intercom::receive() {
 
 void Intercom::sendStatus() {
     if (link_ == LinkType::None) return;
-    PowerState pw = hal_.power->read();
+    refreshPower();
+    const PowerState& pw = power_;
     StatusPacket s;
     s.from = unit_;
     s.link = link_;
@@ -418,11 +454,14 @@ void Intercom::sendStatus() {
     s.battery = pw.hasBattery ? pw.batteryPct : 0;
     s.flags = transmitting_ ? kStatusTalking : 0;
     s.uptimeS = frame_ * kFrameMs / 1000;
+    s.unitUid = opt_.unitUid;
+    s.group = group_;
     uint8_t buf[32];
     hal_.net->send(buf, encodeStatus(s, buf));
 }
 
 void Intercom::updatePanel() {
+    if (frame_ % kStatusEveryFrames == 1) refreshPower();  // once a second, whatever the link
     char text[3];
     uint8_t dots = 0;
     if (setup_.active()) {
@@ -448,9 +487,17 @@ void Intercom::updatePanel() {
         text[0] = r >= 100 ? char('0' + r / 100) : ' ';
         text[1] = r >= 10 ? char('0' + (r / 10) % 10) : ' ';
         text[2] = char('0' + r % 10);
+        if (r == 0) text[0] = text[1] = text[2] = '-';  // no room number set yet
         if (transmitting_) dots |= 0x01;
         if (playing_) dots |= 0x02;
-        if (link_ == LinkType::None && (frame_ / 25) % 2) text[0] = text[1] = text[2] = '-';  // no network
+        // The room number stays the main thing shown. A duplicate number alternates with "dUP" every
+        // second; other faults flash their code for 0.5 s every 3.5 s.
+        const char* f = fault();
+        bool showCode = duplicate() ? ((frame_ / 50) % 2 != 0) : (*f && frame_ % kFaultCycle >= kFaultCycle - kFaultShow);
+        if (*f && showCode) {
+            std::memcpy(text, f, 3);
+            dots = 0;
+        }
     }
     if (std::memcmp(text, shown_, 3) != 0 || dots != shownDots_) {  // the display sits behind I2C: write only on change
         std::memcpy(shown_, text, 3);
@@ -458,6 +505,24 @@ void Intercom::updatePanel() {
         hal_.panel->show(text, dots);
     }
 }
+
+const char* Intercom::fault() const {
+    if (duplicate()) return "dUP";
+    if (link_ == LinkType::None) return "E2 ";                        // no network at all
+    if (power_.source == PowerSource::PoE && !ethUp_) return "E1 ";  // PoE power but no Ethernet link
+    if (power_.source == PowerSource::Battery && power_.hasBattery && power_.batteryPct < kLowBatteryPct) return "Lo ";
+    return "";
+}
+
+bool Intercom::sameGroup(const UnitId& from) const {
+    if (from.room == unit_.room) return true;
+    uint16_t theirs = from.room;
+    for (const auto& p : peers_)
+        if (p.status.from == from && p.status.group) theirs = p.status.group;
+    return theirs == group();
+}
+
+void Intercom::refreshPower() { power_ = hal_.power->read(); }
 
 AudioStats Intercom::audioStats() const {
     AudioStats s = retired_;

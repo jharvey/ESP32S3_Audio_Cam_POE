@@ -52,12 +52,12 @@ static void testPackets() {
     printf("packets\n");
     char ip[16], u[8];
     formatIp(UnitId{214, 0}, ip);
-    CHECK(!strcmp(ip, "10.42.20.14"), "room 214 -> %s", ip);
-    formatIp(UnitId{214, 1}, ip);
-    formatUnit(UnitId{214, 1}, u);
-    CHECK(!strcmp(ip, "10.42.21.14") && !strcmp(u, "214a"), "room %s -> %s", u, ip);
+    CHECK(!strcmp(ip, "10.42.2.14"), "room 214 -> %s (10.42.<floor>.<room>)", ip);
+    formatIp(UnitId{299, 0}, ip);
+    formatUnit(UnitId{299, 0}, u);
+    CHECK(!strcmp(ip, "10.42.2.99") && !strcmp(u, "299"), "room %s -> %s", u, ip);
     formatIp(UnitId{300, 0}, ip);
-    CHECK(!strcmp(ip, "10.42.30.100"), "room 300 -> %s (no .0 host)", ip);
+    CHECK(!strcmp(ip, "10.42.3.100"), "room 300 -> %s (no .0 host)", ip);
 
     int16_t pcm[kFrameSamples], back[kFrameSamples];
     for (int i = 0; i < kFrameSamples; i++) pcm[i] = int16_t(i * 97 - 15000);
@@ -212,10 +212,13 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog {
     NlmsAec aec{512, 0};
     std::unique_ptr<Intercom> ic;
     sim::TestVoice voice;
+    PowerState pw;
 
-    FakeUnit(Bus* b, UnitId u, float f0) : bus(b), id(u), voice(f0, u.room) {
+    FakeUnit(Bus* b, UnitId u, float f0, uint32_t uid = 0) : bus(b), id(u), voice(f0, u.room) {
         bus->queues.push_back(&rx);
-        ic.reset(new Intercom(Hal{this, this, this, this, this, this}, aec));
+        IntercomOptions opt;
+        opt.unitUid = uid ? uid : 0xA0000000u + u.room;  // stands in for the board's MAC
+        ic.reset(new Intercom(Hal{this, this, this, this, this, this}, aec, opt));
         ic->begin();
     }
     void send(const uint8_t* d, size_t n) override {
@@ -233,7 +236,7 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog {
     bool ethernetUp() override { return eth; }
     bool wifiUp() override { return wifi; }
     void useLink(LinkType l) override { used = l; }
-    PowerState read() override { return PowerState(); }
+    PowerState read() override { return pw; }
     uint8_t buttons() override { return held; }
     void show(const char*, uint8_t) override {}
     UnitId loadUnit() override { return id; }
@@ -259,21 +262,26 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog {
 static void testIntercom() {
     printf("intercom (4 units, in-memory network)\n");
     Bus bus;
-    FakeUnit r101(&bus, {101, 0}, 120), r214(&bus, {214, 0}, 160), gymA(&bus, {150, 1}, 190), gymB(&bus, {150, 2}, 230);
+    FakeUnit r101(&bus, {101, 0}, 120), r214(&bus, {214, 0}, 160), gymA(&bus, {299, 0}, 190), gymB(&bus, {298, 0}, 230);
     std::vector<FakeUnit*> all = {&r101, &r214, &gymA, &gymB};
     auto run = [&](int frames) { for (int k = 0; k < frames; k++) for (auto* u : all) u->step(); };
 
     run(20);  // Ethernet settles
     CHECK(r101.used == LinkType::Ethernet, "units come up on Ethernet");
+    CHECK(!strcmp(r101.ic->fault(), ""), "no fault code on PoE with Ethernet (got \"%s\")", r101.ic->fault());
+    gymA.ic->command("group 299");
+    gymB.ic->command("group 299");
+    run(5);
+    CHECK(gymB.ic->group() == 299 && gymB.kv["group"] == "299", "gym unit 298 joined room group 299 (saved)");
     // 101 and gym A talk at the same time for 2 s.
     r101.held = gymA.held = 1;
     run(100);
     r101.held = gymA.held = 0;
     run(20);
-    CHECK(r214.heardFrom(r101.id) > 90 && r214.heardFrom(gymA.id) > 90, "214 heard 101 (%u frames) and 150a (%u) at once",
+    CHECK(r214.heardFrom(r101.id) > 90 && r214.heardFrom(gymA.id) > 90, "214 heard 101 (%u frames) and 299 (%u) at once",
           r214.heardFrom(r101.id), r214.heardFrom(gymA.id));
     CHECK(gymB.heardFrom(r101.id) > 90 && gymB.heardFrom(gymA.id) == 0,
-          "150b heard 101, not 150a in the same room (%u)", gymB.heardFrom(gymA.id));
+          "298 heard 101, not 299 in its room group (%u)", gymB.heardFrom(gymA.id));
     CHECK(r101.heardFrom(r101.id) == 0, "nobody plays their own voice");
     CHECK(r214.ic->peers().size() == 3, "214 sees %zu peers via status", r214.ic->peers().size());
 
@@ -283,6 +291,7 @@ static void testIntercom() {
     r214.eth = false;
     run(1);
     CHECK(r214.used == LinkType::WiFi, "214 unplugged -> Wi-Fi within 1 frame (20 ms)");
+    CHECK(!strcmp(r214.ic->fault(), "E1 "), "PoE power but no Ethernet link -> E1 (got \"%s\")", r214.ic->fault());
     r101.held = 1;
     run(50);
     r101.held = 0;
@@ -293,7 +302,32 @@ static void testIntercom() {
     CHECK(r214.used == LinkType::Ethernet, "214 plugged back in -> Ethernet after 200 ms debounce");
     for (auto& l : r214.logs) printf("      214 log: %s\n", l.c_str());
 
-    // Room-number setup on the panel: hold MODE 3 s, set 3-1-5, sub 'a'.
+    // Faults: no network at all -> E2; on battery below 15 % -> Lo.
+    r214.eth = r214.wifi = false;
+    run(2);
+    CHECK(!strcmp(r214.ic->fault(), "E2 "), "no network at all -> E2 (got \"%s\")", r214.ic->fault());
+    r214.eth = true;
+    r214.pw.source = PowerSource::Battery;
+    r214.pw.hasBattery = true;
+    r214.pw.batteryPct = 10;
+    run(60);
+    CHECK(!strcmp(r214.ic->fault(), "Lo "), "on battery at 10 %% -> Lo (got \"%s\")", r214.ic->fault());
+    r214.pw = PowerState();
+    run(60);
+
+    // A second unit set to room 214 (a different board): both show dUP until one is renumbered.
+    FakeUnit dup(&bus, {214, 0}, 200, 0xB0000214u);
+    all.push_back(&dup);
+    run(80);
+    CHECK(r214.ic->duplicate() && dup.ic->duplicate() && !strcmp(r214.ic->fault(), "dUP"), "two units on room 214 both show dUP");
+    CHECK(!r101.ic->duplicate(), "other units are not flagged");
+    dup.ic->command("unit 215");
+    run(200);
+    CHECK(!r214.ic->duplicate() && !dup.ic->duplicate(), "dUP clears 3 s after 215 is renumbered");
+    CHECK(dup.ic->command("unit 214a").find("usage") == 0, "letters are refused (\"unit 214a\")");
+    all.pop_back();
+
+    // Room-number setup on the panel: hold MODE 3 s, set 3-0-5, MODE on the last digit saves.
     FakeUnit& u = r101;
     auto press = [&](uint8_t bit, int frames) { u.held = bit; run(frames); u.held = 0; run(3); };
     press(1 << kBtnMode, 155);
@@ -302,12 +336,10 @@ static void testIntercom() {
     press(1 << kBtnMode, 2);
     press(1 << kBtnMode, 2);  // 0 stays... next digit
     for (int i = 0; i < 4; i++) press(1 << kBtnUp, 2);  // 1 -> 5
-    press(1 << kBtnMode, 2);
-    press(1 << kBtnUp, 2);  // sub '-' -> 'a'
-    press(1 << kBtnMode, 2);
+    press(1 << kBtnMode, 2);  // MODE on the last digit saves
     char s[8];
     formatUnit(u.ic->unit(), s);
-    CHECK(!u.ic->inSetup() && !strcmp(s, "305a"), "panel setup saved unit %s", s);
+    CHECK(!u.ic->inSetup() && !strcmp(s, "305"), "panel setup saved unit %s", s);
 }
 
 // ---------------------------------------------------------------------------------
@@ -739,7 +771,7 @@ static void testWeb() {
 
     req.path = "/api/status";
     r = web.handle(req);
-    CHECK(r.status == 200 && r.body.find("\"unit\":\"214\"") != std::string::npos && r.body.find("\"ip\":\"10.42.20.14\"") != std::string::npos &&
+    CHECK(r.status == 200 && r.body.find("\"unit\":\"214\"") != std::string::npos && r.body.find("\"ip\":\"10.42.2.14\"") != std::string::npos &&
               r.body.find("\"key\":\"mu\"") != std::string::npos && r.body.find("\"unit\":\"101\"") != std::string::npos,
           "status JSON has unit, IP, settings and peers");
 
