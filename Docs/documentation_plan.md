@@ -35,7 +35,7 @@ hardware; **living** = kept current as work goes on; **to write**; **frozen at R
 | Release notes / changelog | What changed in each firmware release | to write (from R1) |
 | Manufacturing pack | Gerbers, drill, BOM and CPL for JLC, assembly notes (hand-fitted parts), case STL / STEP | to write (when the board is final) |
 | Safety, privacy and network notes | Laser (Class 2 only), camera privacy (cover, emergency only), intercom VLAN, PoE | to write |
-| Video walkthroughs (`Docs/videos/`) | Everyone: all-call, gym group, duplicate number, auto-tune, portable unit | recorder ready, videos to record |
+| Video walkthroughs (`Docs/videos/`) | Everyone: all-call, gym group, duplicate number, auto-tune, portable unit | recorded 23 Nov 2026 (R1 firmware): 01-all-call, 02-gym-group, 03-duplicate-number, 04-auto-tune, 05-portable-unit |
 
 ## Rules
 
