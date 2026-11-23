@@ -11,8 +11,9 @@ Last updated: 23 Nov 2026.
 |---|---|---|
 | R0 Foundations | (done, on `single-sided` and earlier) | Intercom core, PC simulator, office console, tools, network load test |
 | R1 Intercom | `fw/r1-intercom` | A PoE intercom: hold TALK and every unit hears you, wired or Wi-Fi |
-| R2 Camera | `fw/r2-camera`, cut from R1 | Camera, cover servo, emergency video |
-| R3 LoRa | `fw/r3-lora`, cut from R2 | LoRa alerts and repeaters; role still to define |
+| R2 Room calls | `fw/r2-room-calls`, cut from R1 | The office calls one room (or a few); a room calls the office |
+| R3 Camera | `fw/r3-camera`, cut from R2 | Camera, cover servo, emergency video |
+| R4 LoRa | `fw/r4-lora`, cut from R3 | LoRa alerts and repeaters; role still to define |
 | Later | | Tracking, laser, Opus, encryption, console extras |
 
 Each release branch is cut from the one before, so it starts from working code. A fix found on a later branch
@@ -106,28 +107,45 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 - **Display codes (23 Nov):** the room number stays the main thing shown; codes flash briefly (1.13a). Codes:
   `E1`, `E2`, `Lo`, `dUP`.
 
-## R2 Camera (middle)
+## R2 Room calls (after R1, before the camera)
+
+Individual addressing: the office talks to one room instead of the whole school. The audio packets already carry a
+target room, and the office console's "Talk to selected room" works in the simulator; this release brings it to the
+boards and adds what a teacher needs around it.
+
+| # | Feature | Status |
+|---|---|---|
+| 2.1 | Office calls one room: only that room (all units with its number, e.g. 299a-d) plays the call | done (sim) / code |
+| 2.2 | Office calls several rooms, a floor (2xx) or a group from a rooms file | new |
+| 2.3 | Call tone before a room call, so the room knows it's for them, and a display code while it lasts (e.g. `CAL`) | new |
+| 2.4 | Room answers: TALK during or just after a room call replies to the office only, not the whole school | new |
+| 2.5 | Call-the-office button: one press rings only the office, for non-urgent calls; the console shows who's calling | new |
+| 2.6 | All-call still wins: an all-call or emergency interrupts a room call everywhere | new |
+| 2.7 | Console: room-call history with times, missed calls from rooms | new |
+| 2.8 | Privacy: no listening to a room without the room seeing it; listen-in stays out unless the school decides otherwise | decide |
+
+## R3 Camera (middle)
 
 Covers the old phase 5 and the console's alarm.
 
 | # | Feature | Status |
 |---|---|---|
-| 2.1 | Camera driver (esp32-camera) on the `Pins.h` pins; camera power through U21 P04; confirm Q1's polarity | new |
-| 2.2 | Cover servo through the PCA9685; "camera live" light | new |
-| 2.3 | Cover self-test: snapshot of the printed room number compared with a reference; fault to the console | new |
-| 2.4 | Emergency mode from the console alarm or a unit's button | new |
-| 2.5 | MJPEG/RTSP (VGA, 10-15 fps) to the NVR; audio always sent before video | new |
-| 2.6 | Console: alarm button, failed camera checks, units that need auto-tune | new |
-| 2.7 | Optional local recording to the SD card during an emergency | new |
-| 2.8 | Check the CPU budget with the camera running | new |
+| 3.1 | Camera driver (esp32-camera) on the `Pins.h` pins; camera power through U21 P04; confirm Q1's polarity | new |
+| 3.2 | Cover servo through the PCA9685; "camera live" light | new |
+| 3.3 | Cover self-test: snapshot of the printed room number compared with a reference; fault to the console | new |
+| 3.4 | Emergency mode from the console alarm or a unit's button | new |
+| 3.5 | MJPEG/RTSP (VGA, 10-15 fps) to the NVR; audio always sent before video | new |
+| 3.6 | Console: alarm button, failed camera checks, units that need auto-tune | new |
+| 3.7 | Optional local recording to the SD card during an emergency | new |
+| 3.8 | Check the CPU budget with the camera running | new |
 
-## R3 LoRa (part to develop)
+## R4 LoRa (part to develop)
 
 | # | Feature | Status |
 |---|---|---|
-| 3.1 | Decide the role: alerts and status ("lockdown", "214 on battery"); too slow for voice | decide |
-| 3.2 | RFM95 driver on the shared SPI bus (CS GPIO5, IRQ GPIO6, reset U21 P05) | new |
-| 3.3 | 3rd-floor repeater for the building and parking lot | new |
+| 4.1 | Decide the role: alerts and status ("lockdown", "214 on battery"); too slow for voice | decide |
+| 4.2 | RFM95 driver on the shared SPI bus (CS GPIO5, IRQ GPIO6, reset U21 P05) | new |
+| 4.3 | 3rd-floor repeater for the building and parking lot | new |
 
 ## Later
 
@@ -145,7 +163,6 @@ Covers the old phase 5 and the console's alarm.
 | Lockdown / all-clear tones | A distinct sound plus a display code everyone recognises, from the office or any unit |
 | Fire alarm / bell input | Mute the intercom or start emergency mode from a dry contact on a MISC input |
 | Emergency audio recording at the console | A record for after-action review; check school policy first |
-| Call-the-office button | One press rings only the office, for non-urgent calls |
 | Time sync (NTP or from the console) | Timestamps in logs and recordings |
 
 ## Security
