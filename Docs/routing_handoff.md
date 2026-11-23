@@ -20,9 +20,11 @@ State of the single-sided board and how to pick the work up in a fresh session. 
 - Routed: OSC_IN, OSC_OUT, the C3/Y1 node and the crystal grounds; I2C SCL and SDA straight to J3 on F.Cu;
   ETH.CS and ETH.SCLK through vias at (120.55, 109.45) and (122.07, 109.6) onto In2. C11's ground pad and U21
   pin 21 (ground) got their own vias after the new tracks cut the top pour that fed them.
-- Still open: pin 47 (SD.MOSI) and pin 52 (SD.CLK). With 0.4 mm pitch, 0.6 mm vias and C11/C6/R1 in place, the
-  row has room for five escapes plus the crystal; these two are boxed in. Options: share the W5500 SPI bus with
-  the SD card, or move the two nets to other pins.
+- Pin 47 (SD.MOSI) and pin 52 (SD.CLK) escape upward: a short stub from the pad's inner end to a via at
+  y = 107.1, between the pin row and the exposed pad, then In2 west to the SD card (router, about 57 mm each).
+  These two vias are 0.15 mm from the pins and the pad, an exception to the 1 mm via keep-off. U7's bottom-side
+  copper pad (pad 57 on B.Cu) was trimmed from 4.5 to 4.3 mm on this board to make room; the top pad is unchanged.
+  The SD card keeps its own bus, separate from the W5500.
 
 ## Whole-board run on VM105 (finished; `ssh kicad-vm`, folder `~/pcb/ss`)
 - `all.sh WA N1`: six whole-board rounds (route, clean, stitch ground islands, rip-up after rounds 2 and 4).
