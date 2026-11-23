@@ -21,9 +21,17 @@ header. Audio already carries `flags` (all-call, from console), a `target` room 
 - **Tests:** round trip in `ic-selftest` (PESQ-style level check against the input), 10 % random loss on the
   in-memory bus with and without FEC, mixed PCM/Opus units in one test.
 - **Measure on the board:** CPU per frame with ESP-SR running; if the S3 runs short, G.722 (64 kbit/s) instead.
+- **Delay budget (mouth to ear, about 100 ms):** 20 ms mic frame + under 1 ms wired network + 60 ms jitter buffer
+  (3 frames) + about 20 ms speaker output; Opus adds a few ms of look-ahead (PCM and Opus end up within about 5 ms).
+  Opus takes the same CPU time every frame, so it adds no jitter of its own. Wired-only units could run a 2-frame
+  jitter buffer (-20 ms). Echo in the room is cancelled against the local speaker signal, so codec delay doesn't
+  matter there; echo between rooms (about 100 ms, a slap-back) is the same with PCM or Opus and is handled in R1.4.
+- **Scale:** 40 rooms. At most 4 talkers are mixed; about 24 kbit/s each plus 40 status beacons a second.
 
 ## R1.7 Web console
 
+- **Client:** a normal Windows PC on the same network, Chrome, Edge or Firefox (all support getUserMedia,
+  WebSockets and AudioWorklet on HTTPS). Sized for 40 rooms: a 40-tile grid.
 - **Where:** the office unit serves it; any unit can (it's the same firmware), but only units with a console
   password set (`consolepass` over USB, like `webpass`) enable the talk features.
 - **Page:** room grid (one tile per unit from the status beacons: room, link, power, battery, faults, dUP), a
