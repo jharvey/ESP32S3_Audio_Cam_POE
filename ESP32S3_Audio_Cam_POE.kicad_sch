@@ -90503,7 +90503,631 @@
 				)
 			)
 		)
+	)	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 247.650 261.620 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "216c14e0-2375-4c87-8908-1752578ff1df")
+		(property "Reference" "PB6"
+			(at 241.300 262.382 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 247.650 254.000 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 247.650 271.780 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 245.364 261.493 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 247.650 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 247.650 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "5448330c-7561-496f-8170-15c090f6cddf")
+		)
+		(pin "2"
+			(uuid "c8440d65-2336-4fcd-81c6-0e4ed60accd7")
+		)
+		(pin "4"
+			(uuid "3b8ef464-b655-4b6e-a376-635207f161f9")
+		)
+		(pin "1"
+			(uuid "a510149b-4caa-4254-bb1b-c3bd34bf80a1")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB6")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 252.73 259.08) (xy 252.73 254.00)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "53a16287-d8a5-4d4a-958a-cb7e0adffb86")
 	)
+	(label "7SEG.K1"
+		(at 252.73 254.00 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3adcc77b-0b95-40c1-909d-1029cea768f0")
+	)
+	(wire
+		(pts
+			(xy 252.73 266.70) (xy 252.73 271.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "03a9ab55-2761-435c-8b05-e37250a37736")
+	)
+	(label "7SEG.SEG2"
+		(at 252.73 274.32 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f7aa173d-b823-41dc-b99f-3f425ece082c")
+	)
+	(wire
+		(pts
+			(xy 252.73 271.78) (xy 252.73 274.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b2ce7487-539b-4aa1-baaf-72f68a084d7e")
+	)
+	(no_connect
+		(at 242.57 259.08)
+		(uuid "ddc1cc2b-4daa-402e-9ad5-7bb1b60c77b9")
+	)
+	(no_connect
+		(at 242.57 266.70)
+		(uuid "676a2fea-d2e5-4938-a5f5-dd91e11f3d02")
+	)
+	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 262.890 261.620 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "65113c4e-2f2f-4f8a-a8fb-156313348269")
+		(property "Reference" "PB7"
+			(at 256.540 262.382 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 262.890 254.000 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 262.890 271.780 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 260.604 261.493 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 262.890 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 262.890 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "441dad19-18ec-4408-a1ec-60503643836b")
+		)
+		(pin "2"
+			(uuid "ff163102-eec6-4290-8721-14eefbb4bb6c")
+		)
+		(pin "4"
+			(uuid "512da732-8618-47c7-9a23-165cc3006962")
+		)
+		(pin "1"
+			(uuid "f8e6da36-69d1-4010-abc2-ec769d0879ea")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB7")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 267.97 259.08) (xy 267.97 254.00)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "035847eb-ac3b-4a17-b105-24a1dfc6ea21")
+	)
+	(label "7SEG.K1"
+		(at 267.97 254.00 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "92a3f9ce-9c91-4bee-936a-25ea27654e01")
+	)
+	(wire
+		(pts
+			(xy 267.97 266.70) (xy 267.97 271.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "576eb396-75fb-41e8-8b0a-423fa8410090")
+	)
+	(label "7SEG.SEG4"
+		(at 267.97 274.32 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d42502cb-7c9d-4b49-9a48-8554ce133595")
+	)
+	(wire
+		(pts
+			(xy 267.97 271.78) (xy 267.97 274.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a4178a13-ad82-4969-b11b-8532e8bc78e7")
+	)
+	(no_connect
+		(at 257.81 259.08)
+		(uuid "f1e99059-4e38-408e-bfc8-ccc68a22e335")
+	)
+	(no_connect
+		(at 257.81 266.70)
+		(uuid "82814ef4-8fa2-4a70-a70e-22d3e0fbe260")
+	)
+	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 278.130 261.620 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f5dfe0fe-2386-4666-837e-90cd6f11d9b8")
+		(property "Reference" "PB8"
+			(at 271.780 262.382 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 278.130 254.000 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 278.130 271.780 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 275.844 261.493 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 278.130 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 278.130 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "467c16b7-53ff-47ae-a0fb-955d6ca36718")
+		)
+		(pin "2"
+			(uuid "de26c4a5-f092-4e56-9ba1-15a76b8a6eb7")
+		)
+		(pin "4"
+			(uuid "4c464a74-24fa-4e51-83aa-562479ca6fba")
+		)
+		(pin "1"
+			(uuid "293a79dc-23e2-45d7-abb0-6e01386ce08c")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB8")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 283.21 259.08) (xy 283.21 254.00)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "80363ce2-f2b7-45f4-a7e6-430657102c30")
+	)
+	(label "7SEG.K2"
+		(at 283.21 254.00 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ed90f10d-91b2-4950-b88c-f8b394611fcf")
+	)
+	(wire
+		(pts
+			(xy 283.21 266.70) (xy 283.21 271.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dd0a3d31-9a7c-4147-8d02-182eea3bfde9")
+	)
+	(label "7SEG.SEG3"
+		(at 283.21 274.32 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0b666f8a-8efa-4d0c-9514-9dff303217ce")
+	)
+	(wire
+		(pts
+			(xy 283.21 271.78) (xy 283.21 274.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "73328066-b5f9-48ad-bccf-96d1e3bf4a1a")
+	)
+	(no_connect
+		(at 273.05 259.08)
+		(uuid "5b1c6427-1568-41c7-bc0f-2a766011d67b")
+	)
+	(no_connect
+		(at 273.05 266.70)
+		(uuid "6455e22f-dd9e-4ccf-9359-5ba03dd6a2f6")
+	)
+	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 293.370 261.620 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "7134319f-7246-40d8-ae04-3aebccff67c6")
+		(property "Reference" "PB9"
+			(at 287.020 262.382 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 293.370 254.000 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 293.370 271.780 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 291.084 261.493 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 293.370 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 293.370 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "172ebad9-311e-4d3c-8894-8bcec36db1ee")
+		)
+		(pin "2"
+			(uuid "d80fe902-ff16-41a9-b694-256e05805267")
+		)
+		(pin "4"
+			(uuid "f246b62e-ada8-4225-b079-3bb89f98bea5")
+		)
+		(pin "1"
+			(uuid "f02d2273-166d-4219-bc3f-fd8e1f52b322")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB9")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 298.45 259.08) (xy 298.45 254.00)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "64958be2-c071-4f85-b63e-b7037b502fbd")
+	)
+	(label "7SEG.K2"
+		(at 298.45 254.00 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ccf7d1db-4453-493a-bd03-36984d2905e4")
+	)
+	(wire
+		(pts
+			(xy 298.45 266.70) (xy 298.45 271.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "22da78f7-175c-44c9-a47c-4d988959e29e")
+	)
+	(label "7SEG.SEG4"
+		(at 298.45 274.32 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a59daccb-77af-4e82-b17d-035c42d04645")
+	)
+	(wire
+		(pts
+			(xy 298.45 271.78) (xy 298.45 274.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5ae1e529-06c0-4a25-8eb3-f9730a4b565e")
+	)
+	(no_connect
+		(at 288.29 259.08)
+		(uuid "725be31d-13c2-433b-ac0a-7569a7d56c6a")
+	)
+	(no_connect
+		(at 288.29 266.70)
+		(uuid "fb278c57-4c94-4127-88d6-c233a70ee4c0")
+	)
+
 	(symbol
 		(lib_id "JLCPCB-Capacitors:0603,100nF")
 		(at 535.94 63.5 90)
