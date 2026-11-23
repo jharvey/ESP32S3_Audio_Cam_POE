@@ -67,6 +67,13 @@ The camera stays powered and drives GPIO45 during a reset, which can select 1.8 
 - [ ] Write down per board: module type, eFuse burned (y/n), self-test result, auto-tune result, anything reworked.
 - [ ] Send the auto-tune numbers back into the simulator presets if they differ a lot.
 
+## Front-panel buttons
+
+- PB6-PB12 each have a 1 kΩ resistor (R109-R115) between the switch and its TM1637 SEG line. It limits the
+  current when two buttons on the same K line are pressed together. Press each button and check the console
+  shows it (PB7-PB12 = TALK, PB6 = SETUP). If one never registers, fit 0 Ω in its resistor's place.
+- Press two TALK buttons together (e.g. PB10 and PB12): talking must still work and the display must not ghost.
+
 ## Not on the first boards yet
 
 Wi-Fi failover, battery level (AXP2101 driver), the second mic, ESP-SR echo canceller, the camera and cover servo.
