@@ -242,11 +242,17 @@ def cmd_setup(a):
         cmds.append("webpass " + a.webpass)
     if a.netkey:
         cmds.append("netkey " + a.netkey)
+    if a.group:
+        cmds.append("group " + a.group)
+    if a.wifi:
+        cmds.append("wifi %s %s" % (a.wifi[0], a.wifi[1]))
     if cmds:
         text = console(port, cmds)
         for line in text.splitlines():
             if a.webpass:
                 line = line.replace(a.webpass, "****")
+            if a.wifi:
+                line = line.replace(a.wifi[1], "****")
             if a.netkey:
                 line = line.replace(a.netkey, "****")
             if line.strip():
@@ -260,6 +266,46 @@ def cmd_setup(a):
         print("unit %s, ip %s, firmware %s" % (info["unit"], info["ip"], info["version"]))
 
 
+def cmd_tune(a):
+    """Echo-canceller and audio parameters: export to a file, upload a file, or run auto-tune."""
+    port = find_port(a.port)
+    if a.action == "get":
+        out = console(port, ["get"])
+        line = next((l.strip() for l in out.splitlines() if "=" in l and "taps=" in l), "")
+        if not line:
+            fail("no parameters in the reply:\n" + out)
+        text = "\n".join(line.split()) + "\n"
+        if a.file:
+            with open(a.file, "w") as f:
+                f.write("# intercom tuning, from the unit on %s\n" % port + text)
+            print("saved %d parameters to %s" % (len(line.split()), a.file))
+        else:
+            print(text, end="")
+    elif a.action == "set":
+        if not a.file:
+            fail("tune set needs --file (key=value per line, # comments)")
+        cmds = []
+        for raw in open(a.file):
+            l = raw.split("#")[0].strip()
+            if not l:
+                continue
+            k, _, v = l.partition("=")
+            cmds.append("set %s %s" % (k.strip(), v.strip()))
+        if a.save:
+            cmds.append("save")
+        out = console(port, cmds)
+        bad = [l for l in out.splitlines() if "unknown" in l or "bad" in l]
+        print(out.strip())
+        if bad:
+            fail("some values were refused (above)")
+        print("uploaded %d parameters%s" % (len(cmds) - (1 if a.save else 0), ", saved" if a.save else " (not saved: add --save)"))
+    elif a.action == "auto":
+        print("auto-tune: keep the room quiet; the unit plays a noise burst for about 5 s")
+        out = console(port, ["cal"], wait=1.0)
+        out += console(port, ["cal result"], wait=12.0)
+        print(out.strip())
+
+
 def main():
     p = argparse.ArgumentParser(description="Intercom unit USB tool (updates and first-time setup)")
     p.add_argument("--port", help="serial port, e.g. COM5 (default: the one plugged-in unit)")
@@ -271,7 +317,9 @@ def main():
     u = sub.add_parser("update", help="flash a release and check the unit comes back with its settings")
     u.add_argument("--release", help="release folder (default: newest)")
     s = sub.add_parser("setup", help="first-time setup of a new unit")
-    s.add_argument("--unit", help="room number, e.g. 214 or 150a")
+    s.add_argument("--unit", help="room number, e.g. 214 (IP 10.42.2.14)")
+    s.add_argument("--group", help="room group, for several units in one room (e.g. 299 for the gym)")
+    s.add_argument("--wifi", nargs=2, metavar=("SSID", "PASSWORD"), help="Wi-Fi for failover and portable units")
     s.add_argument("--webpass", help="web interface password (8+ characters)")
     s.add_argument("--netkey", help="network command key, shared by the office console (16+ characters)")
     s.add_argument("--flash", action="store_true", help="flash the newest release first")
@@ -279,8 +327,12 @@ def main():
     s.add_argument("--burn-efuse", action="store_true", help="burn the flash-voltage eFuse (permanent; see Docs)")
     s.add_argument("--yes", action="store_true", help="don't ask before burning the eFuse")
     s.add_argument("--selftest", action="store_true", help="run the board self-test at the end")
+    t = sub.add_parser("tune", help="echo-canceller parameters: get to a file, set from a file, or auto-tune")
+    t.add_argument("action", choices=["get", "set", "auto"])
+    t.add_argument("--file", help="parameter file (key=value per line)")
+    t.add_argument("--save", action="store_true", help="with set: save to flash so it survives a restart")
     a = p.parse_args()
-    {"release": cmd_release, "info": cmd_info, "update": cmd_update, "setup": cmd_setup}[a.cmd](a)
+    {"release": cmd_release, "info": cmd_info, "update": cmd_update, "setup": cmd_setup, "tune": cmd_tune}[a.cmd](a)
 
 
 if __name__ == "__main__":

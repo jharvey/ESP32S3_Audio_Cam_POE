@@ -75,15 +75,24 @@ header. Audio already carries `flags` (all-call, from console), a `target` room 
 - **Sounds:** a few built-in chimes in flash; more as files on the SD card.
 - **Priority:** any call or emergency cuts a chime; quiet hours block chimes nights and weekends.
 
-## R3.0 Video in the simulator
+## R3.0 Camera stream for the NVR (and in the simulator)
 
-- **Stream:** MJPEG, VGA, 10-15 fps, one stream per unit, sent only in emergency mode or on request. Each frame is
-  split into UDP datagrams (new `Video` packet type: frame id, part, count) to the NVR / console, unicast.
-- **Audio first:** each unit sends its audio frame before any video part in the same 20 ms slot (the network load
-  test showed audio dropouts without this).
-- **Simulator:** each simulated unit renders a test picture (room number, time, a moving bar) as JPEG; one unit can
-  use the PC webcam. The web console gets a video grid that shows every streaming unit.
-- **Tests:** frame loss and reassembly on the in-memory bus; audio loss with 35 simulated streams (reuse `ic-netsim`).
+- **Standard:** RTSP, discoverable over ONVIF Profile S, so a normal NVR (Blue Iris, Frigate, Synology, most
+  ONVIF recorders) adds each unit as a camera: `rtsp://10.42.2.14:554/stream`.
+- **Video: MJPEG**, VGA (640 x 480), 10-15 fps, quality about 12 (25-40 KB a frame, 2-5 Mbit/s). The OV2640 /
+  OV5640 make JPEG in hardware, so the S3 only packs it into RTP (RFC 2435); the S3 has no H.264 encoder.
+- **Audio: AAC-LC stereo**, 16 kHz, 2 x 32 kbit/s, left and right from the two PDM mics (72 mm apart, so a
+  modest stereo image), in RTP (RFC 3640). Fallback for NVRs that only take G.711: mono mu-law 8 kHz.
+  The intercom keeps Opus between units; AAC is only for the camera stream.
+- **NVRs that need H.264** (Hikvision / Dahua recorders with third-party cameras): put go2rtc or Frigate in front;
+  it takes the MJPEG + AAC stream and re-encodes to H.264 for the recorder. Hardware H.264 on the unit would need
+  a different chip (ESP32-P4).
+- **Audio before video:** each unit sends its intercom audio before any video packet in the same 20 ms slot
+  (the network load test showed dropouts without this).
+- **When:** streams only in emergency mode or when the NVR / console asks; the cover stays closed otherwise.
+- **Simulator:** each simulated unit serves RTSP with a test picture (room number, time, a moving bar) and a test
+  tone in stereo; one unit can use the PC webcam. The web console gets a video grid.
+- **Tests:** RTP packing and loss on the in-memory bus; audio loss with 40 streams (reuse `ic-netsim`).
 
 ## R3.2 Emergency mode
 
