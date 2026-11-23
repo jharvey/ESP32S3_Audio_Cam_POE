@@ -90513,7 +90513,7 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "216c14e0-2375-4c87-8908-1752578ff1df")
+		(uuid "5fc1dec5-cbc9-42c0-b7d7-29dcf86ff740")
 		(property "Reference" "PB6"
 			(at 241.300 262.382 0)
 			(show_name no)
@@ -90582,16 +90582,16 @@
 			)
 		)
 		(pin "3"
-			(uuid "5448330c-7561-496f-8170-15c090f6cddf")
+			(uuid "35a13f83-140a-41cb-968a-6a7719f1a1c6")
 		)
 		(pin "2"
-			(uuid "c8440d65-2336-4fcd-81c6-0e4ed60accd7")
+			(uuid "074ceb38-b0d0-458f-8cc6-4e1ffbb2291d")
 		)
 		(pin "4"
-			(uuid "3b8ef464-b655-4b6e-a376-635207f161f9")
+			(uuid "12abe15d-f392-41e3-9b0a-f60b34dc3f51")
 		)
 		(pin "1"
-			(uuid "a510149b-4caa-4254-bb1b-c3bd34bf80a1")
+			(uuid "a1a6982b-8edd-4680-94c2-dc5eead3628a")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"
@@ -90609,7 +90609,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "53a16287-d8a5-4d4a-958a-cb7e0adffb86")
+		(uuid "38779ef0-f9ad-4bf5-85e5-5edf7c2faf7e")
 	)
 	(label "7SEG.K1"
 		(at 252.73 254.00 90)
@@ -90619,7 +90619,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "3adcc77b-0b95-40c1-909d-1029cea768f0")
+		(uuid "68648db8-1740-4117-aa3a-848d7306a79b")
 	)
 	(wire
 		(pts
@@ -90629,7 +90629,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "03a9ab55-2761-435c-8b05-e37250a37736")
+		(uuid "ec4d59d2-c67c-4863-92af-68c55f4ab966")
 	)
 	(label "7SEG.SEG2"
 		(at 252.73 274.32 90)
@@ -90639,7 +90639,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "f7aa173d-b823-41dc-b99f-3f425ece082c")
+		(uuid "586a5824-4abf-4629-b443-58983e04c8ef")
 	)
 	(wire
 		(pts
@@ -90649,15 +90649,15 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b2ce7487-539b-4aa1-baaf-72f68a084d7e")
+		(uuid "d3b24c3d-056f-4357-a367-70aff6e079b4")
 	)
 	(no_connect
 		(at 242.57 259.08)
-		(uuid "ddc1cc2b-4daa-402e-9ad5-7bb1b60c77b9")
+		(uuid "4273b8f1-12da-405e-b987-97db40ea90a7")
 	)
 	(no_connect
 		(at 242.57 266.70)
-		(uuid "676a2fea-d2e5-4938-a5f5-dd91e11f3d02")
+		(uuid "f2c88191-c209-4084-abda-b2dab87d3883")
 	)
 	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
@@ -90669,7 +90669,7 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "65113c4e-2f2f-4f8a-a8fb-156313348269")
+		(uuid "dae3073c-1335-4c1d-ba13-e4d10da0d3a0")
 		(property "Reference" "PB7"
 			(at 256.540 262.382 0)
 			(show_name no)
@@ -90738,16 +90738,16 @@
 			)
 		)
 		(pin "3"
-			(uuid "441dad19-18ec-4408-a1ec-60503643836b")
+			(uuid "7d5abdf2-4750-4743-a270-2bd0b36aa84e")
 		)
 		(pin "2"
-			(uuid "ff163102-eec6-4290-8721-14eefbb4bb6c")
+			(uuid "a395092f-2559-4049-80ad-4fa286e33b82")
 		)
 		(pin "4"
-			(uuid "512da732-8618-47c7-9a23-165cc3006962")
+			(uuid "a48215c6-1aec-44eb-849a-8af96a8624cc")
 		)
 		(pin "1"
-			(uuid "f8e6da36-69d1-4010-abc2-ec769d0879ea")
+			(uuid "84ce5fcd-3c04-47d6-8577-61dbecdc613a")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"
@@ -90765,7 +90765,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "035847eb-ac3b-4a17-b105-24a1dfc6ea21")
+		(uuid "9ceab348-fdd5-44d8-b8dd-1d606c1d5a57")
 	)
 	(label "7SEG.K1"
 		(at 267.97 254.00 90)
@@ -90775,7 +90775,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "92a3f9ce-9c91-4bee-936a-25ea27654e01")
+		(uuid "5f0de63e-b6e2-4b8f-a705-6ad0e9a02f1c")
 	)
 	(wire
 		(pts
@@ -90785,7 +90785,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "576eb396-75fb-41e8-8b0a-423fa8410090")
+		(uuid "b1f5ac86-de68-4155-94a2-73b9f7d9764f")
 	)
 	(label "7SEG.SEG4"
 		(at 267.97 274.32 90)
@@ -90795,7 +90795,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "d42502cb-7c9d-4b49-9a48-8554ce133595")
+		(uuid "46ed65f6-4baa-4ce8-85d5-25abc28d81cb")
 	)
 	(wire
 		(pts
@@ -90805,15 +90805,15 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a4178a13-ad82-4969-b11b-8532e8bc78e7")
+		(uuid "8a273bff-134e-44d1-a6b9-e5062632b998")
 	)
 	(no_connect
 		(at 257.81 259.08)
-		(uuid "f1e99059-4e38-408e-bfc8-ccc68a22e335")
+		(uuid "4842c3d4-9d45-42c1-8026-f45b86bea2bc")
 	)
 	(no_connect
 		(at 257.81 266.70)
-		(uuid "82814ef4-8fa2-4a70-a70e-22d3e0fbe260")
+		(uuid "0357a2af-037f-4e1b-859a-ed5e04f5cb06")
 	)
 	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
@@ -90825,7 +90825,7 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "f5dfe0fe-2386-4666-837e-90cd6f11d9b8")
+		(uuid "1950748d-510e-472d-b26a-90ddcf349757")
 		(property "Reference" "PB8"
 			(at 271.780 262.382 0)
 			(show_name no)
@@ -90894,16 +90894,16 @@
 			)
 		)
 		(pin "3"
-			(uuid "467c16b7-53ff-47ae-a0fb-955d6ca36718")
+			(uuid "74b8ad22-2f50-41ac-9c53-173e5e206252")
 		)
 		(pin "2"
-			(uuid "de26c4a5-f092-4e56-9ba1-15a76b8a6eb7")
+			(uuid "45acdde3-c5f7-48e0-968d-2ec8635d18ef")
 		)
 		(pin "4"
-			(uuid "4c464a74-24fa-4e51-83aa-562479ca6fba")
+			(uuid "3a76d8ed-9ed3-4552-b556-5b5fa8a126b4")
 		)
 		(pin "1"
-			(uuid "293a79dc-23e2-45d7-abb0-6e01386ce08c")
+			(uuid "a18755d2-3dcd-4c58-a90a-c1330202dda7")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"
@@ -90921,7 +90921,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "80363ce2-f2b7-45f4-a7e6-430657102c30")
+		(uuid "073add31-e2ba-4d9f-aa18-48da83807f3b")
 	)
 	(label "7SEG.K2"
 		(at 283.21 254.00 90)
@@ -90931,7 +90931,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "ed90f10d-91b2-4950-b88c-f8b394611fcf")
+		(uuid "eae0897d-c11d-4950-8b08-528bd13033b8")
 	)
 	(wire
 		(pts
@@ -90941,7 +90941,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "dd0a3d31-9a7c-4147-8d02-182eea3bfde9")
+		(uuid "6511a189-f9a7-4ec5-955a-f524a8b91307")
 	)
 	(label "7SEG.SEG3"
 		(at 283.21 274.32 90)
@@ -90951,7 +90951,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "0b666f8a-8efa-4d0c-9514-9dff303217ce")
+		(uuid "4f9cefc3-3829-4474-8280-ef1e1ace42a0")
 	)
 	(wire
 		(pts
@@ -90961,15 +90961,15 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "73328066-b5f9-48ad-bccf-96d1e3bf4a1a")
+		(uuid "f503740b-6b15-4f37-9a95-96fc3010e30e")
 	)
 	(no_connect
 		(at 273.05 259.08)
-		(uuid "5b1c6427-1568-41c7-bc0f-2a766011d67b")
+		(uuid "b987eec7-31ba-4ebc-9a38-10d5e6110f7a")
 	)
 	(no_connect
 		(at 273.05 266.70)
-		(uuid "6455e22f-dd9e-4ccf-9359-5ba03dd6a2f6")
+		(uuid "46b9c05c-0bb7-4b8c-baeb-ef0444b260c1")
 	)
 	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
@@ -90981,7 +90981,7 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "7134319f-7246-40d8-ae04-3aebccff67c6")
+		(uuid "e9d05e30-6711-48e9-b619-bb559f8ff6d5")
 		(property "Reference" "PB9"
 			(at 287.020 262.382 0)
 			(show_name no)
@@ -91050,16 +91050,16 @@
 			)
 		)
 		(pin "3"
-			(uuid "172ebad9-311e-4d3c-8894-8bcec36db1ee")
+			(uuid "58f3a2aa-68c5-4e35-a453-256e9743d274")
 		)
 		(pin "2"
-			(uuid "d80fe902-ff16-41a9-b694-256e05805267")
+			(uuid "e4ec13ad-079f-40fc-96d7-4740d9dd1505")
 		)
 		(pin "4"
-			(uuid "f246b62e-ada8-4225-b079-3bb89f98bea5")
+			(uuid "84690c5a-9349-4ed2-81d3-4976569578f4")
 		)
 		(pin "1"
-			(uuid "f02d2273-166d-4219-bc3f-fd8e1f52b322")
+			(uuid "23dea210-4e6c-4cbe-b4d0-beeda918f472")
 		)
 		(instances
 			(project "ESP32S3_Audio_Cam_POE"
@@ -91077,7 +91077,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "64958be2-c071-4f85-b63e-b7037b502fbd")
+		(uuid "c018ae2a-166d-44c5-a922-12bbc957398e")
 	)
 	(label "7SEG.K2"
 		(at 298.45 254.00 90)
@@ -91087,7 +91087,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "ccf7d1db-4453-493a-bd03-36984d2905e4")
+		(uuid "c6f4e62a-5a0a-4235-9ba1-3961e15d72ce")
 	)
 	(wire
 		(pts
@@ -91097,7 +91097,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "22da78f7-175c-44c9-a47c-4d988959e29e")
+		(uuid "9f6a03c7-f6d4-49c3-b391-8ccf2df45502")
 	)
 	(label "7SEG.SEG4"
 		(at 298.45 274.32 90)
@@ -91107,7 +91107,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "a59daccb-77af-4e82-b17d-035c42d04645")
+		(uuid "fe9dbdcb-7d1a-44ab-b9ef-95a9233f65ce")
 	)
 	(wire
 		(pts
@@ -91117,15 +91117,483 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "5ae1e529-06c0-4a25-8eb3-f9730a4b565e")
+		(uuid "0f16f098-546a-4675-bdd4-96cfd548934d")
 	)
 	(no_connect
 		(at 288.29 259.08)
-		(uuid "725be31d-13c2-433b-ac0a-7569a7d56c6a")
+		(uuid "994c0408-ccb5-48c2-ba82-63b2e2d80627")
 	)
 	(no_connect
 		(at 288.29 266.70)
-		(uuid "fb278c57-4c94-4127-88d6-c233a70ee4c0")
+		(uuid "fd45c1c3-4fe6-453d-8641-1c011c811e3a")
+	)
+	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 247.650 294.640 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "092c9291-e6cb-4e30-86ae-1746168966aa")
+		(property "Reference" "PB10"
+			(at 241.300 295.402 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 247.650 287.020 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 247.650 304.800 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 245.364 294.513 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 247.650 294.640 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 247.650 294.640 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "49b74dd8-fd3b-4117-9d25-55856482b2cf")
+		)
+		(pin "2"
+			(uuid "def8f0f3-39b8-4d72-9fbc-a2e814e1b154")
+		)
+		(pin "4"
+			(uuid "1eebdc5a-f904-4c7a-bc35-1279d369af9a")
+		)
+		(pin "1"
+			(uuid "bc919112-e668-4a10-8365-89a711712db0")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB10")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 252.73 292.10) (xy 252.73 287.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9434c1dd-794a-46a4-a47b-2415c1bc8912")
+	)
+	(label "7SEG.K1"
+		(at 252.73 287.02 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "453a7e36-128c-469a-9194-fefec809cbbf")
+	)
+	(wire
+		(pts
+			(xy 252.73 299.72) (xy 252.73 304.80)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7cbb7556-9541-41ea-a026-c13de2e17516")
+	)
+	(label "7SEG.SEG5"
+		(at 252.73 307.34 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a9c03063-3567-426b-b04e-4bbbdd84753e")
+	)
+	(wire
+		(pts
+			(xy 252.73 304.80) (xy 252.73 307.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d7708e1d-da0a-4b59-8743-1130cc465503")
+	)
+	(no_connect
+		(at 242.57 292.10)
+		(uuid "f35509b6-172f-4436-b0b0-bcb3665b9f59")
+	)
+	(no_connect
+		(at 242.57 299.72)
+		(uuid "538d8f76-4a9d-47c3-8476-2c1d9b8c3849")
+	)
+	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 262.890 294.640 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "edf99e0c-7eaf-4786-b99c-ca9a4a54dda0")
+		(property "Reference" "PB11"
+			(at 256.540 295.402 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 262.890 287.020 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 262.890 304.800 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 260.604 294.513 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 262.890 294.640 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 262.890 294.640 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "5103f9e1-d701-4bdf-853b-f5525422a10e")
+		)
+		(pin "2"
+			(uuid "bda5459b-5bf9-4d08-aa46-a51092cafd99")
+		)
+		(pin "4"
+			(uuid "2dd5746f-013b-4e3a-8c5f-dd8cb3e324ad")
+		)
+		(pin "1"
+			(uuid "71cf7a20-95d1-45af-9dd2-afccf265f038")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB11")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 267.97 292.10) (xy 267.97 287.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b7117828-9fc5-4a7c-9c99-371facbf1d29")
+	)
+	(label "7SEG.K2"
+		(at 267.97 287.02 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "40637686-9c63-4ee8-8afb-8a82fc5390d5")
+	)
+	(wire
+		(pts
+			(xy 267.97 299.72) (xy 267.97 304.80)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "96f5a4e3-8dd6-46c9-8132-e215fdd10881")
+	)
+	(label "7SEG.SEG5"
+		(at 267.97 307.34 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b460170d-676a-4413-bfc9-9b516c9baf5c")
+	)
+	(wire
+		(pts
+			(xy 267.97 304.80) (xy 267.97 307.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ace32ecf-be34-4c21-aa0d-19c590867ede")
+	)
+	(no_connect
+		(at 257.81 292.10)
+		(uuid "4792e8b0-e995-4d61-8438-d742ebe3e72e")
+	)
+	(no_connect
+		(at 257.81 299.72)
+		(uuid "aec72584-f9b0-4e72-a113-8ddd48cb641d")
+	)
+	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 278.130 294.640 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "9170a71b-d40c-4ff9-b19c-14d9720dadae")
+		(property "Reference" "PB12"
+			(at 271.780 295.402 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 278.130 287.020 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 278.130 304.800 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 275.844 294.513 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 278.130 294.640 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 278.130 294.640 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "cd4d0234-55a9-4658-a26a-d6bdea20dfcb")
+		)
+		(pin "2"
+			(uuid "e70cdd8c-6267-4729-8081-4a6fc00479d7")
+		)
+		(pin "4"
+			(uuid "b32dc2c8-26cc-4727-8218-b85138471bfa")
+		)
+		(pin "1"
+			(uuid "eb5a9d09-81f9-4b3e-8f82-9c222b00fe50")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB12")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 283.21 292.10) (xy 283.21 287.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0798e9de-46f8-4225-b8a1-896c8885e378")
+	)
+	(label "7SEG.K1"
+		(at 283.21 287.02 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6c0cca87-3425-4db0-b476-045d6cece463")
+	)
+	(wire
+		(pts
+			(xy 283.21 299.72) (xy 283.21 304.80)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "528a132c-4049-42bc-9a9d-7dc45bec02f5")
+	)
+	(label "7SEG.SEG6"
+		(at 283.21 307.34 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5f2471ae-e320-4d11-9d8b-a4823123a95c")
+	)
+	(wire
+		(pts
+			(xy 283.21 304.80) (xy 283.21 307.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "037998bc-6121-4b53-bb31-3ef9b904211e")
+	)
+	(no_connect
+		(at 273.05 292.10)
+		(uuid "63d6b971-0ae9-43dd-b931-cad32904c264")
+	)
+	(no_connect
+		(at 273.05 299.72)
+		(uuid "d1b0fd9e-5059-4ca7-9591-e4d7e4bf21c4")
 	)
 
 	(symbol
