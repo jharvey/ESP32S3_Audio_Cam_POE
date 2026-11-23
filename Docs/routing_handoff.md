@@ -15,6 +15,15 @@ State of the single-sided board and how to pick the work up in a fresh session. 
 - Open by area: 38 at U18 (PMU), 16 at U7, 9 on +3V3 / COM / VBUS, 3 at U21 and J5, 5 test-point links
   (TP60, TP61, TP37, TP65 on purpose; TP35 was routed before the run and is open again).
 
+## U7 bottom row (pins 46-56), 22 Nov 2026
+- Y1, C3, C6 and R1 moved 1.0 mm down to open the area under the bottom pin row.
+- Routed: OSC_IN, OSC_OUT, the C3/Y1 node and the crystal grounds; I2C SCL and SDA straight to J3 on F.Cu;
+  ETH.CS and ETH.SCLK through vias at (120.55, 109.45) and (122.07, 109.6) onto In2. C11's ground pad and U21
+  pin 21 (ground) got their own vias after the new tracks cut the top pour that fed them.
+- Still open: pin 47 (SD.MOSI) and pin 52 (SD.CLK). With 0.4 mm pitch, 0.6 mm vias and C11/C6/R1 in place, the
+  row has room for five escapes plus the crystal; these two are boxed in. Options: share the W5500 SPI bus with
+  the SD card, or move the two nets to other pins.
+
 ## Whole-board run on VM105 (finished; `ssh kicad-vm`, folder `~/pcb/ss`)
 - `all.sh WA N1`: six whole-board rounds (route, clean, stitch ground islands, rip-up after rounds 2 and 4).
   Progress is in `all.out`; it prints `ALLDONE` at the end. It cannot delete or rip the hand-routed nets.
