@@ -58,6 +58,7 @@ const char* kHelp =
     "  sched                timed events: list | add HH:MM mon-fri SOUND [room N|floor N|group N] | del N | clear\n"
     "  dayoff [add|del DATE] days without timed events (2026-12-24); \"skip today\" / \"skip off\"\n"
     "  play SOUND           play a sound here now (chime bell lunch tone)\n"
+    "  lamp [white|ir|other 0-100|auto]  lamp outputs; other = call light (blinks for a call, on for an all-call)\n"
     "  ntp [server|default] the school's time server (from the next restart)\n"
     "  callofc [off]        call the office (as DOWN held 2 s; the console shows it until answered)\n"
     "  talk [seconds|off] [room N|floor N|group N]\n"
@@ -249,6 +250,22 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         return buf;
     }
     if (c == "version") return std::string("firmware ") + kFirmwareVersion;
+    if (c == "lamp") {
+        static const char* names[] = {"white", "ir", "other"};
+        if (a.size() >= 3) {
+            int which = -1;
+            for (int i = 0; i < int(Lamp::Count); i++)
+                if (a[1] == names[i]) which = i;
+            if (which < 0) return "usage: lamp white|ir|other 0-100|auto";
+            if (a[2] == "auto") lampManual_[which] = 255;
+            else lampManual_[which] = uint8_t(std::min(100L, std::max(0L, std::strtol(a[2].c_str(), nullptr, 10))));
+            updateLamps();
+        }
+        std::string out;
+        for (int i = 0; i < int(Lamp::Count); i++)
+            out += std::string(i ? ", " : "") + names[i] + " " + std::to_string(lamp_[i]) + "%" + (lampManual_[i] == 255 ? " (auto)" : " (manual)");
+        return out;
+    }
     if (c == "ntp") {  // the school's time server (default: public pools); used from the next restart
         if (a.size() > 1) hal_.store->saveText("ntp", a[1] == "default" ? "" : a[1]);
         std::string s = hal_.store->loadText("ntp");
@@ -773,6 +790,21 @@ void Intercom::checkSchedule() {
     }
 }
 
+// The call light on the "other" lamp output (J11): blinks 0.6 s on / 0.6 s off while a call for this
+// room is on (and while TALK would answer it), steady during an office all-call. White and IR stay
+// off unless set by hand (R3: night vision, emergency).
+void Intercom::updateLamps() {
+    uint8_t want[int(Lamp::Count)] = {0, 0, 0};
+    if (canAnswer() && !transmitting_) want[int(Lamp::Other)] = (frame_ / 30) % 2 ? 0 : 100;
+    else if (frame_ < allCallUntil_) want[int(Lamp::Other)] = 100;
+    for (int i = 0; i < int(Lamp::Count); i++) {
+        uint8_t v = lampManual_[i] == 255 ? want[i] : lampManual_[i];
+        if (v == lamp_[i]) continue;
+        lamp_[i] = v;
+        if (hal_.lamps) hal_.lamps->set(Lamp(i), v);
+    }
+}
+
 bool Intercom::inCall() const { return callLast_ && frame_ - callLast_ < kCallFrames; }
 bool Intercom::canAnswer() const { return callLast_ && frame_ - callLast_ < kAnswerFrames; }
 
@@ -985,6 +1017,7 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
 
     if (frame_ % kStatusEveryFrames == 0) sendStatus();
     updatePanel();
+    updateLamps();
 }
 
 }  // namespace ic

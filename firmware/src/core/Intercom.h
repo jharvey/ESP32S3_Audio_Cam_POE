@@ -98,6 +98,8 @@ public:
     const Schedule& schedule() const { return sched_; }
     bool soundPlaying() const { return soundActive_; }
     Sound currentSound() const { return sound_; }
+    // Lamp outputs: what the core is driving now (0-100 %). Other = the call / alarm light.
+    uint8_t lampLevel(Lamp l) const { return lamp_[int(l)]; }
     Codec sendCodec() const { return encoder_ ? encoder_->codec() : Codec::Pcm16; }
     AudioStats audioStats() const;
     // Talkers heard since start, for tests: (unit key, frames played).
@@ -128,6 +130,7 @@ private:
     void setCallingOffice(bool on, const char* why);
     void startSound(Sound s);
     void checkSchedule();
+    void updateLamps();
     void saveSchedule();
     std::string schedCommand(const std::vector<std::string>& a);
     void refreshPower();
@@ -173,6 +176,8 @@ private:
     UnitId callFrom_;             // last unit that called this room
     uint32_t callLast_ = 0;       // frame of its last packet; 0 = no call yet
     uint32_t allCallUntil_ = 0;   // an office all-call is playing: room calls wait
+    uint8_t lamp_[int(Lamp::Count)] = {0, 0, 0};
+    uint8_t lampManual_[int(Lamp::Count)] = {255, 255, 255};  // 255 = automatic
     bool soundActive_ = false;      // a chime / timed sound is playing
     Sound sound_ = Sound::Chime;
     uint32_t soundPos_ = 0;

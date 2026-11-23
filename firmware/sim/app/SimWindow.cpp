@@ -78,11 +78,12 @@ protected:
             {netTxt, net},
             {"TX", ic && ic->transmitting() ? QColor(0xf0, 0x30, 0x30) : off},
             {"RX", ic && ic->talkersPlaying() ? QColor(0x2e, 0xc4, 0x5a) : off},
+            {"CALL", ic && ic->lampLevel(ic::Lamp::Other) ? QColor(0xff, 0x9f, 0x1a) : off},  // J11 call light
         };
         f.setPointSize(7);
         p.setFont(f);
-        for (int i = 0; i < 4; i++) {
-            QPointF c(win.right() + 26, win.top() + 8 + i * 19);
+        for (int i = 0; i < 5; i++) {
+            QPointF c(win.right() + 26, win.top() + 6 + i * 15.5);
             p.setPen(Qt::NoPen);
             p.setBrush(lights[i].c);
             p.drawEllipse(c, 5, 5);

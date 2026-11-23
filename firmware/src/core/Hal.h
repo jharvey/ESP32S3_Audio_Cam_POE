@@ -79,6 +79,17 @@ public:
     virtual void log(const char* msg) = 0;
 };
 
+// Lamp outputs (P-FET high-side switches on the board): J13 white, J12 IR illuminator, J11 other
+// (the call / alarm light). Level 0-100 %; the board treats anything above 0 as on (its PWM runs at
+// 50 Hz for the servos, which would flicker).
+enum class Lamp : uint8_t { White = 0, Ir = 1, Other = 2, Count = 3 };
+
+class ILamps {
+public:
+    virtual ~ILamps() = default;
+    virtual void set(Lamp lamp, uint8_t pct) = 0;
+};
+
 struct Hal {
     INet* net;
     ILinks* links;
@@ -87,6 +98,7 @@ struct Hal {
     IStore* store;
     ILog* log;
     IDiag* diag = nullptr;  // optional
+    ILamps* lamps = nullptr;  // optional
 };
 
 }  // namespace ic

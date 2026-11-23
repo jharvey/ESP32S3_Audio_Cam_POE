@@ -1050,7 +1050,13 @@ static void testRoomCalls() {
     officeTarget = 214, officeFlags = 0, officeTalk = 50;
     run(3);
     CHECK(r214.ic->chiming() && r214.ic->inCall(), "214 chimes and shows CAL when the office calls it");
-    run(57);
+    int lampOn = 0, lampOff = 0, lampElsewhere = 0;
+    for (int k = 0; k < 57; k++) {
+        run(1);
+        (r214.ic->lampLevel(Lamp::Other) ? lampOn : lampOff)++;
+        if (r101.ic->lampLevel(Lamp::Other)) lampElsewhere++;
+    }
+    CHECK(lampOn > 15 && lampOff > 15 && !lampElsewhere, "call light blinks at 214 only (%d on, %d off frames)", lampOn, lampOff);
     CHECK(r214.heardFrom(kOffice) > 40 && r101.heardFrom(kOffice) == 0 && gymA.heardFrom(kOffice) == 0,
           "room call: 214 heard the office (%u frames), 101 and 299 did not", r214.heardFrom(kOffice));
     // 214 answers with TALK within 10 s: only the office hears it.
@@ -1098,6 +1104,7 @@ static void testRoomCalls() {
     h214b = r214.heardFrom(r101.id);
     officeTarget = 0, officeFlags = kAudioAllCall, officeTalk = 80;
     run(10);
+    CHECK(r101.ic->lampLevel(Lamp::Other) == 100 && r214.ic->lampLevel(Lamp::Other) == 100, "office all-call: call light steady on");
     r101.ic->command("talk 1 room 214");
     run(60);
     CHECK(r214.heardFrom(r101.id) == h214b, "a room call during an office all-call is not played");

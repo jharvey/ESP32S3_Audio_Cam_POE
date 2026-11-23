@@ -184,6 +184,7 @@ board::Tm1637 gTm(gTmLines);
 std::atomic<uint8_t> gButtons{0};
 std::atomic<uint32_t> gDisplay{0x00202020};  // 3 chars + dots, written by the audio task
 std::atomic<bool> gDisplayOk{false};
+std::atomic<uint8_t> gLamps[3];  // lamp levels from the core (audio task), applied by the panel task
 
 void panelTask(void*) {
     uint32_t shown = 0xffffffff;
@@ -199,6 +200,17 @@ void panelTask(void*) {
                 shown = want;
             }
         }
+        {
+            static uint8_t applied[3] = {0, 0, 0};
+            static const int ch[3] = {pins::pwm::LED_WHITE, pins::pwm::LED_IR, pins::pwm::LED_OTHER};
+            for (int i = 0; i < 3; i++) {
+                uint8_t v = gLamps[i].load() ? 1 : 0;  // on / off: the 50 Hz servo PWM would flicker a lamp
+                if (v == applied[i]) continue;
+                applied[i] = v;
+                if (v) gPwm.fullOn(ch[i]);
+                else gPwm.fullOff(ch[i]);
+            }
+        }
         vTaskDelay(pdMS_TO_TICKS(30));  // ~25 key scans a second; each one is ~5 ms of I2C
     }
 }
@@ -207,8 +219,10 @@ NetworkUDP gUdp;
 Preferences gPrefs;
 
 // ---- HAL for the core ----------------------------------------------------------------
-class Board : public ic::INet, public ic::ILinks, public ic::IPower, public ic::IPanel, public ic::IStore, public ic::ILog, public ic::IDiag {
+class Board : public ic::INet, public ic::ILinks, public ic::IPower, public ic::IPanel, public ic::IStore, public ic::ILog, public ic::IDiag,
+              public ic::ILamps {
 public:
+    void set(ic::Lamp lamp, uint8_t pct) override { gLamps[int(lamp)] = pct; }
     // Network: one UDP socket on the multicast group. Ethernet and Wi-Fi carry the same IP
     // (10.42.<floor>.<room>); useLink() makes the active one lwIP's default interface, which is
     // where multicast goes out, and re-joins the group so IGMP is sent on it.
@@ -462,7 +476,7 @@ void setup() {
     gEspAec = new board::EspSrAec();
     ic::EchoCanceller& aec = gEspAec->ok() ? static_cast<ic::EchoCanceller&>(*gEspAec) : gNlms;
     Serial.printf("echo canceller: %s\n", gEspAec->ok() ? "ESP-SR" : "NLMS (ESP-SR did not start)");
-    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, aec, io);
+    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, aec, io);
     gIntercom = &intercom;
     intercom.begin();
     static ic::WebUi web(intercom);
