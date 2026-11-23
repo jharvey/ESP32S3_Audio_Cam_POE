@@ -11,9 +11,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 get_filename_component(FW ${CMAKE_CURRENT_SOURCE_DIR}/.. ABSOLUTE)
 
+# libopus for the Opus codec (R1.6), built from source so Windows and Linux use the same version.
+include(FetchContent)
+set(OPUS_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(OPUS_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
+set(OPUS_INSTALL_PKG_CONFIG_MODULE OFF CACHE BOOL "" FORCE)
+set(OPUS_INSTALL_CMAKE_CONFIG_MODULE OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(opus GIT_REPOSITORY https://github.com/xiph/opus.git GIT_TAG v1.5.2 GIT_SHALLOW TRUE)
+FetchContent_MakeAvailable(opus)
+
 file(GLOB CORE_SRCS CONFIGURE_DEPENDS ${FW}/src/core/*.cpp)
 add_library(ic_core STATIC ${CORE_SRCS})
 target_include_directories(ic_core PUBLIC ${FW}/src/core)
+target_link_libraries(ic_core PUBLIC opus)
+target_compile_definitions(ic_core PUBLIC IC_HAVE_OPUS=1)
 target_compile_options(ic_core PRIVATE -O2 -Wall -Wextra)
 
 add_library(ic_simcommon STATIC common/RoomEcho.cpp common/TestVoice.cpp)

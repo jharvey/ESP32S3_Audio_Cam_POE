@@ -27,13 +27,15 @@ const Field kFields[] = {
     {"volume_db", Kind::Float, -40, 12, "speaker volume, dB"},
     {"mic_gain_db", Kind::Float, -20, 30, "sent audio gain, dB"},
     {"cal_level_db", Kind::Float, -40, -6, "auto-tune noise burst level, dBFS"},
+    {"opus", Kind::Bool, 0, 1, "send Opus-compressed audio (0 = raw PCM)"},
+    {"bitrate_kbps", Kind::Int, 8, 64, "Opus bitrate, kbit/s"},
 };
 
 float clampf(float v, float lo, float hi) { return v < lo ? lo : v > hi ? hi : v; }
 }  // namespace
 
 static void* fieldPtr(TuneParams& p, int i) {
-    void* ptrs[] = {&p.aec, &p.taps, &p.delayMs, &p.mu, &p.dtDb, &p.nlp, &p.nlpDb, &p.duck, &p.duckDb, &p.volumeDb, &p.micGainDb, &p.calLevelDb};
+    void* ptrs[] = {&p.aec, &p.taps, &p.delayMs, &p.mu, &p.dtDb, &p.nlp, &p.nlpDb, &p.duck, &p.duckDb, &p.volumeDb, &p.micGainDb, &p.calLevelDb, &p.opus, &p.bitrateKbps};
     return ptrs[i];
 }
 

@@ -89,6 +89,15 @@ void Intercom::begin() {
 void Intercom::applyParams() {
     if (params_.taps > opt_.maxTaps) params_.taps = opt_.maxTaps;
     aec_.configure(params_);
+    applyCodec();
+}
+
+void Intercom::applyCodec() {
+    Codec want = params_.opus && codecAvailable(Codec::Opus) ? Codec::Opus : Codec::Pcm16;
+    if (!encoder_ || encoder_->codec() != want) encoder_ = makeEncoder(want);
+    if (!encoder_) encoder_ = makeEncoder(Codec::Pcm16);
+    encoder_->setBitrate(params_.bitrateKbps * 1000);
+    encoder_->setFec(link_ == LinkType::WiFi, 5);  // Wi-Fi loses packets; wired doesn't
 }
 
 // ---- auto-tune -------------------------------------------------------------------------
@@ -183,9 +192,9 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
     if (c == "stats") {
         const AecStats& s = aec_.stats();
         static const char* link[] = {"none", "ethernet", "wifi"};
-        snprintf(buf, sizeof(buf), "erle_db=%.1f far=%d double_talk=%d converged=%d nlp_gain=%.2f link=%s mic=%u sent=%u spk=%u talkers=%d",
+        snprintf(buf, sizeof(buf), "erle_db=%.1f far=%d double_talk=%d converged=%d nlp_gain=%.2f link=%s mic=%u sent=%u spk=%u talkers=%d codec=%s",
                  double(s.erleDb), s.farActive, s.doubleTalk, s.converged, double(s.nlpGain), link[int(link_)], micLevel_,
-                 sentLevel_, spkLevel_, playing_);
+                 sentLevel_, spkLevel_, playing_, codecName(sendCodec()));
         return buf;
     }
     if (c == "unit") {
@@ -342,6 +351,7 @@ void Intercom::updateLink() {
     else everLinked_ = true;
     link_ = want;
     hal_.links->useLink(want);
+    if (encoder_) encoder_->setFec(link_ == LinkType::WiFi, 5);
     sendStatus();  // tell the console right away
 }
 
@@ -402,8 +412,7 @@ void Intercom::selfTestFrame(const int16_t* mic, int16_t* speaker) {
 
 void Intercom::receive() {
     uint8_t buf[kMaxPacketBytes + 16];
-    int16_t pcm[kFrameSamples];
-    size_t n;
+        size_t n;
     while ((n = hal_.net->recv(buf, sizeof(buf))) > 0) {
         if (link_ == LinkType::None) continue;
         bool ok;
@@ -412,12 +421,14 @@ void Intercom::receive() {
         if (type == PacketType::Audio) {
             if (cal_.measuring() || testPhase_) continue;  // the room must stay quiet while measuring
             AudioHeader h;
-            if (!decodeAudio(buf, n, &h, pcm)) continue;
+            const uint8_t* payload;
+            size_t plen;
+            if (!decodeAudioData(buf, n, &h, &payload, &plen) || !codecAvailable(h.codec)) continue;
             if (h.from == unit_) continue;                                               // our own multicast echo
             if (sameGroup(h.from) && !(h.flags & kAudioFromConsole)) continue;            // same room group: heard acoustically
             if (h.target != 0 && h.target != unit_.room) continue;                       // a call for another room
             if (Talker* t = talkerFor(h.from)) {
-                t->jb.push(h.seq, pcm, h.level);
+                t->jb.push(h.seq, h.codec, payload, plen, h.level);
                 t->lastFrame = frame_;
             }
         } else if (type == PacketType::Status) {
@@ -634,8 +645,14 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         h.from = unit_;
         h.seq = seq_++;
         h.level = sentLevel_ = frameLevel(clean, kFrameSamples);
-        uint8_t buf[kMaxPacketBytes];
-        hal_.net->send(buf, encodeAudio(h, clean, buf));
+        uint8_t coded[kMaxCodedBytes], buf[kMaxPacketBytes];
+        size_t clen = encoder_ ? encoder_->encode(clean, coded, sizeof(coded)) : 0;
+        if (clen) {
+            h.codec = encoder_->codec();
+            hal_.net->send(buf, encodeAudioData(h, coded, clen, buf));
+        } else {
+            hal_.net->send(buf, encodeAudio(h, clean, buf));  // encoder failed: send this frame raw
+        }
     } else {
         sentLevel_ = 0;
     }

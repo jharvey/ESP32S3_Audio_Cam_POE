@@ -19,6 +19,8 @@ struct TuneParams {
     float volumeDb = 0;       // speaker volume
     float micGainDb = 0;      // gain on the sent (echo-cancelled) audio
     float calLevelDb = -20;   // auto-tune noise burst level, dBFS
+    bool opus = true;         // send Opus (falls back to PCM if Opus isn't built in)
+    int bitrateKbps = 24;     // Opus bitrate
 
     // Text form "key=value key=value ...", used for flash storage and the console.
     std::string toString() const;

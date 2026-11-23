@@ -35,7 +35,7 @@ tested in the simulator before boards exist. Item numbers refer to the tables fu
 | R1.3 Echo in the room | ESP-SR front end with both mics, auto-tune on the board, NLMS fallback | 1.6, 1.6a-b | Board | ESP-SR AEC links |
 | R1.4 Echo between rooms | Own-voice canceller, coupling-map chirp test, automatic room groups | 1.6c-e, 1.9a | Simulator first | next |
 | R1.5 Install and support | Console: TALK held, remote mute, faults and dUP in red; web status; USB tool for Wi-Fi and groups; code card | 1.8b, 1.13c, 1.17-1.20 | Simulator and PC | next |
-| R1.6 Compression | Opus, 16 kHz mono, 20 ms frames, about 24 kbit/s; packet-loss concealment and FEC for Wi-Fi; PCM kept for debugging | 1.21 | Simulator, then board (CPU) | next |
+| R1.6 Compression | Opus, 16 kHz mono, 20 ms frames, about 24 kbit/s; packet-loss concealment and FEC for Wi-Fi; PCM kept for debugging | 1.21 | Simulator, then board (CPU) | done in code: sim tested (21.5 kbit/s, mixed PCM/Opus units), firmware builds; CPU to measure on the board |
 | R1.7 Web console | Office PC browser -> office unit: room grid with status, talk to one room / floor / all with the PC mic, hear the reply | 1.22 | Simulator (localhost), then board (HTTPS) | next |
 | R2.0 Room calls | Office calls a room or floor, call tone, answer to office, call-the-office button | 2.1-2.8 | Simulator | |
 | R2.1 Timed events | Time sync, schedule on each unit, chimes, days off, quiet hours | 2.9-2.15 | Simulator | |
@@ -124,7 +124,7 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 | 1.18 | Move the web interface's first-login password check out of the audio task | new |
 | 1.19 | 3D-printed case with separate speaker and mic chambers; re-run auto-tune in the case | new |
 | 1.20 | Pilot: 3-5 rooms for a few weeks | new |
-| 1.21 | **Compression (Opus):** 16 kHz mono, 20 ms frames, VBR about 24 kbit/s, in-band FEC on Wi-Fi. Codec field in the audio header (already there). PCM stays as a debug option; G.722 is the fallback if the S3 runs short of CPU with ESP-SR and the camera. Firmware: libopus (arduino-libopus); simulator: the same libopus built from source | new |
+| 1.21 | **Compression (Opus):** 16 kHz mono, 20 ms frames, VBR about 24 kbit/s, in-band FEC on Wi-Fi. Codec field in the audio header (already there). PCM stays as a debug option; G.722 is the fallback if the S3 runs short of CPU with ESP-SR and the camera. Firmware: libopus (arduino-libopus); simulator: the same libopus built from source | done (sim) / code: `AudioCodec` (PCM, Opus), jitter buffer keeps frames encoded and decodes in order (Opus PLC), `set opus 0|1`, `set bitrate_kbps`, FEC on Wi-Fi. Firmware libopus 1.3.2 (arduino-libopus), simulator 1.5.2 (same bitstream) |
 | 1.22 | **Web console:** a page on the office unit for the office PC: room grid (link, power, faults, dUP), pick a room / floor / all, hold Talk to speak with the PC mic (browser -> WebSocket -> office unit -> targeted audio), hear the room's reply. Same login as the unit's web page. Browsers allow the mic only over HTTPS: the office unit serves HTTPS with its own certificate (accept once), or Chrome treats its address as secure | new |
 
 ### R1 decisions

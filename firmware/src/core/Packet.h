@@ -2,6 +2,7 @@
 //
 // Audio  (16-byte header + payload):
 //   'I' 'C' ver type | room u16 | sub u8 | flags u8 | target u16 | seq u16 | level u8 | codec u8 | nsamples u16
+//   codec 0 (PCM): nsamples = samples, payload = 16-bit samples; codec 1 (Opus): nsamples = payload bytes
 // Command / Reply (16-byte header + text, console over the network):
 //   'I' 'C' ver type | room u16 | sub u8 | target sub u8 (0xff any) | target room u16 (0xffff all) | 6 rsvd | text
 // Status (24 bytes):
@@ -83,11 +84,15 @@ bool decodeText(const uint8_t* buf, size_t len, TextPacket* t);
 bool parseTarget(const std::string& s, uint16_t* room, uint8_t* sub);
 
 size_t encodeAudio(const AudioHeader& h, const int16_t* pcm, uint8_t* out);
+// Audio with an already encoded payload (h.codec says which); returns the packet size.
+size_t encodeAudioData(const AudioHeader& h, const uint8_t* data, size_t len, uint8_t* out);
 size_t encodeStatus(const StatusPacket& s, uint8_t* out);
 
 PacketType peekType(const uint8_t* buf, size_t len, bool* ok);
 // pcm receives h.nsamples samples (<= kFrameSamples).
 bool decodeAudio(const uint8_t* buf, size_t len, AudioHeader* h, int16_t* pcm);
+// Any codec: *data points into buf at the payload, *n is its size in bytes.
+bool decodeAudioData(const uint8_t* buf, size_t len, AudioHeader* h, const uint8_t** data, size_t* n);
 bool decodeStatus(const uint8_t* buf, size_t len, StatusPacket* s);
 
 // Loudness of a frame for mixer ranking: dBFS + 100, clamped to 0..100.

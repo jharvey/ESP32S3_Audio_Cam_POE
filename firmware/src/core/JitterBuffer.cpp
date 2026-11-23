@@ -12,9 +12,25 @@ void JitterBuffer::reset() {
     for (auto& s : slots_) s.full = false;
     any_ = started_ = false;
     concealRun_ = idleTicks_ = 0;
+    dec_.reset();  // a new talk burst starts a fresh decoder
+}
+
+AudioDecoder* JitterBuffer::decoderFor(Codec c) {
+    if (!dec_ || dec_->codec() != c) dec_ = makeDecoder(c);
+    return dec_.get();
 }
 
 void JitterBuffer::push(uint16_t seq, const int16_t* pcm, uint8_t level) {
+    uint8_t buf[kMaxCodedBytes];
+    for (int i = 0; i < kFrameSamples; i++) {
+        buf[2 * i] = uint8_t(uint16_t(pcm[i]));
+        buf[2 * i + 1] = uint8_t(uint16_t(pcm[i]) >> 8);
+    }
+    push(seq, Codec::Pcm16, buf, sizeof(buf), level);
+}
+
+void JitterBuffer::push(uint16_t seq, Codec codec, const uint8_t* data, size_t len, uint8_t level) {
+    if (len > kMaxCodedBytes || !codecAvailable(codec)) return;
     if (!any_) {
         any_ = true;
         playSeq_ = highest_ = seq;
@@ -34,7 +50,9 @@ void JitterBuffer::push(uint16_t seq, const int16_t* pcm, uint8_t level) {
     s.full = true;
     s.seq = seq;
     s.level = level;
-    std::memcpy(s.pcm, pcm, sizeof(s.pcm));
+    s.codec = codec;
+    s.len = uint16_t(len);
+    std::memcpy(s.data, data, len);
     idleTicks_ = 0;
     if (!started_ && diff(highest_, playSeq_) >= kTargetDepth - 1) started_ = true;
 }
@@ -47,8 +65,11 @@ bool JitterBuffer::pop(int16_t* out, uint8_t* level) {
     }
     Slot& s = slots_[playSeq_ % kSlots];
     if (s.full && s.seq == playSeq_) {
-        std::memcpy(out, s.pcm, sizeof(s.pcm));
-        std::memcpy(last_, s.pcm, sizeof(last_));
+        AudioDecoder* d = decoderFor(s.codec);
+        if (!d || !d->decode(s.data, s.len, out)) {
+            if (d) d->conceal(out);
+            else std::memset(out, 0, sizeof(int16_t) * kFrameSamples);
+        }
         *level = lastLevel_ = s.level;
         s.full = false;
         concealRun_ = 0;
@@ -58,8 +79,8 @@ bool JitterBuffer::pop(int16_t* out, uint8_t* level) {
             return false;
         }
         concealedTotal_++;
-        for (int i = 0; i < kFrameSamples; i++) last_[i] = int16_t(last_[i] / 2);  // -6 dB per frame
-        std::memcpy(out, last_, sizeof(last_));
+        if (dec_) dec_->conceal(out);
+        else std::memset(out, 0, sizeof(int16_t) * kFrameSamples);
         *level = lastLevel_ > 6 ? uint8_t(lastLevel_ - 6) : 0;
         lastLevel_ = *level;
     }

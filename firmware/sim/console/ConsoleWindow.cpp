@@ -297,11 +297,13 @@ void ConsoleWindow::receive() {
             u.lastSeen = clock_.elapsed();
         } else if (type == ic::PacketType::Audio) {
             ic::AudioHeader h;
-            if (!ic::decodeAudio(buf, size_t(len), &h, pcm)) continue;
+            const uint8_t* payload;
+            size_t plen;
+            if (!ic::decodeAudioData(buf, size_t(len), &h, &payload, &plen) || !ic::codecAvailable(h.codec)) continue;
             if (h.from.room == 0) continue;  // our own (or another console's) audio
             auto& t = talkers_[h.from.key()];
             if (!t) t = std::make_shared<Talker>();
-            t->jb.push(h.seq, pcm, h.level);
+            t->jb.push(h.seq, h.codec, payload, plen, h.level);
             t->lastPacket = clock_.elapsed();
         } else if (type == ic::PacketType::Reply) {
             ic::TextPacket r;

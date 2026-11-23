@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+#include "AudioCodec.h"
 #include "Calibrator.h"
 #include "EchoCanceller.h"
 #include "Hal.h"
@@ -76,6 +77,7 @@ public:
     bool duplicate() const { return frame_ < dupUntil_; }
     // What the display shows besides the room number: "dUP", "E1 ", "E2 ", "Lo ", or empty.
     const char* fault() const;
+    Codec sendCodec() const { return encoder_ ? encoder_->codec() : Codec::Pcm16; }
     AudioStats audioStats() const;
     // Talkers heard since start, for tests: (unit key, frames played).
     const std::vector<std::pair<uint32_t, uint32_t>>& heard() const { return heard_; }
@@ -89,6 +91,7 @@ private:
 
     void logf(const char* fmt, ...);
     void applyParams();
+    void applyCodec();
     void startCal(const char* why);
     void setUnit(const UnitId& id);
     void selfTestFrame(const int16_t* mic, int16_t* speaker);
@@ -113,6 +116,7 @@ private:
     Mixer mixer_;
     RoomSetup setup_;
     UnitId unit_;
+    std::unique_ptr<AudioEncoder> encoder_;
     uint16_t group_ = 0;       // room group, 0 = this unit's own room number
     uint32_t dupUntil_ = 0;    // another unit with our room number was heard until this frame
     uint32_t dupUid_ = 0;

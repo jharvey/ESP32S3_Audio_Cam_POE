@@ -63,6 +63,46 @@ size_t encodeStatus(const StatusPacket& s, uint8_t* out) {
     return 24;
 }
 
+size_t encodeAudioData(const AudioHeader& h, const uint8_t* data, size_t len, uint8_t* out) {
+    if (len > kMaxPacketBytes - kHeaderBytes) len = kMaxPacketBytes - kHeaderBytes;
+    putPrefix(out, PacketType::Audio, h.from);
+    out[7] = h.flags;
+    put16(out + 8, h.target);
+    put16(out + 10, h.seq);
+    out[12] = h.level;
+    out[13] = uint8_t(h.codec);
+    put16(out + 14, uint16_t(h.codec == Codec::Pcm16 ? len / 2 : len));
+    for (size_t i = 0; i < len; i++) out[kHeaderBytes + i] = data[i];
+    return kHeaderBytes + len;
+}
+
+bool decodeAudioData(const uint8_t* buf, size_t len, AudioHeader* h, const uint8_t** data, size_t* n) {
+    bool ok;
+    if (peekType(buf, len, &ok) != PacketType::Audio || !ok) return false;
+    h->from.room = get16(buf + 4);
+    h->from.sub = buf[6];
+    h->flags = buf[7];
+    h->target = get16(buf + 8);
+    h->seq = get16(buf + 10);
+    h->level = buf[12];
+    h->codec = Codec(buf[13]);
+    h->nsamples = get16(buf + 14);
+    size_t bytes;
+    if (h->codec == Codec::Pcm16) {
+        if (h->nsamples != kFrameSamples) return false;
+        bytes = 2u * h->nsamples;
+    } else if (h->codec == Codec::Opus) {
+        bytes = h->nsamples;
+        if (bytes == 0) return false;
+    } else {
+        return false;
+    }
+    if (len < kHeaderBytes + bytes) return false;
+    *data = buf + kHeaderBytes;
+    *n = bytes;
+    return true;
+}
+
 PacketType peekType(const uint8_t* buf, size_t len, bool* ok) {
     *ok = len >= kHeaderBytes && buf[0] == 'I' && buf[1] == 'C' && buf[2] == kVersion;
     return *ok ? PacketType(buf[3]) : PacketType::Audio;

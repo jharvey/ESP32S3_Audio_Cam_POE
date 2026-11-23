@@ -73,6 +73,37 @@ static void testPackets() {
               !memcmp(pcm, back, sizeof(pcm)),
           "audio packet round trip (%zu bytes)", n);
     CHECK(!decodeAudio(buf, n - 1, &h2, back), "truncated packet rejected");
+
+    // Opus (R1.6): a 440 Hz tone survives the round trip at about the same level, in about 1/10 the bytes.
+    CHECK(codecAvailable(Codec::Opus), "Opus is built in");
+    auto enc = makeEncoder(Codec::Opus);
+    auto dec = makeDecoder(Codec::Opus);
+    double inE = 0, outE = 0;
+    size_t bytes = 0;
+    int frames = 0;
+    for (int f = 0; f < 50; f++) {
+        int16_t tone[kFrameSamples], dout[kFrameSamples];
+        for (int i = 0; i < kFrameSamples; i++) tone[i] = int16_t(8000 * std::sin(2 * 3.14159265 * 440 * (f * kFrameSamples + i) / kSampleRate));
+        uint8_t coded[kMaxCodedBytes];
+        size_t m = enc->encode(tone, coded, sizeof(coded));
+        AudioHeader oh;
+        oh.codec = Codec::Opus;
+        oh.seq = uint16_t(f);
+        uint8_t pkt[kMaxPacketBytes];
+        size_t pn = encodeAudioData(oh, coded, m, pkt);
+        AudioHeader rh;
+        const uint8_t* pl;
+        size_t plen;
+        bool okp = decodeAudioData(pkt, pn, &rh, &pl, &plen) && rh.codec == Codec::Opus && plen == m;
+        if (!okp || !dec->decode(pl, plen, dout)) continue;
+        bytes += m;
+        frames++;
+        if (f >= 10)
+            for (int i = 0; i < kFrameSamples; i++) { inE += double(tone[i]) * tone[i]; outE += double(dout[i]) * dout[i]; }
+    }
+    double lvlDb = 10 * std::log10((outE + 1) / (inE + 1));
+    double kbps = frames ? bytes * 8.0 / (frames * kFrameMs) : 0;
+    CHECK(frames == 50 && std::fabs(lvlDb) < 2.0 && kbps < 40, "Opus round trip: %d frames, level %+.1f dB, %.1f kbit/s (PCM 256)", frames, lvlDb, kbps);
 }
 
 // ---------------------------------------------------------------------------------
@@ -271,6 +302,8 @@ static void testIntercom() {
     CHECK(!strcmp(r101.ic->fault(), ""), "no fault code on PoE with Ethernet (got \"%s\")", r101.ic->fault());
     gymA.ic->command("group 299");
     gymB.ic->command("group 299");
+    r101.ic->command("set opus 0");  // one unit on raw PCM, the rest on Opus: everyone must still hear everyone
+    CHECK(r101.ic->sendCodec() == Codec::Pcm16 && r214.ic->sendCodec() == Codec::Opus, "101 sends PCM, the others Opus");
     run(5);
     CHECK(gymB.ic->group() == 299 && gymB.kv["group"] == "299", "gym unit 298 joined room group 299 (saved)");
     // 101 and gym A talk at the same time for 2 s.
