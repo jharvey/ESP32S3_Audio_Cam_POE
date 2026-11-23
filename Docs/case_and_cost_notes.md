@@ -59,3 +59,21 @@ Suggestions for the 3D-printed case and for lowering the JLCPCB order cost. Boar
 7. **Biggest single parts:** the PoE module (DP9900M, C5380106), the ESP32-S3, the W5500 and the camera
    connector. Compare the PoE module against an Ag9900M-class alternative before the large order.
 8. **Test points** are DNP already: no cost.
+
+## Lamp outputs and LEDs (checked 23 Nov)
+
+| Output | Drives | On-board LED |
+|---|---|---|
+| LED.WH | Q3 -> lamp header J13 | D12 white through 10 kOhm (indicator, ~0.3 mA) |
+| LED.IR | Q4 -> lamp header J12 | D13 **IR** (IR26-21C) through 10 kOhm |
+| LED.OTH | Q5 -> lamp header J11 | none |
+| MISC1-3 | Q6-Q8 -> J17-J19 | D16-D18 **IR** through 10 kOhm |
+
+- Lamps plug into the headers; the AO3401A switches carry several amps. J11 is the call / alarm light (a red or
+  amber LED or beacon). J12 can drive an IR illuminator for night vision (850 nm, with a camera module that has no
+  fixed IR-cut filter).
+- **Check:** D13 and D16-D18 are infrared LEDs used as "output on" indicators at about 0.3 mA. Nobody can see
+  infrared, and that current lights nothing. If they are meant as visible indicators, a JLC basic visible LED
+  (green or red 0603) fits better; if they were meant to light the scene for the camera, they need to be IR
+  illuminator parts with far more current.
+- D3 (yellow) is the W5500 network-link LED and D14 (yellow) the PMU charge LED, not lamps.
