@@ -96,6 +96,8 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 | 1.6d | **Cross-room echo, neighbours' speakers:** a longer canceller tail or extra suppression for room-to-room paths; ducking of nearby units while one talks, if needed | new |
 | 1.6e | **Coupling map:** at install, each unit chirps in turn while the others listen; the result shows which rooms hear each other and sets 1.6c/1.6d per unit; shown on the console | new |
 | 1.6f | Gym and corridor test with real units: residual echo measured per room and between rooms | new (needs boards) |
+| 1.6g | **Noise suppression (gym):** ESP-SR's neural noise suppression and AGC on the sent audio, voice detection so noise isn't sent; a portable suppressor in the simulator so it can be tested with crowd noise | new |
+| 1.6h | **Automatic volume:** the unit measures room noise between calls and raises its speaker volume with it, up to a set limit (`volume_db` stays the base) | new |
 | 1.7 | Watchdog and automatic restart; log the reset reason | code: audio-task watchdog (3 s), reset reason logged |
 | 1.8 | Confirm the button mapping (`Panel.h`) against the case labels | new |
 | 1.8a | Extra buttons on the TM1637 key scan (board cc3eacb): PB7-PB12 = TALK (any one talks; PB10-PB12 in a column left of the display), PB6 = hidden SETUP under the front cover; room setup only from SETUP held 3 s. Free for later: K1+SEG7-8, K2+SEG6-8. A D-pad doesn't fit beside the display | done (sim) / code; board placed, not routed |
@@ -155,6 +157,7 @@ boards and adds what a teacher needs around it.
 | 2.6 | All-call still wins: an all-call or emergency interrupts a room call everywhere | new |
 | 2.7 | Console: room-call history with times, missed calls from rooms | new |
 | 2.8 | Privacy: no listening to a room without the room seeing it; listen-in stays out unless the school decides otherwise | decide |
+| 2.8a | **Visual call indicator:** a room call pulses the lamp output LED.OTH slowly (red or amber LED) and shows `CAL` until answered; steady glow during an all-call. Flashing at most 2 per second; never white-strobe like the fire alarm | new |
 
 ### Timed events
 | # | Feature | Status |
@@ -177,6 +180,7 @@ Covers the old phase 5 and the console's alarm.
 | 3.2 | Cover servo through the PCA9685; "camera live" light | new |
 | 3.3 | Cover self-test: snapshot of the printed room number compared with a reference; fault to the console | new |
 | 3.4 | Emergency mode from the console alarm or a unit's button | new |
+| 3.4a | **Alarm light:** lockdown / emergency flashes LED.OTH in its own pattern (at most 2 per second) with `ALr` on the display, for anyone who can't hear the call | new |
 | 3.5 | MJPEG/RTSP (VGA, 10-15 fps) to the NVR; audio always sent before video | new |
 | 3.6 | Console: alarm button, failed camera checks, units that need auto-tune | new |
 | 3.7 | Optional local recording to the SD card during an emergency | new |
