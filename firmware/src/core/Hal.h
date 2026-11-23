@@ -43,8 +43,9 @@ public:
     virtual PowerState read() = 0;
 };
 
-// Front panel: 4 buttons (via the TM1637 key scan) and the 3-digit display.
-enum Button : uint8_t { kBtnTalk = 0, kBtnMode = 1, kBtnUp = 2, kBtnDown = 3, kButtonCount = 4 };
+// Front panel: buttons (via the TM1637 key scan) and the 3-digit display. SETUP is the hidden
+// button under the front cover: holding it 3 s starts room-number setup.
+enum Button : uint8_t { kBtnTalk = 0, kBtnMode = 1, kBtnUp = 2, kBtnDown = 3, kBtnSetup = 4, kButtonCount = 5 };
 
 class IPanel {
 public:

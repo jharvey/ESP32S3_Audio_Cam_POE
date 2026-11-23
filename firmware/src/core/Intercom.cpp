@@ -609,7 +609,7 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     int16_t clean[kFrameSamples];
     aec_.capture(mic, clean);
 
-    // Panel: room-number setup and TALK. (MODE alone held 3 s = setup; with UP = auto-tune.)
+    // Panel: room-number setup and TALK. (Hidden SETUP held 3 s = setup; MODE + UP or UP held = auto-tune.)
     UnitId id = unit_;
     uint8_t setupHeld = comboSince_ ? uint8_t(held & ~(1u << kBtnMode)) : held;
     if (setup_.update(setupHeld, frame_, &id) && id != unit_) setUnit(id);

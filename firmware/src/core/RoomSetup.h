@@ -1,6 +1,6 @@
 // Setting the room number on the unit itself (the SW1/SW2 dials on the board are not read).
 //
-//   Hold MODE 3 s        enter setup; the first digit blinks
+//   Hold SETUP 3 s       enter setup (hidden button under the front cover); the first digit blinks
 //   UP / DOWN            change the blinking digit
 //   MODE (short)         next digit; MODE on the last digit saves and the unit takes
 //                        its new IP address (10.42.<floor>.<room>)

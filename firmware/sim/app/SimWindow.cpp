@@ -134,7 +134,7 @@ SimWindow::SimWindow(SimUnit* unit, QWidget* parent) : QWidget(parent), unit_(un
     device_ = new DeviceView(unit);
     left->addWidget(device_);
     auto* btns = new QHBoxLayout;
-    const char* names[] = {"TALK\n(Space)", "MODE\n(M)", "UP\n(↑)", "DOWN\n(↓)"};
+    const char* names[] = {"TALK\n(Space)", "MODE\n(M)", "UP\n(↑)", "DOWN\n(↓)", "SETUP\n(S, hidden)"};
     for (int b = 0; b < ic::kButtonCount; b++) {
         auto* pb = new QPushButton(names[b]);
         pb->setFocusPolicy(Qt::NoFocus);
@@ -320,6 +320,7 @@ bool SimWindow::keyToButton(int key, int* b) const {
     switch (key) {
         case Qt::Key_Space: *b = ic::kBtnTalk; return true;
         case Qt::Key_M: *b = ic::kBtnMode; return true;
+        case Qt::Key_S: *b = ic::kBtnSetup; return true;
         case Qt::Key_Up: *b = ic::kBtnUp; return true;
         case Qt::Key_Down: *b = ic::kBtnDown; return true;
         default: return false;

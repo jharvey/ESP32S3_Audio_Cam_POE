@@ -14,14 +14,13 @@ bool RoomSetup::update(uint8_t held, uint32_t frame, UnitId* id) {
     uint8_t released = prev_ & ~held;
     prev_ = held;
     const uint8_t mode = 1u << kBtnMode;
+    const uint8_t setupKey = 1u << kBtnSetup;
 
-    if (pressed & mode) {
-        modeDownAt_ = frame;
-        modeLong_ = false;
-    }
+    if (pressed & mode) modeLong_ = false;
+    if (pressed & setupKey) modeDownAt_ = frame;  // only the hidden SETUP button starts setup
     if (!active_) {
-        if ((held & mode) && !modeLong_ && frame - modeDownAt_ >= kLongPressFrames) {
-            modeLong_ = true;  // the release of this press must not advance a field
+        if ((held & setupKey) && frame - modeDownAt_ >= kLongPressFrames) {
+            modeLong_ = !!(held & mode);  // a MODE press already down must not advance a field
             active_ = true;
             field_ = 0;
             digits_[0] = (id->room / 100) % 10;

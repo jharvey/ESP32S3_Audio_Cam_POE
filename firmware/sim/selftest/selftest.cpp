@@ -331,7 +331,9 @@ static void testIntercom() {
     FakeUnit& u = r101;
     auto press = [&](uint8_t bit, int frames) { u.held = bit; run(frames); u.held = 0; run(3); };
     press(1 << kBtnMode, 155);
-    CHECK(u.ic->inSetup(), "MODE held 3 s enters setup");
+    CHECK(!u.ic->inSetup(), "MODE held 3 s on the front does not start setup");
+    press(1 << kBtnSetup, 155);
+    CHECK(u.ic->inSetup(), "hidden SETUP held 3 s enters setup");
     press(1 << kBtnUp, 2); press(1 << kBtnUp, 2);  // 1 -> 3
     press(1 << kBtnMode, 2);
     press(1 << kBtnMode, 2);  // 0 stays... next digit
@@ -713,7 +715,8 @@ static void testPanelDriver() {
     CHECK(ok && frames, "display \"21.4\": data command, 3 digits with the dot, display on (chip ACKed every byte)");
 
     struct Case { uint8_t code; Button b; const char* name; };
-    const Case cases[] = {{0xF7, kBtnTalk, "PB1 TALK"}, {0xEF, kBtnMode, "PB2 MODE"}, {0xF5, kBtnUp, "PB4 UP"}, {0xEE, kBtnDown, "PB5 DOWN"}};
+    const Case cases[] = {{0xF7, kBtnTalk, "PB1 TALK"}, {0xEF, kBtnMode, "PB2 MODE"}, {0xF5, kBtnUp, "PB4 UP"}, {0xEE, kBtnDown, "PB5 DOWN"},
+                          {0xF6, kBtnSetup, "PB6 SETUP"}, {0xF4, kBtnTalk, "PB7 TALK"}, {0xED, kBtnTalk, "PB8 TALK"}, {0xEC, kBtnTalk, "PB9 TALK"}};
     for (const Case& c : cases) {
         chip.keyCode = c.code;
         uint8_t got = 0;
