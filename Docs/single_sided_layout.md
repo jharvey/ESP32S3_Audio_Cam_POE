@@ -41,9 +41,11 @@ They are DNP test points, so JLC places nothing on them.
 
 ### Floor and room switches
 
-- SW1 = floor (0-9), SW2 = room on that floor (0-9). Each switch's 1/2/4/8 outputs go to U21 P10-P13 (nets
-  FLOOR.1-8) and P14-P17 (nets ROOM.1-8). The switch common goes to COM.
-- The signals are active low: read port 1, invert it, then floor = P13..P10 and room = P17..P14.
+- SW1 = floor (0-9), SW2 = room on that floor (0-9). The switch common goes to COM. After the 22 Nov pin remap
+  the bits are interleaved on U21 port 1 (as in `firmware/src/board/Pins.h`):
+  P10 ROOM.1, P11 ROOM.4, P12 FLOOR.1, P13 FLOOR.4, P14 FLOOR.2, P15 FLOOR.8, P16 ROOM.2, P17 ROOM.8.
+- The signals are active low: read port 1 and invert it, then
+  floor = 8·P15 + 4·P13 + 2·P14 + P12 and room = 8·P17 + 4·P11 + 2·P16 + P10.
 - **Check:** the switches need pull-ups on port 1. I believe the TI TCA9555 has internal 100 kΩ pull-ups (the
   TCA9535 does not), but confirm this in the datasheet. If it doesn't, add 8 x 100 kΩ to +3V3.
 - Suggested IP scheme: static `x.y.z.(100 + 10 x floor + room)`, with floor 0 / room 0 meaning DHCP. The firmware

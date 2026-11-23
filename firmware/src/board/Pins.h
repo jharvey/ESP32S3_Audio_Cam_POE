@@ -36,10 +36,10 @@ constexpr int CAM_XCLK = 21;
 constexpr int CAM_SIOD = 40;  // CAM.SDA
 constexpr int CAM_SIOC = 39;  // CAM.SCL
 constexpr int CAM_VSYNC = 38;
-constexpr int CAM_HREF = 48;
+constexpr int CAM_HREF = 47;  // U7 pin 37, SPICLK_P = GPIO47
 constexpr int CAM_PCLK = 15;
 constexpr int CAM_D0 = 13, CAM_D1 = 11, CAM_D2 = 10, CAM_D3 = 12;
-constexpr int CAM_D4 = 14, CAM_D5 = 17, CAM_D6 = 18, CAM_D7 = 47;
+constexpr int CAM_D4 = 14, CAM_D5 = 17, CAM_D6 = 18, CAM_D7 = 48;  // D7: U7 pin 36, SPICLK_N = GPIO48
 // GPIO45 and GPIO46 are strapping pins. After the remap they carry ETH.SCLK and SD.CLK, which only the
 // ESP32 drives and which have no pull-ups, so nothing can hold them high during a reset.
 // GPIO3 (ETH.MISO) is the JTAG-source strap; it is ignored unless the STRAP_JTAG_SEL eFuse is burned.
