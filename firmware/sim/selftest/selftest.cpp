@@ -20,6 +20,7 @@
 #include "Panel.h"
 #include "Tm1637.h"
 #include "Packet.h"
+#include "BoardGeometry.h"
 #include "RoomEcho.h"
 #include "TestVoice.h"
 
@@ -167,8 +168,9 @@ struct AecResult {
 };
 
 // Far end talks for 12 s into a room; near end also talks from 8 s to 10 s.
-static AecResult runAec(sim::RoomPreset preset, int taps) {
+static AecResult runAec(sim::RoomPreset preset, int taps, const sim::board::MicPath* micPath = nullptr, double* residDbfs = nullptr) {
     sim::RoomEcho room;
+    if (micPath) room.setMicPath(micPath->delayMs, micPath->relDb);
     room.setPreset(preset);
     sim::TestVoice far(120.0f, 7, -16.0f), nearV(210.0f, 99, -26.0f);
     NlmsAec aec(taps, 0);
@@ -207,6 +209,7 @@ static AecResult runAec(sim::RoomPreset preset, int taps) {
         }
     }
     (void)dtEchoResP;
+    if (residDbfs) *residDbfs = db(outNlpP / 150.0 / kFrameSamples / (32768.0 * 32768.0));
     return {db(micP / outP), db(micP / outNlpP), db(dtOutP / nearP)};
 }
 
@@ -224,6 +227,17 @@ static void testAec() {
         CHECK(r.nearKeptDb > -3.0 && r.nearKeptDb < 3.0, "%-24s double talk: near-end level kept %+.1f dB",
               sim::presetName(c.p), r.nearKeptDb);
     }
+    // Each mic's own direct path from the board layout (firmware/tools/echo_predict.py -> BoardGeometry.h).
+    printf("echo from the board layout (speaker at %.1f, %.1f mm)\n", double(sim::board::kSpeakerX), double(sim::board::kSpeakerY));
+    double resid[2] = {0, 0};
+    for (int m = 0; m < 2; m++) {
+        const sim::board::MicPath& mp = sim::board::kMics[m];
+        AecResult r = runAec(sim::RoomPreset::Classroom, 2048, &mp, &resid[m]);
+        CHECK(r.erleDb >= 10.0, "%s: %.0f mm from the speaker (%+.1f dB): ERLE %.1f dB, residual echo %.1f dBFS", mp.name,
+              double(mp.distMm), double(mp.relDb), r.erleDb, resid[m]);
+    }
+    printf("      in a classroom the reverb dominates: %s leaves %.1f dBFS, %s %.1f dBFS of echo\n", sim::board::kMics[0].name, resid[0],
+           sim::board::kMics[1].name, resid[1]);
 }
 
 // ---------------------------------------------------------------------------------
@@ -375,6 +389,75 @@ static void testIntercom() {
     char s[8];
     formatUnit(u.ic->unit(), s);
     CHECK(!u.ic->inSetup() && !strcmp(s, "305"), "panel setup saved unit %s", s);
+}
+
+// ---------------------------------------------------------------------------------
+// Cross-room echo (R1.4): 101 holds TALK and speaks in 400 ms bursts; 102 next door plays it, and 102's
+// speaker leaks back into 101's mic (`leak`, through the wall or an open door) 15 ms of air later. The same
+// run with no leak gives the clean sent stream, so (with leak - without) is exactly the echo 101 sends out.
+static std::vector<int16_t> crossRoomSent(float leak, int frames) {
+    Bus bus;
+    std::deque<std::vector<uint8_t>> tap;  // a listener on the network: 101's packets
+    FakeUnit a(&bus, {101, 0}, 140), b(&bus, {102, 0}, 180);
+    bus.queues.push_back(&tap);
+    a.ic->command("set opus 0");  // exact samples, so the two runs can be subtracted
+    const int air = 15 * kSampleRate / 1000;
+    std::vector<int16_t> bHist(size_t(kFrameSamples * 20), 0);
+    size_t bPos = 0;
+    std::vector<int16_t> sent(size_t(frames) * kFrameSamples, 0);
+    for (int k = 0; k < frames; k++) {
+        bool burst = (k / 20) % 2 == 0;
+        int16_t mic[kFrameSamples], spkA[kFrameSamples], micB[kFrameSamples], spkB[kFrameSamples];
+        if (burst) a.voice.render(mic, kFrameSamples);
+        else memset(mic, 0, sizeof(mic));
+        for (int i = 0; i < kFrameSamples; i++) {
+            size_t idx = (bPos + bHist.size() - size_t(air) + size_t(i)) % bHist.size();
+            int v = mic[i] + int(leak * bHist[idx]);
+            mic[i] = int16_t(std::max(-32767, std::min(32767, v)));
+        }
+        a.held = 1;
+        a.ic->processFrame(mic, spkA);
+        memset(micB, 0, sizeof(micB));
+        b.ic->processFrame(micB, spkB);
+        for (int i = 0; i < kFrameSamples; i++) bHist[(bPos + size_t(i)) % bHist.size()] = spkB[i];
+        bPos = (bPos + kFrameSamples) % bHist.size();
+        while (!tap.empty()) {
+            AudioHeader h;
+            int16_t pcm[kFrameSamples];
+            if (decodeAudio(tap.front().data(), tap.front().size(), &h, pcm) && h.from.room == 101 && h.seq < frames)
+                memcpy(&sent[size_t(h.seq) * kFrameSamples], pcm, sizeof(pcm));
+            tap.pop_front();
+        }
+    }
+    return sent;
+}
+
+struct CrossEcho { double echoToVoiceDb, lagMs; };
+static CrossEcho crossRoomEcho(float leak) {
+    const int frames = 1200, skip = 400 * kFrameSamples;  // skip the first 8 s (settling)
+    std::vector<int16_t> dry = crossRoomSent(0.0f, frames), wet = crossRoomSent(leak, frames);
+    double ev = 0, ee = 0;
+    for (size_t i = size_t(skip); i < dry.size(); i++) {
+        double e = double(wet[i]) - double(dry[i]);
+        ev += double(dry[i]) * dry[i];
+        ee += e * e;
+    }
+    double best = 0;
+    int bestLag = 0;
+    for (int lag = 0; lag < 3200; lag += 16) {  // where the echo sits: correlate the echo with the dry voice
+        double c = 0;
+        for (size_t i = size_t(skip); i + size_t(lag) < dry.size(); i += 4) c += (double(wet[i + size_t(lag)]) - dry[i + size_t(lag)]) * dry[i];
+        if (std::fabs(c) > best) { best = std::fabs(c); bestLag = lag; }
+    }
+    return {10 * std::log10((ee + 1) / (ev + 1)), bestLag * 1000.0 / kSampleRate};
+}
+
+static void testCrossRoom() {
+    printf("cross-room echo (own voice coming back from the next room's speaker)\n");
+    CrossEcho wall = crossRoomEcho(0.1f), door = crossRoomEcho(0.316f);
+    CHECK(wall.echoToVoiceDb < -15.0, "through a wall (-20 dB): own voice sent back %.1f dB below the voice, %.0f ms late",
+          wall.echoToVoiceDb, wall.lagMs);
+    CHECK(door.echoToVoiceDb < -5.0, "open door (-10 dB): %.1f dB below the voice, %.0f ms late", door.echoToVoiceDb, door.lagMs);
 }
 
 // ---------------------------------------------------------------------------------
@@ -861,6 +944,7 @@ int main() {
     testMixer();
     testIntercom();
     testAec();
+    testCrossRoom();
     printf(g_fail ? "\n%d FAILED\n" : "\nALL PASS\n", g_fail);
     return g_fail ? 1 : 0;
 }

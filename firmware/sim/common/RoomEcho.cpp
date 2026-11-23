@@ -24,6 +24,12 @@ RoomEcho::RoomEcho() {
     for (int i = 0; i < kLines; i++) line_[i].assign(size_t(kLineLen[i]), 0.0f);
 }
 
+void RoomEcho::setMicPath(float delayMs, float relDb) {
+    micDelayMs_ = delayMs;
+    micGain_ = std::pow(10.0f, relDb / 20.0f);
+    setPreset(preset_);
+}
+
 void RoomEcho::setPreset(RoomPreset p) {
     preset_ = p;
     taps_.clear();
@@ -44,6 +50,10 @@ void RoomEcho::setPreset(RoomPreset p) {
             revIn_ = 0.10f;
             rt60 = 2.0f;
             break;
+    }
+    if (!taps_.empty()) {  // the first tap is the direct path through the case: move it per mic
+        taps_[0].delay = ms(2.0f + micDelayMs_);
+        taps_[0].gain *= micGain_;
     }
     for (int i = 0; i < kLines; i++) {
         fb_[i] = rt60 > 0 ? std::pow(10.0f, -3.0f * kLineLen[i] / (kFs * rt60)) : 0.0f;

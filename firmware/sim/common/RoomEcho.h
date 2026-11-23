@@ -14,6 +14,9 @@ class RoomEcho {
 public:
     RoomEcho();
     void setPreset(RoomPreset p);
+    // Direct speaker -> mic path for one mic, from the board layout (BoardGeometry.h): extra delay in ms
+    // and level relative to the nearer mic in dB. Applies to the next setPreset() and to the current one.
+    void setMicPath(float delayMs, float relDb);
     RoomPreset preset() const { return preset_; }
     // Speaker frame in (n samples), echo frame out (to add to the mic signal).
     void process(const int16_t* speaker, float* echo, int n);
@@ -31,6 +34,7 @@ private:
     float fb_[kLines] = {};
     float lp_[kLines] = {};
     int preDelay_ = 0;
+    float micDelayMs_ = 0, micGain_ = 1.0f;
 };
 
 }  // namespace sim
