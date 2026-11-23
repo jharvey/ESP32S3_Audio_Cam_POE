@@ -38,8 +38,8 @@ A unit ignores audio from its own room group (unless it's from the console) and 
 | 7 | link: 0 none, 1 Ethernet, 2 Wi-Fi |
 | 8 | power: 0 PoE, 1 battery |
 | 9 | battery % (0 if none) |
-| 10 | flags: 0x01 talking, 0x02 emergency, 0x04 camera OK |
-| 11 | reserved |
+| 10 | flags: 0x01 talking, 0x02 emergency, 0x04 camera OK, 0x08 TALK muted by the office, 0x10 TALK held over 2 min |
+| 11 | fault shown on the display: 0 none, 1 `E1` no Ethernet, 2 `E2` no network, 3 `Lo` battery, 4 `dUP` |
 | 12-15 | uptime, s |
 | 16-19 | unit ID (from the board's MAC); two units with the same room and different IDs = duplicate (`dUP`) |
 | 20-21 | room group (0 = the unit's own room) |

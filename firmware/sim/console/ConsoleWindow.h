@@ -49,6 +49,9 @@ private:
         ic::StatusPacket status;
         qint64 lastSeen = -1;  // ms since start, -1 = never
         bool expected = false;
+        quint32 otherUid = 0;    // a second board heard with the same number
+        qint64 otherSeen = -1;   // when that was
+        bool heldLogged = false;
     };
     struct Talker {
         ic::JitterBuffer jb;

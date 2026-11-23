@@ -103,6 +103,9 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     cmd_->setPlaceholderText("stats");
     auto* send = new QPushButton("Send");
     auto* web = new QPushButton("Open web page");
+    auto* mute = new QPushButton("Mute TALK 15 min");
+    auto* unmute = new QPushButton("Unmute");
+    mute->setToolTip("Stops the selected unit's TALK (stuck button, misuse); it still hears everyone");
     key_ = new QLineEdit(opt_.key);
     key_->setEchoMode(QLineEdit::Password);
     key_->setPlaceholderText("network key");
@@ -113,6 +116,8 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     row->addWidget(new QLabel("Key:"));
     row->addWidget(key_);
     row->addWidget(web);
+    row->addWidget(mute);
+    row->addWidget(unmute);
     cl->addLayout(row);
     log_ = new QPlainTextEdit;
     log_->setReadOnly(true);
@@ -122,6 +127,13 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     root->addWidget(cmdBox, 2);
     connect(send, &QPushButton::clicked, this, &ConsoleWindow::sendCommand);
     connect(cmd_, &QLineEdit::returnPressed, this, &ConsoleWindow::sendCommand);
+    auto muteSel = [this](const QString& c) {
+        QString u = selectedUnit();
+        if (u.isEmpty()) return appendLog("select a unit first");
+        sendText(u, c);
+    };
+    connect(mute, &QPushButton::clicked, this, [muteSel] { muteSel("mute 15"); });
+    connect(unmute, &QPushButton::clicked, this, [muteSel] { muteSel("mute off"); });
     connect(web, &QPushButton::clicked, this, [this] {
         QString u = selectedUnit();
         if (u.isEmpty()) return appendLog("select a unit first");
@@ -291,6 +303,19 @@ void ConsoleWindow::receive() {
             ic::StatusPacket s;
             if (!ic::decodeStatus(buf, size_t(len), &s)) continue;
             UnitRow& u = units_[s.from.key()];
+            qint64 nowMs = clock_.elapsed();
+            bool live = u.lastSeen >= 0 && nowMs - u.lastSeen <= kOfflineMs;
+            if (live && s.unitUid && u.status.unitUid && s.unitUid != u.status.unitUid) {
+                // Two boards sending as the same room number. Keep showing the first; remember the other.
+                if (u.otherSeen < 0 || nowMs - u.otherSeen > kOfflineMs) appendLog(unitName(s.from) + ": DUPLICATE number (two units use it)");
+                u.otherUid = s.unitUid;
+                u.otherSeen = nowMs;
+                continue;
+            }
+            if ((s.flags & ic::kStatusTalkHeld) && !u.heldLogged) appendLog(unitName(s.from) + ": TALK held over 2 minutes (stuck button?) - Mute TALK stops it");
+            u.heldLogged = s.flags & ic::kStatusTalkHeld;
+            if ((s.flags & ic::kStatusMuted) != (u.status.flags & ic::kStatusMuted) && u.lastSeen >= 0)
+                appendLog(unitName(s.from) + ((s.flags & ic::kStatusMuted) ? ": TALK muted" : ": TALK unmuted"));
             bool wasOffline = u.lastSeen >= 0 && clock_.elapsed() - u.lastSeen > kOfflineMs;
             if (u.lastSeen < 0 || wasOffline) appendLog(unitName(s.from) + (u.lastSeen < 0 ? " online" : " back online"));
             u.status = s;
@@ -321,7 +346,7 @@ void ConsoleWindow::refreshTable() {
     QList<UnitRow> rows = units_.values();
     std::sort(rows.begin(), rows.end(), [](const UnitRow& a, const UnitRow& b) { return a.status.from.key() < b.status.from.key(); });
     table_->setRowCount(int(rows.size()));
-    int online = 0, offline = 0, battery = 0, talking = 0;
+    int online = 0, offline = 0, battery = 0, talking = 0, problems = 0;
     for (int r = 0; r < rows.size(); r++) {
         const UnitRow& u = rows[r];
         bool on = u.lastSeen >= 0 && now - u.lastSeen <= kOfflineMs;
@@ -340,11 +365,26 @@ void ConsoleWindow::refreshTable() {
                 talking++;
                 bg = QColor(255, 236, 179);
             }
+            static const char* faults[] = {"", "E1 no Ethernet (on Wi-Fi)", "E2 no network", "Lo battery low", "dUP duplicate number"};
+            bool dup = s.fault == ic::Fault::Duplicate || (u.otherSeen >= 0 && now - u.otherSeen <= kOfflineMs);
+            QStringList notes;
+            if (s.flags & ic::kStatusTalkHeld) notes << "TALK HELD >2 min";
+            if (s.flags & ic::kStatusMuted) notes << "muted";
+            if (dup) notes << faults[4];
+            else if (s.fault != ic::Fault::None) notes << faults[int(s.fault)];
+            if (!notes.isEmpty()) state = (talk ? QString("talking, ") : QString()) + notes.join(", ");
+            if (dup || (s.flags & ic::kStatusTalkHeld) || s.fault == ic::Fault::LowBattery) {
+                bg = QColor(255, 160, 160);  // red: needs someone now
+                problems++;
+            } else if (s.fault != ic::Fault::None || (s.flags & ic::kStatusMuted)) {
+                if (!talk) bg = QColor(255, 214, 170);  // orange: degraded
+                problems++;
+            }
             link = s.link == ic::LinkType::Ethernet ? "Ethernet" : s.link == ic::LinkType::WiFi ? "Wi-Fi" : "none";
             power = s.power == ic::PowerSource::Battery ? QString("battery %1%").arg(s.battery) : QString("PoE");
             if (s.power == ic::PowerSource::Battery) {
                 battery++;
-                if (!talk) bg = s.battery < 25 ? QColor(255, 205, 205) : QColor(255, 244, 214);
+                if (!bg.isValid()) bg = QColor(255, 244, 214);
             }
             up = duration(s.uptimeS);
         }
@@ -359,7 +399,7 @@ void ConsoleWindow::refreshTable() {
         }
         if (cells[0] == keep) table_->selectRow(r);
     }
-    summary_->setText(QString("%1 online   %2 offline   %3 on battery   %4 talking").arg(online).arg(offline).arg(battery).arg(talking));
+    summary_->setText(QString("%1 online   %2 offline   %3 on battery   %4 talking   %5 need attention").arg(online).arg(offline).arg(battery).arg(talking).arg(problems));
 }
 
 void ConsoleWindow::sendCommand() {

@@ -368,11 +368,42 @@ static void testIntercom() {
     run(80);
     CHECK(r214.ic->duplicate() && dup.ic->duplicate() && !strcmp(r214.ic->fault(), "dUP"), "two units on room 214 both show dUP");
     CHECK(!r101.ic->duplicate(), "other units are not flagged");
+    auto peerOf = [](FakeUnit& at, uint16_t room) -> const StatusPacket* {
+        for (const Peer& p : at.ic->peers())
+            if (p.status.from.room == room) return &p.status;
+        return nullptr;
+    };
+    const StatusPacket* p214 = peerOf(r101, 214);
+    CHECK(p214 && p214->fault == Fault::Duplicate, "101 (and the office) see 214's dUP in its status");
     dup.ic->command("unit 215");
     run(200);
     CHECK(!r214.ic->duplicate() && !dup.ic->duplicate(), "dUP clears 3 s after 215 is renumbered");
     CHECK(dup.ic->command("unit 214a").find("usage") == 0, "letters are refused (\"unit 214a\")");
     all.pop_back();
+
+    // Office mute: 101's TALK is ignored while muted; everyone sees the muted flag.
+    uint32_t before = r214.heardFrom(r101.id);
+    CHECK(r101.ic->command("mute 1", CmdSource::Network).find("TALK muted") == 0, "\"mute 1\" accepted from the network");
+    r101.held = 1;
+    run(60);
+    r101.held = 0;
+    run(10);
+    const StatusPacket* p101 = peerOf(r214, 101);
+    CHECK(r214.heardFrom(r101.id) == before && p101 && (p101->flags & kStatusMuted), "muted 101 isn't heard; 214 sees it muted");
+    r101.ic->command("mute off", CmdSource::Network);
+    run(60);
+    p101 = peerOf(r214, 101);
+    CHECK(p101 && !(p101->flags & kStatusMuted), "\"mute off\" clears it");
+
+    // TALK held over 2 minutes: flagged (stuck button), cleared on release.
+    r101.held = 1;
+    run(6010);
+    p101 = peerOf(r214, 101);
+    CHECK(r101.ic->talkHeld() && p101 && (p101->flags & kStatusTalkHeld), "TALK held 2 min -> flagged to everyone");
+    r101.held = 0;
+    run(60);
+    p101 = peerOf(r214, 101);
+    CHECK(!r101.ic->talkHeld() && p101 && !(p101->flags & kStatusTalkHeld), "released -> flag cleared");
 
     // Room-number setup on the panel: hold MODE 3 s, set 3-0-5, MODE on the last digit saves.
     FakeUnit& u = r101;

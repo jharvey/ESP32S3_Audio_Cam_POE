@@ -149,9 +149,11 @@ std::string WebUi::statusJson() const {
     for (const Peer& p : ic_.peers()) {
         char pu[8];
         formatUnit(p.status.from, pu);
-        snprintf(buf, sizeof(buf), "%s{\"unit\":\"%s\",\"link\":\"%s\",\"power\":\"%s\",\"battery\":%u,\"talking\":%s,\"uptime_s\":%u,\"age_s\":%.1f}",
+        snprintf(buf, sizeof(buf), "%s{\"unit\":\"%s\",\"link\":\"%s\",\"power\":\"%s\",\"battery\":%u,\"talking\":%s,\"muted\":%s,\"talk_held\":%s,\"fault\":%u,\"uptime_s\":%u,\"age_s\":%.1f}",
                  first ? "" : ",", pu, linkName(p.status.link), p.status.power == PowerSource::Battery ? "battery" : "poe",
-                 unsigned(p.status.battery), (p.status.flags & kStatusTalking) ? "true" : "false", unsigned(p.status.uptimeS),
+                 unsigned(p.status.battery), (p.status.flags & kStatusTalking) ? "true" : "false",
+                 (p.status.flags & kStatusMuted) ? "true" : "false", (p.status.flags & kStatusTalkHeld) ? "true" : "false",
+                 unsigned(p.status.fault), unsigned(p.status.uptimeS),
                  double(ic_.frame() - p.lastFrame) * kFrameMs / 1000.0);
         out += buf;
         first = false;

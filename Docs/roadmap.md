@@ -34,7 +34,7 @@ tested in the simulator before boards exist. Item numbers refer to the tables fu
 | R1.2 Portable and failover | Wi-Fi with the same IP, link rules, battery readout, SD-card update | 1.10-1.13, 1.16 | Simulator (logic), board | code |
 | R1.3 Echo in the room | ESP-SR front end with both mics, auto-tune on the board, NLMS fallback | 1.6, 1.6a-b | Board | ESP-SR AEC links |
 | R1.4 Echo between rooms | Echo predicted from the board layout and simulated between rooms ([echo_prediction.md](echo_prediction.md)); coupling-map chirp test, automatic room groups, ducking of coupled rooms | 1.6c-e, 1.9a | Simulator first | prediction and measurement done; own-voice NLMS canceller tried and dropped (made it worse); coupling map and ducking next |
-| R1.5 Install and support | Console: TALK held, remote mute, faults and dUP in red; web status; USB tool for Wi-Fi and groups; code card | 1.8b, 1.13c, 1.17-1.20 | Simulator and PC | next |
+| R1.5 Install and support | Console: TALK held, remote mute, faults and dUP in red (done in sim); web status; USB tool for Wi-Fi and groups; code card | 1.8b, 1.13c, 1.17-1.20 | Simulator and PC | next |
 | R1.6 Compression | Opus, 16 kHz mono, 20 ms frames, about 24 kbit/s; packet-loss concealment and FEC for Wi-Fi; PCM kept for debugging | 1.21 | Simulator, then board (CPU) | done in code: sim tested (21.5 kbit/s, mixed PCM/Opus units), firmware builds; CPU to measure on the board |
 | R1.7 Web console | Office PC browser -> office unit: room grid with status, talk to one room / floor / all with the PC mic, hear the reply | 1.22 | Simulator (localhost), then board (HTTPS) | next |
 | R2.0 Room calls | Office calls a room or floor, call tone, answer to office, call-the-office button | 2.1-2.8 | Simulator | |
@@ -101,7 +101,7 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 | 1.7 | Watchdog and automatic restart; log the reset reason | code: audio-task watchdog (3 s), reset reason logged |
 | 1.8 | Confirm the button mapping (`Panel.h`) against the case labels | new |
 | 1.8a | Extra buttons on the TM1637 key scan (board cc3eacb): PB7-PB12 = TALK (any one talks; PB10-PB12 in a column left of the display), PB6 = hidden SETUP under the front cover; room setup only from SETUP held 3 s. Free for later: K1+SEG7-8, K2+SEG6-8. A D-pad doesn't fit beside the display | done (sim) / code; board placed, not routed |
-| 1.8b | No TALK timeout (decided 23 Nov): an emergency may need TALK held a long time. Instead, after about 2 min held the console shows the room as "TALK held", and the office can mute that unit with a signed command until its button is released and pressed again | new |
+| 1.8b | No TALK timeout (decided 23 Nov): an emergency may need TALK held a long time. Instead, after about 2 min held the console shows the room as "TALK held", and the office can mute that unit's TALK with a signed command (`mute <minutes>` / `mute off`; the console's button mutes 15 min, which also covers a button that stays stuck). Status flags "TALK held" and "muted" | done (sim) / code |
 
 ### Network, power and addressing
 | # | Feature | Status |
@@ -113,7 +113,7 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 | 1.12 | Link rules. PoE power and Ethernet link: wired. PoE power, no Ethernet link: Wi-Fi, display alternates room and `E1`. No PoE (battery): Wi-Fi. `E2` if Wi-Fi is down too. Switch within 1 s | done (sim) / code |
 | 1.13 | AXP2101: power source, battery %, charging in the status beacons; `Lo` on the display | code (register map to confirm on the board) |
 | 1.13a | Fault display: the room number stays on; every 3 s the code flashes for 0.5 s (`E1` no cable link, `E2` no network at all, `Lo` battery low) | done (sim) / code |
-| 1.13b | Duplicate number: a unit ID (from the MAC) in every status beacon. A unit that hears its own number and letter from a different ID alternates `dUP` and the number every second, within about 1 s, until one is renumbered; the console shows it in red | done (sim) / code; console red marking: new |
+| 1.13b | Duplicate number: a unit ID (from the MAC) in every status beacon. A unit that hears its own number and letter from a different ID alternates `dUP` and the number every second, within about 1 s, until one is renumbered; the console shows it in red | done (sim) / code |
 | 1.13c | Code card: the codes printed on the case or a card by the display, and spelled out on the web page and console | new |
 | 1.14 | Check parking-lot Wi-Fi coverage (may need an outdoor access point) | new (site) |
 

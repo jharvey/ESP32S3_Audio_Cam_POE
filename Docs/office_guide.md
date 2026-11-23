@@ -7,13 +7,17 @@ Features marked *(planned)* are on the roadmap but not in the units yet.
 
 Today: the PC office console (`firmware/sim/console`), a Windows program. *(Planned: the web console, below.)*
 
-- **Room grid:** every unit with its link (Ethernet / Wi-Fi), power (PoE / battery and level) and uptime. Offline
-  units in red; units listed in the rooms file but never heard are shown too.
+- **Room grid:** every unit with its link (Ethernet / Wi-Fi), power (PoE / battery and level), uptime and any
+  problem. Red = needs someone now (offline, duplicate number, TALK held, battery low); orange = working but degraded
+  (on Wi-Fi with PoE power, muted). Units listed in the rooms file but never heard are shown too. The line above
+  the grid counts the units that need attention.
 - **All-call:** hold the button to talk to every room with the PC microphone.
 - **Talk to a room:** select a room and hold the button; only that room hears you.
 - **Commands:** send a console command to one unit, a room or all units (signed with the network key), for example
   `get`, `set volume_db -6`, `save`, `cal`, `selftest result`.
 - **Open web page** of the selected unit.
+- **Mute TALK 15 min / Unmute:** stops the selected unit's TALK (a stuck button, misuse). The room still hears
+  all-calls and other rooms. The mute ends by itself after 15 minutes.
 
 ## Web console *(planned, R1.7)*
 
@@ -30,7 +34,8 @@ A page on the office unit, opened in Chrome, Edge or Firefox on the office PC:
 | On Wi-Fi with PoE power (`E1` on the unit) | The network cable or switch port is faulty |
 | Battery and low | A portable unit away from its cable |
 | Duplicate (`dUP`) | Two units on one room number |
-| TALK held over 2 minutes *(planned)* | A button may be stuck; the office can mute that unit until it's released |
+| TALK held over 2 minutes (red) | A button may be stuck: **Mute TALK 15 min**, then have the button checked |
+| Muted (orange) | The office muted the unit's TALK; it ends by itself or with **Unmute** |
 
 ## Planned
 

@@ -55,7 +55,7 @@ size_t encodeStatus(const StatusPacket& s, uint8_t* out) {
     out[8] = uint8_t(s.power);
     out[9] = s.battery;
     out[10] = s.flags;
-    out[11] = 0;
+    out[11] = uint8_t(s.fault);
     put32(out + 12, s.uptimeS);
     put32(out + 16, s.unitUid);
     put16(out + 20, s.group);
@@ -137,6 +137,7 @@ bool decodeStatus(const uint8_t* buf, size_t len, StatusPacket* s) {
     s->uptimeS = get32(buf + 12);
     s->unitUid = get32(buf + 16);
     s->group = get16(buf + 20);
+    s->fault = buf[11] <= uint8_t(Fault::Duplicate) ? Fault(buf[11]) : Fault::None;
     return true;
 }
 

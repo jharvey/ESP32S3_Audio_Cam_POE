@@ -77,6 +77,9 @@ public:
     bool duplicate() const { return frame_ < dupUntil_; }
     // What the display shows besides the room number: "dUP", "E1 ", "E2 ", "Lo ", or empty.
     const char* fault() const;
+    Fault faultCode() const;
+    bool muted() const { return muteUntil_ != 0; }
+    bool talkHeld() const { return talkSince_ && frame_ - talkSince_ >= kTalkHeldFrames; }
     Codec sendCodec() const { return encoder_ ? encoder_->codec() : Codec::Pcm16; }
     AudioStats audioStats() const;
     // Talkers heard since start, for tests: (unit key, frames played).
@@ -137,6 +140,9 @@ private:
     std::vector<Peer> peers_;
     std::vector<std::pair<uint32_t, uint32_t>> heard_;
     uint32_t toneFrames_ = 0;  // test tone frames left ("tone" command)
+    static constexpr uint32_t kTalkHeldFrames = 120000 / kFrameMs;  // 2 minutes
+    uint32_t muteUntil_ = 0;  // frame the office mute ends; 0 = not muted
+    uint32_t talkSince_ = 0;  // frame TALK went down; 0 = not talking
     uint32_t talkFrames_ = 0;  // "talk" command: transmit as if TALK were held
     uint64_t lastNonce_ = 0;   // last accepted network command (replay protection)
     int testPhase_ = 0;        // selftest: 0 idle, 1 quiet, 2 tone

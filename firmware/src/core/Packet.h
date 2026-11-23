@@ -6,7 +6,7 @@
 // Command / Reply (16-byte header + text, console over the network):
 //   'I' 'C' ver type | room u16 | sub u8 | target sub u8 (0xff any) | target room u16 (0xffff all) | 6 rsvd | text
 // Status (24 bytes):
-//   'I' 'C' ver type | room u16 | sub u8 | link u8 | power u8 | battery u8 | flags u8 | rsvd u8 | uptime_s u32
+//   'I' 'C' ver type | room u16 | sub u8 | link u8 | power u8 | battery u8 | flags u8 | fault u8 | uptime_s u32
 //   | unit_id u32 (from the MAC: tells two units with the same room number apart) | group u16 | rsvd u16
 #pragma once
 #include <cstddef>
@@ -41,7 +41,15 @@ constexpr size_t kHeaderBytes = 16;
 constexpr size_t kMaxPacketBytes = kHeaderBytes + kFrameSamples * 2;
 
 enum AudioFlags : uint8_t { kAudioAllCall = 0x01, kAudioFromConsole = 0x02 };
-enum StatusFlags : uint8_t { kStatusTalking = 0x01, kStatusEmergency = 0x02, kStatusCameraOk = 0x04 };
+enum StatusFlags : uint8_t {
+    kStatusTalking = 0x01,
+    kStatusEmergency = 0x02,
+    kStatusCameraOk = 0x04,
+    kStatusMuted = 0x08,     // the office muted this unit's TALK ("mute" command)
+    kStatusTalkHeld = 0x10,  // TALK held for over 2 minutes: stuck button or something on it
+};
+// Status fault byte: what the unit's display is flashing.
+enum class Fault : uint8_t { None = 0, NoEthernet = 1, NoNetwork = 2, LowBattery = 3, Duplicate = 4 };
 
 struct AudioHeader {
     UnitId from;
@@ -62,6 +70,7 @@ struct StatusPacket {
     uint32_t uptimeS = 0;
     uint32_t unitUid = 0;  // unique per board (MAC); 0 = unknown
     uint16_t group = 0;    // room group (0 = its own room number)
+    Fault fault = Fault::None;
 };
 
 constexpr uint16_t kTargetAllRooms = 0xffff;

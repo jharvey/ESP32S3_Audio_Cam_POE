@@ -44,6 +44,7 @@ const char* kHelp =
     "  unit [214]           show or set the room number (sets the IP address 10.42.<floor>.<room>)\n"
     "  group [299|off]      room group: units in one room (the gym: 299, 298 ...) do not play each other\n"
     "  tone [seconds]       play a 1 kHz test tone on this unit's speaker (default 2 s, 0 stops)\n"
+    "  mute [minutes|off]   stop this unit's TALK for a while (office: stuck button, misuse); it still hears\n"
     "  talk [seconds|off]   transmit as if TALK were held (USB only; default 5 s, bring-up without the panel)\n"
     "  selftest [result]    check the board and the speaker->mic path (plays a short tone)\n"
     "  version              firmware version\n"
@@ -231,6 +232,20 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         return buf;
     }
     if (c == "version") return std::string("firmware ") + kFirmwareVersion;
+    if (c == "mute") {  // office: stop a unit's TALK (stuck button, misuse); it still hears everyone
+        if (a.size() > 1 && a[1] == "off") {
+            muteUntil_ = 0;
+        } else if (a.size() > 1) {
+            float mins = std::strtof(a[1].c_str(), nullptr);
+            if (!(mins > 0) || mins > 1440) return "usage: mute <minutes 1-1440> | mute off | mute";
+            muteUntil_ = frame_ + uint32_t(mins * 60000 / kFrameMs);
+            logf("TALK muted for %.0f min (%s)", double(mins), src == CmdSource::Local ? "USB" : "office");
+        }
+        sendStatus();
+        if (!muted()) return "not muted";
+        snprintf(buf, sizeof(buf), "TALK muted, %u min left", unsigned((muteUntil_ - frame_) * kFrameMs / 60000 + 1));
+        return buf;
+    }
     if (c == "talk") {
         if (src != CmdSource::Local) return "talk only works from the USB console";
         if (a.size() > 1 && a[1] == "off") {
@@ -487,7 +502,8 @@ void Intercom::sendStatus() {
     s.link = link_;
     s.power = pw.source;
     s.battery = pw.hasBattery ? pw.batteryPct : 0;
-    s.flags = transmitting_ ? kStatusTalking : 0;
+    s.flags = uint8_t((transmitting_ ? kStatusTalking : 0) | (muted() ? kStatusMuted : 0) | (talkHeld() ? kStatusTalkHeld : 0));
+    s.fault = faultCode();
     s.uptimeS = frame_ * kFrameMs / 1000;
     s.unitUid = opt_.unitUid;
     s.group = group_;
@@ -547,6 +563,14 @@ const char* Intercom::fault() const {
     if (power_.source == PowerSource::PoE && !ethUp_) return "E1 ";  // PoE power but no Ethernet link
     if (power_.source == PowerSource::Battery && power_.hasBattery && power_.batteryPct < kLowBatteryPct) return "Lo ";
     return "";
+}
+
+Fault Intercom::faultCode() const {
+    const char* f = fault();
+    if (f[0] == 'd') return Fault::Duplicate;
+    if (f[0] == 'E') return f[1] == '1' ? Fault::NoEthernet : Fault::NoNetwork;
+    if (f[0] == 'L') return Fault::LowBattery;
+    return Fault::None;
 }
 
 bool Intercom::sameGroup(const UnitId& from) const {
@@ -625,9 +649,19 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     uint8_t setupHeld = comboSince_ ? uint8_t(held & ~(1u << kBtnMode)) : held;
     if (setup_.update(setupHeld, frame_, &id) && id != unit_) setUnit(id);
     if (talkFrames_) talkFrames_--;
-    bool talk = ((held & talkBit) || talkFrames_) && !setup_.active();
+    if (muteUntil_ && frame_ >= muteUntil_) {
+        muteUntil_ = 0;
+        logf("mute ended");
+        sendStatus();
+    }
+    bool talk = ((held & talkBit) || talkFrames_) && !setup_.active() && !muted();
     if (talk != transmitting_) {
         transmitting_ = talk;
+        talkSince_ = talk ? frame_ : 0;
+        sendStatus();
+    }
+    if (talkSince_ && frame_ - talkSince_ == kTalkHeldFrames) {
+        logf("TALK held for over 2 minutes (stuck button?)");
         sendStatus();
     }
 
