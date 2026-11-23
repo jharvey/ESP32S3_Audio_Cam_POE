@@ -14,7 +14,7 @@ Last updated: 23 Nov 2026.
 | R2 Room calls and timed events | `fw/r2-room-calls`, cut from R1 | The office calls one room (or a few); a room calls the office; scheduled chimes such as lunch |
 | R3 Camera | `fw/r3-camera`, cut from R2 | Camera, cover servo, emergency video |
 | R4 LoRa | `fw/r4-lora`, cut from R3 | LoRa alerts and repeaters; role still to define |
-| Later | | Tracking, laser, Opus, encryption, console extras |
+| Later | | Tracking, laser, encryption, console extras |
 
 Each release branch is cut from the one before, so it starts from working code. A fix found on a later branch
 goes back to the earlier one first.
@@ -24,7 +24,7 @@ not run on a board, **new** = to write, **decide** = needs a decision first.
 
 ## Increments
 
-Smaller steps inside the releases. Each one ends tested and usable before the next starts; most can be built and
+Smaller steps inside the releases (designs: [release_designs.md](release_designs.md)). Each one ends tested and usable before the next starts; most can be built and
 tested in the simulator before boards exist. Item numbers refer to the tables further down.
 
 | Increment | What it delivers | Items | Testable where | Status |
@@ -35,9 +35,10 @@ tested in the simulator before boards exist. Item numbers refer to the tables fu
 | R1.3 Echo in the room | ESP-SR front end with both mics, auto-tune on the board, NLMS fallback | 1.6, 1.6a-b | Board | ESP-SR AEC links |
 | R1.4 Echo between rooms | Own-voice canceller, coupling-map chirp test, automatic room groups | 1.6c-e, 1.9a | Simulator first | next |
 | R1.5 Install and support | Console: TALK held, remote mute, faults and dUP in red; web status; USB tool for Wi-Fi and groups; code card | 1.8b, 1.13c, 1.17-1.20 | Simulator and PC | next |
+| R1.6 Compression | Opus, 16 kHz mono, 20 ms frames, about 24 kbit/s; packet-loss concealment and FEC for Wi-Fi; PCM kept for debugging | 1.21 | Simulator, then board (CPU) | next |
+| R1.7 Web console | Office PC browser -> office unit: room grid with status, talk to one room / floor / all with the PC mic, hear the reply | 1.22 | Simulator (localhost), then board (HTTPS) | next |
 | R2.0 Room calls | Office calls a room or floor, call tone, answer to office, call-the-office button | 2.1-2.8 | Simulator | |
 | R2.1 Timed events | Time sync, schedule on each unit, chimes, days off, quiet hours | 2.9-2.15 | Simulator | |
-| R2.2 Opus | About 10x less audio bandwidth | Later list | Simulator, then board | |
 | R3.0 Video in the simulator | Simulated units stream test video; console video grid; audio ahead of video | 3.4-3.6 | Simulator | |
 | R3.1 Camera on the board | Camera driver, Q1 power, cover servo | 3.1-3.2 | Board | |
 | R3.2 Emergency mode | Alarm opens covers, streams to the NVR, cover snapshot self-test | 3.3-3.8 | Simulator, then board | |
@@ -123,6 +124,8 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 | 1.18 | Move the web interface's first-login password check out of the audio task | new |
 | 1.19 | 3D-printed case with separate speaker and mic chambers; re-run auto-tune in the case | new |
 | 1.20 | Pilot: 3-5 rooms for a few weeks | new |
+| 1.21 | **Compression (Opus):** 16 kHz mono, 20 ms frames, VBR about 24 kbit/s, in-band FEC on Wi-Fi. Codec field in the audio header (already there). PCM stays as a debug option; G.722 is the fallback if the S3 runs short of CPU with ESP-SR and the camera. Firmware: libopus (arduino-libopus); simulator: the same libopus built from source | new |
+| 1.22 | **Web console:** a page on the office unit for the office PC: room grid (link, power, faults, dUP), pick a room / floor / all, hold Talk to speak with the PC mic (browser -> WebSocket -> office unit -> targeted audio), hear the room's reply. Same login as the unit's web page. Browsers allow the mic only over HTTPS: the office unit serves HTTPS with its own certificate (accept once), or Chrome treats its address as secure | new |
 
 ### R1 decisions
 - **Addressing (decided 23 Nov):** 10.42.&lt;floor&gt;.&lt;room&gt;. A broken unit is replaced by a teacher setting the room number,
@@ -191,7 +194,6 @@ Covers the old phase 5 and the console's alarm.
 
 | Feature | Notes |
 |---|---|
-| Opus codec | Cuts audio bandwidth about 10× |
 | Signed audio packets, then encrypted audio | Stops spoofed all-calls, then eavesdropping |
 | Listen-in from the office | Needs a privacy decision first |
 | Pan/tilt person tracking and a Class 2 laser | ESP-DL on the unit |
