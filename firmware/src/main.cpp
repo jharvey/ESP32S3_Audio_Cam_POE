@@ -102,7 +102,7 @@ public:
         I2cLock lock;
         out_ = 0;  // TM1637 CLK/DIO output latches stay 0: they are driven open-drain via cfg_
         out_ |= 1u << pins::exp::ETH_RST | 1u << pins::exp::LORA_RST;
-        out_ |= 1u << pins::exp::PWM_OE;   // /OE high: PCA9685 outputs released (MODE2 OUTNE = 10, set by safeOff)
+        out_ |= 1u << pins::exp::PWM_OE;   // /OE high: PCA9685 outputs LOW (MODE2 OUTNE = 00) = all switches off
         out_ |= 1u << pins::exp::CAM_PWR;  // TODO: confirm Q1 polarity (camera stays powered)
         write();
         // Port 0 directions: 1 = input. PMU_IRQ and ETH_INT are inputs; TM1637 lines start
@@ -124,6 +124,15 @@ public:
         cfg_ = c;
         writeCfg();
     }
+    // Input port 1 (P10..P17): the output switches' fault flags. 0xFF if the read fails.
+    uint8_t port1() {
+        I2cLock lock;
+        Wire.beginTransmission(kTca9555);
+        Wire.write(1);  // input port 1
+        Wire.endTransmission(false);
+        if (Wire.requestFrom(kTca9555, uint8_t(1)) != 1) return 0xff;
+        return uint8_t(Wire.read());
+    }
     bool input(int bit) {
         Wire.beginTransmission(kTca9555);
         Wire.write(0);  // input port 0
@@ -140,30 +149,47 @@ private:
 
 class Pwm {
 public:
-    // The PCA9685 powers up with every output driven LOW (datasheet 7.5: totem pole, all "full
-    // off"), and LOW turns every P-FET on: lamps, MISC outputs (laser) and servo power. This is
-    // the first thing setup() does. Switching to open-drain releases all outputs at once (full
-    // off = released for a P-FET driver), and OUTNE = 10 makes /OE high release them too (the
-    // default OUTNE = 00 drives them LOW, i.e. on, while /OE is high).
+    // The output switches (SY6288) turn on when U20 drives their EN high. The PCA9685 powers up with
+    // every output LOW (datasheet 7.5), /OE high also drives them LOW (OUTNE = 00), and each EN has a
+    // 100k pull-down, so everything is off from power-up without firmware. safeOff() restates that
+    // first thing at boot (all channels full off, push-pull) in case U20 kept state through an ESP32 reset.
     void safeOff() {
         i2cWrite(kPca9685, 0xFD, 0x10);  // ALL_LED_OFF_H: full off on every channel (the reset value)
-        i2cWrite(kPca9685, 0x01, 0x02);  // MODE2: OUTDRV = 0 open-drain, OUTNE = 10
+        i2cWrite(kPca9685, 0x01, 0x04);  // MODE2: OUTDRV = 1 push-pull, INVRT = 0, OUTNE = 00
+        on_ = tripped_ = 0;
     }
     void begin() {
         safeOff();
         i2cWrite(kPca9685, 0x00, 0x10);  // MODE1: sleep (prescale can only be set asleep)
         i2cWrite(kPca9685, 0xFE, 121);   // 25 MHz / (4096 * 50 Hz) - 1
-        i2cWrite(kPca9685, 0x01, 0x02);  // MODE2: open-drain, /OE high = released
+        i2cWrite(kPca9685, 0x01, 0x04);  // MODE2: push-pull, /OE high = all LOW (off)
         i2cWrite(kPca9685, 0x00, 0x20);  // MODE1: awake, auto-increment
         delay(1);
-        // Released = P-FETs off: servo power, lamps and MISC outputs.
+        // LOW = switches off: servo power, lamps and MISC outputs.
         for (int ch : {pins::pwm::RC_PWR, pins::pwm::LED_WHITE, pins::pwm::LED_IR, pins::pwm::LED_OTHER,
                        pins::pwm::MISC1, pins::pwm::MISC2, pins::pwm::MISC3})
             fullOff(ch);
     }
-    // Open-drain: "full on" pulls the line low (P-FET on); "full off" releases it.
-    void fullOn(int ch) { reg(ch, 0x1000, 0x0000); }
-    void fullOff(int ch) { reg(ch, 0x0000, 0x1000); }
+    // Push-pull: "full on" drives the pin high (switch on), "full off" drives it low.
+    // A channel whose switch reported a fault stays off until it is switched off and on again.
+    void fullOn(int ch) {
+        if (tripped_ & (1u << ch)) return;
+        on_ |= uint16_t(1u << ch);
+        reg(ch, 0x1000, 0x0000);
+    }
+    void fullOff(int ch) {
+        on_ &= uint16_t(~(1u << ch));
+        tripped_ &= uint16_t(~(1u << ch));
+        reg(ch, 0x0000, 0x1000);
+    }
+    bool isOn(int ch) const { return on_ & (1u << ch); }
+    // Over-current / thermal fault on an output that is on: switch it off and keep it off.
+    void trip(int ch) {
+        reg(ch, 0x0000, 0x1000);
+        on_ &= uint16_t(~(1u << ch));
+        tripped_ |= uint16_t(1u << ch);
+    }
+    uint16_t tripped() const { return tripped_; }
     void servoUs(int ch, int us) { reg(ch, 0, uint16_t(us * 4096L / 20000)); }  // 50 Hz frame
 
 private:
@@ -177,6 +203,7 @@ private:
         Wire.write(uint8_t(off >> 8));
         Wire.endTransmission();
     }
+    volatile uint16_t on_ = 0, tripped_ = 0;
 };
 
 Expander gExp;
@@ -195,9 +222,45 @@ std::atomic<uint8_t> gButtons{0};
 std::atomic<uint32_t> gDisplay{0x00202020};  // 3 chars + dots, written by the audio task
 std::atomic<bool> gDisplayOk{false};
 
+// Output switch faults: each SY6288 pulls its OCB line low on over-current or thermal shutdown
+// (shorted lamp cable, stalled servos). The switch already limits the current; firmware then turns
+// that output off so a short can't keep loading the 5 V rail, and says so.
+struct OutputFault {
+    int ch, bit;
+    const char* name;
+};
+const OutputFault kOutputs[] = {
+    {pins::pwm::LED_WHITE, pins::exp::FLT_WH, "white lamp (J13)"}, {pins::pwm::LED_IR, pins::exp::FLT_IR, "IR lamp (J12)"},
+    {pins::pwm::LED_OTHER, pins::exp::FLT_OTH, "call light (J11)"}, {pins::pwm::MISC1, pins::exp::FLT_M1, "MISC1 (J17)"},
+    {pins::pwm::MISC2, pins::exp::FLT_M2, "MISC2 (J18)"},          {pins::pwm::MISC3, pins::exp::FLT_M3, "MISC3 (J19)"},
+    {pins::pwm::RC_PWR, pins::exp::FLT_RC, "servo power"},
+};
+std::atomic<uint16_t> gOutputFaults{0};  // bit = PCA9685 channel tripped since boot (for the self-test)
+
+void checkOutputFaults() {
+    static uint8_t seen[8] = {0};
+    uint8_t p1 = gExp.port1();
+    if (p1 == 0xff) {  // read failed or no fault anywhere
+        for (auto& s : seen) s = 0;
+        return;
+    }
+    for (size_t i = 0; i < sizeof(kOutputs) / sizeof(kOutputs[0]); i++) {
+        const OutputFault& o = kOutputs[i];
+        bool fault = !(p1 & (1u << (o.bit - 8)));
+        // Soft-start into a capacitive load can flag briefly: act on two scans in a row (~60 ms).
+        seen[i] = (fault && gPwm.isOn(o.ch)) ? uint8_t(seen[i] + 1) : 0;
+        if (seen[i] == 2) {
+            gPwm.trip(o.ch);
+            gOutputFaults = uint16_t(gOutputFaults.load() | (1u << o.ch));
+            Serial.printf("OUTPUT FAULT: %s over-current or overheated, switched off\n", o.name);
+        }
+    }
+}
+
 void panelTask(void*) {
     uint32_t shown = 0xffffffff;
     for (;;) {
+        checkOutputFaults();
         {
             I2cLock lock;
             uint8_t code = 0xff;
@@ -284,6 +347,21 @@ public:
         };
         line(i2cPresent(kTca9555), "I2C: TCA9555 I/O expander (0x20)");
         line(i2cPresent(kPca9685), "I2C: PCA9685 servo/lamp driver (0x40)");
+        {
+            uint8_t p1 = gExp.port1();
+            bool ok = p1 != 0xff || i2cPresent(kTca9555);
+            uint16_t tr = gOutputFaults.load();
+            for (const auto& o : kOutputs) {
+                bool flag = !(p1 & (1u << (o.bit - 8)));
+                if (flag && !gPwm.isOn(o.ch)) ok = false;  // a switch that is off should never flag
+                if (tr & (1u << o.ch)) {
+                    char t[80];
+                    snprintf(t, sizeof(t), "output %s tripped (over-current / overheated) since boot", o.name);
+                    line(false, t);
+                }
+            }
+            line(ok, "output switch fault lines idle (SY6288 OCB, U21 P10-P16)");
+        }
         line(i2cPresent(kAxp2101), "I2C: AXP2101 power manager (0x34)");
         {
             ic::PowerState p = gPmu.read();

@@ -48,23 +48,25 @@ constexpr int CAM_D4 = 14, CAM_D5 = 17, CAM_D6 = 18, CAM_D7 = 48;  // D7: U7 pin
 namespace exp {
 constexpr int TM_CLK = 6;      // P06  TM1637 CLK (display + key scan)
 constexpr int TM_DIO = 7;      // P07  TM1637 DIO
-constexpr int PWM_OE = 0;      // P00  PCA9685 /OE, high = outputs off
+constexpr int PWM_OE = 0;      // P00  PCA9685 /OE, high = outputs LOW = every output switch off
 constexpr int CAM_PWR = 4;     // P04  camera power (Q1 via R15)
 constexpr int LORA_RST = 5;    // P05
 constexpr int PMU_IRQ = 1;     // P01  AXP2101 IRQ, input
 constexpr int ETH_INT = 3;     // P03  W5500 INT, input (W5500 runs polled)
 constexpr int ETH_RST = 2;     // P02  W5500 reset (via R27)
-// Port 1 (bits 8..15): coded rotary switches, SW1 = floor, SW2 = room
-constexpr int ROOM_1 = 8, ROOM_4 = 9, FLOOR_1 = 10, FLOOR_4 = 11;   // P10..P13
-constexpr int FLOOR_2 = 12, FLOOR_8 = 13, ROOM_2 = 14, ROOM_8 = 15;  // P14..P17
+// Port 1 (bits 8..15): the output switches' fault flags (SY6288 OCB, open-drain, low = over-current /
+// thermal shutdown; TCA9555 internal pull-ups). The rotary switches that used these are gone.
+constexpr int FLT_WH = 8, FLT_IR = 9, FLT_OTH = 10, FLT_M1 = 11;     // P10..P13
+constexpr int FLT_M2 = 12, FLT_M3 = 13, FLT_RC = 14, P17_SPARE = 15;  // P14..P17
 }  // namespace exp
 
-// PCA9685 (U20) channels, open-drain (MODE2.OUTDRV = 0)
+// PCA9685 (U20) channels, push-pull (MODE2.OUTDRV = 1). Output switches are SY6288 (EN high = on, 100k
+// pull-down: off at power-up, when U20 is unpowered and while /OE is high).
 namespace pwm {
-constexpr int RC_PWR = 15;                                         // servo 5 V switch (Q2), low = on
+constexpr int RC_PWR = 15;                                         // servo 5 V switch (Q2), high = on
 constexpr int RC_PAN = 1, RC_TILT = 2, RC_ROT = 4, RC_OTHER = 5;  // servo signals, 4.7k pull-ups
-constexpr int LED_WHITE = 11, LED_IR = 14, LED_OTHER = 12;          // lamp P-FETs, low = on
-constexpr int MISC1 = 8, MISC2 = 9, MISC3 = 10;                    // MISC.OUT P-FETs (laser on one of these)
+constexpr int LED_WHITE = 11, LED_IR = 14, LED_OTHER = 12;          // lamp switches Q3 Q4 Q5, high = on
+constexpr int MISC1 = 8, MISC2 = 9, MISC3 = 10;                    // MISC.OUT switches Q6-Q8 (laser on one of these)
 constexpr int EXP11 = 7, EXP12 = 6, EXP13 = 13, EXP14 = 3, EXP15 = 0;  // spare outputs on the expansion header
 }  // namespace pwm
 
