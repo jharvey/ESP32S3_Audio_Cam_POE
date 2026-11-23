@@ -59,6 +59,8 @@ what changed from v0.1b) is in `single_sided_layout.md`.
 - New courtyard overlaps around U18 (C92/U18, C73/L5/C75, R66/L5); check in KiCad.
 
 ## Open, needs hand work
+- New front-panel buttons PB6-PB12 and their 1 kΩ resistors R109-R115 (commit 73bbe0d): 21 short connections
+  near the display (K1/K2, BTNn, SEGn), plus CHIP_BOOT under PB8 (two router segments removed). Not routed yet.
 - U18 bottom row (pins 31-40). L9/C97 sit too close. Plan: move L9 and C95 1 mm down and C97 to the left of L9,
   then fan J16/VDCDC5 left, SW down between, and vias for J14, Vsys 34/36, VBUS, IRQ, SCL, SDA.
 - SPK.DIN and I2S.WS into U15 (fine-pitch amp; needs a hand fan-out like U7 and U18).

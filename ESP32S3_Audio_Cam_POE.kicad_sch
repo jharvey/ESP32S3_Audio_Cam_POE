@@ -10,6 +10,281 @@
 		(rev "R0.1")
 	)
 	(lib_symbols
+		(symbol "JLCPCB-Resistors:0402,1kΩ"
+		(pin_numbers hide)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "R"
+			(at 1.778 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1kΩ"
+			(at 0 0 90)(do_not_autoplace)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "PCM_JLCPCB:R_0402"
+			(at -1.778 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010216_UNI-ROYAL-Uniroyal-Elec-0402WGF1001TCE_C11702.pdf"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C11702"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Stock" "11621711"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Price" "0.004USD"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Process" "SMT"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Minimum Qty" "20"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Attrition Qty" "10"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Class" "Basic Component"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Category" "Resistors,Chip Resistor - Surface Mount"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL(Uniroyal Elec)"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Part" "0402WGF1001TCE"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Resistance" "1kΩ"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Power(Watts)" "62.5mW"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Type" "Thick Film Resistors"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Overload Voltage (Max)" "50V"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Operating Temperature Range" "-55°C~+155°C"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Temperature Coefficient" "±100ppm/°C"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "R_*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "0402,1kΩ_0_1"
+			(rectangle
+				(start -1.016 2.54)
+				(end 1.016 -2.54)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "0402,1kΩ_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+	)
 		(symbol "0402,0Ω_1"
 			(pin_numbers
 				(hide yes)
@@ -90503,7 +90778,1792 @@
 				)
 			)
 		)
+	)	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 247.650 261.620 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "40525bae-c271-4c1d-b3bb-48f6cab6c8db")
+		(property "Reference" "PB6"
+			(at 241.300 262.382 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 247.650 254.000 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 247.650 271.780 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 245.364 261.493 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 247.650 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 247.650 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "2eeee21c-7aa8-462c-90f8-ba839ca1e205")
+		)
+		(pin "2"
+			(uuid "571f6183-2c6d-424d-981b-2fd1c73ede30")
+		)
+		(pin "4"
+			(uuid "0457b6d8-17ae-486c-9ad7-50aa6f3d26ce")
+		)
+		(pin "1"
+			(uuid "25c0e00a-b584-4f49-a05b-7b5d6db3fa74")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB6")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 252.73 259.08) (xy 252.73 254.00)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "56c082d7-51a0-45b4-886c-f8d80aa480b4")
 	)
+	(label "7SEG.K1"
+		(at 252.73 254.00 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "17798b14-03ec-4fc1-b02d-af4550580511")
+	)
+	(wire
+		(pts
+			(xy 252.73 266.70) (xy 252.73 274.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d09776ef-889b-41d8-ace5-03bdc182e494")
+	)
+	(label "BTN6"
+		(at 252.73 270.51 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "743f5497-071a-44ea-b0fe-891ffd78b1cd")
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
+		(at 252.730 278.130 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "0d7a7c46-14a3-4f88-b303-f9d91c513cc9")
+		(property "Reference" "R109"
+			(at 249.428 278.130 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1kΩ"
+			(at 252.730 278.130 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 254.508 278.130 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010216_UNI-ROYAL-Uniroyal-Elec-0402WGF1001TCE_C11702.pdf"
+			(at 252.730 278.130 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 252.730 278.130 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C11702"
+			(at 252.730 278.130 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d3b79300-b72f-4461-beb2-6d598343e249")
+		)
+		(pin "2"
+			(uuid "9d38094a-d644-4a0d-b960-bac356f6c290")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R109")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 252.73 281.94) (xy 252.73 284.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9160fa94-ff56-401c-85e2-471e46da264f")
+	)
+	(label "7SEG.SEG2"
+		(at 252.73 284.48 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "43adf18b-194e-4e16-9592-e350eaf80bff")
+	)
+	(no_connect
+		(at 242.57 259.08)
+		(uuid "29f6f89f-dd69-4971-b881-236b5e9e95c4")
+	)
+	(no_connect
+		(at 242.57 266.70)
+		(uuid "8a94ab64-8361-47e5-a7ea-13f2e09d326c")
+	)
+	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 262.890 261.620 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "4eb31116-9e39-4006-af6b-4c1fd5685071")
+		(property "Reference" "PB7"
+			(at 256.540 262.382 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 262.890 254.000 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 262.890 271.780 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 260.604 261.493 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 262.890 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 262.890 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "d7f9d31e-aa7b-4af5-8485-4429c95a368e")
+		)
+		(pin "2"
+			(uuid "7906d1da-1a47-4d81-8cb4-22eebff7d0c4")
+		)
+		(pin "4"
+			(uuid "32f06bf8-6c79-40d7-adfb-6cf64c942a6b")
+		)
+		(pin "1"
+			(uuid "34a84bc7-ea6c-48b9-99b4-2095e45344bd")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB7")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 267.97 259.08) (xy 267.97 254.00)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bea7259e-7027-4ea6-afe3-f06466759885")
+	)
+	(label "7SEG.K1"
+		(at 267.97 254.00 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "7a733ad6-29a1-456d-a570-d77fa4f33999")
+	)
+	(wire
+		(pts
+			(xy 267.97 266.70) (xy 267.97 274.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4924e6ae-30f0-4c8d-8b66-c5b5c67caf03")
+	)
+	(label "BTN7"
+		(at 267.97 270.51 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "685b3d66-9544-4c46-9197-ffee70e946d6")
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
+		(at 267.970 278.130 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b152122f-7a8e-4e8e-9d15-22432a04227e")
+		(property "Reference" "R110"
+			(at 264.668 278.130 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1kΩ"
+			(at 267.970 278.130 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 269.748 278.130 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010216_UNI-ROYAL-Uniroyal-Elec-0402WGF1001TCE_C11702.pdf"
+			(at 267.970 278.130 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 267.970 278.130 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C11702"
+			(at 267.970 278.130 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d6306cf8-9f17-4a37-a468-be13e0e01173")
+		)
+		(pin "2"
+			(uuid "aaa8ef87-1d69-49b2-bf4a-f703ddf9fb60")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R110")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 267.97 281.94) (xy 267.97 284.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "43d5db9f-6727-465e-b9c8-0fd0fd5dfaad")
+	)
+	(label "7SEG.SEG4"
+		(at 267.97 284.48 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0275997b-84cf-4da7-9c66-5a95ad8a0900")
+	)
+	(no_connect
+		(at 257.81 259.08)
+		(uuid "7265b40d-bc1f-4648-9bce-000a6266f4e1")
+	)
+	(no_connect
+		(at 257.81 266.70)
+		(uuid "a1ab0aaf-cbc5-41d7-b1b0-4fa1d2a6aafc")
+	)
+	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 278.130 261.620 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "5e9c4de8-f41d-456b-8000-3d9e473962da")
+		(property "Reference" "PB8"
+			(at 271.780 262.382 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 278.130 254.000 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 278.130 271.780 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 275.844 261.493 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 278.130 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 278.130 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "3d0329f2-d682-4e65-a844-bc7ca466fe41")
+		)
+		(pin "2"
+			(uuid "c8a5616c-fe48-45a0-8eae-e8749c2ec6cd")
+		)
+		(pin "4"
+			(uuid "d936a205-70f0-40f3-8d1a-4ec40f4525af")
+		)
+		(pin "1"
+			(uuid "dafd7b49-1ea8-4db9-a4e5-398f97533549")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB8")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 283.21 259.08) (xy 283.21 254.00)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d60d5371-e10f-41a7-9c5d-e874694250ff")
+	)
+	(label "7SEG.K2"
+		(at 283.21 254.00 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c93ac477-231f-496a-915c-cca0f28db88f")
+	)
+	(wire
+		(pts
+			(xy 283.21 266.70) (xy 283.21 274.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b65ece46-f0d5-466c-aa23-d17f598cc2aa")
+	)
+	(label "BTN8"
+		(at 283.21 270.51 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "55d350a2-5f20-485a-9c01-0530bda58215")
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
+		(at 283.210 278.130 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "bfead5d2-a463-4ebd-bb97-73b92b3387ff")
+		(property "Reference" "R111"
+			(at 279.908 278.130 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1kΩ"
+			(at 283.210 278.130 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 284.988 278.130 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010216_UNI-ROYAL-Uniroyal-Elec-0402WGF1001TCE_C11702.pdf"
+			(at 283.210 278.130 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 283.210 278.130 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C11702"
+			(at 283.210 278.130 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "c5f077c4-176b-4b50-b984-8bc0ebd7e441")
+		)
+		(pin "2"
+			(uuid "8f191142-a2e3-4810-a9f9-207cc8e1ab29")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R111")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 283.21 281.94) (xy 283.21 284.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b6bebbf7-d2a6-4d4c-8213-2942d37623c6")
+	)
+	(label "7SEG.SEG3"
+		(at 283.21 284.48 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "855466df-b227-454d-84d6-18a5d5d24c7c")
+	)
+	(no_connect
+		(at 273.05 259.08)
+		(uuid "fe71ca0a-77c4-4686-8a26-1eabc56ebe0e")
+	)
+	(no_connect
+		(at 273.05 266.70)
+		(uuid "f600746c-3e8a-40ed-a004-162459be5e66")
+	)
+	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 293.370 261.620 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d5e7d9a3-e35e-4853-b0de-193cfce94887")
+		(property "Reference" "PB9"
+			(at 287.020 262.382 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 293.370 254.000 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 293.370 271.780 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 291.084 261.493 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 293.370 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 293.370 261.620 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "2cb7a937-e7f6-478d-aa38-12a417defb91")
+		)
+		(pin "2"
+			(uuid "0f8e80fa-829c-4827-9718-f217711831bd")
+		)
+		(pin "4"
+			(uuid "2a22e52d-9791-47eb-b5da-563f326b643d")
+		)
+		(pin "1"
+			(uuid "a720bbe3-0a7f-42e8-af7e-1653b211717f")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB9")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 298.45 259.08) (xy 298.45 254.00)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c3a455fc-ad42-429e-baf6-a8e9d82207ca")
+	)
+	(label "7SEG.K2"
+		(at 298.45 254.00 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "26440e55-0931-4c47-b55f-8074e9c52762")
+	)
+	(wire
+		(pts
+			(xy 298.45 266.70) (xy 298.45 274.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "42b1bf36-c710-4550-a635-7732751dcb61")
+	)
+	(label "BTN9"
+		(at 298.45 270.51 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6c5d31eb-cefd-4992-9a0a-2dd5fb797151")
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
+		(at 298.450 278.130 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "de3173ac-48c9-43f0-a880-8ddfdb340aac")
+		(property "Reference" "R112"
+			(at 295.148 278.130 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1kΩ"
+			(at 298.450 278.130 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 300.228 278.130 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010216_UNI-ROYAL-Uniroyal-Elec-0402WGF1001TCE_C11702.pdf"
+			(at 298.450 278.130 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 298.450 278.130 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C11702"
+			(at 298.450 278.130 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0b6d046d-cadc-4f55-a0ee-3cff5c6d53f7")
+		)
+		(pin "2"
+			(uuid "429b5681-1dba-48ef-997a-eb509280371f")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R112")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 298.45 281.94) (xy 298.45 284.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "67424bb6-c6da-4f9c-8ff6-face82e74ae2")
+	)
+	(label "7SEG.SEG4"
+		(at 298.45 284.48 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d8693402-1860-4b85-a92d-5a5d7eb0caa3")
+	)
+	(no_connect
+		(at 288.29 259.08)
+		(uuid "a7e7af46-c4c8-4fef-8c15-0e21497713ba")
+	)
+	(no_connect
+		(at 288.29 266.70)
+		(uuid "665ab2ec-ed68-4000-abeb-d430aa92ad3d")
+	)
+	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 247.650 294.640 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "3f643601-42f2-42cb-93f2-bf633a81678c")
+		(property "Reference" "PB10"
+			(at 241.300 295.402 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 247.650 287.020 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 247.650 304.800 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 245.364 294.513 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 247.650 294.640 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 247.650 294.640 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "3048648b-5c39-4fed-ab2a-bb9cdba0636c")
+		)
+		(pin "2"
+			(uuid "7e270141-2207-44f9-ad38-f19772ed5597")
+		)
+		(pin "4"
+			(uuid "e8910032-df4e-4836-84d8-2649bc3b8198")
+		)
+		(pin "1"
+			(uuid "a7da43bf-744d-46d6-991a-d87fffc7a0dc")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB10")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 252.73 292.10) (xy 252.73 287.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5985e441-cb8f-4dd4-8c58-2b70d29c6eb3")
+	)
+	(label "7SEG.K1"
+		(at 252.73 287.02 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e9c9dba9-fe98-4f94-a501-68308eb83543")
+	)
+	(wire
+		(pts
+			(xy 252.73 299.72) (xy 252.73 307.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "990ae33f-96fb-4c3c-b6cb-a7e4a71c6035")
+	)
+	(label "BTN10"
+		(at 252.73 303.53 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "eaa51eaa-0d61-4ec3-a3a6-5fca37743ea2")
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
+		(at 252.730 311.150 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "708e0c8d-46fa-4fea-afcc-69ecc8158b3c")
+		(property "Reference" "R113"
+			(at 249.428 311.150 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1kΩ"
+			(at 252.730 311.150 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 254.508 311.150 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010216_UNI-ROYAL-Uniroyal-Elec-0402WGF1001TCE_C11702.pdf"
+			(at 252.730 311.150 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 252.730 311.150 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C11702"
+			(at 252.730 311.150 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e2d199ef-e86a-49f2-8793-106ba46b5037")
+		)
+		(pin "2"
+			(uuid "b02005cb-4f5a-4d74-8a44-2ce7a5546e51")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R113")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 252.73 314.96) (xy 252.73 317.50)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "43986794-9c26-442d-9d33-ef8992494fc2")
+	)
+	(label "7SEG.SEG5"
+		(at 252.73 317.50 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "45edaf00-cd68-4298-83bb-ac428db4991b")
+	)
+	(no_connect
+		(at 242.57 292.10)
+		(uuid "8d201760-7566-4674-baed-f26f43708ccb")
+	)
+	(no_connect
+		(at 242.57 299.72)
+		(uuid "d32f68e8-0984-429e-be73-e514f38171f2")
+	)
+	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 262.890 294.640 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b6690e23-6a68-4a56-a8e9-dccd00541abf")
+		(property "Reference" "PB11"
+			(at 256.540 295.402 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 262.890 287.020 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 262.890 304.800 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 260.604 294.513 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 262.890 294.640 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 262.890 294.640 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "e8aecdec-f93f-450d-ad23-ce8b75d4d856")
+		)
+		(pin "2"
+			(uuid "ab03980f-8528-4c01-af95-6de8401b2908")
+		)
+		(pin "4"
+			(uuid "17abe0a2-61f6-4b2b-a2af-13459e55affb")
+		)
+		(pin "1"
+			(uuid "d5177a59-aa03-433a-aec4-a8bf0bddd231")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB11")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 267.97 292.10) (xy 267.97 287.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3d96fa48-758d-4a19-9b7e-7c38696b6cfb")
+	)
+	(label "7SEG.K2"
+		(at 267.97 287.02 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "949c5a09-cae1-4462-a34a-65afc9a6674d")
+	)
+	(wire
+		(pts
+			(xy 267.97 299.72) (xy 267.97 307.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e418c058-2879-4f00-9991-25ad61c1b3c7")
+	)
+	(label "BTN11"
+		(at 267.97 303.53 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c39b7e10-8d9a-4950-ba5b-1885b098cafb")
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
+		(at 267.970 311.150 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "39c4bcf9-f26e-4dc2-9ec9-ff6d54937ef7")
+		(property "Reference" "R114"
+			(at 264.668 311.150 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1kΩ"
+			(at 267.970 311.150 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 269.748 311.150 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010216_UNI-ROYAL-Uniroyal-Elec-0402WGF1001TCE_C11702.pdf"
+			(at 267.970 311.150 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 267.970 311.150 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C11702"
+			(at 267.970 311.150 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7ccc3a6b-df1a-4933-9643-0b7f7ff14954")
+		)
+		(pin "2"
+			(uuid "d302f1d6-4a70-4c6a-af24-8519cf6b7de5")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R114")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 267.97 314.96) (xy 267.97 317.50)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9c3326c8-419f-4e46-b9dc-ffe21d616abc")
+	)
+	(label "7SEG.SEG5"
+		(at 267.97 317.50 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a2a46a81-be0e-4a2a-ae09-548cd71851a3")
+	)
+	(no_connect
+		(at 257.81 292.10)
+		(uuid "72c7aff1-9df1-4b04-a4b2-d7f1f5870fe2")
+	)
+	(no_connect
+		(at 257.81 299.72)
+		(uuid "3cfd131b-8b81-4c6a-9b17-62a0adc52f0e")
+	)
+	(symbol
+		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
+		(at 278.130 294.640 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b57fb29f-8a58-4c75-8f29-c127cf84225d")
+		(property "Reference" "PB12"
+			(at 271.780 295.402 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Tactile Button, 160gf"
+			(at 278.130 287.020 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
+			(at 278.130 304.800 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
+			(at 275.844 294.513 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
+			(at 278.130 294.640 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318884"
+			(at 278.130 294.640 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "d32f1276-77f9-4f5e-9ff6-852fe34a9e24")
+		)
+		(pin "2"
+			(uuid "4f958399-2203-4598-8121-fc726556d72c")
+		)
+		(pin "4"
+			(uuid "13d81f6e-95a4-4da0-8226-c0e79e15ce6d")
+		)
+		(pin "1"
+			(uuid "16b7def4-58c6-428d-ae46-27cab90c52c2")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "PB12")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 283.21 292.10) (xy 283.21 287.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5557bf37-8993-44b5-906f-5cdbb3f18030")
+	)
+	(label "7SEG.K1"
+		(at 283.21 287.02 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "700f2034-261b-4cc7-9b38-ce33db855acd")
+	)
+	(wire
+		(pts
+			(xy 283.21 299.72) (xy 283.21 307.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c89d52dc-5a60-4b95-9b53-52327c3e0f57")
+	)
+	(label "BTN12"
+		(at 283.21 303.53 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "38c2c08e-1056-414c-bf57-44df6271ef4e")
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
+		(at 283.210 311.150 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "937b1e5e-cc17-420f-86f8-02bc99c04d6b")
+		(property "Reference" "R115"
+			(at 279.908 311.150 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1kΩ"
+			(at 283.210 311.150 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 284.988 311.150 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010216_UNI-ROYAL-Uniroyal-Elec-0402WGF1001TCE_C11702.pdf"
+			(at 283.210 311.150 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 283.210 311.150 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C11702"
+			(at 283.210 311.150 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d330f92f-debd-4a11-b244-cf0b9fb9a4f3")
+		)
+		(pin "2"
+			(uuid "7598cbcc-9ae3-4caf-b793-06e0c4ed3ff9")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R115")
+					(unit 1)
+				)
+			)
+		)
+	)	(wire
+		(pts
+			(xy 283.21 314.96) (xy 283.21 317.50)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4643e3bd-2721-4651-b185-89d7cdb7da33")
+	)
+	(label "7SEG.SEG6"
+		(at 283.21 317.50 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "457c4975-a7ef-4a0a-8dde-577f5ea50ed0")
+	)
+	(no_connect
+		(at 273.05 292.10)
+		(uuid "1ee9825e-2d54-4fb0-9c1e-0af7ea77dfa1")
+	)
+	(no_connect
+		(at 273.05 299.72)
+		(uuid "edea9b52-689c-4e15-90a4-97a7ceb19b07")
+	)
+
 	(symbol
 		(lib_id "JLCPCB-Capacitors:0603,100nF")
 		(at 535.94 63.5 90)

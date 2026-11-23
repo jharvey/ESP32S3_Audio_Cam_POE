@@ -8,6 +8,13 @@
 
 # RF feeds are 0.38 mm microstrip (50 ohm over the In1 ground plane, 0.21 mm prepreg).
 # Keep the ground pour 0.4 mm away so the pour does not pull the impedance down.
+# Vias are 0.6 mm with a 0.3 mm drill, no smaller (house rule). Pad holes in footprints are not
+# affected (U18's thermal holes are 0.2 mm).
+(rule "Vias 0.6/0.3 minimum"
+	(condition "A.Type == 'Via'")
+	(constraint via_diameter (min 0.6mm))
+	(constraint hole_size (min 0.3mm)))
+
 (rule "RF feeds: pour gap"
 	(condition "A.Type == 'Zone' && (B.NetName == '/RF1' || B.NetName == '/RF1-ANT' || B.NetName == '/LORA1' || B.NetName == '/LORA1-ANT')")
 	(constraint clearance (min 0.4mm)))
