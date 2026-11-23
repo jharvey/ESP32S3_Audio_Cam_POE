@@ -81,3 +81,6 @@ Suggestions for the 3D-printed case and for lowering the JLCPCB order cost. Boar
   1 kOhm so it lights from Vsys), D15 green = PMU power good, D8 green = USB power, D10 red = 3.3 V. D3/D4 were
   wired backwards (the W5500 LED pins are active low: they pull low when lit): now anode to +3V3, cathode through
   R34/R35 to the pin. D9 (WS2812B RGB) is separate and unchanged. These are not the lamp outputs.
+- Lamp-output indicators: D12 white (white lamp, J13), D13 IR (IR illuminator, J12), J11 has none. D16-D18 (MISC1-3
+  outputs, J17-J19) are now plain green 0805 KT-0805G (C2297, a basic part already on the board) instead of IR LEDs:
+  they just show the output is on.

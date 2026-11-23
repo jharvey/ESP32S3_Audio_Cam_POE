@@ -66,6 +66,10 @@ from the board before this: after taking a routed result, run
 `"C:\Program Files\KiCad\10.0\bin\python.exe" tools\pcb_led_fix.py ESP32S3_Audio_Cam_POE.kicad_pcb` on it
 (it skips what is already done) and check DRC near D3/D4.
 
+D16-D18 then became green 0805s: `tools\pcb_misc_led_green.py` swaps the footprints, moves /MISC.OUT1 and /MISC.OUT3
+(they ran between the old IR pads) below the LEDs, and adds a ground via at the D16/D18 cathodes. On a routed copy it
+warns if those two tracks are routed differently. Left: a thermal-spoke warning on J18 pin 2.
+
 ## Open, needs hand work
 - New front-panel buttons PB6-PB12 and their 1 kΩ resistors R109-R115 (commit 73bbe0d): 21 short connections
   near the display (K1/K2, BTNn, SEGn), plus CHIP_BOOT under PB8 (two router segments removed). Not routed yet.

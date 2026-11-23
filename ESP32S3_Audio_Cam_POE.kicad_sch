@@ -51378,6 +51378,66 @@
 		)
 		(uuid "0efc8fe5-c89e-4be9-8f3b-c7fb54299790")
 	)
+	(wire
+		(pts
+			(xy 415.29 375.92) (xy 417.83 375.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8018fc02-338f-4a5a-9de1-03c876f82547")
+	)
+	(wire
+		(pts
+			(xy 425.45 375.92) (xy 427.99 375.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "70ba85ae-d073-4ff1-89a6-231150fb5ec0")
+	)
+	(wire
+		(pts
+			(xy 415.29 349.25) (xy 417.83 349.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f27527a-daa8-4b35-81fc-cedfdde89cd4")
+	)
+	(wire
+		(pts
+			(xy 425.45 349.25) (xy 427.99 349.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37e2f512-8549-4c93-b6a0-f7b3d8b8069b")
+	)
+	(wire
+		(pts
+			(xy 415.29 323.85) (xy 417.83 323.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bb28f631-c4b8-4ef2-86d1-e030d32b2c85")
+	)
+	(wire
+		(pts
+			(xy 425.45 323.85) (xy 427.99 323.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dd5ea5d5-0af3-402c-9062-dc7b1f95274e")
+	)
 	(symbol
 		(lib_id "power:+3V3")
 		(at 367.03 76.2 0)
@@ -69200,8 +69260,8 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Diodes:LED IR IR26-21c_C131280")
-		(at 421.64 375.92 180)
+		(lib_id "JLCPCB-Diodes:LED,0805,Green")
+		(at 421.64 375.92 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -69221,7 +69281,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "IR"
+		(property "Value" "Green"
 			(at 424.18 374.396 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -69232,7 +69292,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "JLCPCB:IR-LED_C131280"
+		(property "Footprint" "JLCPCB:D_0805"
 			(at 421.64 375.92 0)
 			(hide yes)
 			(show_name no)
@@ -69243,7 +69303,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20170918/C131280_1505726894401976288.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1806151820_Hubei-KENTO-Elec-KT-0805G_C2297.pdf"
 			(at 421.64 375.92 0)
 			(hide yes)
 			(show_name no)
@@ -69254,7 +69314,7 @@
 				)
 			)
 		)
-		(property "Description" "Radiant Intensity:"
+		(property "Description" "Emerald 0805 LED Indication - Discrete ROHS"
 			(at 421.64 375.92 0)
 			(hide yes)
 			(show_name no)
@@ -69265,7 +69325,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C131280"
+		(property "LCSC" "C2297"
 			(at 421.64 375.92 0)
 			(hide yes)
 			(show_name no)
@@ -79092,8 +79152,8 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Diodes:LED IR IR26-21c_C131280")
-		(at 421.64 323.85 180)
+		(lib_id "JLCPCB-Diodes:LED,0805,Green")
+		(at 421.64 323.85 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -79113,7 +79173,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "IR"
+		(property "Value" "Green"
 			(at 424.18 322.326 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -79124,7 +79184,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "JLCPCB:IR-LED_C131280"
+		(property "Footprint" "JLCPCB:D_0805"
 			(at 421.64 323.85 0)
 			(hide yes)
 			(show_name no)
@@ -79135,7 +79195,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20170918/C131280_1505726894401976288.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1806151820_Hubei-KENTO-Elec-KT-0805G_C2297.pdf"
 			(at 421.64 323.85 0)
 			(hide yes)
 			(show_name no)
@@ -79146,7 +79206,7 @@
 				)
 			)
 		)
-		(property "Description" "Radiant Intensity:"
+		(property "Description" "Emerald 0805 LED Indication - Discrete ROHS"
 			(at 421.64 323.85 0)
 			(hide yes)
 			(show_name no)
@@ -79157,7 +79217,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C131280"
+		(property "LCSC" "C2297"
 			(at 421.64 323.85 0)
 			(hide yes)
 			(show_name no)
@@ -101717,8 +101777,8 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Diodes:LED IR IR26-21c_C131280")
-		(at 421.64 349.25 180)
+		(lib_id "JLCPCB-Diodes:LED,0805,Green")
+		(at 421.64 349.25 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -101738,7 +101798,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "IR"
+		(property "Value" "Green"
 			(at 424.18 347.726 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -101749,7 +101809,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "JLCPCB:IR-LED_C131280"
+		(property "Footprint" "JLCPCB:D_0805"
 			(at 421.64 349.25 0)
 			(hide yes)
 			(show_name no)
@@ -101760,7 +101820,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://atta.szlcsc.com/upload/public/pdf/source/20170918/C131280_1505726894401976288.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_1806151820_Hubei-KENTO-Elec-KT-0805G_C2297.pdf"
 			(at 421.64 349.25 0)
 			(hide yes)
 			(show_name no)
@@ -101771,7 +101831,7 @@
 				)
 			)
 		)
-		(property "Description" "Radiant Intensity:"
+		(property "Description" "Emerald 0805 LED Indication - Discrete ROHS"
 			(at 421.64 349.25 0)
 			(hide yes)
 			(show_name no)
@@ -101782,7 +101842,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C131280"
+		(property "LCSC" "C2297"
 			(at 421.64 349.25 0)
 			(hide yes)
 			(show_name no)
