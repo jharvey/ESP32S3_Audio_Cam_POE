@@ -7,10 +7,15 @@ State of the single-sided board and how to pick the work up in a fresh session. 
 - Hand-routed and protected: both RF feeds with fence vias, the camera bus (all lines on B.Cu except VSYNC, SCL,
   SDA), Ethernet line side, W5500 TX/RX pairs, USB D+/D- with stitching vias.
 - Router-routed: W5500 local nets, PoE 5 V output, Ethernet SPI/control lines, U20, U21, SD card (14 of 16).
-- 376 connections open. DRC has no errors from the routing; the remaining errors are placement items that were
+- 71 connections open after the whole-board run (`all.sh WA N1`, round 6, board `WA6S`); it was 376 before.
+  DRC has no errors from the routing; the remaining errors are placement items that were
   already there (test-point clearances, U19 dual-net pads, parts in the camera heatsink area, BT1 cut-out).
+- The run did not change any hand-routed net (checked item by item against 19ac70b) and moved no parts.
+  Totals: F.Cu 2.47 m, B.Cu 1.32 m, In2 0.74 m of signal track, In1 none; 552 vias, all 0.6/0.3 mm.
+- Open by area: 38 at U18 (PMU), 16 at U7, 9 on +3V3 / COM / VBUS, 3 at U21 and J5, 5 test-point links
+  (TP60, TP61, TP37, TP65 on purpose; TP35 was routed before the run and is open again).
 
-## Running unattended on VM105 (`ssh kicad-vm`, folder `~/pcb/ss`)
+## Whole-board run on VM105 (finished; `ssh kicad-vm`, folder `~/pcb/ss`)
 - `all.sh WA N1`: six whole-board rounds (route, clean, stitch ground islands, rip-up after rounds 2 and 4).
   Progress is in `all.out`; it prints `ALLDONE` at the end. It cannot delete or rip the hand-routed nets.
 - Result boards: `WA1S` ... `WA6S` (one per round), each with its own `drc.json`. The last finished round is the
