@@ -162,13 +162,13 @@ boards and adds what a teacher needs around it.
 ### Timed events
 | # | Feature | Status |
 |---|---|---|
-| 2.9 | Time sync: NTP from the school network, or the office console as the time source; time in logs | new |
-| 2.10 | Schedule kept on each unit (pushed from the console, signed), so chimes still play with the office PC off | new |
-| 2.11 | Chimes and bells: lunch, start and end of day, class changes; played by all rooms or chosen rooms/floors | new |
-| 2.12 | Weekday tables, days off (holidays, snow days) and a one-tap "skip today" on the console | new |
+| 2.9 | Time: SNTP on the board (`ntp <server>` for the school's own; public pools by default); without NTP the office console sends `time` to all units every 10 min. Time zone + US/EU daylight saving (`tz -300 us`) | done (sim) / code |
+| 2.10 | Schedule kept on each unit in flash (`sched add 11:30 mon-fri lunch [room/floor/group N]`, `sched set` pushes a whole table, signed), so chimes still play with the office PC off; up to 40 entries | done (sim) / code |
+| 2.11 | Built-in sounds made in code: `chime`, `bell`, `lunch`, `tone` (`play bell` tests one); for all rooms or a room, floor or group | done (sim) / code |
+| 2.12 | Weekday masks, days off (`dayoff add 2026-12-24`, up to 60) and `skip today` / `skip off`. Console schedule editor: later | done (sim) / code |
 | 2.13 | Chime sounds and short recorded messages stored on the SD card (or sent from the console) | new |
-| 2.14 | Priority: an all-call, room call or emergency cuts a chime; a chime never interrupts them | new |
-| 2.15 | Quiet hours: no chimes nights and weekends unless the schedule says so | new |
+| 2.14 | Priority: a call cuts a timed sound; a sound due during a call waits until it ends (up to 60 s, then skipped) | done (sim) / code |
+| 2.15 | Quiet hours: covered by the weekday masks (an entry only plays on its days) | done (by design) |
 
 ## R3 Camera (middle)
 

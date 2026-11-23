@@ -252,6 +252,11 @@ void ConsoleWindow::tick() {
             opt_.autoTalkAt = -1;
         }
     }
+    // Time source for units without NTP (timed events): 3 s after start, then every 10 minutes.
+    if (t >= nextTimeSync_ && !key_->text().isEmpty()) {
+        nextTimeSync_ = t + 600.0;
+        sendText("all", QString("time %1").arg(QDateTime::currentSecsSinceEpoch()));
+    }
     if (!opt_.autoCommand.isEmpty() && t >= 2.0) {
         sendText(opt_.autoCommand.section(' ', 0, 0), opt_.autoCommand.section(' ', 1));
         opt_.autoCommand.clear();

@@ -58,6 +58,12 @@ enum StatusFlags : uint8_t {
 // Status fault byte: what the unit's display is flashing.
 enum class Fault : uint8_t { None = 0, NoEthernet = 1, NoNetwork = 2, LowBattery = 3, Duplicate = 4 };
 
+// Who TALK reaches (office unit / bring-up). A unit answering a call always replies to the caller only.
+struct TalkTarget {
+    enum Kind : uint8_t { All = 0, Room = 1, Floor = 2, Group = 3 } kind = All;
+    uint16_t n = 0;  // room, floor or group number
+};
+
 struct AudioHeader {
     UnitId from;
     uint8_t flags = kAudioAllCall;

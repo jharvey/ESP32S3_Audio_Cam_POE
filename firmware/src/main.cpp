@@ -438,6 +438,13 @@ void setup() {
     io.maxTaps = 1024;
     uint64_t mac = ESP.getEfuseMac();
     io.unitUid = uint32_t(mac ^ (mac >> 32));  // unique per board: finds two units set to the same room
+    // Clock for timed events: SNTP in the background (the school's server if "ntp" was set over USB,
+    // else public pools). Until it syncs, time() is near 1970 and the office console's "time" is used.
+    {
+        static String ntp = gBoard.loadText("ntp").c_str();
+        configTime(0, 0, ntp.length() ? ntp.c_str() : "pool.ntp.org", "time.google.com");
+    }
+    io.utcNow = [] { return int64_t(time(nullptr)); };
     gConsole = xQueueCreate(4, sizeof(ConsoleLine));
     gWebJobs = xQueueCreate(1, sizeof(WebJob));
     // Auto-tune's analysis runs in a low-priority task on core 0, so audio keeps going.

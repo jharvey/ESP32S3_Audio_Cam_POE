@@ -1,3 +1,4 @@
+#include <QDateTime>
 #include "SimUnit.h"
 
 #include <QRandomGenerator>
@@ -226,6 +227,7 @@ void SimUnit::tick() {
             if (analysis_.joinable()) analysis_.join();
             analysis_ = std::thread(std::move(job));
         };
+        io.utcNow = [] { return int64_t(QDateTime::currentSecsSinceEpoch()); };  // the PC's clock stands in for NTP
         ic_.reset(new ic::Intercom(ic::Hal{this, this, this, this, this, this, this}, *aec_, io));
         ic_->begin();
         web_.reset(new ic::WebUi(*ic_));

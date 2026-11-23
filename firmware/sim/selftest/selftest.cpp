@@ -246,6 +246,8 @@ struct Bus {
     std::vector<std::deque<std::vector<uint8_t>>*> queues;
 };
 
+static int64_t g_clock0 = 0;  // test wall clock: UTC at frame 0 (0 = no clock)
+
 struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog {
     Bus* bus;
     std::deque<std::vector<uint8_t>> rx;
@@ -263,6 +265,7 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog {
         bus->queues.push_back(&rx);
         IntercomOptions opt;
         opt.unitUid = uid ? uid : 0xA0000000u + u.room;  // stands in for the board's MAC
+        opt.utcNow = [this] { return g_clock0 ? g_clock0 + int64_t(ic->frame()) / 50 : int64_t(0); };
         ic.reset(new Intercom(Hal{this, this, this, this, this, this}, aec, opt));
         ic->begin();
     }
@@ -1118,6 +1121,89 @@ static void testRoomCalls() {
     CHECK(!office.isCalling(101), "\"callofc off\" cancels");
 }
 
+static void testTimedEvents() {
+    printf("timed events (R2.1): clock, schedule, days off, priority\n");
+    Schedule s;
+    s.tzMinutes = -300;
+    s.dst = DstRule::Us;
+    LocalTime t = s.local(1795451390), t2;  // 2026-11-23 16:29:50 UTC
+    CHECK(t.hour == 11 && t.minute == 29 && t.second == 50 && t.wday == 0 && !t.dst && t.ymd() == 20261123,
+          "UTC -> US Eastern in November: Mon 11:29:50 EST");
+    t = s.local(1783351790);
+    CHECK(t.hour == 11 && t.minute == 29 && t.dst && t.ymd() == 20260706, "July: 11:29 EDT (daylight saving)");
+    t = s.local(1772953199), t2 = s.local(1772953201);
+    CHECK(t.hour == 1 && t.minute == 59 && !t.dst && t2.hour == 3 && t2.dst, "spring forward on 8 Mar 2026: 1:59 -> 3:00");
+    t = s.local(1793512799), t2 = s.local(1793512801);
+    CHECK(t.hour == 1 && t.dst && t2.hour == 1 && t2.minute == 0 && !t2.dst, "fall back on 1 Nov 2026: 1:59 EDT -> 1:00 EST");
+    std::vector<std::string> a = {"sched", "add", "11:30", "mon-fri", "lunch", "floor", "1"};
+    ScheduleEntry e;
+    CHECK(Schedule::parseEntry(a, 2, &e).empty() && Schedule::formatEntry(e) == "11:30 mon-fri lunch floor 1",
+          "parses \"11:30 mon-fri lunch floor 1\"");
+    uint8_t m = 0;
+    CHECK(Schedule::parseDays("fri-mon", &m) && m == 0x71, "days wrap round: fri-mon");
+    s.add(e);
+    s.daysOff.push_back(20261224);
+    Schedule r;
+    CHECK(r.fromString(s.toString()) && r.toString() == s.toString(), "schedule saves and loads (%s)", s.toString().c_str());
+
+    Bus bus;
+    FakeUnit r101(&bus, {101, 0}, 120), r214(&bus, {214, 0}, 160);
+    FakeOffice office(&bus);
+    std::vector<FakeUnit*> all = {&r101, &r214};
+    int officeTalk = 0;
+    bool any101 = false, any214 = false;
+    Sound last101 = Sound::Tone;
+    auto run = [&](int frames) {
+        for (int k = 0; k < frames; k++) {
+            if (officeTalk > 0) {
+                office.talk(214, 0);
+                officeTalk--;
+            }
+            for (auto* u : all) u->step();
+            office.drain();
+            if (r101.ic->soundPlaying()) any101 = true, last101 = r101.ic->currentSound();
+            if (r214.ic->soundPlaying() && !r214.ic->chiming()) any214 = true;
+        }
+    };
+    g_clock0 = 0;
+    CHECK(r101.ic->command("time").find("no clock") == 0, "no NTP and no office time: no clock, no timed events");
+    CHECK(r101.ic->command("time 1795451390").find("2026-11-23 16:29:50 Mon, clock from the office") == 0,
+          "\"time\" from the office sets it (UTC until a time zone is set)");
+    g_clock0 = 1795451390;  // NTP: both units' clocks read Mon 11:29:50 EST at frame 0
+    for (auto* u : all) {
+        u->ic->command("tz -300 us");
+        u->ic->command("sched add 11:30 mon-fri lunch floor 1");
+        u->ic->command("sched add 11:31 daily bell");
+        u->ic->command("sched add 11:33 weekend tone");
+    }
+    CHECK(r101.ic->command("time").find("2026-11-23 11:29:50 Mon, clock from NTP") == 0, "clock: %s", r101.ic->command("time").c_str());
+    CHECK(!r101.kv["sched"].empty(), "the schedule is saved in flash");
+    run(495);  // 11:29:59.9
+    CHECK(!any101, "nothing before 11:30");
+    run(305);  // 11:30:06
+    CHECK(any101 && last101 == Sound::Lunch && !any214, "11:30 lunch for floor 1: 101 played it, 214 didn't");
+    // 11:31 bell for everyone, while the office is calling 214: 214 plays it after the call.
+    any101 = any214 = false;
+    run(2600);  // 11:30:58
+    officeTalk = 200;  // 4 s call to 214
+    run(150);          // 11:31:01
+    CHECK(any101 && last101 == Sound::Bell && !any214, "11:31 bell: 101 rings, 214 waits (a call is on)");
+    run(220);  // the call ended about 1 s ago
+    CHECK(any214, "214 rings once the call is over");
+    // A day off: nothing plays.
+    any101 = false;
+    r101.ic->command("sched add 11:32 daily tone");
+    r101.ic->command("dayoff add 2026-11-23");
+    run(3000);  // past 11:32
+    CHECK(!any101 && r101.ic->command("time").find("day off") != std::string::npos, "day off: no timed events");
+    r101.ic->command("dayoff del 2026-11-23");
+    CHECK(r101.ic->command("skip today") == "no timed events today" && r101.ic->command("skip off") == "timed events back on",
+          "skip today / skip off");
+    CHECK(r101.ic->command("sched del 1").find("deleted: 11:30") == 0 && r101.ic->schedule().entries.size() == 3, "sched del 1");
+    CHECK(r101.ic->command("sched add 25:00 daily bell").find("bad time") == 0, "bad times are refused");
+    g_clock0 = 0;
+}
+
 int main() {
     testTuning();
     testAutoTune();
@@ -1132,6 +1218,7 @@ int main() {
     testMixer();
     testIntercom();
     testRoomCalls();
+    testTimedEvents();
     testAec();
     testCrossRoom();
     printf(g_fail ? "\n%d FAILED\n" : "\nALL PASS\n", g_fail);

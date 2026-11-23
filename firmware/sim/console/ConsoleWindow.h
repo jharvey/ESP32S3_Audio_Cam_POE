@@ -78,6 +78,7 @@ private:
     QElapsedTimer clock_;
     qint64 framesRun_ = 0;
     qint64 lastNonce_ = 0;
+    double nextTimeSync_ = 3.0;  // s since start: next "time" broadcast
 
     QMap<quint32, UnitRow> units_;
     QMap<quint32, std::shared_ptr<Talker>> talkers_;

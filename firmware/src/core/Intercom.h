@@ -17,6 +17,8 @@
 #include "JitterBuffer.h"
 #include "Mixer.h"
 #include "RoomSetup.h"
+#include "Schedule.h"
+#include "Sounds.h"
 #include "Tuning.h"
 
 namespace ic {
@@ -26,6 +28,9 @@ struct IntercomOptions {
     // Runs auto-tune's analysis off the audio thread (seconds on the S3). Empty = run it inline.
     std::function<void(std::function<void()>)> runBackground;
     uint32_t unitUid = 0;  // unique per board (the ESP32's MAC); finds two units set to the same room
+    // Wall clock, UTC seconds (NTP on the board, the PC clock in the simulator); 0 = not known yet.
+    // Without it the office console's "time" command sets the clock.
+    std::function<int64_t()> utcNow;
 };
 
 struct AudioStats {
@@ -37,12 +42,6 @@ struct AudioStats {
 // Where a console command came from. Some commands are refused from the network or web
 // (the web password can only be set over USB).
 enum class CmdSource : uint8_t { Local = 0, Network = 1, Web = 2 };
-
-// Who TALK reaches (office unit / bring-up). A unit answering a call always replies to the caller only.
-struct TalkTarget {
-    enum Kind : uint8_t { All = 0, Room = 1, Floor = 2, Group = 3 } kind = All;
-    uint16_t n = 0;  // room, floor or group number
-};
 
 struct Peer {
     StatusPacket status;
@@ -93,7 +92,12 @@ public:
     bool canAnswer() const;         // TALK now answers the caller only (during a call and 10 s after)
     const UnitId& caller() const { return callFrom_; }
     bool callingOffice() const { return callingOffice_; }
-    bool chiming() const { return chimeFrames_ > 0; }
+    bool chiming() const { return soundActive_ && sound_ == Sound::Chime; }
+    // Timed events (R2.1).
+    int64_t utcNow() const;  // 0 = no clock yet
+    const Schedule& schedule() const { return sched_; }
+    bool soundPlaying() const { return soundActive_; }
+    Sound currentSound() const { return sound_; }
     Codec sendCodec() const { return encoder_ ? encoder_->codec() : Codec::Pcm16; }
     AudioStats audioStats() const;
     // Talkers heard since start, for tests: (unit key, frames played).
@@ -122,6 +126,10 @@ private:
     bool sameGroup(const UnitId& from) const;
     bool isForMe(const AudioHeader& h) const;
     void setCallingOffice(bool on, const char* why);
+    void startSound(Sound s);
+    void checkSchedule();
+    void saveSchedule();
+    std::string schedCommand(const std::vector<std::string>& a);
     void refreshPower();
 
     Hal hal_;
@@ -165,7 +173,16 @@ private:
     UnitId callFrom_;             // last unit that called this room
     uint32_t callLast_ = 0;       // frame of its last packet; 0 = no call yet
     uint32_t allCallUntil_ = 0;   // an office all-call is playing: room calls wait
-    uint32_t chimeFrames_ = 0, chimePos_ = 0;
+    bool soundActive_ = false;      // a chime / timed sound is playing
+    Sound sound_ = Sound::Chime;
+    uint32_t soundPos_ = 0;
+    bool pendingSound_ = false;     // a timed sound waiting for a call to end
+    Sound pending_ = Sound::Bell;
+    uint32_t pendingSince_ = 0;
+    Schedule sched_;
+    int64_t setEpoch_ = 0;          // clock set by the "time" command, at frame setFrame_
+    uint32_t setFrame_ = 0;
+    int64_t lastSchedMinute_ = 0;   // the last minute the schedule was checked for
     bool callingOffice_ = false;
     uint32_t callingSince_ = 0, downSince_ = 0;
     uint32_t talkFrames_ = 0;  // "talk" command: transmit as if TALK were held

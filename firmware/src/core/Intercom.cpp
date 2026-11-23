@@ -22,10 +22,11 @@ constexpr uint32_t kResultFrames = 250;  // show the auto-tune result for 5 s
 // Room calls (R2.0).
 constexpr uint32_t kCallFrames = 50;        // a call is "on" while its packets keep coming (1 s gap ends it)
 constexpr uint32_t kAnswerFrames = 500;     // TALK answers the caller during a call and 10 s after
-constexpr uint32_t kChimeFrames = 30;       // two-tone chime before a call, 0.6 s
 constexpr uint32_t kAllCallHoldFrames = 25; // an office all-call keeps room calls out until 0.5 s after it
 constexpr uint32_t kCallHoldFrames = 100;   // DOWN held 2 s = call the office (again = cancel)
 constexpr uint32_t kCallingTimeoutFrames = 15000;  // a call to the office gives up after 5 min
+constexpr uint32_t kPendingSoundFrames = 3000;     // a timed chime waits up to 60 s for a call to end
+constexpr const char* kSchedKey = "sched";
 constexpr uint32_t kDupHoldFrames = 150; // "dUP" stays 3 s after the other unit was last heard
 constexpr uint32_t kFaultCycle = 175;    // faults: room number 3 s, then the code for 0.5 s
 constexpr uint32_t kFaultShow = 25;
@@ -52,6 +53,12 @@ const char* kHelp =
     "  group [299|off]      room group: units in one room (the gym: 299, 298 ...) do not play each other\n"
     "  tone [seconds]       play a 1 kHz test tone on this unit's speaker (default 2 s, 0 stops)\n"
     "  mute [minutes|off]   stop this unit's TALK for a while (office: stuck button, misuse); it still hears\n"
+    "  time [utc_seconds]   show the clock / set it (the office console does this when there's no NTP)\n"
+    "  tz MIN [none|us|eu]  time zone: standard-time offset in minutes (US Eastern -300) and daylight-saving rule\n"
+    "  sched                timed events: list | add HH:MM mon-fri SOUND [room N|floor N|group N] | del N | clear\n"
+    "  dayoff [add|del DATE] days without timed events (2026-12-24); \"skip today\" / \"skip off\"\n"
+    "  play SOUND           play a sound here now (chime bell lunch tone)\n"
+    "  ntp [server|default] the school's time server (from the next restart)\n"
     "  callofc [off]        call the office (as DOWN held 2 s; the console shows it until answered)\n"
     "  talk [seconds|off] [room N|floor N|group N]\n"
     "                       transmit as if TALK were held, to everyone or a target (USB only; default 5 s)\n"
@@ -81,6 +88,7 @@ void Intercom::begin() {
     unit_ = hal_.store->loadUnit();
     unit_.sub = 0;  // letters are gone since protocol 2
     group_ = uint16_t(std::strtoul(hal_.store->loadText(kGroupKey).c_str(), nullptr, 10));
+    sched_.fromString(hal_.store->loadText(kSchedKey));
     refreshPower();
     hal_.links->setWifi(hal_.store->loadText(kWifiSsidKey), hal_.store->loadText(kWifiPassKey));
     lastNonce_ = netauth::loadNonce(*hal_.store);
@@ -241,6 +249,11 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         return buf;
     }
     if (c == "version") return std::string("firmware ") + kFirmwareVersion;
+    if (c == "ntp") {  // the school's time server (default: public pools); used from the next restart
+        if (a.size() > 1) hal_.store->saveText("ntp", a[1] == "default" ? "" : a[1]);
+        std::string s = hal_.store->loadText("ntp");
+        return "ntp server: " + (s.empty() ? std::string("pool.ntp.org (default)") : s) + (a.size() > 1 ? " (from the next restart)" : "");
+    }
     if (c == "mute") {  // office: stop a unit's TALK (stuck button, misuse); it still hears everyone
         if (a.size() > 1 && a[1] == "off") {
             muteUntil_ = 0;
@@ -279,6 +292,39 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         std::string num = t.kind ? " " + std::to_string(t.n) : std::string();
         snprintf(buf, sizeof(buf), "talking for %.0f s to %s%s (\"talk off\" stops)", double(secs), kinds[t.kind], num.c_str());
         return buf;
+    }
+    if (c == "time") {
+        if (a.size() > 1) {
+            long long t = std::strtoll(a[1].c_str(), nullptr, 10);
+            if (t < 1600000000LL || t > 4100000000LL) return "usage: time <UTC seconds since 1970>";
+            setEpoch_ = t;
+            setFrame_ = frame_;
+        }
+        int64_t now = utcNow();
+        if (!now) return "no clock yet (no NTP; the office console sets it)";
+        LocalTime lt = sched_.local(now);
+        static const char* wd[] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        bool ntp = opt_.utcNow && opt_.utcNow() > 1600000000LL;
+        snprintf(buf, sizeof(buf), "%04d-%02d-%02d %02d:%02d:%02d %s%s, clock from %s%s", lt.year, lt.month, lt.day, lt.hour, lt.minute,
+                 lt.second, wd[lt.wday], lt.dst ? " (daylight saving)" : "", ntp ? "NTP" : "the office",
+                 sched_.isDayOff(lt) ? ", day off: no timed events today" : "");
+        return buf;
+    }
+    if (c == "tz") {
+        if (a.size() < 2) return sched_.list().substr(0, sched_.list().find('\n'));
+        int m = std::atoi(a[1].c_str());
+        if (m < -720 || m > 840) return "usage: tz <minutes from UTC, standard time> [none|us|eu]";
+        sched_.tzMinutes = m;
+        if (a.size() > 2) sched_.dst = a[2] == "us" ? DstRule::Us : a[2] == "eu" ? DstRule::Eu : DstRule::None;
+        saveSchedule();
+        return "ok " + sched_.list().substr(0, sched_.list().find('\n'));
+    }
+    if (c == "sched" || c == "dayoff" || c == "skip") return schedCommand(a);
+    if (c == "play") {
+        Sound s;
+        if (a.size() < 2 || !soundFromName(a[1], &s)) return "usage: play " + soundList();
+        startSound(s);
+        return std::string("playing ") + soundName(s);
     }
     if (c == "callofc") {
         setCallingOffice(!(a.size() > 1 && a[1] == "off"), src == CmdSource::Local ? "USB" : "console");
@@ -476,10 +522,7 @@ void Intercom::receive() {
                     char u[8];
                     formatUnit(h.from, u);
                     logf("call from %s", h.from.room ? u : "the office");
-                    if (!canAnswer()) {  // a new call, not the next sentence of one
-                        chimeFrames_ = kChimeFrames;
-                        chimePos_ = 0;
-                    }
+                    if (!canAnswer()) startSound(Sound::Chime);  // a new call, not the next sentence of one
                 }
                 callFrom_ = h.from;
                 callLast_ = frame_;
@@ -628,6 +671,106 @@ bool Intercom::isForMe(const AudioHeader& h) const {
     if (h.flags & kAudioFloor) return unit_.room / 100 == h.target;
     if (h.flags & kAudioGroupCall) return group() == h.target || unit_.room == h.target;
     return h.target == unit_.room;
+}
+
+int64_t Intercom::utcNow() const {
+    int64_t t = opt_.utcNow ? opt_.utcNow() : 0;
+    if (t > 1600000000LL) return t;
+    if (setEpoch_) return setEpoch_ + int64_t(frame_ - setFrame_) * kFrameMs / 1000;
+    return 0;
+}
+
+void Intercom::startSound(Sound s) {
+    sound_ = s;
+    soundPos_ = 0;
+    soundActive_ = true;
+}
+
+void Intercom::saveSchedule() { hal_.store->saveText(kSchedKey, sched_.toString()); }
+
+std::string Intercom::schedCommand(const std::vector<std::string>& a) {
+    const std::string& c = a[0];
+    std::string sub = a.size() > 1 ? a[1] : "";
+    if (c == "skip") {
+        if (sub == "off") sched_.skipDay = 0;
+        else if (sub == "today") {
+            int64_t now = utcNow();
+            if (!now) return "no clock yet";
+            sched_.skipDay = sched_.local(now).ymd();
+        } else {
+            return "usage: skip today | skip off";
+        }
+        saveSchedule();
+        return sched_.skipDay ? "no timed events today" : "timed events back on";
+    }
+    if (c == "dayoff") {
+        if (sub.empty()) return sched_.list();
+        uint32_t d;
+        if ((sub != "add" && sub != "del") || a.size() < 3 || !Schedule::parseDate(a[2], &d)) return "usage: dayoff add|del 2026-12-24";
+        auto it = std::find(sched_.daysOff.begin(), sched_.daysOff.end(), d);
+        if (sub == "add" && it == sched_.daysOff.end()) {
+            if (sched_.daysOff.size() >= Schedule::kMaxDaysOff) return "too many days off (60)";
+            sched_.daysOff.push_back(d);
+            std::sort(sched_.daysOff.begin(), sched_.daysOff.end());
+        }
+        if (sub == "del" && it != sched_.daysOff.end()) sched_.daysOff.erase(it);
+        saveSchedule();
+        return "ok";
+    }
+    // sched
+    if (sub.empty() || sub == "list") return sched_.list();
+    if (sub == "add") {
+        ScheduleEntry e;
+        std::string err = Schedule::parseEntry(a, 2, &e);
+        if (err.empty()) err = sched_.add(e);
+        if (!err.empty()) return err;
+        saveSchedule();
+        return "added: " + Schedule::formatEntry(e);
+    }
+    if (sub == "del") {
+        unsigned long n = a.size() > 2 ? std::strtoul(a[2].c_str(), nullptr, 10) : 0;
+        if (n < 1 || n > sched_.entries.size()) return "usage: sched del N (the number from \"sched\")";
+        std::string gone = Schedule::formatEntry(sched_.entries[n - 1]);
+        sched_.entries.erase(sched_.entries.begin() + long(n - 1));
+        saveSchedule();
+        return "deleted: " + gone;
+    }
+    if (sub == "clear") {
+        sched_.entries.clear();
+        saveSchedule();
+        return "no timed events";
+    }
+    if (sub == "set") {  // the console pushes the whole table at once (as "sched get" prints it)
+        std::string s;
+        for (size_t i = 2; i < a.size(); i++) s += (i > 2 ? " " : "") + a[i];
+        Schedule n;
+        if (!n.fromString(s)) return "bad schedule";
+        sched_ = n;
+        saveSchedule();
+        return "ok, " + std::to_string(sched_.entries.size()) + " timed events";
+    }
+    if (sub == "get") return sched_.toString();
+    return "usage: sched [list | add HH:MM DAYS SOUND [room N|floor N|group N] | del N | clear | get | set ...]";
+}
+
+void Intercom::checkSchedule() {
+    int64_t now = utcNow();
+    if (!now) return;
+    int64_t minute = now / 60;
+    if (minute == lastSchedMinute_) return;
+    bool first = lastSchedMinute_ == 0;
+    lastSchedMinute_ = minute;
+    LocalTime lt = sched_.local(now);
+    if (first && lt.second > 20) return;  // just started mid-minute: don't play an event late
+    if (sched_.isDayOff(lt)) return;
+    for (const ScheduleEntry& e : sched_.entries) {
+        if (e.minute != lt.hour * 60 + lt.minute || !(e.days & (1u << lt.wday)) || !sched_.appliesTo(e, unit_.room, group())) continue;
+        logf("timed event %s", Schedule::formatEntry(e).c_str());
+        pendingSound_ = true;
+        pending_ = e.sound;
+        pendingSince_ = frame_;
+        break;  // one sound a minute
+    }
 }
 
 bool Intercom::inCall() const { return callLast_ && frame_ - callLast_ < kCallFrames; }
@@ -819,16 +962,23 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
             speaker[i] = int16_t(v > 32767 ? 32767 : v < -32767 ? -32767 : v);
         }
     }
-    if (chimeFrames_) {  // call chime: 880 Hz then 660 Hz, -14 dBFS, with a short fade at each end
-        chimeFrames_--;
-        const uint32_t half = kChimeFrames * kFrameSamples / 2;
-        for (int i = 0; i < kFrameSamples; i++, chimePos_++) {
-            float f = chimePos_ < half ? 880.0f : 660.0f;
-            uint32_t k = chimePos_ % half;
-            float env = std::min(1.0f, std::min(float(k), float(half - k)) / 160.0f);
-            int v = speaker[i] + int(6500.0f * env * std::sin(2.0f * 3.14159265f * f * float(chimePos_) / kSampleRate));
-            speaker[i] = int16_t(v > 32767 ? 32767 : v < -32767 ? -32767 : v);
-        }
+    // Timed events: a waiting chime plays once nobody is talking (up to 60 s late); a call or all-call cuts one.
+    if (frame_ % kStatusEveryFrames == 0) checkSchedule();
+    const bool busy = n > 0 || transmitting_ || inCall();
+    if (soundActive_ && sound_ != Sound::Chime && busy) {
+        soundActive_ = false;
+        logf("timed event cut short by a call");
+    }
+    if (pendingSound_ && !busy && !soundActive_) {
+        pendingSound_ = false;
+        startSound(pending_);
+    } else if (pendingSound_ && frame_ - pendingSince_ > kPendingSoundFrames) {
+        pendingSound_ = false;
+        logf("timed event skipped: a call lasted over a minute");
+    }
+    if (soundActive_) {  // the call chime or a timed sound, mixed in before the echo canceller's reference
+        soundActive_ = renderSound(sound_, soundPos_, speaker, kFrameSamples);
+        soundPos_ += kFrameSamples;
     }
     spkLevel_ = frameLevel(speaker, kFrameSamples);
     aec_.playback(speaker);

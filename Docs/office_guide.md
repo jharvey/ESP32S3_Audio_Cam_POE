@@ -45,6 +45,9 @@ A page on the office unit, opened in Chrome, Edge or Firefox on the office PC:
 
 ## Planned
 
-- **Timed events (R2.1):** lunch chime, bells, class changes; a schedule kept on every unit, days off, quiet hours.
+- **Timed events (R2.1, in code, not yet in the units):** each unit keeps the schedule and plays its own chimes.
+  Set it with commands to "all units": `tz -300 us` once, then e.g. `sched add 11:30 mon-fri lunch`,
+  `sched add 8:00 mon-fri bell floor 2`; `sched` lists, `sched del 2` removes; `dayoff add 2026-12-24`;
+  `skip today` for a snow day. The console keeps the units' clocks right when the school has no time server.
 - **Emergency mode (R3):** an alarm button opens the camera covers, starts the video to the NVR and flashes the
   alarm light in every room.
