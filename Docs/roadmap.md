@@ -79,7 +79,8 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 ### Network, power and addressing
 | # | Feature | Status |
 |---|---|---|
-| 1.9 | Room number = IP address, fixed IP (no DHCP wait): 10.42.&lt;floor·10 + letter&gt;.&lt;room % 100&gt;, so 214 → 10.42.20.14 and 299b → 10.42.22.99. Kept as built (decided 23 Nov); the 10.42 prefix can be changed over USB | done (sim) / code |
+| 1.9 | Room number = IP address, fixed IP (no DHCP wait): 10.42.&lt;floor&gt;.&lt;room on that floor&gt;, so 214 → 10.42.2.14, netmask 255.255.0.0 (decided 23 Nov; was 10.42.&lt;floor·10&gt;.&lt;room&gt;). No letters. The 10.42 prefix can be changed over USB | new (change from the built scheme) |
+| 1.9a | Room groups without letters: units that hear each other loudly in the coupling map (1.6e) are one room and don't play each other back; manual override over USB | new |
 | 1.10 | Setup over USB: room number, IP prefix, Wi-Fi name and password, stored in flash (panel setup stays) | code (room) / new (rest) |
 | 1.11 | Wi-Fi brought up with the same IP; Wi-Fi units hear and talk like wired ones (multicast first, wired relay if too lossy) | new |
 | 1.12 | Link rules. PoE power and Ethernet link: wired. PoE power, no Ethernet link: Wi-Fi, display alternates room and `E1`. No PoE (battery): Wi-Fi. `E2` if Wi-Fi is down too. Switch within 1 s | done (logic) / new (board) |
@@ -100,10 +101,14 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 | 1.20 | Pilot: 3-5 rooms for a few weeks | new |
 
 ### R1 decisions
-- **Addressing (decided 23 Nov):** keep 10.42 and the built scheme; teachers set the room number on the panel.
-- **Gym (decided 23 Nov):** gym units are 299a, 299b, 299c, 299d, set on the panel like any room (the letter is
-  the fourth field). Same number = one room group, so they don't play each other back. Up to 4 units; no new code.
-- **Floor/room switches (SW1/SW2).** One digit each, so they can't hold a 3-digit room. Proposed: ignore in R1.
+- **Addressing (decided 23 Nov):** 10.42.&lt;floor&gt;.&lt;room&gt;. A broken unit is replaced by a teacher setting the room number,
+  with no IT help; how (rotary dials or the panel) is still to decide, see below.
+- **Gym (decided 23 Nov):** gym units get their own numbers counting down from 299 (10.42.2.99, 10.42.2.98, ...).
+  They are grouped automatically from the coupling map (1.9a), so they don't play each other back.
+- **Rotary dials (SW1/SW2), open.** The goal is a teacher replacing a unit by setting its room number. Two dials
+  give two digits; a room needs three (floor + two-digit room). Options: a third dial in the next board spin (needs
+  another I/O expander), dials for the two room digits with the floor set once, a dial position mapped through a
+  table shared by all units, or the panel buttons as built.
 - **Display codes (23 Nov):** the room number stays the main thing shown; codes flash briefly (1.13a). Codes:
   `E1`, `E2`, `Lo`, `dUP`.
 
