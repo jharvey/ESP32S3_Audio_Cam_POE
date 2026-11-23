@@ -36,6 +36,14 @@ Useful settings: `volume_db`, `mic_gain_db`, `opus` (1 = compressed audio, 0 = r
 5. Run `unit_tool.py tune auto`, or load the room's saved settings with `tune set`.
 6. The office console logs the new unit (a new unit ID on that room number).
 
+## Power-up light test
+
+Every time a unit powers up it runs a 4-second light test, so a dead light shows at a glance:
+each display segment in turn on all three digits, then the dots, then `8.8.8.`; then `L1` white lamp,
+`L2` IR lamp, `L3` call light, and `L4`-`L6` the RGB LED in red, green and blue. A segment that never lights,
+or a lamp / LED that stays dark during its step, is broken. The MISC outputs (one may drive the laser) and servo
+power are not part of the test. `boottest run` repeats it; `boottest off` / `boottest on` turn it off or on.
+
 ## Faults
 
 | On the unit | Likely cause | Check |

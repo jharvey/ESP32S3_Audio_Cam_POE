@@ -52,6 +52,7 @@ public:
     virtual ~IPanel() = default;
     virtual uint8_t buttons() = 0;  // bit n = Button n held
     // 3 characters: '0'-'9', 'a'-'f', 'E', 'L', 'r', 'n', 'o', 'P', 'u', 'U', '-', ' '. dots: bit n lights the decimal point after digit n.
+    // A character with bit 7 set is a raw segment pattern instead: bit 0 = a ... bit 6 = g (power-up light test).
     virtual void show(const char text[3], uint8_t dots) = 0;
 };
 
@@ -88,6 +89,8 @@ class ILamps {
 public:
     virtual ~ILamps() = default;
     virtual void set(Lamp lamp, uint8_t pct) = 0;
+    // The RGB status LED (D9, WS2812B). 0-255 per colour.
+    virtual void setRgb(uint8_t r, uint8_t g, uint8_t b) { (void)r; (void)g; (void)b; }
 };
 
 struct Hal {

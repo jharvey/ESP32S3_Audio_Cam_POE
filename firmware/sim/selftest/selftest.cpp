@@ -247,8 +247,9 @@ struct Bus {
 };
 
 static int64_t g_clock0 = 0;  // test wall clock: UTC at frame 0 (0 = no clock)
+static bool g_bootTest = false;  // power-up light test in new FakeUnits (off: it would light lamps in other tests)
 
-struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog {
+struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps {
     Bus* bus;
     std::deque<std::vector<uint8_t>> rx;
     UnitId id;
@@ -266,7 +267,8 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog {
         IntercomOptions opt;
         opt.unitUid = uid ? uid : 0xA0000000u + u.room;  // stands in for the board's MAC
         opt.utcNow = [this] { return g_clock0 ? g_clock0 + int64_t(ic->frame()) / 50 : int64_t(0); };
-        ic.reset(new Intercom(Hal{this, this, this, this, this, this}, aec, opt));
+        if (!g_bootTest) kv["boottest"] = "off";
+        ic.reset(new Intercom(Hal{this, this, this, this, this, this, nullptr, this}, aec, opt));
         ic->begin();
     }
     void send(const uint8_t* d, size_t n) override {
@@ -286,7 +288,12 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog {
     void useLink(LinkType l) override { used = l; }
     PowerState read() override { return pw; }
     uint8_t buttons() override { return held; }
-    void show(const char*, uint8_t) override {}
+    std::vector<std::string> shown;  // every display change, 3 chars + dots byte
+    uint32_t rgbSeen = 0;
+    uint8_t lampSeen = 0;            // bit n: lamp n was switched on
+    void show(const char* t, uint8_t d) override { shown.push_back(std::string(t, 3) + char(d)); }
+    void set(Lamp l, uint8_t pct) override { if (pct) lampSeen |= uint8_t(1u << int(l)); }
+    void setRgb(uint8_t r, uint8_t g, uint8_t b) override { rgbSeen |= uint32_t(r) << 16 | uint32_t(g) << 8 | b; }
     UnitId loadUnit() override { return id; }
     void saveUnit(const UnitId& u) override { id = u; }
     void log(const char* m) override { logs.push_back(m); }
@@ -1211,7 +1218,34 @@ static void testTimedEvents() {
     g_clock0 = 0;
 }
 
+static void testBootLightTest() {
+    printf("power-up light test\n");
+    Bus bus;
+    g_bootTest = true;
+    FakeUnit u(&bus, {214, 0}, 160);
+    g_bootTest = false;
+    CHECK(u.ic->bootTesting(), "starts at power-up");
+    for (int k = 0; k < 230; k++) u.step();
+    uint8_t segsSeen = 0, dotsSeen = 0;
+    bool allOn = false;
+    for (auto& s : u.shown) {
+        for (int i = 0; i < 3; i++)
+            if (uint8_t(s[i]) & 0x80) segsSeen |= uint8_t(s[i]) & 0x7f;
+        dotsSeen |= uint8_t(s[3]);
+        if (uint8_t(s[0]) == 0xff && uint8_t(s[3]) == 7) allOn = true;
+    }
+    CHECK(segsSeen == 0x7f && dotsSeen == 7 && allOn, "every segment and dot lit, then 8.8.8. (segments 0x%02x)", segsSeen);
+    CHECK(u.lampSeen == 0x07 && u.rgbSeen == 0xffffff, "white, IR and call lamps and the RGB LED's red, green, blue all lit");
+    CHECK(!u.ic->bootTesting() && u.shown.back().substr(0, 3) == "214" && !u.ic->lampLevel(Lamp::White) && !u.ic->rgb(),
+          "ends after about 4 s: room number back, everything off");
+    CHECK(u.ic->command("boottest off").find("off") != std::string::npos && u.kv["boottest"] == "off", "\"boottest off\" saves");
+    u.ic->command("boottest run");
+    u.step();
+    CHECK(u.ic->bootTesting(), "\"boottest run\" runs it again");
+}
+
 int main() {
+    testBootLightTest();
     testTuning();
     testAutoTune();
     testConsole();

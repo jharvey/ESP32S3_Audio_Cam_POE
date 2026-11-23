@@ -106,7 +106,11 @@ bool Tm1637::show(const char text[3], uint8_t dots, int brightness) {
     stop();
     start();
     ok &= writeByte(kCmdAddr0);
-    for (int i = 0; i < 3; i++) ok &= writeByte(uint8_t(segments(text[i]) | ((dots >> i) & 1 ? 0x80 : 0)));
+    for (int i = 0; i < 3; i++) {
+        uint8_t c = uint8_t(text[i]);
+        uint8_t seg = (c & 0x80) ? uint8_t(c & 0x7f) : segments(text[i]);  // bit 7 set = raw segments
+        ok &= writeByte(uint8_t(seg | ((dots >> i) & 1 ? 0x80 : 0)));
+    }
     stop();
     start();
     ok &= writeByte(uint8_t(kCmdDisplayOn | brightness));

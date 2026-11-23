@@ -195,6 +195,7 @@ std::atomic<uint8_t> gButtons{0};
 std::atomic<uint32_t> gDisplay{0x00202020};  // 3 chars + dots, written by the audio task
 std::atomic<bool> gDisplayOk{false};
 std::atomic<uint8_t> gLamps[3];  // lamp levels from the core (audio task), applied by the panel task
+std::atomic<uint32_t> gRgb{0};     // RGB LED colour 0xRRGGBB, applied by the panel task
 
 void panelTask(void*) {
     uint32_t shown = 0xffffffff;
@@ -220,6 +221,12 @@ void panelTask(void*) {
                 if (v) gPwm.fullOn(ch[i]);
                 else gPwm.fullOff(ch[i]);
             }
+            static uint32_t rgbShown = 0xffffffff;
+            uint32_t rgb = gRgb.load();
+            if (rgb != rgbShown) {
+                rgbShown = rgb;
+                rgbLedWrite(pins::RGB_LED_GPIO, uint8_t(rgb >> 16), uint8_t(rgb >> 8), uint8_t(rgb));  // RMT, GRB order handled
+            }
         }
         vTaskDelay(pdMS_TO_TICKS(30));  // ~25 key scans a second; each one is ~5 ms of I2C
     }
@@ -233,6 +240,7 @@ class Board : public ic::INet, public ic::ILinks, public ic::IPower, public ic::
               public ic::ILamps {
 public:
     void set(ic::Lamp lamp, uint8_t pct) override { gLamps[int(lamp)] = pct; }
+    void setRgb(uint8_t r, uint8_t g, uint8_t b) override { gRgb = uint32_t(r) << 16 | uint32_t(g) << 8 | b; }
     // Network: one UDP socket on the multicast group. Ethernet and Wi-Fi carry the same IP
     // (10.42.<floor>.<room>); useLink() makes the active one lwIP's default interface, which is
     // where multicast goes out, and re-joins the group so IGMP is sent on it.

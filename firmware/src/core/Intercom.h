@@ -100,6 +100,8 @@ public:
     Sound currentSound() const { return sound_; }
     // Lamp outputs: what the core is driving now (0-100 %). Other = the call / alarm light.
     uint8_t lampLevel(Lamp l) const { return lamp_[int(l)]; }
+    uint32_t rgb() const { return rgb_; }  // 0xRRGGBB on the RGB status LED
+    bool bootTesting() const { return bootT0_ != 0; }
     Codec sendCodec() const { return encoder_ ? encoder_->codec() : Codec::Pcm16; }
     AudioStats audioStats() const;
     // Talkers heard since start, for tests: (unit key, frames played).
@@ -177,6 +179,9 @@ private:
     uint32_t callLast_ = 0;       // frame of its last packet; 0 = no call yet
     uint32_t allCallUntil_ = 0;   // an office all-call is playing: room calls wait
     uint8_t lamp_[int(Lamp::Count)] = {0, 0, 0};
+    uint32_t rgb_ = 0;
+    uint32_t bootT0_ = 0;  // power-up light test running since this frame; 0 = not running
+    int bootTestStep(char text[3], uint8_t* dots, uint8_t lamps[], uint32_t* rgb) const;
     uint8_t lampManual_[int(Lamp::Count)] = {255, 255, 255};  // 255 = automatic
     bool soundActive_ = false;      // a chime / timed sound is playing
     Sound sound_ = Sound::Chime;

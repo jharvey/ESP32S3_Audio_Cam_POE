@@ -58,6 +58,7 @@ const char* kHelp =
     "  sched                timed events: list | add HH:MM mon-fri SOUND [room N|floor N|group N] | del N | clear\n"
     "  dayoff [add|del DATE] days without timed events (2026-12-24); \"skip today\" / \"skip off\"\n"
     "  play SOUND           play a sound here now (chime bell lunch tone)\n"
+    "  boottest [on|off|run] power-up light test: display segments, lamps, RGB LED (about 4 s at start)\n"
     "  lamp [white|ir|other 0-100|auto]  lamp outputs; other = call light (blinks for a call, on for an all-call)\n"
     "  ntp [server|default] the school's time server (from the next restart)\n"
     "  callofc [off]        call the office (as DOWN held 2 s; the console shows it until answered)\n"
@@ -90,6 +91,7 @@ void Intercom::begin() {
     unit_.sub = 0;  // letters are gone since protocol 2
     group_ = uint16_t(std::strtoul(hal_.store->loadText(kGroupKey).c_str(), nullptr, 10));
     sched_.fromString(hal_.store->loadText(kSchedKey));
+    if (hal_.store->loadText("boottest") != "off") bootT0_ = 1;  // runs from the first frame
     refreshPower();
     hal_.links->setWifi(hal_.store->loadText(kWifiSsidKey), hal_.store->loadText(kWifiPassKey));
     lastNonce_ = netauth::loadNonce(*hal_.store);
@@ -250,6 +252,12 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         return buf;
     }
     if (c == "version") return std::string("firmware ") + kFirmwareVersion;
+    if (c == "boottest") {
+        if (a.size() > 1 && (a[1] == "on" || a[1] == "off")) hal_.store->saveText("boottest", a[1] == "off" ? "off" : "");
+        if (a.size() > 1 && a[1] == "run") bootT0_ = frame_ ? frame_ : 1;
+        return std::string("power-up light test ") + (hal_.store->loadText("boottest") == "off" ? "off" : "on") +
+               (bootTesting() ? " (running)" : "");
+    }
     if (c == "lamp") {
         static const char* names[] = {"white", "ir", "other"};
         if (a.size() >= 3) {
@@ -619,7 +627,12 @@ void Intercom::updatePanel() {
     if (frame_ % kStatusEveryFrames == 1) refreshPower();  // once a second, whatever the link
     char text[3];
     uint8_t dots = 0;
-    if (setup_.active()) {
+    uint8_t testLamps[int(Lamp::Count)];
+    uint32_t testRgb;
+    if (bootT0_ && bootTestStep(text, &dots, testLamps, &testRgb) < 0) bootT0_ = 0;  // test over
+    if (bootT0_) {
+        // power-up light test: text and dots already set
+    } else if (setup_.active()) {
         setup_.render(frame_, text, &dots);
     } else if (cal_.active()) {  // "c42" = auto-tune 42 % done
         int pct = std::min(99, cal_.progressPct());
@@ -795,7 +808,12 @@ void Intercom::checkSchedule() {
 // off unless set by hand (R3: night vision, emergency).
 void Intercom::updateLamps() {
     uint8_t want[int(Lamp::Count)] = {0, 0, 0};
-    if (canAnswer() && !transmitting_) want[int(Lamp::Other)] = (frame_ / 30) % 2 ? 0 : 100;
+    uint32_t rgb = 0;
+    char t[3];
+    uint8_t d;
+    if (bootT0_ && bootTestStep(t, &d, want, &rgb) >= 0) {
+        // power-up light test drives the lamps and the RGB LED
+    } else if (canAnswer() && !transmitting_) want[int(Lamp::Other)] = (frame_ / 30) % 2 ? 0 : 100;
     else if (frame_ < allCallUntil_) want[int(Lamp::Other)] = 100;
     for (int i = 0; i < int(Lamp::Count); i++) {
         uint8_t v = lampManual_[i] == 255 ? want[i] : lampManual_[i];
@@ -803,6 +821,53 @@ void Intercom::updateLamps() {
         lamp_[i] = v;
         if (hal_.lamps) hal_.lamps->set(Lamp(i), v);
     }
+    if (rgb != rgb_) {
+        rgb_ = rgb;
+        if (hal_.lamps) hal_.lamps->setRgb(uint8_t(rgb >> 16), uint8_t(rgb >> 8), uint8_t(rgb));
+    }
+}
+
+// Power-up light test, so a dead segment, lamp or LED shows at a glance:
+//   segments a..g one at a time on all three digits, then the dots   (8 x 0.16 s)
+//   everything on, "8.8.8."                                           (0.5 s)
+//   L1 white lamp, L2 IR lamp, L3 call light (J11)                     (0.4 s each)
+//   L4 / L5 / L6: RGB LED red, green, blue                             (0.3 s each)
+// MISC outputs (one may carry the laser) and servo power are left out on purpose.
+// Returns the step number, or -1 when the test is over.
+int Intercom::bootTestStep(char text[3], uint8_t* dots, uint8_t lamps[], uint32_t* rgb) const {
+    if (!bootT0_ || frame_ < bootT0_) return -1;
+    uint32_t t = frame_ - bootT0_;
+    text[0] = text[1] = text[2] = ' ';
+    *dots = 0;
+    *rgb = 0;
+    for (int i = 0; i < int(Lamp::Count); i++) lamps[i] = 0;
+    if (t < 64) {  // one segment at a time
+        uint32_t s = t / 8;
+        if (s < 7) text[0] = text[1] = text[2] = char(0x80 | (1u << s));
+        else *dots = 0x07;
+        return int(s);
+    }
+    if (t < 89) {
+        text[0] = text[1] = text[2] = char(0x80 | 0x7f);
+        *dots = 0x07;
+        return 8;
+    }
+    if (t < 149) {
+        int n = int((t - 89) / 20);  // 0 white, 1 IR, 2 other
+        text[0] = 'L';
+        text[1] = char('1' + n);
+        lamps[n] = 100;
+        return 9 + n;
+    }
+    if (t < 194) {
+        int n = int((t - 149) / 15);
+        static const uint32_t colours[] = {0xff0000, 0x00ff00, 0x0000ff};
+        text[0] = 'L';
+        text[1] = char('4' + n);
+        *rgb = colours[n];
+        return 12 + n;
+    }
+    return -1;
 }
 
 bool Intercom::inCall() const { return callLast_ && frame_ - callLast_ < kCallFrames; }

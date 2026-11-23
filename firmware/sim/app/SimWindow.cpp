@@ -79,11 +79,14 @@ protected:
             {"TX", ic && ic->transmitting() ? QColor(0xf0, 0x30, 0x30) : off},
             {"RX", ic && ic->talkersPlaying() ? QColor(0x2e, 0xc4, 0x5a) : off},
             {"CALL", ic && ic->lampLevel(ic::Lamp::Other) ? QColor(0xff, 0x9f, 0x1a) : off},  // J11 call light
+            {"RGB", ic && ic->rgb() ? QColor(QRgb(ic->rgb())) : off},                         // D9
+            {"WHT", ic && ic->lampLevel(ic::Lamp::White) ? QColor(0xff, 0xff, 0xff) : off},   // J13 white lamp
+            {"IR", ic && ic->lampLevel(ic::Lamp::Ir) ? QColor(0x9a, 0x2e, 0xd0) : off},       // J12 IR lamp
         };
         f.setPointSize(7);
         p.setFont(f);
-        for (int i = 0; i < 5; i++) {
-            QPointF c(win.right() + 26, win.top() + 6 + i * 15.5);
+        for (int i = 0; i < 8; i++) {
+            QPointF c(win.right() + 26 + (i / 5) * 46, win.top() + 6 + (i % 5) * 15.5);
             p.setPen(Qt::NoPen);
             p.setBrush(lights[i].c);
             p.drawEllipse(c, 5, 5);
@@ -102,6 +105,7 @@ private:
         uint8_t segs = 0;
         for (auto& m : map)
             if (m.c == ch) segs = m.s;
+        if (uint8_t(ch) & 0x80) segs = uint8_t(ch) & 0x7f;  // raw segments (power-up light test)
         QColor on(0x40, 0x9c, 0xff), off(0x1c, 0x22, 0x30);  // blue display (SLS0563DBA1GD)
         double w = r.width(), h = r.height(), th = 6, hh = h / 2;
         QRectF seg[7] = {
