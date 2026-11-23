@@ -39,6 +39,11 @@ On Windows, if the submodule fails with "Filename too long" or "'$GIT_DIR' too b
 
 TBD currently has not had its first spin. TBD
 
+## Layout status
+The `single-sided` branch puts every assembled part on the top of a 4-layer board. Routing is in progress: see
+[Docs/single_sided_layout.md](Docs/single_sided_layout.md) for the layout and
+[Docs/routing_handoff.md](Docs/routing_handoff.md) for what is routed, what is open and how to continue.
+
 
 ## 3D case
 See 3D case found here

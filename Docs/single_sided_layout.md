@@ -77,6 +77,11 @@ They are DNP test points, so JLC places nothing on them.
 4. **Edge connectors.** CN1, CARD1, J9 and J1 sit at the board edge. Check how far each should overhang the outline.
 5. **JLC rotation.** The `JLCPCB Rotation Offset` fields are unchanged. Check the flipped parts (especially U1, D9
    and the mics) in JLC's placement preview.
+6. **Parts moved for routing (22-23 Nov).** Around U7: Y1, C3, C6, R1 1 mm down; C30, C23 1 mm right. Around U18:
+   the C79-C89 cap row 1.2 mm up and spread out, their test points into two rows on the back, C92 and C93 turned
+   sideways, C73 flipped, C76, C90, D15, L5 and C96 nudged, C91 and C94 moved out of the way. Check the new
+   courtyard overlaps (C92/U18, C73/L5/C75, R66/L5) and that the decoupling still sits close enough to its pins.
+   Routing status and what is still open: `routing_handoff.md`.
 
 ## USB stitching, Ethernet SPI, U20 and U21 (22 Nov 2026)
 
