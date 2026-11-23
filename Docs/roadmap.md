@@ -77,6 +77,9 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 | 1.11 | Wi-Fi brought up with the same IP; Wi-Fi units hear and talk like wired ones (multicast first, wired relay if too lossy) | new |
 | 1.12 | Link rules. PoE power and Ethernet link: wired. PoE power, no Ethernet link: Wi-Fi, display alternates room and `E1`. No PoE (battery): Wi-Fi. `E2` if Wi-Fi is down too. Switch within 1 s | done (logic) / new (board) |
 | 1.13 | AXP2101: power source, battery %, charging in the status beacons; `Lo` on the display | new |
+| 1.13a | Fault display: the room number stays on; every 3 s the code flashes for 0.5 s (`E1` no cable link, `E2` no network at all, `Lo` battery low) | new |
+| 1.13b | Duplicate number: a unit ID (from the MAC) in every status beacon. A unit that hears its own number and letter from a different ID alternates `dUP` and the number every second, within about 1 s, until one is renumbered; the console shows it in red | new |
+| 1.13c | Code card: the codes printed on the case or a card by the display, and spelled out on the web page and console | new |
 | 1.14 | Check parking-lot Wi-Fi coverage (may need an outdoor access point) | new (site) |
 
 ### Updates and install
@@ -94,7 +97,8 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 - **Gym (decided 23 Nov):** gym units are 299a, 299b, 299c, 299d, set on the panel like any room (the letter is
   the fourth field). Same number = one room group, so they don't play each other back. Up to 4 units; no new code.
 - **Floor/room switches (SW1/SW2).** One digit each, so they can't hold a 3-digit room. Proposed: ignore in R1.
-- **Display codes.** Proposed: `E1`, `E2`, `Lo` as above.
+- **Display codes (23 Nov):** the room number stays the main thing shown; codes flash briefly (1.13a). Codes:
+  `E1`, `E2`, `Lo`, `dUP`.
 
 ## R2 Camera (middle)
 
