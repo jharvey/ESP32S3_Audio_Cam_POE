@@ -22,6 +22,28 @@ goes back to the earlier one first.
 Status: **done** = built and tested (in the simulator unless it says hardware), **code** = written and compiling,
 not run on a board, **new** = to write, **decide** = needs a decision first.
 
+## Increments
+
+Smaller steps inside the releases. Each one ends tested and usable before the next starts; most can be built and
+tested in the simulator before boards exist. Item numbers refer to the tables further down.
+
+| Increment | What it delivers | Items | Testable where | Status |
+|---|---|---|---|---|
+| R1.0 Bring-up | Self-test, two boards talking over PoE, speaker/mic check, measured echo delay | 1.1-1.4 | Board | waiting for boards |
+| R1.1 Wired intercom | TALK everyone, room = IP, fault codes, dUP, extra TALK buttons, hidden SETUP, watchdog | 1.5, 1.7, 1.8a, 1.9, 1.13a-b | Simulator, then board | done in code |
+| R1.2 Portable and failover | Wi-Fi with the same IP, link rules, battery readout, SD-card update | 1.10-1.13, 1.16 | Simulator (logic), board | code |
+| R1.3 Echo in the room | ESP-SR front end with both mics, auto-tune on the board, NLMS fallback | 1.6, 1.6a-b | Board | ESP-SR AEC links |
+| R1.4 Echo between rooms | Own-voice canceller, coupling-map chirp test, automatic room groups | 1.6c-e, 1.9a | Simulator first | next |
+| R1.5 Install and support | Console: TALK held, remote mute, faults and dUP in red; web status; USB tool for Wi-Fi and groups; code card | 1.8b, 1.13c, 1.17-1.20 | Simulator and PC | next |
+| R2.0 Room calls | Office calls a room or floor, call tone, answer to office, call-the-office button | 2.1-2.8 | Simulator | |
+| R2.1 Timed events | Time sync, schedule on each unit, chimes, days off, quiet hours | 2.9-2.15 | Simulator | |
+| R2.2 Opus | About 10x less audio bandwidth | Later list | Simulator, then board | |
+| R3.0 Video in the simulator | Simulated units stream test video; console video grid; audio ahead of video | 3.4-3.6 | Simulator | |
+| R3.1 Camera on the board | Camera driver, Q1 power, cover servo | 3.1-3.2 | Board | |
+| R3.2 Emergency mode | Alarm opens covers, streams to the NVR, cover snapshot self-test | 3.3-3.8 | Simulator, then board | |
+| R4.0 LoRa protocol | Alert and status messages, repeater, simulated | 4.1, 4.3 | Simulator | |
+| R4.1 LoRa on the board | RFM95 driver, 3rd-floor repeater | 4.2-4.3 | Board | |
+
 ## R0 Foundations (done)
 
 The intercom logic was built first, in a PC simulator that runs the same code as the firmware.
