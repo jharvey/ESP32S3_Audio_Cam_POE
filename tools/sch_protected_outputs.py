@@ -10,7 +10,7 @@
 import re, sys, uuid
 
 P = "ESP32S3_Audio_Cam_POE.kicad_sch"
-s = open(P, encoding="utf-8", newline="").read()
+s = open(P, encoding="utf-8", newline="").read().replace("\r\n", "\n")  # git may check it out with CRLF
 assert 'lib_id "Project:SY6288"' not in s, "already done"
 
 # channel: (FET, series R, gate-source R, 0-ohm link, fault label, U21 label it replaces, part, LCSC)

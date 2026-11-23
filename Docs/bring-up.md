@@ -71,10 +71,12 @@ The camera stays powered and drives GPIO45 during a reset, which can select 1.8 
 
 ## Front-panel buttons
 
-- PB6-PB12 each have a 1 kΩ resistor (R109-R115) between the switch and its TM1637 SEG line. It limits the
-  current when two buttons on the same K line are pressed together. Press each button and check the console
-  shows it (PB7-PB12 = TALK, PB6 = SETUP). If one never registers, fit 0 Ω in its resistor's place.
-- Press two TALK buttons together (e.g. PB10 and PB12): talking must still work and the display must not ghost.
+- All eleven buttons are on U22 (second TCA9555, I2C 0x21): each switches its own input to ground (internal
+  pull-ups). `selftest` must list U22 at 0x21. Press each button and check the console shows it (PB1 and
+  PB7-PB12 = TALK, PB2 MODE, PB4 UP, PB5 DOWN, PB6 = hidden SETUP).
+- Press two buttons together (e.g. MODE + UP): both must show; the TM1637 key scan could only see one.
+- Short each output's load connector (J11-J13, J17-J19) to ground through a 1 Ω resistor with the output on:
+  the console must print `OUTPUT FAULT` for that output within about 0.1 s and the 5 V rail must stay up.
 
 ## Not on the first boards yet
 

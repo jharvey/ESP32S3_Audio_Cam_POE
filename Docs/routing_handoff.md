@@ -84,8 +84,12 @@ only three thermal-spoke warnings on the grounded 0-ohm links. Needs routing: ea
 OUT, EN, and the seven fault lines to U21.
 
 ## Open, needs hand work
-- New front-panel buttons PB6-PB12 and their 1 kΩ resistors R109-R115 (commit 73bbe0d): 21 short connections
-  near the display (K1/K2, BTNn, SEGn), plus CHIP_BOOT under PB8 (two router segments removed). Not routed yet.
+- Buttons on U22 (23 Nov 2026): all eleven buttons now go to a second TCA9555, U22 (I2C 0x21, at 104.5,123.8
+  rot 90, where the rotary switches were; C109 100 nF beside it), one input each plus a ground: /BTN.TALK1, .MODE,
+  .UP, .DOWN, .SETUP, .TALK7-.TALK12. R109-R115 are gone; the buttons no longer touch K1/K2 or the SEG lines.
+  U22 INT shares /EXP.INT with U21. Scripts: tools/sch_button_expander.py (done), tools/pcb_sync_netlist.py
+  (re-run on a routed copy with U22=104.5,123.8,90 C109=111.5,118,0). Unconnected after: 113. CHIP_BOOT under
+  PB8 is still to route.
 - U18 bottom row (pins 31-40). L9/C97 sit too close. Plan: move L9 and C95 1 mm down and C97 to the left of L9,
   then fan J16/VDCDC5 left, SW down between, and vias for J14, Vsys 34/36, VBUS, IRQ, SCL, SDA.
 - SPK.DIN and I2S.WS into U15 (fine-pitch amp; needs a hand fan-out like U7 and U18).
