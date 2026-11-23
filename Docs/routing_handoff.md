@@ -42,7 +42,9 @@ State of the single-sided board and how to pick the work up in a fresh session. 
 - Other open: SPK.DIN and I2S.WS into U15 (fine-pitch amp, needs a hand fan-out like U7/U18), LORA_CS (lane end
   boxed in at 130.0, 103.66), FLASH_QSPI_DO (pin 34), RC.PAN, VBUS (R108 to the far side), Vsys and C91/C94.
 - ETH.MISO/MOSI to the W5500: In2 below U7 is walled off by the SD and flash lines, so route the W5500 branch
-  from the LoRa module pins (U19 pads 10/11 at 120.95, 80.75/82.75), which share the bus.
+  from the LoRa module pins (U19 pads 10/11 at 120.95, 80.75/82.75), which share the bus. A router run from that
+  end also failed: R24.1/R25.1 (76.4/77.6, 142.29) are boxed in by the U9-side vias and the ETH.SCLK/CS
+  diagonals just above them. Needs a hand escape from R24.1/R25.1 first (or move R22-R27 down about 0.5 mm).
 - Router change: `route9.py` on VM105 takes `ANCH="net@x,y,layers;..."` to move a net's end onto a hand-drawn
   stub end instead of a fine-pitch pad.
 
