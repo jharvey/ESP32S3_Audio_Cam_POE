@@ -13,7 +13,7 @@ Last updated: 23 Nov 2026.
 | R1 Intercom | `fw/r1-intercom` | A PoE intercom: hold TALK and every unit hears you, wired or Wi-Fi |
 | R2 Camera | `fw/r2-camera`, cut from R1 | Camera, cover servo, emergency video |
 | R3 LoRa | `fw/r3-lora`, cut from R2 | LoRa alerts and repeaters; role still to define |
-| Later | | Tracking, laser, Opus and ESP-SR, encryption, console extras |
+| Later | | Tracking, laser, Opus, encryption, console extras |
 
 Each release branch is cut from the one before, so it starts from working code. A fix found on a later branch
 goes back to the earlier one first.
@@ -65,7 +65,13 @@ phases 0 (bring-up), 1 (wall unit), 2 (install) and 4 (portable units).
 | # | Feature | Status |
 |---|---|---|
 | 1.5 | Hold TALK: raw PCM (16 kHz, 20 ms) on UDP multicast; every unit mixes and plays | done (sim) / code |
-| 1.6 | NLMS echo cancelling on the board | done (sim) / code |
+| 1.6 | NLMS echo cancelling on the board (the fallback once 1.6a works) | done (sim) / code |
+| 1.6a | **Advanced echo cancelling:** ESP-SR audio front end with both mics: echo cancelling, beamforming, noise suppression, auto gain, voice detection. First check it builds under Arduino-ESP32 / PlatformIO (else ESP-IDF) | new |
+| 1.6b | **Auto-tune on the board:** run the built auto-tune with the real speaker, mics and case; pick settings for ESP-SR as well as NLMS; re-run after install | done (sim) / new (board) |
+| 1.6c | **Cross-room echo, own voice:** while a unit talks, cancel its own voice coming back from neighbouring rooms' speakers, using its sent audio (delayed by the network and jitter buffer) as a second echo reference | new |
+| 1.6d | **Cross-room echo, neighbours' speakers:** a longer canceller tail or extra suppression for room-to-room paths; ducking of nearby units while one talks, if needed | new |
+| 1.6e | **Coupling map:** at install, each unit chirps in turn while the others listen; the result shows which rooms hear each other and sets 1.6c/1.6d per unit; shown on the console | new |
+| 1.6f | Gym and corridor test with real units: residual echo measured per room and between rooms | new (needs boards) |
 | 1.7 | Watchdog and automatic restart; log the reset reason | new |
 | 1.8 | Confirm the button mapping (`Panel.h`) against the case labels | new |
 
@@ -128,7 +134,6 @@ Covers the old phase 5 and the console's alarm.
 | Feature | Notes |
 |---|---|
 | Opus codec | Cuts audio bandwidth about 10× |
-| ESP-SR audio front end with both mics | Beamforming, noise suppression, AGC; NLMS stays as the fallback |
 | Signed audio packets, then encrypted audio | Stops spoofed all-calls, then eavesdropping |
 | Listen-in from the office | Needs a privacy decision first |
 | Pan/tilt person tracking and a Class 2 laser | ESP-DL on the unit |
@@ -156,6 +161,9 @@ Signing and then encrypting audio come later.
 ## Risks
 
 - **Echo cancelling in the gym** may still need ducking (half duplex), even with ESP-SR.
+- **ESP-SR availability:** it's a prebuilt Espressif library; if it doesn't link under Arduino-ESP32 3.x, R1 moves
+  to ESP-IDF (bigger change, decided early in R1). The simulator keeps the portable canceller either way.
+- **Cross-room echo** is only modelled roughly in the simulator; the real numbers come from 1.6f.
 - **Ethernet and Wi-Fi with the same IP** is untested in lwIP.
 - **CPU budget** with ESP-SR, Opus and the camera at once is unknown until measured.
 - **USB and SD-only updates** mean a bug found after install needs a visit to every room; the pilot is there to
