@@ -871,20 +871,20 @@ static void testPanelDriver() {
                   chip.frames[2] == std::vector<uint8_t>{0x8C};
     CHECK(ok && frames, "display \"21.4\": data command, 3 digits with the dot, display on (chip ACKed every byte)");
 
-    struct Case { uint8_t code; Button b; const char* name; };
-    const Case cases[] = {{0xF7, kBtnTalk, "PB1 TALK"}, {0xEF, kBtnMode, "PB2 MODE"}, {0xF5, kBtnUp, "PB4 UP"}, {0xEE, kBtnDown, "PB5 DOWN"},
-                          {0xF6, kBtnSetup, "PB6 SETUP"}, {0xF4, kBtnTalk, "PB7 TALK"}, {0xED, kBtnTalk, "PB8 TALK"}, {0xEC, kBtnTalk, "PB9 TALK"},
-                          {0xF3, kBtnTalk, "PB10 TALK"}, {0xEB, kBtnTalk, "PB11 TALK"}, {0xF2, kBtnTalk, "PB12 TALK"}};
-    for (const Case& c : cases) {
-        chip.keyCode = c.code;
-        uint8_t got = 0;
-        bool r = tm.readKeys(&got);
-        CHECK(r && got == c.code && board::buttonsFromKey(got) == (1u << c.b), "key scan 0x%02X -> %s", got, c.name);
-    }
-    chip.keyCode = 0xFF;
+    // Buttons are on U22 (TCA9555 0x21), one input each, pressed = 0.
+    struct Case { int bit; Button b; const char* name; };
+    const Case cases[] = {{0, kBtnTalk, "PB1 TALK"}, {1, kBtnMode, "PB2 MODE"}, {2, kBtnUp, "PB4 UP"}, {3, kBtnDown, "PB5 DOWN"},
+                          {4, kBtnSetup, "PB6 SETUP"}, {5, kBtnTalk, "PB7 TALK"}, {6, kBtnTalk, "PB8 TALK"}, {7, kBtnTalk, "PB9 TALK"},
+                          {8, kBtnTalk, "PB10 TALK"}, {9, kBtnTalk, "PB11 TALK"}, {10, kBtnTalk, "PB12 TALK"}};
+    for (const Case& c : cases)
+        CHECK(board::buttonsFromInputs(uint16_t(~(1u << c.bit))) == (1u << c.b), "U22 P%d%d low -> %s", c.bit / 8, c.bit % 8, c.name);
+    CHECK(board::buttonsFromInputs(0xFFFF) == 0, "nothing pressed -> no buttons");
+    CHECK(board::buttonsFromInputs(uint16_t(~((1u << 1) | (1u << 2)))) == ((1u << kBtnMode) | (1u << kBtnUp)),
+          "MODE + UP together are both seen (the old key scan saw one)");
+    CHECK(board::buttonsFromInputs(uint16_t(~(1u << 13))) == 0, "free inputs P15-P17 do nothing");
     uint8_t got = 0;
+    chip.keyCode = 0xFF;
     tm.readKeys(&got);
-    CHECK(got == 0xFF && board::buttonsFromKey(got) == 0, "no key -> no buttons");
 
     FakeTm1637 missing;
     missing.present = false;

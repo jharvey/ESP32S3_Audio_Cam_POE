@@ -908,8 +908,8 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     const uint8_t talkBit = 1u << kBtnTalk;
     const uint8_t combo = (1u << kBtnMode) | (1u << kBtnUp);
 
-    // Auto-tune from the panel: MODE + UP held 3 s, or UP alone held 5 s. (The board's TM1637
-    // key scan reports one key at a time, so on hardware only the UP-alone hold works.)
+    // Auto-tune from the panel: MODE + UP held 3 s, or UP alone held 5 s. (Both work on boards
+    // from 75d75fb, where the buttons are on their own expander; the older TM1637 key scan saw one key.)
     const bool comboHeld = (held & combo) == combo;
     const bool upHeld = held == (1u << kBtnUp);
     if ((comboHeld || upHeld) && !setup_.active()) {

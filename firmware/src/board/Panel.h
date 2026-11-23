@@ -1,45 +1,43 @@
-// Front-panel buttons: which TM1637 key-scan position is which button.
+// Front-panel buttons: which input of the second TCA9555 (U22, I2C 0x21) is which button.
 //
-// PCB wiring (from the board file):  PB1 = K1 + SEG1   PB2 = K2 + SEG1   PB4 = K1 + SEG3   PB5 = K2 + SEG2
-//                                    PB6 = K1 + SEG2   PB7 = K1 + SEG4   PB8 = K2 + SEG3   PB9 = K2 + SEG4
-//                                    PB10 = K1 + SEG5  PB11 = K2 + SEG5  PB12 = K1 + SEG6 (column left of the display)
-//                                    (PB3 is the AXP2101 power button, not on the scan)
-// Function of each button: ASSUMED (PB1 TALK, PB2 MODE, PB4 UP, PB5 DOWN; PB6 hidden SETUP under the
-// front cover; PB7-PB12 more TALK buttons, any one talks). Change the table if the case differs.
-// Free key positions for later buttons: K1 + SEG7-8, K2 + SEG6-8.
+// Board 75d75fb: every button switches its own U22 input to ground (TCA9555 internal pull-ups), so
+// several buttons can be pressed at once (the TM1637 key scan they used before saw only one).
+//   P00 PB1 TALK   P01 PB2 MODE   P02 PB4 UP   P03 PB5 DOWN   P04 PB6 hidden SETUP (under the cover)
+//   P05 PB7  P06 PB8  P07 PB9  P10 PB10  P11 PB11  P12 PB12: more TALK buttons, any one talks
+//   P13-P17 free.  (PB3 is the AXP2101 power button, not on U22.)
 #pragma once
 #include <cstdint>
 
 #include "Hal.h"
-#include "Tm1637.h"
 
 namespace board {
 
-struct KeyMap {
-    int k, seg;
+constexpr uint8_t kButtonExpanderAddr = 0x21;
+
+struct PinMap {
+    int bit;  // 0..15 = P00..P17
     ic::Button button;
 };
-constexpr KeyMap kPanelKeys[] = {
-    {1, 1, ic::kBtnTalk},  // PB1
-    {2, 1, ic::kBtnMode},  // PB2
-    {1, 3, ic::kBtnUp},    // PB4
-    {2, 2, ic::kBtnDown},  // PB5
-    {1, 2, ic::kBtnSetup}, // PB6 (hidden)
-    {1, 4, ic::kBtnTalk},  // PB7
-    {2, 3, ic::kBtnTalk},  // PB8
-    {2, 4, ic::kBtnTalk},  // PB9
-    {1, 5, ic::kBtnTalk},  // PB10
-    {2, 5, ic::kBtnTalk},  // PB11
-    {1, 6, ic::kBtnTalk},  // PB12
+constexpr PinMap kPanelPins[] = {
+    {0, ic::kBtnTalk},   // PB1
+    {1, ic::kBtnMode},   // PB2
+    {2, ic::kBtnUp},     // PB4
+    {3, ic::kBtnDown},   // PB5
+    {4, ic::kBtnSetup},  // PB6 (hidden)
+    {5, ic::kBtnTalk},   // PB7
+    {6, ic::kBtnTalk},   // PB8
+    {7, ic::kBtnTalk},   // PB9
+    {8, ic::kBtnTalk},   // PB10
+    {9, ic::kBtnTalk},   // PB11
+    {10, ic::kBtnTalk},  // PB12
 };
 
-// TM1637 key code -> the core's button bits. Only one key at a time (chip limitation).
-inline uint8_t buttonsFromKey(uint8_t code) {
-    int k, seg;
-    if (!Tm1637::keyIndex(code, &k, &seg)) return 0;
-    for (const KeyMap& m : kPanelKeys)
-        if (m.k == k && m.seg == seg) return uint8_t(1u << m.button);
-    return 0;
+// U22 input ports (bit n = Pn, P00..P17; a pressed button reads 0) -> the core's button bits.
+inline uint8_t buttonsFromInputs(uint16_t inputs) {
+    uint8_t held = 0;
+    for (const PinMap& m : kPanelPins)
+        if (!(inputs & (1u << m.bit))) held |= uint8_t(1u << m.button);
+    return held;
 }
 
 }  // namespace board
