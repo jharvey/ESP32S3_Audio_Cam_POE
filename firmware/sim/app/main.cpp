@@ -92,6 +92,7 @@ int main(int argc, char** argv) {
     p.addOption({"fresh", "Forget the saved room number for this name."});
     p.addOption({"headless", "No window."});
     p.addOption({"shot", "Save a PNG of the window on exit (with --quit-after).", "file"});
+    p.addOption({"pos", "Window position on screen, X,Y (for recorded walkthroughs).", "x,y"});
     p.process(*app);
 
     SimOptions o;
@@ -123,6 +124,10 @@ int main(int argc, char** argv) {
     if (!headless) {
         win.reset(new SimWindow(&unit));
         win->show();
+        if (p.isSet("pos")) {
+            QStringList xy = p.value("pos").split(',');
+            if (xy.size() == 2) win->move(xy[0].toInt(), xy[1].toInt());
+        }
         if (p.isSet("shot")) {  // save a picture of the window when the run ends (docs, checks)
             QString path = p.value("shot");
             SimWindow* w = win.get();

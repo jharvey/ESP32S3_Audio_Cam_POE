@@ -148,7 +148,7 @@ SimWindow::SimWindow(SimUnit* unit, QWidget* parent) : QWidget(parent), unit_(un
     status_ = new QLabel;
     status_->setWordWrap(true);
     left->addWidget(status_);
-    left->addWidget(new QLabel("<small>Room setup: hold MODE 3 s, UP/DOWN change a digit, MODE next, MODE on the letter saves.</small>"));
+    left->addWidget(new QLabel("<small>Room setup: hold SETUP (hidden, under the cover) 3 s, UP/DOWN change a digit, MODE next, MODE on the last digit saves.</small>"));
     left->addStretch();
     root->addLayout(left, 0);
 

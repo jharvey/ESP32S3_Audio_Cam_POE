@@ -1,5 +1,7 @@
 #include "SimUnit.h"
 
+#include <QRandomGenerator>
+
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
@@ -219,6 +221,7 @@ void SimUnit::tick() {
         aec_.reset(new ic::NlmsAec(2048, 0));
         ic::IntercomOptions io;
         io.maxTaps = 4096;  // a PC can run more; the S3 limit is set in the firmware
+        io.unitUid = QRandomGenerator::global()->generate() | 1u;  // stands in for the board's MAC (finds duplicates)
         io.runBackground = [this](std::function<void()> job) {
             if (analysis_.joinable()) analysis_.join();
             analysis_ = std::thread(std::move(job));
