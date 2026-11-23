@@ -58,6 +58,14 @@ what changed from v0.1b) is in `single_sided_layout.md`.
   C94 parked at (58.5, 150.5) for the router.
 - New courtyard overlaps around U18 (C92/U18, C73/L5/C75, R66/L5); check in KiCad.
 
+## LED change, 23 Nov 2026 (after the WB/WC/WD routing runs were started)
+
+D3 and D4 turned 180 degrees in place (now anode to +3V3 with a via, cathode to R34/R35), a COM track joins C36 to
+C37 (C36's ground used to reach the pour through D4), D14 blue C2293, R66 1 kOhm. The routing runs on VM105 started
+from the board before this: after taking a routed result, run
+`"C:\Program Files\KiCad\10.0\bin\python.exe" tools\pcb_led_fix.py ESP32S3_Audio_Cam_POE.kicad_pcb` on it
+(it skips what is already done) and check DRC near D3/D4.
+
 ## Open, needs hand work
 - New front-panel buttons PB6-PB12 and their 1 kΩ resistors R109-R115 (commit 73bbe0d): 21 short connections
   near the display (K1/K2, BTNn, SEGn), plus CHIP_BOOT under PB8 (two router segments removed). Not routed yet.

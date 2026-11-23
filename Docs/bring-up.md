@@ -61,6 +61,8 @@ The camera stays powered and drives GPIO45 during a reset, which can select 1.8 
 - [ ] Browse to `http://10.42.20.14`: log in, check the status page updates every second, run the test tone and auto-tune from the page.
 - [ ] Office console (`intercom-console --key <key>`): both boards show, `stats` to one board gets a reply, all-call is heard on both.
 - [ ] Pull the PoE cable: the board shows OFFLINE in the console within 4 s.
+- [ ] LEDs: yellow D3 on with a cable in and off without; green D4 blinks with traffic (ping -t). On battery
+  charging, blue D14 is lit.
 
 ## 7. Record
 

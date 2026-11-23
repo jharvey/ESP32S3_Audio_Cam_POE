@@ -76,4 +76,8 @@ Suggestions for the 3D-printed case and for lowering the JLCPCB order cost. Boar
   infrared, and that current lights nothing. If they are meant as visible indicators, a JLC basic visible LED
   (green or red 0603) fits better; if they were meant to light the scene for the camera, they need to be IR
   illuminator parts with far more current.
-- D3 (yellow) is the W5500 network-link LED and D14 (yellow) the PMU charge LED, not lamps.
+- Status LEDs (23 Nov 2026): D3 yellow = Ethernet link, D4 green = Ethernet activity (blinks on transmit and
+  receive; the W5500 has one activity output for both), D14 **blue** = charging (KT-0805B, C2293, with R66 now
+  1 kOhm so it lights from Vsys), D15 green = PMU power good, D8 green = USB power, D10 red = 3.3 V. D3/D4 were
+  wired backwards (the W5500 LED pins are active low: they pull low when lit): now anode to +3V3, cathode through
+  R34/R35 to the pin. D9 (WS2812B RGB) is separate and unchanged. These are not the lamp outputs.

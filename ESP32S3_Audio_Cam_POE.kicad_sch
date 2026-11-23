@@ -42778,16 +42778,6 @@
 	)
 	(wire
 		(pts
-			(xy 367.03 83.82) (xy 367.03 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "69b89070-f5be-4c31-af43-c31713d42323")
-	)
-	(wire
-		(pts
 			(xy 468.63 364.49) (xy 478.79 364.49)
 		)
 		(stroke
@@ -51378,6 +51368,93 @@
 		)
 		(uuid "fe8b9fca-d0ae-412c-870b-f51d27dd3037")
 	)
+	(wire
+		(pts
+			(xy 367.03 76.2) (xy 367.03 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0efc8fe5-c89e-4be9-8f3b-c7fb54299790")
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 367.03 76.2 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "fdb7daff-801a-45b5-887f-1ae77a624cf0")
+		(property "Reference" "#PWR0344"
+			(at 370.84 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 367.03 72.39 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 367.03 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 367.03 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 367.03 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5949d63e-7e34-4a4c-967c-44d4e0454f05")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0344")
+					(unit 1)
+				)
+			)
+		)
+	)
 	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 373.38 160.02 180)
@@ -57622,7 +57699,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0402,10kΩ")
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
 		(at 199.39 358.14 270)
 		(mirror x)
 		(unit 1)
@@ -57643,7 +57720,7 @@
 				)
 			)
 		)
-		(property "Value" "10kΩ"
+		(property "Value" "1kΩ"
 			(at 199.39 358.14 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -57675,7 +57752,7 @@
 				)
 			)
 		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 10kΩ 0402 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
 			(at 199.39 358.14 0)
 			(hide yes)
 			(show_name no)
@@ -57686,7 +57763,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25744"
+		(property "LCSC" "C11702"
 			(at 199.39 358.14 0)
 			(hide yes)
 			(show_name no)
@@ -63260,7 +63337,7 @@
 				)
 			)
 		)
-		(property "Value" "Yellow"
+		(property "Value" "Blue"
 			(at 212.09 356.616 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -63292,7 +63369,7 @@
 				)
 			)
 		)
-		(property "Description" "Yellow 0805 LED Indication - Discrete ROHS"
+		(property "Description" "Blue 0805 LED Indication - Discrete ROHS (KENTO KT-0805B)"
 			(at 208.28 358.14 0)
 			(hide yes)
 			(show_name no)
@@ -63303,7 +63380,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C2296"
+		(property "LCSC" "C2293"
 			(at 208.28 358.14 0)
 			(hide yes)
 			(show_name no)
@@ -83141,6 +83218,7 @@
 	(symbol
 		(lib_id "JLCPCB-Diodes:LED,0805,Green")
 		(at 363.22 83.82 90)
+		(mirror y)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -86205,7 +86283,7 @@
 	(symbol
 		(lib_id "JLCPCB-Diodes:LED,0805,Yellow")
 		(at 363.22 78.74 90)
-		(mirror x)
+		(mirror y)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
