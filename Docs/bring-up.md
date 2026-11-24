@@ -16,6 +16,8 @@ or come from `firmware/tools/update-unit.bat`.
 - [ ] `pio run -t upload`, or `update-unit.bat setup --flash` once a release exists.
 - [ ] The console prints `unit 0, ip 10.42.0.0, aec NLMS, default tuning: ...` at boot.
 - [ ] `version` replies `firmware 0.2.0` (or newer).
+- [ ] Power-cycle 10 times: it must start the firmware every time, never sit in flashing mode (GPIO0 has the R109 10k
+  pull-up; C71, the old 100 nF debounce cap on GPIO0, is not fitted). If an upload can't connect: hold BOOT, tap RST.
 
 ## 2. Strapping-pin fix (camera on GPIO45/46)
 
