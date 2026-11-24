@@ -135,6 +135,8 @@ document.getElementById("rooms").addEventListener("click",e=>{
   if(document.getElementById("tkind").value==="all")document.getElementById("tkind").value="room";
   document.querySelectorAll(".room.sel").forEach(x=>x.classList.remove("sel"));c.classList.add("sel");updTarget();});
 document.getElementById("tkind").addEventListener("change",updTarget);
+// a dot clicked on the floor plan picks its room, as clicking its card does
+window.onPlanPick=u=>{const c=document.querySelector('.room[data-room="'+u.room+'"]');if(c)c.click();};
 function setState(t,cls){const e=document.getElementById("tstate");e.textContent=t;e.className=cls||"mute";}
 async function startTalk(){
   if(talking)return;
