@@ -22,7 +22,7 @@ Today: the PC office console (`firmware/sim/console`), a Windows program. *(Plan
 ## School status page (web console, step 1)
 
 Open `http://<office unit's address>/school` in Chrome, Edge or Firefox on the office PC (same login as the
-unit's own page; the office unit is room 100, so `http://10.42.1.100/school`). It shows every unit, floor by floor,
+unit's own page; for example, if the office unit is set to room 100: `http://10.42.1.100/school`). It shows every unit, floor by floor,
 updated every 2 seconds:
 - green OK; yellow talking; blue calling the office; orange degraded (on Wi-Fi with PoE power, muted);
 - red: offline (with when it was last heard), duplicate number, TALK held, battery low, output shorted (`oL`);
