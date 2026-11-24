@@ -1,7 +1,9 @@
 // ESP32-S3 (U7) pin map, taken from the schematic netlist after the 2026-11-22 pin remap
 // (pins re-assigned to untangle the ratsnest for the single-sided layout), and the 2026-11-24 camera remap:
 // the camera's fast lines (D0-D7, PCLK, XCLK) moved to U7's left and bottom edges, nearest the FPC, so they
-// reach it on the top layer without crossing USB (pins 25/26).
+// reach it on the top layer without crossing USB (pins 25/26). Then SD and Ethernet moved to the right edge
+// (pins 6-11, GPIO1-6): their lines leave the bottom-right corner and pass under the camera bundle to the SD
+// card and W5500 (lower left) without crossing it.
 // Regenerate this if the schematic changes.
 #pragma once
 
@@ -11,15 +13,15 @@ constexpr int RGB_LED_GPIO = 0;  // D9 WS2812B data on GPIO0 (CHIP_BOOT strap: d
 
 // I2C bus: PCA9685 0x40 (U20), TCA9555 0x20 (U21), AXP2101 0x34 (U18)
 constexpr int I2C_SCL = 43;
-constexpr int I2C_SDA = 14;
+constexpr int I2C_SDA = 12;
 
 // Shared SPI: W5500 Ethernet (U9) and RFM95 LoRa (U19)
-constexpr int SPI_MOSI = 4;     // GPIO matrix
-constexpr int SPI_MISO = 3;
-constexpr int SPI_SCLK = 12;   // FSPICLK IO_MUX pin
+constexpr int SPI_MOSI = 6;     // GPIO matrix
+constexpr int SPI_MISO = 5;
+constexpr int SPI_SCLK = 4;
 constexpr int ETH_CS = 13;
-constexpr int LORA_CS = 5;
-constexpr int LORA_DIO0 = 6;   // LORA_IRQ
+constexpr int LORA_CS = 11;
+constexpr int LORA_DIO0 = 10;  // LORA_IRQ
 
 // PDM microphones U16/U17 (L/R by JP7/JP8) on I2S0
 constexpr int MIC_CLK = 9;
@@ -28,11 +30,11 @@ constexpr int MIC_DATA = 7;
 // Speaker amp MAX98357A (U15) on I2S1
 constexpr int SPK_BCLK = 16;  // net /ESP.MIC.SCK (XTAL_32K_N, free: no 32 kHz crystal fitted)
 constexpr int SPK_WS = 8;     // net /ESP.I2S.WS
-constexpr int SPK_DOUT = 2;   // net /SPK.DIN
+constexpr int SPK_DOUT = 14;  // net /SPK.DIN
 
 // SD card, SDMMC 1-bit (DAT3 pulled up by R29, not on a GPIO)
-constexpr int SD_CLK = 10;
-constexpr int SD_CMD = 11;   // net /SD.MOSI
+constexpr int SD_CLK = 2;
+constexpr int SD_CMD = 3;    // net /SD.MOSI. GPIO3 is the JTAG-source strap, ignored unless its eFuse is burned
 constexpr int SD_D0 = 1;
 
 // Camera (OV2640 / OV5640). No PWDN/RESET GPIOs; power via TCA9555 P03.
@@ -49,7 +51,7 @@ constexpr int CAM_D4 = 40, CAM_D5 = 42, CAM_D6 = 44, CAM_D7 = 46;  // pins 45, 4
 // GPIO46 = 1 is not a valid boot mode. At power-up the camera is off (TCA9555 P04 is an input at reset, R14
 // holds Q1 off), so this only bites if the camera is powered when BOOT is held. Keep it that way: power the camera off (CAM_PWR high) before
 // any restart. Normal SPI boot (GPIO0 high) ignores GPIO46.
-// GPIO3 (ETH.MISO) is the JTAG-source strap; it is ignored unless the STRAP_JTAG_SEL eFuse is burned.
+// GPIO3 (SD.MOSI = SD CMD) is the JTAG-source strap; it is ignored unless the STRAP_JTAG_SEL eFuse is burned.
 
 // TCA9555 (U21) port bits
 namespace exp {
