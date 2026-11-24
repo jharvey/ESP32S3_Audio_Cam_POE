@@ -8,6 +8,7 @@
 //   GET  /api/status   live state as JSON (polled by the page once a second)
 //   GET  /school       whole-school status: every unit this one hears, as a grid of rooms
 //   GET  /api/school   that list as JSON (offline units stay listed, marked offline)
+//   GET  /floorplan.js the floor plan map on /school (the DXF is loaded and kept in the browser only)
 //   POST /api/talk     web console talk: body = base64 of 16 kHz mono 16-bit PCM (about 100 ms per post);
 //                      this unit transmits it as an office all-call. Needs X-Intercom: 1.
 //   POST /api/cmd      body = one console command, reply = its text. Needs header X-Intercom: 1
@@ -59,6 +60,7 @@ private:
 
 const char* webPage();     // WebPage.cpp
 const char* schoolPage();  // SchoolPage.cpp
+const char* floorPlanJs();  // FloorPlanJs.cpp: the floor plan map on /school (DXF loaded in the browser)
 bool base64Decode(const std::string& in, std::vector<uint8_t>* out);
 
 }  // namespace ic

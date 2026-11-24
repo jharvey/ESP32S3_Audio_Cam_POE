@@ -39,6 +39,7 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 <main><div id="err"></div>
 <div class="talkbar"><button id="talk" title="Hold the button (or the space bar) and speak">Hold to talk to everyone</button>
 <div class="meterbox"><div id="tmeter"></div></div><span id="tstate" class="mute">Uses this PC's microphone. Rooms answer on the office unit.</span></div>
+<div id="plan"></div>
 <div id="rooms"></div></main>
 <script>
 const FAULT=["","E1 no Ethernet (on Wi-Fi)","E2 no network","Lo battery low","dUP duplicate number","oL output shorted"];
@@ -71,6 +72,7 @@ async function tick(){
     const floors={};for(const u of us){const fl=Math.floor(u.room/100);(floors[fl]=floors[fl]||[]).push(u);}
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
+    if(window.planUpdate)planUpdate(us);  // floor plan map (/floorplan.js)
   }catch(e){document.getElementById("err").textContent="Can't reach the unit: "+e.message;}
 }
 tick();setInterval(tick,2000);
@@ -127,7 +129,7 @@ document.addEventListener("keydown",e=>{if(e.code==="Space"&&!e.repeat&&e.target
 document.addEventListener("keyup",e=>{if(e.code==="Space")stopTalk();});
 window.addEventListener("blur",stopTalk);
 if(location.hash==="#test-talk"){setTimeout(startTalk,1500);setTimeout(stopTalk,5500);}  // scripted check: talk 4 s
-</script></body></html>)PAGE";
+</script><script src="/floorplan.js"></script></body></html>)PAGE";
 }
 
 }  // namespace ic

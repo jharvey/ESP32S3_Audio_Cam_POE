@@ -32,6 +32,14 @@ updated every 2 seconds:
 
 Any unit can show this page, so it still works if the office unit is the one that failed.
 
+**Floor plan:** press **Load a DXF floor plan…** and pick the school's DXF drawing. Each layer that has room
+numbers in its labels (like `ART 101`) becomes a floor tab, and every unit is shown as a coloured dot on its room
+(same colours as above); a tab gets a red or blue dot when something on that floor needs attention or is calling.
+Units whose number isn't a room on the drawing (the gym units 299, 298, ...) are listed above the map: click one,
+then click where it hangs (one per corner of the gym). Click any dot to move it. The drawing and the positions are
+kept in this browser only (they are not stored on the unit and are not part of the firmware), so load the DXF once
+on each office PC; positions clicked on one PC have to be clicked again on another.
+
 **Talking from the PC:** hold **Hold to talk to everyone** (or the space bar) and speak into the PC's microphone
 or headset: the unit sends it to every room as an office all-call, and the meter shows your voice level. Rooms
 that answer are heard on the office unit's own speaker. Use a headset if the PC is next to the office unit.

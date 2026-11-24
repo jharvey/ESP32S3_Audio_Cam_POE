@@ -1,0 +1,171 @@
+// Floor plan map for the school page (/floorplan.js). The office loads the school's DXF floor plan in the
+// browser; the script draws each floor (layers that carry room-number labels) and puts every unit on its
+// room, coloured by its status, refreshed with the room grid. The DXF and the unit positions stay in that
+// browser's local storage only: they are never sent to the unit (and so never end up in the firmware or
+// its repository). Units whose number isn't a room on the plan (gym units 299, 298 ...) are placed by
+// clicking: pick the unit, then click the map; click a dot to move it.
+#include "WebUi.h"
+
+namespace ic {
+
+const char* floorPlanJs() {
+    return R"JS((function(){
+"use strict";
+const KP="icPlan1",KU="icPlace1",KF="icPlanFloor";
+const st=document.createElement("style");
+st.textContent=`#plan{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 16px}
+#plan .bar{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}#plan .bar b{font-size:15px}
+#plan button{font:13px system-ui,sans-serif;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+#plan button.sel{border-color:var(--call);background:var(--callbg);color:var(--call);font-weight:600}
+#plan .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 6px}#plan .hint{font-size:13px;color:var(--mute);margin:4px 0}
+#plan svg{width:100%;height:auto;max-height:72vh;display:block;background:var(--bg);border-radius:6px;cursor:crosshair}
+#plan .wall{fill:none;stroke:var(--mute);stroke-linecap:round}#plan .lbl{fill:var(--mute)}
+#plan .dot{stroke:var(--card);cursor:pointer}#plan .num{fill:#fff;font-weight:700;pointer-events:none}
+#plan .ok{fill:var(--ok)}#plan .warn{fill:var(--warn)}#plan .bad{fill:var(--bad)}#plan .call{fill:var(--call)}#plan .talk{fill:#d4a800}
+#plan .chip{font-size:13px;padding:2px 8px}`;
+document.head.appendChild(st);
+const box=document.getElementById("plan");if(!box)return;
+function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
+let plan=load(KP,null),place=load(KU,{}),floor=load(KF,0),units=[],sel=null,msg="";
+
+// ---- DXF -> floors ---------------------------------------------------------------------------------
+function parseDxf(txt){
+  const L=txt.split(/\r?\n/),P=[];for(let i=0;i+1<L.length;i+=2)P.push([parseInt(L[i],10),L[i+1].trim()]);
+  const blocks={},ents=[];let sec=null,blk=null,hdr=false,cur=null;
+  const flush=()=>{if(cur)(blk?blk.ents:ents).push(cur);cur=null};
+  for(let i=0;i<P.length;i++){const c=P[i][0],v=P[i][1];
+    if(c===0){flush();
+      if(v==="SECTION"){sec=(P[i+1]&&P[i+1][0]===2)?P[i+1][1]:null;i++;continue}
+      if(v==="ENDSEC"){sec=null;continue}
+      if(sec==="BLOCKS"&&v==="BLOCK"){blk={name:"",x:0,y:0,ents:[]};hdr=true;continue}
+      if(v==="ENDBLK"){if(blk)blocks[blk.name]=blk;blk=null;hdr=false;continue}
+      hdr=false;if(sec==="ENTITIES"||(sec==="BLOCKS"&&blk))cur={t:v,g:[]};continue}
+    if(hdr&&blk){if(c===2)blk.name=v;else if(c===10)blk.x=+v;else if(c===20)blk.y=+v;continue}
+    if(cur)cur.g.push([c,v]);}
+  flush();return{blocks,ents};
+}
+function g1(e,c,d){for(const p of e.g)if(p[0]===c)return p[1];return d}
+function num(e,c,d){const v=g1(e,c,null);return v===null?d:+v}
+function cleanText(s){return s.replace(/\\P/g," ").replace(/\\[A-Za-z][^;\\]*;/g,"").replace(/[{}]/g,"").replace(/\s+/g," ").trim()}
+function build(dxf){
+  const lines={},texts=[];  // lines[layer] = [[x,y],...] polylines
+  const add=(lay,pts)=>{if(pts.length>1)(lines[lay]=lines[lay]||[]).push(pts)};
+  function walk(list,xf,over,depth){
+    let poly=null;
+    for(const e of list){
+      let lay=g1(e,8,"0");if(lay==="0"&&over)lay=over;
+      const P=(x,y)=>xf(x,y);
+      switch(e.t){
+      case "LINE":add(lay,[P(num(e,10,0),num(e,20,0)),P(num(e,11,0),num(e,21,0))]);break;
+      case "LWPOLYLINE":{const xs=[],ys=[];for(const p of e.g){if(p[0]===10)xs.push(+p[1]);else if(p[0]===20)ys.push(+p[1]);}
+        const pts=xs.map((x,k)=>P(x,ys[k]||0));if(num(e,70,0)&1&&pts.length)pts.push(pts[0]);add(lay,pts);break}
+      case "POLYLINE":poly={lay,pts:[],closed:num(e,70,0)&1};break;
+      case "VERTEX":if(poly)poly.pts.push(P(num(e,10,0),num(e,20,0)));break;
+      case "SEQEND":if(poly){if(poly.closed&&poly.pts.length)poly.pts.push(poly.pts[0]);add(poly.lay,poly.pts);poly=null}break;
+      case "ARC":case "CIRCLE":{const cx=num(e,10,0),cy=num(e,20,0),r=num(e,40,0);let a0=e.t==="ARC"?num(e,50,0):0,a1=e.t==="ARC"?num(e,51,360):360;
+        if(a1<=a0)a1+=360;const n=Math.max(3,Math.ceil((a1-a0)/12)),pts=[];
+        for(let k=0;k<=n;k++){const a=(a0+(a1-a0)*k/n)*Math.PI/180;pts.push(P(cx+r*Math.cos(a),cy+r*Math.sin(a)))}add(lay,pts);break}
+      case "INSERT":{const b=dxf.blocks[g1(e,2,"")];if(!b||depth>6)break;
+        const ix=num(e,10,0),iy=num(e,20,0),sx=num(e,41,1),sy=num(e,42,1),ro=num(e,50,0)*Math.PI/180,co=Math.cos(ro),si=Math.sin(ro);
+        walk(b.ents,(x,y)=>{const u=(x-b.x)*sx,v=(y-b.y)*sy;return xf(ix+u*co-v*si,iy+u*si+v*co)},lay,depth+1);break}
+      case "TEXT":case "MTEXT":if(depth===0){let s="";for(const p of e.g)if(p[0]===3)s+=p[1];s+=g1(e,1,"");
+        const q=P(num(e,10,0),num(e,20,0));texts.push({lay,s:cleanText(s),x:q[0],y:q[1]})}break;
+      }
+    }
+  }
+  walk(dxf.ents,(x,y)=>[x,y],null,0);
+  // A floor is a layer with room-number labels (3 digits).
+  const byLay={};
+  for(const t of texts){const m=t.s.match(/(^|\D)(\d{3})(?!\d)/g);if(!m)continue;
+    for(const tok of m){const n=+tok.replace(/\D/g,"");(byLay[t.lay]=byLay[t.lay]||[]).push({n,t})}}
+  // The floor number is the most common hundreds digit of its rooms (a floor may also label a room below it).
+  const hundOf=lay=>{const c={};for(const r of byLay[lay]){const h=Math.floor(r.n/100);c[h]=(c[h]||0)+1}
+    return +Object.keys(c).sort((a,b)=>c[b]-c[a]||a-b)[0]};
+  const lays=Object.keys(byLay).filter(l=>lines[l]).sort((a,b)=>hundOf(a)-hundOf(b));
+  if(!lays.length)throw new Error("no layer has room-number labels (like \"ART 101\")");
+  const floors=[],rooms={};
+  lays.forEach((lay,fi)=>{
+    const R=v=>Math.round(v*2)/2;let d="";const xs=[],ys=[];
+    for(const pl of lines[lay]){d+="M"+pl.map(p=>{xs.push(p[0]);ys.push(-p[1]);return R(p[0])+" "+R(-p[1])}).join("L")}
+    const lbl=texts.filter(t=>t.lay===lay&&t.s).map(t=>[R(t.x),R(-t.y),t.s.slice(0,40)]);
+    // view: the drawing, but no further than 30% beyond the labels, so a stray far-off bit doesn't shrink the floor
+    const mn=a=>a.reduce((m,v)=>Math.min(m,v),1e18),mx=a=>a.reduce((m,v)=>Math.max(m,v),-1e18);
+    const lx=lbl.map(t=>t[0]),ly=lbl.map(t=>t[1]),lw=mx(lx)-mn(lx),lh=mx(ly)-mn(ly),e=0.3*Math.max(lw,lh);
+    const x0=Math.max(mn(xs),mn(lx)-e),x1=Math.min(mx(xs),mx(lx)+e),y0=Math.max(mn(ys),mn(ly)-e),y1=Math.min(mx(ys),mx(ly)+e);
+    const hund=hundOf(lay);
+    floors.push({name:"Floor "+hund+" ("+lay+")",x0,y0,x1,y1,d,lbl});
+    for(const r of byLay[lay]){const old=rooms[r.n];
+      if(!old||Math.floor(r.n/100)===hund)rooms[r.n]={f:fi,x:R(r.t.x),y:R(-r.t.y)}}
+  });
+  return{floors,rooms,when:new Date().toISOString().slice(0,10)};
+}
+
+// ---- drawing ----------------------------------------------------------------------------------------
+function cls(u){const f=u.flags;if(!u.online)return"bad";if(f&32)return"call";if(u.fault===3||u.fault===4||u.fault===5||(f&16))return"bad";
+  if(u.fault||(f&8))return"warn";if(f&1)return"talk";return"ok"}
+const rank={bad:4,call:3,warn:2,talk:1,ok:0};
+function where(u){return place[u.unit]||(plan&&plan.rooms[u.room])||null}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function render(){
+  if(!plan){box.innerHTML=`<div class="bar"><b>Floor plan</b><button id="pload">Load a DXF floor plan…</button>
+    <span class="hint">Shows every unit on its room. The file stays in this browser only: it is not sent to the unit.</span>${msg?`<span class="hint">${esc(msg)}</span>`:""}</div>`;
+    hook();return}
+  if(floor>=plan.floors.length)floor=0;
+  const F=plan.floors[floor],w=F.x1-F.x0,h=F.y1-F.y0,m=Math.max(w,h)*0.03,r=Math.max(w,h)*0.011;
+  const fc=plan.floors.map(()=>({n:0,worst:"ok"}));const un=[];
+  for(const u of units){const p=where(u);if(!p){un.push(u);continue}const c=fc[p.f];if(!c)continue;c.n++;if(rank[cls(u)]>rank[c.worst])c.worst=cls(u)}
+  const tabs=plan.floors.map((f,i)=>`<button data-f="${i}" class="${i===floor?"sel":""}">${esc(f.name.replace(/ \(.*/,""))} · ${fc[i].n}${fc[i].worst!=="ok"?` <span style="color:var(--${fc[i].worst==="talk"?"talk":fc[i].worst})">●</span>`:""}</button>`).join("");
+  // dots: units sharing a spot sit side by side
+  const spots={};for(const u of units){const p=where(u);if(!p||p.f!==floor)continue;const k=p.x+","+p.y;(spots[k]=spots[k]||[]).push(u)}
+  let dots="";
+  for(const k in spots){const us=spots[k],p=where(us[0]);us.forEach((u,i)=>{const x=p.x+(i-(us.length-1)/2)*r*2.3,y=p.y+r*1.6;
+    dots+=`<g data-u="${u.unit}"><circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${sel===String(u.unit)?` style="stroke:var(--call);stroke-width:${r*0.45}"`:""}><title>${esc(u.unit)}</title></circle>`+
+      `<text class="num" x="${x}" y="${y+r*0.36}" font-size="${r*0.95}" text-anchor="middle">${esc(u.unit)}</text></g>`})}
+  const lbl=F.lbl.map(t=>`<text class="lbl" x="${t[0]}" y="${t[1]}" font-size="${r*0.9}">${esc(t[2])}</text>`).join("");
+  const chips=un.map(u=>`<button class="chip ${sel===String(u.unit)?"sel":""}" data-u="${u.unit}">${esc(u.unit)}</button>`).join("");
+  box.innerHTML=`<div class="bar"><b>Floor plan</b><span class="hint">loaded ${esc(plan.when)} · stored in this browser only</span>
+    <span style="margin-left:auto"></span><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
+    <div class="tabs">${tabs}</div>
+    ${sel?`<div class="hint"><b>Unit ${esc(sel)}:</b> click the map where it is. <button id="pcancel">Cancel</button>${place[sel]?` <button id="preset">Back to its room</button>`:""}</div>`:
+      un.length?`<div class="hint">Not on the plan (no room with that number): ${chips} pick one, then click the map. Click a dot to move it.</div>`:
+      `<div class="hint">Click a dot to move it.</div>`}
+    ${msg?`<div class="hint">${esc(msg)}</div>`:""}
+    <svg id="psvg" viewBox="${F.x0-m} ${F.y0-m} ${w+2*m} ${h+2*m}" preserveAspectRatio="xMidYMid meet">
+    <path class="wall" d="${F.d}" stroke-width="${Math.max(w,h)*0.0015}"/>${lbl}${dots}</svg>`;
+  hook();
+}
+function hook(){
+  const fi=document.getElementById("pfile")||Object.assign(document.createElement("input"),{type:"file",accept:".dxf",id:"pfile",hidden:true});
+  if(!fi.parentNode){document.body.appendChild(fi);fi.addEventListener("change",()=>{const f=fi.files[0];if(!f)return;
+    const rd=new FileReader();rd.onload=()=>loadText(rd.result);rd.readAsText(f);fi.value=""})}
+  const b=id=>document.getElementById(id);
+  if(b("pload"))b("pload").onclick=()=>fi.click();
+  if(b("pdel"))b("pdel").onclick=()=>{if(confirm("Remove the floor plan from this browser? Unit positions you placed are kept.")){plan=null;try{localStorage.removeItem(KP)}catch(e){}render()}};
+  if(b("pcancel"))b("pcancel").onclick=()=>{sel=null;render()};
+  if(b("preset"))b("preset").onclick=()=>{delete place[sel];save(KU,place);sel=null;render()};
+  box.querySelectorAll(".tabs button").forEach(t=>t.onclick=()=>{floor=+t.dataset.f;save(KF,floor);render()});
+  box.querySelectorAll("button.chip").forEach(t=>t.onclick=()=>{sel=t.dataset.u;render()});
+  const svg=b("psvg");if(!svg)return;
+  svg.addEventListener("click",ev=>{
+    const g=ev.target.closest&&ev.target.closest("g[data-u]");
+    if(g&&!sel){sel=g.dataset.u;render();return}
+    if(!sel)return;
+    const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse());
+    // dots are drawn a little below their spot (a room's label sits on the spot): store the spot
+    const F=plan.floors[floor];place[sel]={f:floor,x:Math.round(q.x),y:Math.round(q.y-Math.max(F.x1-F.x0,F.y1-F.y0)*0.011*1.6)};
+    save(KU,place);sel=null;render()});
+}
+function loadText(txt){
+  try{const p=build(parseDxf(txt));plan=p;floor=0;save(KF,0);
+    msg=save(KP,p)?`${p.floors.length} floors, ${Object.keys(p.rooms).length} rooms found.`:"Loaded, but too big to keep in this browser: load it again next time.";
+  }catch(e){msg="Couldn't read that DXF: "+e.message}
+  render();
+}
+window.planUpdate=us=>{units=us||[];render()};
+window.planLoadText=loadText;  // also used by the scripted check
+render();
+})();)JS";
+}
+
+}  // namespace ic
