@@ -89,6 +89,7 @@ public:
     uint8_t micLevel() const { return micLevel_; }
     uint8_t sentLevel() const { return sentLevel_; }
     uint8_t speakerLevel() const { return spkLevel_; }
+    bool groupTalking() const { return frame_ < groupTalkUntil_; }  // another unit in our room is talking
     uint32_t frame() const { return frame_; }
     uint16_t group() const { return group_ ? group_ : unit_.room; }
     bool duplicate() const { return frame_ < dupUntil_; }
@@ -175,6 +176,7 @@ private:
     std::unique_ptr<AudioEncoder> encoder_;
     uint16_t group_ = 0;       // room group, 0 = this unit's own room number
     uint32_t dupUntil_ = 0;    // another unit with our room number was heard until this frame
+    uint32_t groupTalkUntil_ = 0;  // a unit in our room group was talking until this frame: our speaker stays quiet
     uint32_t dupUid_ = 0;
     uint8_t outFaults_ = 0;    // output switches shut down by a fault (IDiag::outputFaults)
     PowerState power_;         // read every second (I2C on the board), not every frame

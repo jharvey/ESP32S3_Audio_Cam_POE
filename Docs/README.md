@@ -52,7 +52,7 @@ How the documents are organised (development vs final, per release): [documentat
 |---|---|
 | Releases | R1 intercom, R2 room calls and timed events, R3 camera, R4 LoRa; each split into increments tested before the next |
 | Addressing | Room number = IP: 10.42.<floor>.<room>, netmask 255.255.0.0 (214 -> 10.42.2.14) |
-| Gym | Units numbered down from 299, joined by a room group (`group 299`); automatic grouping from the coupling test later |
+| Gym | Four units, one per corner, numbered 299, 298, 297, 296 and joined by a room group (`group 299` on each, or automatically by the coupling test). Units in the group never play each other, and the other three go quiet while one talks, so its microphone does not send their speakers back out as echo |
 | Room number setup | Hidden SETUP button under the front cover (held 3 s), then UP/DOWN/MODE; MODE on the front can't change it. The SW1/SW2 dials stay on the board but aren't used |
 | Display | The room number stays on; codes flash briefly: `E1` (PoE, no cable link), `E2` (no network), `Lo` (battery), `dUP` (duplicate number, alternates every second) |
 | Duplicates | Each unit sends an ID from its MAC; two units on one number both show `dUP` |
