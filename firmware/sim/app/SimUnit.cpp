@@ -256,6 +256,8 @@ void SimUnit::tick() {
     // Scripted talk for headless runs.
     double t = now / 1000.0;
     autoTalk_ = (opt_.autoTalkAt >= 0 && t >= opt_.autoTalkAt && t < opt_.autoTalkAt + opt_.autoTalkFor) ? 1 : 0;
+    for (const auto& pr : opt_.presses)
+        if (t >= pr.at && t < pr.at + pr.dur) autoTalk_ |= uint8_t(1u << pr.bit);
 
     int16_t mic[ic::kFrameSamples];
     if (mic_ == MicMode::Pc && in_.isOpen()) {

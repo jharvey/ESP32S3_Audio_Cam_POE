@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
     p.addOption({"auto-talk", "Hold a talk button: START,DUR,TARGET (TARGET = all or a room).", "start,dur,target"});
     p.addOption({"quit-after", "Exit after N seconds.", "s"});
     p.addOption({"shot", "Save a PNG of the window on exit (with --quit-after).", "file"});
+    p.addOption({"pos", "Window position and size on screen, X,Y[,W,H] (for recorded how-to videos).", "x,y,w,h"});
     p.process(app);
 
     ConsoleOptions o;
@@ -52,6 +53,11 @@ int main(int argc, char** argv) {
     o.shot = p.value("shot");
 
     ConsoleWindow w(o);
+    if (p.isSet("pos")) {
+        QStringList v = p.value("pos").split(',');
+        if (v.size() >= 4) w.resize(v[2].toInt(), v[3].toInt());
+        w.move(v.value(0).toInt(), v.value(1).toInt());
+    }
     w.show();
     return app.exec();
 }

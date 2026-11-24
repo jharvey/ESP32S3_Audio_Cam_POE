@@ -88,6 +88,7 @@ int main(int argc, char** argv) {
     p.addOption({"hw-delay", "Simulated speaker->mic hardware latency, ms (auto-tune should find it).", "ms", "12"});
     p.addOption({"send", "Send a console command to units on the network and print replies: \"214a get\", \"all stats\".", "target cmd"});
     p.addOption({"auto-talk", "Hold TALK from START for DUR seconds.", "start,dur"});
+    p.addOption({"press", "Scripted button presses: KEY@START+DUR,... (KEY T talk, M mode, U up, D down, S setup).", "list"});
     p.addOption({"quit-after", "Exit after N seconds and print a SUMMARY line.", "s"});
     p.addOption({"fresh", "Forget the saved room number for this name."});
     p.addOption({"headless", "No window."});
@@ -116,6 +117,15 @@ int main(int argc, char** argv) {
         QStringList v = p.value("auto-talk").split(',');
         o.autoTalkAt = v.value(0).toDouble();
         o.autoTalkFor = v.value(1, "2").toDouble();
+    }
+    for (const QString& item : p.value("press").split(',', Qt::SkipEmptyParts)) {  // e.g. S@3+3.2
+        static const QString keys = "TMUDS";  // same order as ic::Button
+        int at = item.indexOf('@'), plus = item.indexOf('+');
+        int bit = keys.indexOf(item.left(1).toUpper());
+        if (bit < 0 || at != 1) continue;
+        double start = item.mid(at + 1, plus < 0 ? -1 : plus - at - 1).toDouble();
+        double dur = plus < 0 ? 0.2 : item.mid(plus + 1).toDouble();
+        o.presses.push_back({bit, start, dur});
     }
     if (p.isSet("quit-after")) o.quitAfter = p.value("quit-after").toDouble();
 

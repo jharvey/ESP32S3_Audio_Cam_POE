@@ -39,6 +39,11 @@ struct SimOptions {
     QString netKey;      // set this network key at boot, as if typed on the USB console
     int hwDelayMs = 12;  // simulated I2S DMA + converter latency on the echo path (auto-tune finds it)
     double autoTalkAt = -1, autoTalkFor = 0;
+    struct Press {
+        int bit;          // ic::Button
+        double at, dur;   // seconds after start, held for
+    };
+    std::vector<Press> presses;  // scripted button presses (--press), for recorded how-to videos
     double quitAfter = -1;
 };
 

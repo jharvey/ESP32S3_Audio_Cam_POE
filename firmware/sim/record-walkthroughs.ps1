@@ -17,13 +17,18 @@ $font = "C\:/Windows/Fonts/arial.ttf"
 function Start-Unit([string]$name, [string]$extra) {
     Start-Process -FilePath $sim -ArgumentList ("--name $name --fresh --net-key $key " + $extra) -WindowStyle Normal | Out-Null
 }
+$console = Join-Path $PSScriptRoot "build\intercom-console.exe"
+function Start-Console([string]$extra) {
+    # the office console as the right-hand window (800 x 720)
+    Start-Process -FilePath $console -ArgumentList ("--key $key --test-voice --pos 800,0,800,720 " + $extra) -WindowStyle Normal | Out-Null
+}
 function Send-Cmd([string]$cmd) {
     Start-Process -FilePath $sim -ArgumentList ("--send `"$cmd`" --key $key") -WindowStyle Hidden -Wait | Out-Null
 }
 function Caption-Filter($captions) {
     $parts = @("pad=1600:800:0:0:color=0x202020")
     foreach ($c in $captions) {
-        $t = $c[2].Replace("'", "’").Replace(":", "\:").Replace(",", "\,")
+        $t = $c[2].Replace("'", [string][char]0x2019).Replace(":", "\:").Replace(",", "\,")  # char code: this file is read as ANSI by PowerShell 5
         $parts += "drawtext=fontfile='$font':text='$t':x=24:y=742:fontsize=26:fontcolor=white:enable='between(t\,$($c[0])\,$($c[1]))'"
     }
     return ($parts -join ",")
@@ -100,5 +105,57 @@ Record-Scene "05-portable-unit" 20 @(
 ) {
     Start-Unit "999" "--pos 0,0 --battery --no-poe --quit-after 20"
     Start-Unit "101" "--pos 800,0 --auto-talk 6,6 --quit-after 19"
+}
+
+# ---- How-to videos (firmware R2) ----------------------------------------------------------------
+
+# 06: the office calls one room; the room answers only the office
+Record-Scene "06-office-calls-a-room" 26 @(
+    @(0, 6, "Room 214 (left) and the office console (right). The unit starts with its light test."),
+    @(6, 11, "The office selects 214 and holds Call selected room: 214 chimes, shows CAL and its CALL light blinks."),
+    @(11, 15, "Only 214 hears the call: room 101 (not shown) stays quiet. The calls list shows the call."),
+    @(15, 21, "Within 10 s the teacher holds TALK: the answer goes to the office only, not to the whole school."),
+    @(21, 26, "The calls list says 'answered by 214'. Every call is also saved to intercom-calls.csv.")
+) {
+    Start-Unit "214" "--pos 0,0 --auto-talk 15,4 --quit-after 26"
+    Start-Unit "101" "--headless --quit-after 26"
+    Start-Console "--rooms 101,214 --auto-talk 7,4,214 --quit-after 26"
+}
+
+# 07: a room calls the office
+Record-Scene "07-calling-the-office" 26 @(
+    @(0, 6, "Room 214 (left) needs the office, but not the whole school."),
+    @(6, 10, "The teacher holds DOWN for 2 seconds: the display alternates oFC and the room number."),
+    @(10, 15, "The office console beeps and shows 214 in blue: CALLING THE OFFICE. Nobody else hears anything."),
+    @(15, 21, "The office calls 214 back (select it, hold 'Call selected room'): that answers the call."),
+    @(21, 26, "The calls list: '214 -> office, answered by the office after 11 s'. Unanswered calls show MISSED in red.")
+) {
+    Start-Unit "214" "--pos 0,0 --press D@6.5+2.3 --quit-after 26"
+    Start-Console "--rooms 214 --auto-talk 16,4,214 --quit-after 26"
+}
+
+# 08: setting the room number on the unit
+Record-Scene "08-setting-the-room-number" 25 @(
+    @(0, 6, "A replacement unit, still set to 101 (after its light test). It has to become room 305."),
+    @(6, 10, "With the front cover off, hold the hidden SETUP button for 3 seconds: the first digit blinks."),
+    @(10, 15, "UP / DOWN change the blinking digit (1 -> 3); MODE moves to the next digit (0 stays)."),
+    @(15, 20, "UP four times on the last digit (1 -> 5), then MODE on the last digit saves."),
+    @(20, 25, "The unit now is 305 (IP 10.42.3.5). The number stays through power cuts. Put the cover back.")
+) {
+    Start-Unit "101" ("--pos 0,0 --quit-after 25 --press " +
+        "S@6+3.3,U@10.5+0.25,U@11.3+0.25,M@12.3+0.25,M@13.6+0.25,U@15+0.2,U@15.6+0.2,U@16.2+0.2,U@16.8+0.2,M@18+0.25")
+    Start-Unit "214" "--pos 800,0 --quit-after 25"
+}
+
+# 09: the power-up light test
+Record-Scene "09-power-up-light-test" 14 @(
+    @(0, 2, "Two units powering up. Each one tests every light it has, in about 4 seconds."),
+    @(2, 5, "Every display segment in turn, then all on (8.8.8.): a segment that never lights is broken."),
+    @(5, 8, "Then L1 white lamp, L2 IR lamp, L3 call light, L4-L6 the RGB light red / green / blue (side lights)."),
+    @(8, 14, "Then the room number. boottest run repeats the test; boottest off turns it off.")
+) {
+    Start-Unit "214" "--pos 0,0 --quit-after 14"
+    Start-Sleep -Milliseconds 700
+    Start-Unit "101" "--pos 800,0 --quit-after 13"
 }
 Write-Host "done: $out"

@@ -101,7 +101,9 @@ private:
         static const struct { char c; uint8_t s; } map[] = {
             {'0', 0x3f}, {'1', 0x06}, {'2', 0x5b}, {'3', 0x4f}, {'4', 0x66}, {'5', 0x6d}, {'6', 0x7d}, {'7', 0x07},
             {'8', 0x7f}, {'9', 0x6f}, {'a', 0x77}, {'b', 0x7c}, {'c', 0x58}, {'d', 0x5e}, {'e', 0x79}, {'f', 0x71},
-            {'-', 0x40}, {' ', 0x00}, {'L', 0x38}, {'r', 0x50}, {'n', 0x54}, {'o', 0x5c}, {'P', 0x73}, {'u', 0x1c}};
+            {'-', 0x40}, {' ', 0x00}, {'L', 0x38}, {'r', 0x50}, {'n', 0x54}, {'o', 0x5c}, {'P', 0x73}, {'u', 0x1c},
+            // the same capitals as the board's TM1637 font (CAL, oFC, E1, dUP)
+            {'A', 0x77}, {'B', 0x7c}, {'C', 0x39}, {'D', 0x5e}, {'E', 0x79}, {'F', 0x71}, {'U', 0x3e}};
         uint8_t segs = 0;
         for (auto& m : map)
             if (m.c == ch) segs = m.s;
