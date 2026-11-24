@@ -135,15 +135,17 @@ SimWindow::SimWindow(SimUnit* unit, QWidget* parent) : QWidget(parent), unit_(un
     left->addWidget(device_);
     auto* btns = new QHBoxLayout;
     const char* names[] = {"TALK\n(Space)", "MODE\n(M)", "UP\n(↑)", "DOWN\n(↓)", "SETUP\n(S, hidden)", "OFFICE\n(O)"};
-    for (int b = 0; b < ic::kButtonCount; b++) {
+    // front buttons first (TALK, OFFICE), then the ones under the cover
+    const int order[] = {ic::kBtnTalk, ic::kBtnOffice, ic::kBtnMode, ic::kBtnUp, ic::kBtnDown, ic::kBtnSetup};
+    for (int b : order) {
         auto* pb = new QPushButton(names[b]);
         pb->setFocusPolicy(Qt::NoFocus);
-        pb->setMinimumHeight(b == 0 ? 56 : 44);
+        pb->setMinimumHeight(b == 0 || b == ic::kBtnOffice ? 56 : 44);
         if (b == 0) pb->setStyleSheet("QPushButton{background:#c0392b;color:white;font-weight:bold}QPushButton:pressed{background:#e74c3c}");
         if (b == ic::kBtnOffice) pb->setStyleSheet("QPushButton{background:#1d4ed8;color:white;font-weight:bold}QPushButton:pressed{background:#3b6cf0}");
         connect(pb, &QPushButton::pressed, this, [this, b] { unit_->setButton(b, true); });
         connect(pb, &QPushButton::released, this, [this, b] { unit_->setButton(b, false); });
-        btns->addWidget(pb, b == 0 ? 2 : 1);
+        btns->addWidget(pb, b == 0 || b == ic::kBtnOffice ? 2 : 1);
     }
     left->addLayout(btns);
     status_ = new QLabel;
