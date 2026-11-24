@@ -49,23 +49,24 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 <option value="room">The selected room</option><option value="floor">The selected room's floor</option></select>
 <button id="talk" title="Hold the button (or the space bar) and speak">Hold to talk to everyone</button>
 <div class="meterbox"><div id="tmeter"></div></div><span id="tstate" class="mute">Uses this PC's microphone. Rooms answer on the office unit.</span></div>
-<div id="rooms"></div>
-<div class="panels">
-<section class="panel"><h2>Commands</h2>
- <div class="prow"><select id="ctarget"><option value="all">All units</option><option value="sel">The selected room</option></select>
- <input id="cmd" placeholder="stats" size="24"><button id="csend">Send</button></div>
- <div class="mute">The same commands as the USB console ("help" lists them), signed with this unit's network key.</div>
- <pre id="cout"></pre></section>
-<section class="panel"><h2>Timed events (kept on every unit)</h2>
- <pre id="sched">…</pre>
- <div class="prow"><input type="time" id="stime" value="11:30"><select id="sdays"><option>mon-fri</option><option>daily</option><option>weekend</option></select>
- <select id="ssound"><option>bell</option><option>lunch</option><option>chime</option><option>tone</option></select>
- <select id="swho"><option value="all">everyone</option><option value="room">the selected room</option><option value="floor">its floor</option></select>
- <button id="sadd">Add</button></div>
- <div class="prow">Delete number <input type="number" id="sdel" min="1" style="width:5em"><button id="sdelb">Delete</button>
- <button id="sskip">Skip today</button><button id="sresume">Resume today</button></div>
- <div class="prow">Day off <input type="date" id="soff"><button id="soffadd">Add</button><button id="soffdel">Remove</button></div>
-</section></div></main>
+<div id="plan"></div>
+<div id="rooms"></div>
+<div class="panels">
+<section class="panel"><h2>Commands</h2>
+ <div class="prow"><select id="ctarget"><option value="all">All units</option><option value="sel">The selected room</option></select>
+ <input id="cmd" placeholder="stats" size="24"><button id="csend">Send</button></div>
+ <div class="mute">The same commands as the USB console ("help" lists them), signed with this unit's network key.</div>
+ <pre id="cout"></pre></section>
+<section class="panel"><h2>Timed events (kept on every unit)</h2>
+ <pre id="sched">…</pre>
+ <div class="prow"><input type="time" id="stime" value="11:30"><select id="sdays"><option>mon-fri</option><option>daily</option><option>weekend</option></select>
+ <select id="ssound"><option>bell</option><option>lunch</option><option>chime</option><option>tone</option></select>
+ <select id="swho"><option value="all">everyone</option><option value="room">the selected room</option><option value="floor">its floor</option></select>
+ <button id="sadd">Add</button></div>
+ <div class="prow">Delete number <input type="number" id="sdel" min="1" style="width:5em"><button id="sdelb">Delete</button>
+ <button id="sskip">Skip today</button><button id="sresume">Resume today</button></div>
+ <div class="prow">Day off <input type="date" id="soff"><button id="soffadd">Add</button><button id="soffdel">Remove</button></div>
+</section></div></main>
 <script>
 const FAULT=["","E1 no Ethernet (on Wi-Fi)","E2 no network","Lo battery low","dUP duplicate number","oL output shorted"];
 function card(u){
@@ -98,6 +99,7 @@ async function tick(){
     const floors={};for(const u of us){const fl=Math.floor(u.room/100);(floors[fl]=floors[fl]||[]).push(u);}
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
+    if(window.planUpdate)planUpdate(us);  // floor plan map (/floorplan.js)
   }catch(e){document.getElementById("err").textContent="Can't reach the unit: "+e.message;}
 }
 tick();setInterval(tick,2000);
@@ -201,7 +203,7 @@ document.getElementById("soffdel").addEventListener("click",()=>{const d=documen
 loadSched();
 {const m=location.hash.match(/^#test-talk(?:-(\d+))?$/);  // scripted checks / videos: talk N s (default 4)
  if(m){setTimeout(startTalk,1500);setTimeout(stopTalk,1500+1000*(+m[1]||4));}}
-</script></body></html>)PAGE";
+</script><script src="/floorplan.js"></script></body></html>)PAGE";
 }
 
 }  // namespace ic

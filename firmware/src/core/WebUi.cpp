@@ -108,6 +108,13 @@ HttpResponse WebUi::handle(const HttpRequest& req) {
         r.body = schoolPage();
         return r;
     }
+    if (path == "/floorplan.js") {  // floor plan map for /school (FloorPlanJs.cpp)
+        if (req.method != "GET") return text(405, "GET only");
+        HttpResponse r;
+        r.contentType = "application/javascript; charset=utf-8";
+        r.body = floorPlanJs();
+        return r;
+    }
     if (path == "/api/school") {
         HttpResponse r;
         r.contentType = "application/json";

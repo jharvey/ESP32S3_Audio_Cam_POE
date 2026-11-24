@@ -961,6 +961,11 @@ static void testWeb() {
     req.path = "/school";
     r = web.handle(req);
     CHECK(r.status == 200 && r.body.find("School intercom") != std::string::npos, "school page served");
+    CHECK(r.body.find("/floorplan.js") != std::string::npos && r.body.find("id=\"plan\"") != std::string::npos, "school page has the floor plan map");
+    req.path = "/floorplan.js";
+    r = web.handle(req);
+    CHECK(r.status == 200 && r.contentType.find("javascript") != std::string::npos && r.body.find("planUpdate") != std::string::npos,
+          "floor plan script served");
     req.path = "/api/school";
     r = web.handle(req);
     CHECK(r.status == 200 && r.body.find("\"self\":\"214\"") != std::string::npos && r.body.find("\"unit\":\"101\"") != std::string::npos &&
