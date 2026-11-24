@@ -75,8 +75,15 @@ pages, and the unit's page is plain `http://` on the intercom network, so set th
 ## Planned
 
 - **Timed events (R2.1, in code, not yet in the units):** each unit keeps the schedule and plays its own chimes.
-  Set it with commands to "all units": `tz -300 us` once, then e.g. `sched add 11:30 mon-fri lunch`,
-  `sched add 8:00 mon-fri bell floor 2`; `sched` lists, `sched del 2` removes; `dayoff add 2026-12-24`;
-  `skip today` for a snow day. The console keeps the units' clocks right when the school has no time server.
+  Easiest from the school page's **Timed events** panel: pick the time, days, sound and who hears it
+  (everyone, the selected room or its floor) and press Add; Delete number, Skip today / Resume today and
+  days off work the same way. Every change is sent to all units, so their schedules stay identical. Set the
+  time zone once first, in the Commands panel: `tz -300 us` to all units (US Eastern with daylight saving).
+  The same commands work from the PC console: `sched add 11:30 mon-fri lunch`, `sched add 8:00 mon-fri bell
+  floor 2`, `sched`, `sched del 2`, `dayoff add 2026-12-24`, `skip today`. Units get the time from the school's
+  time server (`ntp`), or from the PC console every 10 minutes.
+- **Commands panel (school page, R2):** send any console command to all units or the selected room (for
+  example `stats`, `version`, `group 299`); the replies appear underneath. The page's unit signs them with its
+  network key, so set `netkey` on it (USB) first; it also needs the clock.
 - **Emergency mode (R3):** an alarm button opens the camera covers, starts the video to the NVR and flashes the
   alarm light in every room.

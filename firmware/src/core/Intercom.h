@@ -77,6 +77,13 @@ public:
     const std::vector<Peer>& peers() const { return peers_; }
     // Every unit heard since start, with when it was last heard (peers() drops silent ones after 3.5 s).
     const std::vector<Peer>& known() const { return known_; }
+    // Replies to commands this unit sent ("send ..."), oldest first, numbered so the web page can poll for new ones.
+    struct ReplyLine {
+        uint32_t n;
+        UnitId from;
+        std::string text;
+    };
+    const std::vector<ReplyLine>& replies() const { return replies_; }
     const std::vector<CouplingResult>& couplings() const { return couplings_; }
     bool couplingTest() const { return couple_.active(); }
     uint8_t micLevel() const { return micLevel_; }
@@ -137,6 +144,7 @@ private:
     void receive();
     void sendStatus();
     void sendReply(const TextPacket& to, const std::string& text);
+    std::string sendSigned(const std::string& target, const std::string& cmd);
     void updatePanel();
     Talker* talkerFor(const UnitId& id);
     bool sameGroup(const UnitId& from) const;
@@ -184,7 +192,10 @@ private:
     uint8_t shownDots_ = 0xff;
     std::vector<std::unique_ptr<Talker>> talkers_;
     std::vector<Peer> peers_;
-    std::vector<Peer> known_;  // up to 200 units, never pruned (the school status page shows them offline)
+    std::vector<Peer> known_;
+    std::vector<ReplyLine> replies_;  // last 200 reply lines to commands this unit sent
+    uint32_t replyN_ = 0;
+    uint64_t sentNonce_ = 0;          // last nonce this unit signed with (web console commands)  // up to 200 units, never pruned (the school status page shows them offline)
     std::vector<std::pair<uint32_t, uint32_t>> heard_;
     uint32_t toneFrames_ = 0;  // test tone frames left ("tone" command)
     static constexpr uint32_t kTalkHeldFrames = 120000 / kFrameMs;  // 2 minutes

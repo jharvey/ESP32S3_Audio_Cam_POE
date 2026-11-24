@@ -23,6 +23,12 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:18px}
 .room{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--ok);border-radius:8px;padding:8px 10px;min-height:74px}
 .room{cursor:pointer}.room.sel{outline:3px solid var(--call);outline-offset:1px}
+.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px;margin-top:6px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.panel h2{margin:0 0 8px;font-size:15px}.prow{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:6px 0}
+.panel input,.panel select{font:inherit;padding:5px 7px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.panel button{font:inherit;padding:5px 11px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.panel pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px;margin:6px 0 0;font-size:12.5px;max-height:220px;overflow:auto}
 #tkind{font:inherit;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
 .room b{font-size:22px;letter-spacing:.5px}.room .st{font-size:13px;font-weight:600}.room .d{font-size:12px;color:var(--mute)}
 .ok{border-left-color:var(--ok)}.ok .st{color:var(--ok)}
@@ -43,7 +49,23 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 <option value="room">The selected room</option><option value="floor">The selected room's floor</option></select>
 <button id="talk" title="Hold the button (or the space bar) and speak">Hold to talk to everyone</button>
 <div class="meterbox"><div id="tmeter"></div></div><span id="tstate" class="mute">Uses this PC's microphone. Rooms answer on the office unit.</span></div>
-<div id="rooms"></div></main>
+<div id="rooms"></div>
+<div class="panels">
+<section class="panel"><h2>Commands</h2>
+ <div class="prow"><select id="ctarget"><option value="all">All units</option><option value="sel">The selected room</option></select>
+ <input id="cmd" placeholder="stats" size="24"><button id="csend">Send</button></div>
+ <div class="mute">The same commands as the USB console ("help" lists them), signed with this unit's network key.</div>
+ <pre id="cout"></pre></section>
+<section class="panel"><h2>Timed events (kept on every unit)</h2>
+ <pre id="sched">…</pre>
+ <div class="prow"><input type="time" id="stime" value="11:30"><select id="sdays"><option>mon-fri</option><option>daily</option><option>weekend</option></select>
+ <select id="ssound"><option>bell</option><option>lunch</option><option>chime</option><option>tone</option></select>
+ <select id="swho"><option value="all">everyone</option><option value="room">the selected room</option><option value="floor">its floor</option></select>
+ <button id="sadd">Add</button></div>
+ <div class="prow">Delete number <input type="number" id="sdel" min="1" style="width:5em"><button id="sdelb">Delete</button>
+ <button id="sskip">Skip today</button><button id="sresume">Resume today</button></div>
+ <div class="prow">Day off <input type="date" id="soff"><button id="soffadd">Add</button><button id="soffdel">Remove</button></div>
+</section></div></main>
 <script>
 const FAULT=["","E1 no Ethernet (on Wi-Fi)","E2 no network","Lo battery low","dUP duplicate number","oL output shorted"];
 function card(u){
@@ -149,6 +171,34 @@ for(const ev of ["pointerup","pointercancel","lostpointercapture"])tb.addEventLi
 document.addEventListener("keydown",e=>{if(e.code==="Space"&&!e.repeat&&e.target===document.body){e.preventDefault();startTalk();}});
 document.addEventListener("keyup",e=>{if(e.code==="Space")stopTalk();});
 window.addEventListener("blur",stopTalk);
+// ---- Commands to other units, and the timed events every unit keeps ------------------------------
+async function cmd(text){  // runs a console command on this unit (e.g. "send all stats")
+  const r=await fetch(location.origin+"/api/cmd",{method:"POST",headers:{"X-Intercom":"1","Content-Type":"text/plain"},body:text});
+  return r.ok?await r.text():"error "+r.status;}
+let replyN=0;
+function out(line){const o=document.getElementById("cout");o.textContent+=line+"\n";o.scrollTop=o.scrollHeight;}
+async function pollReplies(){
+  try{const r=await fetch(location.origin+"/api/replies?since="+replyN,{cache:"no-store"});const j=await r.json();
+    for(const l of j.lines)out(l.from+": "+l.text);replyN=j.next;}catch(e){}}
+setInterval(pollReplies,1000);
+async function sendTo(target,text){const r=await cmd("send "+target+" "+text);out("> "+target+" "+text+"   ("+r+")");return r;}
+document.getElementById("csend").addEventListener("click",async()=>{
+  const c=document.getElementById("cmd").value.trim();if(!c)return;
+  let t="all";if(document.getElementById("ctarget").value==="sel"){if(!selRoom){out("click a room first");return;}t=String(selRoom.room);}
+  await sendTo(t,c);document.getElementById("cmd").value="";});
+document.getElementById("cmd").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("csend").click();});
+async function loadSched(){document.getElementById("sched").textContent=await cmd("sched");}
+async function schedAll(text){await sendTo("all",text);setTimeout(loadSched,1500);}
+document.getElementById("sadd").addEventListener("click",()=>{
+  const w=document.getElementById("swho").value;let who="";
+  if(w!=="all"){if(!selRoom){out("click a room first");return;}who=w==="room"?" room "+selRoom.room:" floor "+Math.floor(selRoom.room/100);}
+  schedAll("sched add "+document.getElementById("stime").value+" "+document.getElementById("sdays").value+" "+document.getElementById("ssound").value+who);});
+document.getElementById("sdelb").addEventListener("click",()=>{const n=document.getElementById("sdel").value;if(n)schedAll("sched del "+n);});
+document.getElementById("sskip").addEventListener("click",()=>schedAll("skip today"));
+document.getElementById("sresume").addEventListener("click",()=>schedAll("skip off"));
+document.getElementById("soffadd").addEventListener("click",()=>{const d=document.getElementById("soff").value;if(d)schedAll("dayoff add "+d);});
+document.getElementById("soffdel").addEventListener("click",()=>{const d=document.getElementById("soff").value;if(d)schedAll("dayoff del "+d);});
+loadSched();
 if(location.hash==="#test-talk"){setTimeout(startTalk,1500);setTimeout(stopTalk,5500);}  // scripted check: talk 4 s
 </script></body></html>)PAGE";
 }

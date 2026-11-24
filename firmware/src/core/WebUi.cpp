@@ -142,6 +142,26 @@ HttpResponse WebUi::handle(const HttpRequest& req) {
         size_t waiting = ic_.webTalk(pcm.data(), pcm.size());
         return text(200, "ok " + std::to_string(waiting));
     }
+    if (path == "/api/replies") {  // ?since=N: reply lines to commands this unit sent
+        uint32_t since = 0;
+        size_t q = req.path.find("since=");
+        if (q != std::string::npos) since = uint32_t(std::strtoul(req.path.c_str() + q + 6, nullptr, 10));
+        std::string out = "{\"lines\":[";
+        bool first = true;
+        uint32_t last = since;
+        char u[8];
+        for (const auto& l : ic_.replies()) {
+            if (l.n <= since) continue;
+            formatUnit(l.from, u);
+            out += std::string(first ? "" : ",") + "{\"n\":" + std::to_string(l.n) + ",\"from\":\"" + u + "\",\"text\":" + jsonString(l.text) + "}";
+            first = false;
+            last = l.n;
+        }
+        HttpResponse r;
+        r.contentType = "application/json";
+        r.body = out + "],\"next\":" + std::to_string(last) + "}";
+        return r;
+    }
     if (path == "/api/status") {
         HttpResponse r;
         r.contentType = "application/json";

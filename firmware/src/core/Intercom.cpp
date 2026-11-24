@@ -63,6 +63,7 @@ const char* kHelp =
     "  boottest [on|off|run] power-up light test: display segments, lamps, RGB LED (about 4 s at start)\n"
     "  lamp [white|ir|other 0-100|auto]  lamp outputs; other = call light (blinks for a call, on for an all-call)\n"
     "  ntp [server|default] the school's time server (from the next restart)\n"
+    "  send all|ROOM CMD    send a console command to other units, signed with this unit's key (web / USB)\n"
     "  callofc [off]        call the office (as DOWN held 2 s; the console shows it until answered)\n"
     "  talk [seconds|off] [room N|floor N|group N]\n"
     "                       transmit as if TALK were held, to everyone or a target (USB only; default 5 s)\n"
@@ -391,6 +392,13 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         startSound(s);
         return std::string("playing ") + soundName(s);
     }
+    if (c == "send") {  // web console / USB: "send all sched", "send 214 stats"
+        if (src == CmdSource::Network) return "send only works from this unit's web page or USB";
+        if (a.size() < 3) return "usage: send <all|room> <command ...>";
+        std::string cmd;
+        for (size_t i = 2; i < a.size(); i++) cmd += (i > 2 ? " " : "") + a[i];
+        return sendSigned(a[1], cmd);
+    }
     if (c == "callofc") {
         setCallingOffice(!(a.size() > 1 && a[1] == "off"), src == CmdSource::Local ? "USB" : "console");
         return callingOffice_ ? "calling the office" : "not calling the office";
@@ -457,6 +465,31 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         return "web password set; web interface on";
     }
     return "unknown command \"" + c + "\" (try help)";
+}
+
+// Web console: send a console command to one unit or all of them, signed with this unit's network key,
+// as the PC console does. Units only take a nonce higher than the last one they accepted; the PC console
+// uses milliseconds since 1970, so this does too (it needs the clock), and never repeats or goes back.
+std::string Intercom::sendSigned(const std::string& target, const std::string& cmd) {
+    std::string key = netauth::loadKey(*hal_.store);
+    if (key.empty()) return "no network key on this unit (set it on USB: netkey <key>)";
+    int64_t now = utcNow();
+    if (!now) return "no clock yet (NTP or the office console sets it): can't sign commands";
+    TextPacket t;
+    t.type = PacketType::Command;
+    t.from = unit_;
+    if (!parseTarget(target, &t.targetRoom, &t.targetSub)) return "bad target (all, or a room number)";
+    if (sentNonce_ == 0) sentNonce_ = std::strtoull(hal_.store->loadText("send_nonce").c_str(), nullptr, 10);
+    uint64_t nonce = std::max<uint64_t>(sentNonce_ + 1, uint64_t(now) * 1000 + (frame_ % 50) * 20);
+    sentNonce_ = nonce;
+    hal_.store->saveText("send_nonce", std::to_string(nonce));
+    t.text = cmd;
+    t.text = netauth::sign(key, nonce, t);
+    uint8_t buf[kMaxPacketBytes + 16];
+    hal_.net->send(buf, encodeText(t, buf));
+    bool secret = cmd.compare(0, 7, "webpass") == 0 || cmd.compare(0, 6, "netkey") == 0;
+    logf("web console sent to %s: %s", target.c_str(), secret ? "(password command, hidden)" : cmd.c_str());
+    return "sent to " + target;
 }
 
 void Intercom::sendReply(const TextPacket& to, const std::string& text) {
@@ -626,6 +659,17 @@ void Intercom::receive() {
                 k = &known_.back();
             }
             if (k) *k = *p;
+        } else if (type == PacketType::Reply) {  // answers to commands this unit sent (web console)
+            TextPacket r;
+            if (!decodeText(buf, n, &r) || r.targetRoom != unit_.room) continue;
+            size_t a = 0;
+            while (a < r.text.size()) {
+                size_t e = r.text.find('\n', a);
+                if (e == std::string::npos) e = r.text.size();
+                if (e > a) replies_.push_back({++replyN_, r.from, r.text.substr(a, e - a)});
+                a = e + 1;
+            }
+            if (replies_.size() > 200) replies_.erase(replies_.begin(), replies_.end() - 200);
         } else if (type == PacketType::Command) {
             // Signed with the network key (netkey), and never replayed.
             TextPacket t;

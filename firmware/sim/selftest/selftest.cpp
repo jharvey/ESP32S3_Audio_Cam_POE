@@ -1032,6 +1032,32 @@ static void testWeb() {
         CHECK(web.handle(t).status == 400, "bad target refused");
     }
 
+    // Web console commands: 214's page sends a signed command to every unit and collects the replies.
+    {
+        HttpRequest c;
+        c.method = "POST";
+        c.path = "/api/cmd";
+        c.authorization = req.authorization;
+        c.xIntercom = "1";
+        c.body = "send all version";
+        CHECK(web.handle(c).body.find("no network key") != std::string::npos, "send needs this unit's network key");
+        a.ic->command("netkey school-network-key-1");
+        b.ic->command("netkey school-network-key-1");
+        CHECK(web.handle(c).body.find("no clock") != std::string::npos, "send needs the clock (nonces are milliseconds since 1970)");
+        a.ic->command("time 1795451390");
+        CHECK(web.handle(c).body == "sent to all", "send all version: %s", web.handle(c).body.c_str());
+        for (int k = 0; k < 5; k++) { a.step(); b.step(); }
+        HttpRequest g;
+        g.method = "GET";
+        g.path = "/api/replies?since=0";
+        g.authorization = req.authorization;
+        std::string rj = web.handle(g).body;
+        CHECK(rj.find("\"from\":\"101\",\"text\":\"firmware") != std::string::npos && rj.find("\"from\":\"214\",\"text\":\"firmware") != std::string::npos,
+              "replies from 101 and from 214 itself come back to the page");
+        CHECK(b.ic->command("send all version", CmdSource::Network).find("only works") != std::string::npos,
+              "a unit won't relay commands that came over the network");
+    }
+
     req.body = "tone 1";
     web.handle(req);
     int16_t mic[kFrameSamples] = {}, spk[kFrameSamples];
