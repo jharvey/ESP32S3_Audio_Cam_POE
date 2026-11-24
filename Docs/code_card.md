@@ -5,7 +5,8 @@ browser and print; it fits half an A4 or Letter page).
 
 **Talk to the school:** hold **TALK** and speak. Let go when you've finished. Any TALK button works.
 
-**Answer the office:** when the display shows **`CAL`**, hold TALK: only the office hears you.
+**Answer the office:** when **`CAL`** flashes and the light blinks blue, hold TALK: only the office hears you.
+Missed it? `CAL` alternates with the room number and the blue light blinks every 2 s: press any button to clear it.
 
 **Call the office:** hold **DOWN** for 2 seconds. The display alternates **`oFC`** and the room number until the
 office calls back.
@@ -16,6 +17,7 @@ office calls back.
 | dot after 1st digit | You're talking | – |
 | dot after 2nd digit | Someone is talking to you | – |
 | `CAL` | The office is calling this room | Hold TALK to answer |
+| `CAL` / room number, blue blink every 2 s | A call nobody answered (up to 5 min) | Press any button; call the office back (DOWN 2 s) |
 | `oFC` / number | This room is calling the office | Wait for the office |
 | `E1` | Network cable problem, on Wi-Fi | Tell the office |
 | `E2` | No network | Tell the office |

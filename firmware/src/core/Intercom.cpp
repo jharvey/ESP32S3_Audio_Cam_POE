@@ -25,6 +25,8 @@ constexpr uint32_t kAnswerFrames = 500;     // TALK answers the caller during a 
 constexpr uint32_t kAllCallHoldFrames = 25; // an office all-call keeps room calls out until 0.5 s after it
 constexpr uint32_t kCallHoldFrames = 100;   // DOWN held 2 s = call the office (again = cancel)
 constexpr uint32_t kCallingTimeoutFrames = 15000;  // a call to the office gives up after 5 min
+constexpr uint32_t kMissedFrames = 15000;   // an unanswered call keeps a slow blink for 5 min (any button stops it)
+constexpr uint32_t kCallRgb = 0x0030C0;     // RGB LED colour for calls: blue, like "calling" on the school page
 constexpr uint32_t kPendingSoundFrames = 3000;     // a timed chime waits up to 60 s for a call to end
 constexpr const char* kSchedKey = "sched";
 constexpr uint32_t kDupHoldFrames = 150; // "dUP" stays 3 s after the other unit was last heard
@@ -627,7 +629,13 @@ void Intercom::receive() {
                     char u[8];
                     formatUnit(h.from, u);
                     logf("call from %s", h.from.room ? u : "the office");
-                    if (!canAnswer()) startSound(Sound::Chime);  // a new call, not the next sentence of one
+                    if (!canAnswer()) {  // a new call, not the next sentence of one
+                        startSound(Sound::Chime);
+                        // A call to this room alone: the call LEDs blink until TALK answers (a floor or group
+                        // announcement doesn't ask for an answer, so no attention blink or missed call).
+                        callAnswered_ = (h.flags & (kAudioFloor | kAudioGroupCall)) != 0;
+                        missedUntil_ = 0;
+                    }
                 }
                 callFrom_ = h.from;
                 callLast_ = frame_;
@@ -755,7 +763,9 @@ void Intercom::updatePanel() {
         text[1] = r >= 10 ? char('0' + (r / 10) % 10) : ' ';
         text[2] = char('0' + r % 10);
         if (r == 0) text[0] = text[1] = text[2] = '-';  // no room number set yet
-        if (canAnswer() && !transmitting_) {  // a call for this room: CAL (TALK answers the caller)
+        if (canAnswer() && !transmitting_) {  // a call for this room: CAL (TALK answers the caller), flashing until answered
+            std::memcpy(text, (callAnswered_ || (frame_ / 30) % 2 == 0) ? "CAL" : "   ", 3);
+        } else if (missedCall() && (frame_ / 100) % 2) {  // missed call: CAL alternates with the room number
             std::memcpy(text, "CAL", 3);
         } else if (callingOffice_ && !transmitting_ && (frame_ / 50) % 2) {  // calling the office: oFC / number
             std::memcpy(text, "oFC", 3);
@@ -914,8 +924,19 @@ void Intercom::updateLamps() {
     uint8_t d;
     if (bootT0_ && bootTestStep(t, &d, want, &rgb) >= 0) {
         // power-up light test drives the lamps and the RGB LED
-    } else if (canAnswer() && !transmitting_) want[int(Lamp::Other)] = (frame_ / 30) % 2 ? 0 : 100;
-    else if (frame_ < allCallUntil_) want[int(Lamp::Other)] = 100;
+    } else if (canAnswer() && !transmitting_) {
+        // A call for this room: the call light and the RGB LED (blue) blink together until TALK answers;
+        // once answered the RGB stays on while the conversation is open.
+        bool on = (frame_ / 30) % 2 == 0;
+        want[int(Lamp::Other)] = on ? 100 : 0;
+        rgb = (on || callAnswered_) ? kCallRgb : 0;
+    } else if (frame_ < allCallUntil_) {
+        want[int(Lamp::Other)] = 100;
+    } else if (missedCall()) {  // nobody answered: a short blink every 2 s until a button is pressed
+        bool on = frame_ % 100 < 12;
+        want[int(Lamp::Other)] = on ? 100 : 0;
+        rgb = on ? kCallRgb : 0;
+    }
     for (int i = 0; i < int(Lamp::Count); i++) {
         uint8_t v = lampManual_[i] == 255 ? want[i] : lampManual_[i];
         if (v == lamp_[i]) continue;
@@ -1169,7 +1190,16 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         }
         sendStatus();
     }
-    if (talk && txFlags_ == kAudioReply) callLast_ = frame_;  // keep the conversation open while answering
+    if (talk && txFlags_ == kAudioReply) {  // keep the conversation open while answering
+        callLast_ = frame_;
+        callAnswered_ = true;
+    }
+    if (callLast_ && !callAnswered_ && frame_ - callLast_ == kAnswerFrames) {  // nobody answered in time
+        missedUntil_ = frame_ + kMissedFrames;
+        callAnswered_ = true;
+        logf("missed call from %s", callFrom_.room ? std::to_string(callFrom_.room).c_str() : "the office");
+    }
+    if (held && missedUntil_) missedUntil_ = 0;  // any button: the missed call was seen
     if (talkSince_ && frame_ - talkSince_ == kTalkHeldFrames) {
         logf("TALK held for over 2 minutes (stuck button?)");
         sendStatus();

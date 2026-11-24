@@ -1176,13 +1176,17 @@ static void testRoomCalls() {
     officeTarget = 214, officeFlags = 0, officeTalk = 50;
     run(3);
     CHECK(r214.ic->chiming() && r214.ic->inCall(), "214 chimes and shows CAL when the office calls it");
-    int lampOn = 0, lampOff = 0, lampElsewhere = 0;
+    int lampOn = 0, lampOff = 0, lampElsewhere = 0, rgbOn = 0, rgbOff = 0, rgbSync = 0;
     for (int k = 0; k < 57; k++) {
         run(1);
         (r214.ic->lampLevel(Lamp::Other) ? lampOn : lampOff)++;
-        if (r101.ic->lampLevel(Lamp::Other)) lampElsewhere++;
+        (r214.ic->rgb() ? rgbOn : rgbOff)++;
+        if ((r214.ic->rgb() != 0) == (r214.ic->lampLevel(Lamp::Other) != 0)) rgbSync++;
+        if (r101.ic->lampLevel(Lamp::Other) || r101.ic->rgb()) lampElsewhere++;
     }
     CHECK(lampOn > 15 && lampOff > 15 && !lampElsewhere, "call light blinks at 214 only (%d on, %d off frames)", lampOn, lampOff);
+    CHECK(rgbOn > 15 && rgbOff > 15 && rgbSync == 57 && !r214.ic->callAnswered(),
+          "the RGB LED blinks blue with the call light until answered (%d on, %d off)", rgbOn, rgbOff);
     CHECK(r214.heardFrom(kOffice) > 40 && r101.heardFrom(kOffice) == 0 && gymA.heardFrom(kOffice) == 0,
           "room call: 214 heard the office (%u frames), 101 and 299 did not", r214.heardFrom(kOffice));
     // 214 answers with TALK within 10 s: only the office hears it.
@@ -1192,6 +1196,7 @@ static void testRoomCalls() {
     run(10);
     CHECK(office.replies > 40 && office.lastReplyFrom == r214.id, "214's answer went to the office (%d frames)", office.replies);
     CHECK(r101.heardFrom(r214.id) == 0 && gymA.heardFrom(r214.id) == 0, "nobody else heard the answer");
+    CHECK(r214.ic->callAnswered() && r214.ic->rgb() != 0, "answered: the RGB LED stops blinking and stays on during the call");
     run(520);  // more than 10 s after the call
     CHECK(!r214.ic->canAnswer(), "the answer window closes 10 s after the call");
     r214.held = 1;
@@ -1199,6 +1204,27 @@ static void testRoomCalls() {
     r214.held = 0;
     run(10);
     CHECK(r101.heardFrom(r214.id) > 15, "after that, TALK is an all-call again");
+    CHECK(!r214.ic->missedCall(), "an answered call is not a missed call");
+    // The office calls 214 again and nobody answers: a slow missed-call blink until a button is pressed.
+    officeTarget = 214, officeFlags = 0, officeTalk = 50;
+    run(60);
+    CHECK(!r214.ic->callAnswered() && r214.ic->canAnswer(), "second call to 214, not answered yet");
+    run(510);
+    CHECK(r214.ic->missedCall() && !r214.ic->canAnswer(), "10 s with no answer: 214 shows a missed call");
+    {
+        int on = 0;
+        for (int k = 0; k < 200; k++) {
+            run(1);
+            if (r214.ic->rgb()) on++;
+        }
+        CHECK(on > 10 && on < 60, "missed call: a short blue blink every 2 s (%d of 200 frames on)", on);
+    }
+    r214.held = 1u << kBtnDown;  // any button (DOWN, briefly)
+    run(3);
+    r214.held = 0;
+    run(5);
+    CHECK(!r214.ic->missedCall() && r214.ic->rgb() == 0 && r214.ic->lampLevel(Lamp::Other) == 0,
+          "a button press clears the missed call and its lights");
 
     // Floor 1: 101 and 102, not 214.
     uint32_t h214 = r214.heardFrom(kOffice);
