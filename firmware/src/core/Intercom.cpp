@@ -578,6 +578,14 @@ void Intercom::receive() {
             }
             p->status = s;
             p->lastFrame = frame_;
+            Peer* k = nullptr;
+            for (auto& q : known_)
+                if (q.status.from == s.from) k = &q;
+            if (!k && known_.size() < 200) {
+                known_.push_back(Peer());
+                k = &known_.back();
+            }
+            if (k) *k = *p;
         } else if (type == PacketType::Command) {
             // Signed with the network key (netkey), and never replayed.
             TextPacket t;

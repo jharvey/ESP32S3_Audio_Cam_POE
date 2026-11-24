@@ -6,6 +6,8 @@
 //
 //   GET  /             the page (HTML + JS, built in)
 //   GET  /api/status   live state as JSON (polled by the page once a second)
+//   GET  /school       whole-school status: every unit this one hears, as a grid of rooms
+//   GET  /api/school   that list as JSON (offline units stay listed, marked offline)
 //   POST /api/cmd      body = one console command, reply = its text. Needs header X-Intercom: 1
 //                      (a browser on another site can't add it, which blocks cross-site requests).
 //
@@ -40,6 +42,7 @@ public:
     explicit WebUi(Intercom& ic) : ic_(ic) {}
     HttpResponse handle(const HttpRequest& req);
     std::string statusJson() const;
+    std::string schoolJson();
 
 private:
     bool authorized(const std::string& header);
@@ -51,6 +54,7 @@ private:
     uint32_t lockedUntil_ = 0;
 };
 
-const char* webPage();  // WebPage.cpp
+const char* webPage();     // WebPage.cpp
+const char* schoolPage();  // SchoolPage.cpp
 
 }  // namespace ic

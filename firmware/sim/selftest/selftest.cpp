@@ -955,6 +955,19 @@ static void testWeb() {
               r.body.find("\"key\":\"mu\"") != std::string::npos && r.body.find("\"unit\":\"101\"") != std::string::npos,
           "status JSON has unit, IP, settings and peers");
 
+    req.path = "/school";
+    r = web.handle(req);
+    CHECK(r.status == 200 && r.body.find("School intercom") != std::string::npos, "school page served");
+    req.path = "/api/school";
+    r = web.handle(req);
+    CHECK(r.status == 200 && r.body.find("\"self\":\"214\"") != std::string::npos && r.body.find("\"unit\":\"101\"") != std::string::npos &&
+              r.body.find("\"online\":true") != std::string::npos,
+          "school JSON lists this unit and the units it hears");
+    for (int k = 0; k < 400; k++) a.step();  // 101 goes quiet for 8 s
+    r = web.handle(req);
+    CHECK(r.body.find("\"unit\":\"101\"") != std::string::npos && r.body.find("\"online\":false") != std::string::npos,
+          "a unit that went quiet stays listed, offline");
+
     req.path = "/api/cmd";
     req.method = "POST";
     req.body = "set volume_db -3";
