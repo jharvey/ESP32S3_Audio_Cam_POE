@@ -49,7 +49,7 @@ enum StatusFlags : uint8_t {
     kStatusTalkHeld = 0x10,  // TALK held for over 2 minutes: stuck button or something on it
 };
 // Status fault byte: what the unit's display is flashing.
-enum class Fault : uint8_t { None = 0, NoEthernet = 1, NoNetwork = 2, LowBattery = 3, Duplicate = 4 };
+enum class Fault : uint8_t { None = 0, NoEthernet = 1, NoNetwork = 2, LowBattery = 3, Duplicate = 4, Overload = 5 };
 
 struct AudioHeader {
     UnitId from;

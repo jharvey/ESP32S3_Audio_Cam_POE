@@ -78,6 +78,7 @@ public:
     // What the display shows besides the room number: "dUP", "E1 ", "E2 ", "Lo ", or empty.
     const char* fault() const;
     Fault faultCode() const;
+    uint8_t outputFaults() const { return outFaults_; }
     bool muted() const { return muteUntil_ != 0; }
     bool talkHeld() const { return talkSince_ && frame_ - talkSince_ >= kTalkHeldFrames; }
     Codec sendCodec() const { return encoder_ ? encoder_->codec() : Codec::Pcm16; }
@@ -123,6 +124,7 @@ private:
     uint16_t group_ = 0;       // room group, 0 = this unit's own room number
     uint32_t dupUntil_ = 0;    // another unit with our room number was heard until this frame
     uint32_t dupUid_ = 0;
+    uint8_t outFaults_ = 0;    // output switches shut down by a fault (IDiag::outputFaults)
     PowerState power_;         // read every second (I2C on the board), not every frame
     bool ethUp_ = false;
     LinkType link_ = LinkType::None;

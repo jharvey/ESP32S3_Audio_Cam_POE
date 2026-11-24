@@ -246,7 +246,10 @@ struct Bus {
     std::vector<std::deque<std::vector<uint8_t>>*> queues;
 };
 
-struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog {
+struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, IDiag {
+    uint8_t outFaults = 0;
+    std::string boardTest() override { return "ok fake board\n"; }
+    uint8_t outputFaults() override { return outFaults; }
     Bus* bus;
     std::deque<std::vector<uint8_t>> rx;
     UnitId id;
@@ -263,7 +266,7 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog {
         bus->queues.push_back(&rx);
         IntercomOptions opt;
         opt.unitUid = uid ? uid : 0xA0000000u + u.room;  // stands in for the board's MAC
-        ic.reset(new Intercom(Hal{this, this, this, this, this, this}, aec, opt));
+        ic.reset(new Intercom(Hal{this, this, this, this, this, this, this}, aec, opt));
         ic->begin();
     }
     void send(const uint8_t* d, size_t n) override {
@@ -361,6 +364,22 @@ static void testIntercom() {
     CHECK(!strcmp(r214.ic->fault(), "Lo "), "on battery at 10 %% -> Lo (got \"%s\")", r214.ic->fault());
     r214.pw = PowerState();
     run(60);
+
+    // A shorted output (lamp cable): oL on the display, the office sees it, gone once cleared.
+    r214.outFaults = 0x04;
+    run(60);
+    {
+        const StatusPacket* p = nullptr;
+        for (const Peer& q : r101.ic->peers())
+            if (q.status.from.room == 214) p = &q.status;
+        bool logged = false;
+        for (auto& l : r214.logs) logged |= l.find("OUTPUT OVERLOAD: call light") != std::string::npos;
+        CHECK(!strcmp(r214.ic->fault(), "oL ") && p && p->fault == Fault::Overload && logged,
+              "shorted output -> oL, logged, and the office sees it (got \"%s\")", r214.ic->fault());
+    }
+    r214.outFaults = 0;
+    run(60);
+    CHECK(!strcmp(r214.ic->fault(), ""), "fault cleared -> no code");
 
     // A second unit set to room 214 (a different board): both show dUP until one is renumbered.
     FakeUnit dup(&bus, {214, 0}, 200, 0xB0000214u);

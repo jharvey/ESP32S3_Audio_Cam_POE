@@ -21,6 +21,7 @@ not in the units yet.
 | `E1` flashing briefly | Network cable not connected; the unit is on Wi-Fi | Tell the office or IT |
 | `E2` flashing briefly | No network at all | Tell the office or IT |
 | `Lo` flashing briefly | Battery low (portable units) | Plug it into its PoE cable |
+| `oL` flashing briefly | A light or accessory cable on the unit is shorted; that output was switched off | Tell the office or IT; the intercom still works |
 | `dUP` and the number alternating | Another unit has the same room number | Tell the office; one unit needs its number changed |
 | `---` | No room number set yet | Set the number (see below) |
 | `CAL` *(planned)* | The office is calling your room | Hold TALK to answer |
