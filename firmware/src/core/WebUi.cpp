@@ -150,7 +150,8 @@ std::string WebUi::schoolJson() {
     PowerState pw = ic_.power();
     me.power = pw.source;
     me.battery = pw.hasBattery ? pw.batteryPct : 0;
-    me.flags = uint8_t((ic_.transmitting() ? kStatusTalking : 0) | (ic_.muted() ? kStatusMuted : 0) | (ic_.talkHeld() ? kStatusTalkHeld : 0));
+    me.flags = uint8_t((ic_.transmitting() ? kStatusTalking : 0) | (ic_.muted() ? kStatusMuted : 0) | (ic_.talkHeld() ? kStatusTalkHeld : 0) |
+                       (ic_.callingOffice() ? kStatusCalling : 0));
     me.fault = ic_.faultCode();
     me.group = ic_.group();
     formatUnit(me.from, u);
