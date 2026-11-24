@@ -215,4 +215,16 @@ Record-Scene "11-talking-from-the-pc" 22 @(
     Start-Sleep -Seconds 21
     Stop-Pages
 }
+# 12: the attention lights when the office calls and nobody answers
+Record-Scene "12-call-lights" 33 @(
+    @(0, 6, "Room 214 (left) and the office console (right). Watch the CALL, RGB and WHT lights under the display."),
+    @(6, 11, "The office calls 214: the white lamp, the blue RGB light and the call light blink together; CAL flashes."),
+    @(11, 20, "Nobody answers. The lights keep blinking for the 10 seconds TALK would still answer the office."),
+    @(20, 27, "Missed call: a short blink every 2 seconds and CAL alternating with 214, for up to 5 minutes."),
+    @(27, 33, "The teacher presses any button: the missed call is cleared. Holding DOWN 2 s would call the office back.")
+) {
+    Start-Unit "214" "--pos 0,0 --press M@27+0.3 --quit-after 33"
+    Start-Console "--rooms 214 --auto-talk 6,4,214 --quit-after 33"
+}
+
 Write-Host "done: $out"
