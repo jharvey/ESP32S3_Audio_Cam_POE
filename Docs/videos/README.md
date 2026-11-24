@@ -22,3 +22,10 @@ the office console, with a caption bar explaining each step. Re-record them afte
 | [07-calling-the-office.mp4](07-calling-the-office.mp4) | A teacher calls the office with DOWN held 2 s (`oFC`); the office console shows it and calls back |
 | [08-setting-the-room-number.mp4](08-setting-the-room-number.mp4) | Changing a unit's room number with the hidden SETUP button (101 to 305) |
 | [09-power-up-light-test.mp4](09-power-up-light-test.mp4) | The 4-second light test at power-up: every segment, the lamps and the RGB light |
+
+## Web console (office PC browser)
+
+| Video | Shows |
+|---|---|
+| [10-school-status-page.mp4](10-school-status-page.mp4) | The school page on the office PC: every unit by floor, talking (yellow), calling the office (blue), offline (red) |
+| [11-talking-from-the-pc.mp4](11-talking-from-the-pc.mp4) | Talking to the school from the office PC microphone; room 214 hears it |

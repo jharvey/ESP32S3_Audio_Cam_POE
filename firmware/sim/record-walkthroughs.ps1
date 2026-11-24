@@ -22,6 +22,22 @@ function Start-Console([string]$extra) {
     # the office console as the right-hand window (800 x 720)
     Start-Process -FilePath $console -ArgumentList ("--key $key --test-voice --pos 800,0,800,720 " + $extra) -WindowStyle Normal | Out-Null
 }
+$edge = "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
+$edgeProfile = Join-Path $tmp "edge-profile"
+function Start-Page([string]$url, [string]$geom, [string]$extra) {
+    # an Edge app window (own throw-away profile, so the user's Edge is not touched); geom = "x,y,w,h"
+    # The window is made 60 px taller than asked so nothing behind it (desktop, taskbar) shows in the
+    # recorded strip; --test-type hides Edge's warning bar about the test flags.
+    $g = $geom.Split(",")
+    $h = [int]$g[3] + 60
+    Start-Process -FilePath $edge -ArgumentList ("--app=`"$url`" --user-data-dir=`"$edgeProfile`" --no-first-run --test-type " +
+        "--window-position=$($g[0]),$($g[1]) --window-size=$($g[2]),$h " + $extra) | Out-Null
+}
+function Stop-Pages {
+    # only the Edge processes started with the throw-away profile
+    Get-CimInstance Win32_Process -Filter "Name='msedge.exe'" | Where-Object { $_.CommandLine -like "*edge-profile*" } |
+        ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
+}
 function Send-Cmd([string]$cmd) {
     Start-Process -FilePath $sim -ArgumentList ("--send `"$cmd`" --key $key") -WindowStyle Hidden -Wait | Out-Null
 }
@@ -44,7 +60,12 @@ function Record-Scene([string]$id, [int]$seconds, $captions, [scriptblock]$actio
     & $actions
     $ff.WaitForExit()
     $vf = Caption-Filter $captions
-    & ffmpeg -y -loglevel error -i $raw -vf $vf -c:v libx264 -crf 30 -pix_fmt yuv420p -movflags +faststart (Join-Path $out "$id.mp4")
+    # PRIVACY: the windows take a moment to open and close by themselves at the end, and anything behind
+    # them (the user's desktop, other apps) would be recorded. Keep only the part where they are up:
+    # drop the first $lead s and stop $tail s before the end. Caption times stay in recording time.
+    $lead = 2.5; $tail = 1.5
+    $keep = [string]::Format([Globalization.CultureInfo]::InvariantCulture, "{0:0.0}", $seconds - $lead - $tail)
+    & ffmpeg -y -loglevel error -i $raw -vf $vf -ss $lead -t $keep -c:v libx264 -crf 30 -pix_fmt yuv420p -movflags +faststart (Join-Path $out "$id.mp4")
     Start-Sleep -Seconds 2
 }
 
@@ -157,5 +178,41 @@ Record-Scene "09-power-up-light-test" 14 @(
     Start-Unit "214" "--pos 0,0 --quit-after 14"
     Start-Sleep -Milliseconds 700
     Start-Unit "101" "--pos 800,0 --quit-after 13"
+}
+
+# 10: the school status page (web console) on the office PC
+Record-Scene "10-school-status-page" 30 @(
+    @(0, 7, "The office PC's browser shows the school page of the office unit: every unit, floor by floor, every 2 s."),
+    @(7, 13, "Yellow = talking: room 102 holds TALK."),
+    @(13, 19, "Blue = a room calling the office: the teacher in 214 held DOWN for 2 seconds."),
+    @(19, 25, "Red = offline: gym unit 298 stopped answering; the card says when it was last heard."),
+    @(25, 30, "Click a room to call it, send it commands, or set timed events in the panels below.")
+) {
+    Start-Unit "101" "--headless --web-port 8101 --web-pass video-demo-pass --quit-after 31"
+    Start-Sleep -Seconds 1   # the page needs 101's web server; the first 2.5 s are cut anyway
+    Start-Page "http://admin:video-demo-pass@localhost:8101/school" "0,0,1600,720" ""
+    Start-Unit "102" "--headless --auto-talk 8,6 --quit-after 31"
+    Start-Unit "214" "--headless --press D@13+2.3 --quit-after 31"
+    Start-Unit "205" "--headless --battery --no-poe --quit-after 31"
+    Start-Unit "299" "--headless --quit-after 31"
+    Start-Unit "298" "--headless --quit-after 14"
+    Start-Sleep -Seconds 28
+    Stop-Pages
+}
+
+# 11: talking to the school from the office PC's microphone
+Record-Scene "11-talking-from-the-pc" 22 @(
+    @(0, 5, "Left: the school page on the office PC. Right: room 214."),
+    @(5, 9, "Hold the Talk button (or the space bar) and speak: the meter shows the PC microphone's level."),
+    @(9, 14, "Room 214 hears the office (RX light, speaker meter); so does every other room."),
+    @(14, 22, "Pick a room or a floor in the list (R2) to call just them. Answers come back on the office unit.")
+) {
+    Start-Unit "101" "--headless --web-port 8101 --web-pass video-demo-pass --quit-after 23"
+    Start-Unit "214" "--pos 800,0 --quit-after 23"
+    Start-Sleep -Seconds 1
+    # the page loads when the office unit is up; it talks from 1.5 s to 10.5 s after loading
+    Start-Page "http://admin:video-demo-pass@localhost:8101/school#test-talk-9" "0,0,800,720" "--use-fake-device-for-media-stream --use-fake-ui-for-media-stream"
+    Start-Sleep -Seconds 21
+    Stop-Pages
 }
 Write-Host "done: $out"

@@ -199,7 +199,8 @@ document.getElementById("sresume").addEventListener("click",()=>schedAll("skip o
 document.getElementById("soffadd").addEventListener("click",()=>{const d=document.getElementById("soff").value;if(d)schedAll("dayoff add "+d);});
 document.getElementById("soffdel").addEventListener("click",()=>{const d=document.getElementById("soff").value;if(d)schedAll("dayoff del "+d);});
 loadSched();
-if(location.hash==="#test-talk"){setTimeout(startTalk,1500);setTimeout(stopTalk,5500);}  // scripted check: talk 4 s
+{const m=location.hash.match(/^#test-talk(?:-(\d+))?$/);  // scripted checks / videos: talk N s (default 4)
+ if(m){setTimeout(startTalk,1500);setTimeout(stopTalk,1500+1000*(+m[1]||4));}}
 </script></body></html>)PAGE";
 }
 
