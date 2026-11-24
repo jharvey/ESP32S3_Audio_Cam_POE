@@ -45,7 +45,8 @@ public:
 
 // Front panel: buttons (U22, a TCA9555 input each) and the 3-digit display (TM1637). SETUP is the hidden
 // button under the front cover: holding it 3 s starts room-number setup.
-enum Button : uint8_t { kBtnTalk = 0, kBtnMode = 1, kBtnUp = 2, kBtnDown = 3, kBtnSetup = 4, kButtonCount = 5 };
+// Front: TALK and OFFICE (calls / answers the office, R2). Under the cover: MODE, UP, DOWN, SETUP.
+enum Button : uint8_t { kBtnTalk = 0, kBtnMode = 1, kBtnUp = 2, kBtnDown = 3, kBtnSetup = 4, kBtnOffice = 5, kButtonCount = 6 };
 
 class IPanel {
 public:
