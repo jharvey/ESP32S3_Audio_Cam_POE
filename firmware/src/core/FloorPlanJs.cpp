@@ -178,7 +178,7 @@ function unitsIn(fi,n){return units.filter(u=>{const p=where(u);return p&&p.f===
 
 let hot=0;  // room shown highlighted (picked, talking or ringing)
 function full(){
-  if(!plan){box.innerHTML=`<div class="bar"><b>Floor plan</b><button id="pload">Load a DXF floor plan…</button>
+  if(!plan){box.innerHTML=`<div class="bar"><b>Floor plan</b><button id="pload">Load a DXF floor plan…</button><button id="pdemo">Show a demo plan</button>
     <span class="hint">Shows every unit on its room. The file stays in this browser only: it is not sent to the unit.</span>${msg?`<span class="hint">${esc(msg)}</span>`:""}</div>`;
     hook();return}
   if(floor>=plan.floors.length)floor=0;
@@ -224,6 +224,7 @@ function hook(){
     const rd=new FileReader();rd.onload=()=>loadText(rd.result);rd.readAsText(f);fi.value=""})}
   const b=id=>document.getElementById(id);
   if(b("pload"))b("pload").onclick=()=>fi.click();
+  if(b("pdemo"))b("pdemo").onclick=showDemo;
   if(b("pmove"))b("pmove").onclick=()=>{moving=!moving;sel=null;part()};
   if(b("pdel"))b("pdel").onclick=()=>{if(confirm("Remove the floor plan from this browser? Unit positions you placed are kept.")){plan=null;try{localStorage.removeItem(KP)}catch(e){}full()}};
   const svg=b("psvg");if(!svg)return;
@@ -255,6 +256,44 @@ function hook(){
     save(KU,place);sel=null;part()});
 }
 function render(){full()}
+// A made-up plan from the units online (a corridor of rooms per floor): to try the map without a DXF,
+// and for the videos (the school's own plan must not be published).
+function demoDxf(){
+  const rooms=[...new Set(units.map(u=>u.room).filter(r=>r>=100))].sort((a,b)=>a-b);
+  if(!rooms.length)throw new Error("no units online yet to lay out");
+  const fl={};for(const r of rooms)(fl[Math.floor(r/100)]=fl[Math.floor(r/100)]||[]).push(r);
+  const W=360,D=300,C=96;let o="0\nSECTION\n2\nENTITIES\n";
+  const L=(lay,x1,y1,x2,y2)=>{o+=`0\nLINE\n8\n${lay}\n10\n${x1}\n20\n${y1}\n11\n${x2}\n21\n${y2}\n`};
+  const T=(lay,x,y,s)=>{o+=`0\nTEXT\n8\n${lay}\n10\n${x}\n20\n${y}\n40\n24\n1\n${s}\n`};
+  for(const f in fl){
+    const rs=fl[f],lay="demo"+f,half=Math.ceil(rs.length/2),len=half*W,M=Math.max(len,2*D+C),g=Math.max(12,0.0095*M);
+    rs.forEach((r,i)=>{const top=i<half,x=(top?i:i-half)*W,y0=top?C/2:-C/2,y1=top?C/2+D:-C/2-D,mid=x+W/2;
+      L(lay,x,y0,x,y1);L(lay,x+W,y0,x+W,y1);L(lay,x,y1,x+W,y1);L(lay,x,y0,mid-g,y0);L(lay,mid+g,y0,x+W,y0);
+      T(lay,mid-60,(y0+y1)/2,"ROOM "+r)});
+    const bl=(rs.length-half)*W;if(bl<len)L(lay,bl,-C/2,len,-C/2);  // a shorter bottom row: close the corridor
+    L(lay,0,-C/2,0,C/2);L(lay,len,-C/2,len,C/2);
+  }
+  return o+"0\nENDSEC\n0\nEOF\n";
+}
+function showDemo(){
+  try{loadText(demoDxf());msg="A demo plan made from the units online, not your building: load your DXF to replace it."}
+  catch(e){msg="No demo plan: "+e.message}
+  part();
+}
+// Scripted gestures for the videos (no mouse is recorded): a tap mark shows where the "finger" is.
+function tapAt(n,ms){
+  const L=plan&&plan.rooms[n];if(!L)return null;if(L.f!==floor){floor=L.f;full()}
+  const svg=document.getElementById("psvg"),F=plan.floors[floor],r=Math.max(F.x1-F.x0,F.y1-F.y0)*0.02;
+  const x=L.x+r*3,y=L.y,c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+  c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",r);c.setAttribute("fill","rgba(200,40,40,.45)");
+  c.setAttribute("pointer-events","none");svg.appendChild(c);setTimeout(()=>c.remove(),ms);
+  const p=svg.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(svg.getScreenCTM());return {clientX:q.x,clientY:q.y};
+}
+function fire(t,c){document.getElementById("psvg").dispatchEvent(new PointerEvent(t,Object.assign({bubbles:true,pointerId:1,isPrimary:true},c)))}
+window.planTest={demo:showDemo,
+  press(n,ms){const c=tapAt(n,ms+200);if(!c)return;fire("pointerdown",c);setTimeout(()=>fire("pointerup",c),ms)},
+  dbl(n){const c=tapAt(n,700);if(!c)return;fire("pointerdown",c);
+    setTimeout(()=>fire("pointerup",c),80);setTimeout(()=>fire("pointerdown",c),220);setTimeout(()=>fire("pointerup",c),300)}};
 function loadText(txt){
   try{const p=build(parseDxf(txt));plan=p;floor=0;save(KF,0);for(const k in regCache)delete regCache[k];
     msg=save(KP,p)?"":"Loaded, but too big to keep in this browser: load it again next time.";
