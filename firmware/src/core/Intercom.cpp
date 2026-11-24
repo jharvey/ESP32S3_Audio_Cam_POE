@@ -20,6 +20,7 @@ constexpr uint32_t kComboFrames = 150;   // MODE + UP held 3 s = auto-tune
 constexpr uint32_t kUpHoldFrames = 250;  // or UP alone held 5 s (one-key panels)
 constexpr uint32_t kResultFrames = 250;  // show the auto-tune result for 5 s
 constexpr uint32_t kDupHoldFrames = 150; // "dUP" stays 3 s after the other unit was last heard
+constexpr uint32_t kGroupTalkHoldFrames = 15;  // speaker stays quiet 300 ms after a room-group member's last frame
 constexpr uint32_t kFaultCycle = 175;    // faults: room number 3 s, then the code for 0.5 s
 constexpr uint32_t kFaultShow = 25;
 constexpr uint8_t kLowBatteryPct = 15;
@@ -42,7 +43,8 @@ const char* kHelp =
     "  cal result           last auto-tune measurements\n"
     "  stats                echo canceller and link state\n"
     "  unit [214]           show or set the room number (sets the IP address 10.42.<floor>.<room>)\n"
-    "  group [299|off]      room group: units in one room (the gym: 299, 298 ...) do not play each other\n"
+    "  group [299|off]      room group: units in one room (the gym: 299, 298 ...) do not play each other,\n"
+    "                         and go quiet while one of them talks\n"
     "  couple [run S auto|manual 101,102,...|clear]  room coupling test: every unit in the list plays a sweep in\n"
     "                       turn (S s each, sent to all units at once by the office); couple = result\n"
     "  tone [seconds]       play a 1 kHz test tone on this unit's speaker (default 2 s, 0 stops)\n"
@@ -480,7 +482,12 @@ void Intercom::receive() {
             size_t plen;
             if (!decodeAudioData(buf, n, &h, &payload, &plen) || !codecAvailable(h.codec)) continue;
             if (h.from == unit_) continue;                                               // our own multicast echo
-            if (sameGroup(h.from) && !(h.flags & kAudioFromConsole)) continue;            // same room group: heard acoustically
+            if (sameGroup(h.from) && !(h.flags & kAudioFromConsole)) {                     // same room group: heard acoustically
+                // and while it talks, this speaker goes quiet: the talker's echo canceller only knows its own
+                // speaker, so the room's other speakers would go back out through its microphone as echo.
+                groupTalkUntil_ = frame_ + kGroupTalkHoldFrames;
+                continue;
+            }
             if (h.target != 0 && h.target != unit_.room) continue;                       // a call for another room
             if (Talker* t = talkerFor(h.from)) {
                 t->jb.push(h.seq, h.codec, payload, plen, h.level);
@@ -862,6 +869,7 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     }
     playing_ = n;
     float gainDb = params_.volumeDb + ((transmitting_ && params_.duck) ? params_.duckDb : 0.0f);
+    if (groupTalking() && !transmitting_) n = 0;  // another unit in this room is talking (see receive())
     if (n) mixer_.mix(in, n, std::pow(10.0f, gainDb / 20.0f), speaker);
     else std::memset(speaker, 0, sizeof(int16_t) * kFrameSamples);
     if (toneFrames_) {  // test tone, -12 dBFS, mixed in before the echo canceller's reference

@@ -326,6 +326,9 @@ static void testIntercom() {
     // 101 and gym A talk at the same time for 2 s.
     r101.held = gymA.held = 1;
     run(100);
+    CHECK(gymB.ic->groupTalking() && gymB.ic->speakerLevel() == 0 && r214.ic->speakerLevel() > 0,
+          "298 goes quiet while 299 (same room) talks, so 299's mic doesn't pick up 101 from it (298 %u, 214 %u)",
+          unsigned(gymB.ic->speakerLevel()), unsigned(r214.ic->speakerLevel()));
     r101.held = gymA.held = 0;
     run(20);
     CHECK(r214.heardFrom(r101.id) > 90 && r214.heardFrom(gymA.id) > 90, "214 heard 101 (%u frames) and 299 (%u) at once",
