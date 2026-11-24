@@ -23,6 +23,7 @@ the office console, with a caption bar explaining each step. Re-record them afte
 | [08-setting-the-room-number.mp4](08-setting-the-room-number.mp4) | Changing a unit's room number with the hidden SETUP button (101 to 305) |
 | [09-power-up-light-test.mp4](09-power-up-light-test.mp4) | The 4-second light test at power-up: every segment, the lamps and the RGB light |
 | [12-call-lights.mp4](12-call-lights.mp4) | The office calls a room: white, blue and call lights blink with `CAL` until answered; a missed call keeps a short blink until a button is pressed |
+| [13-floor-plan-calls.mp4](13-floor-plan-calls.mp4) | The office floor plan (a made-up demo plan): hold a room to talk to it, double-click to ring it; the teacher answers with OFFICE |
 
 ## Web console (office PC browser)
 

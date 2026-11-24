@@ -75,6 +75,9 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     floorBtn_ = new QPushButton("Call its floor");
     roomBtn_->setToolTip("Only that room hears you (every unit of a room group, e.g. the gym); it hears a chime first and can answer");
     floorBtn_->setToolTip("Every room on the selected room's floor (214 -> floor 2)");
+    auto* ringBtn = new QPushButton("Ring selected room");
+    ringBtn->setToolTip("No audio: the room chimes every 2 s and blinks for 10 s; the teacher answers with TALK or OFFICE");
+    ringBtn->setMinimumHeight(44);
     for (QPushButton* b : {allBtn_, roomBtn_, floorBtn_}) b->setMinimumHeight(44);
     allBtn_->setStyleSheet("font-weight:600");
     micSrc_ = new QComboBox;
@@ -86,6 +89,7 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     tl->addWidget(allBtn_);
     tl->addWidget(roomBtn_);
     tl->addWidget(floorBtn_);
+    tl->addWidget(ringBtn);
     tl->addWidget(new QLabel("Mic:"));
     tl->addWidget(micSrc_);
     tl->addWidget(listen_);
@@ -107,6 +111,12 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     connect(allBtn_, &QPushButton::pressed, this, [this] { startTalk(kTalkAll); });
     connect(roomBtn_, &QPushButton::pressed, this, [this] { startTalk(kTalkRoom); });
     connect(floorBtn_, &QPushButton::pressed, this, [this] { startTalk(kTalkFloor); });
+    connect(ringBtn, &QPushButton::clicked, this, [this] {
+        QString u = selectedUnit();
+        if (u.isEmpty()) return appendLog("select a room first");
+        sendText(u, "ring");
+        appendLog("ringing " + u + " for 10 s: it answers with TALK or OFFICE");
+    });
     for (QPushButton* b : {allBtn_, roomBtn_, floorBtn_}) connect(b, &QPushButton::released, this, &ConsoleWindow::stopTalk);
     connect(listen_, &QCheckBox::toggled, this, [this](bool on) {
         if (on && !out_.isOpen() && !out_.open()) appendLog("no PC speaker available");

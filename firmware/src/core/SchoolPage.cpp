@@ -244,6 +244,10 @@ document.getElementById("sresume").addEventListener("click",()=>schedAll("skip o
 document.getElementById("soffadd").addEventListener("click",()=>{const d=document.getElementById("soff").value;if(d)schedAll("dayoff add "+d);});
 document.getElementById("soffdel").addEventListener("click",()=>{const d=document.getElementById("soff").value;if(d)schedAll("dayoff del "+d);});
 loadSched();
+if(location.hash==="#test-plan"){  // video: a demo plan; hold room 214 for 4 s (talk), then double-click it (ring)
+  const go=setInterval(()=>{if(!window.planTest||lastSchool.units.filter(u=>u.online).length<4)return;clearInterval(go);
+    planUpdate(lastSchool.units);planTest.demo();document.getElementById("plan").scrollIntoView();
+    setTimeout(()=>planTest.press(214,4000),2500);setTimeout(()=>planTest.dbl(214),9500);},300);}
 {const m=location.hash.match(/^#test-talk(?:-(\d+))?$/);  // scripted checks / videos: talk N s (default 4)
  if(m){setTimeout(startTalk,1500);setTimeout(stopTalk,1500+1000*(+m[1]||4));}}
 </script><script src="/floorplan.js"></script></body></html>)PAGE";

@@ -29,6 +29,8 @@ function Start-Page([string]$url, [string]$geom, [string]$extra) {
     # The window is made 60 px taller than asked so nothing behind it (desktop, taskbar) shows in the
     # recorded strip; --test-type hides Edge's warning bar about the test flags.
     $g = $geom.Split(",")
+    # a fresh profile every time: nothing left over from an earlier scene (a floor plan in local storage)
+    if (Test-Path $edgeProfile) { Remove-Item -Recurse -Force $edgeProfile -ErrorAction SilentlyContinue }
     $h = [int]$g[3] + 60
     Start-Process -FilePath $edge -ArgumentList ("--app=`"$url`" --user-data-dir=`"$edgeProfile`" --no-first-run --test-type " +
         "--window-position=$($g[0]),$($g[1]) --window-size=$($g[2]),$h " + $extra) | Out-Null
@@ -215,6 +217,24 @@ Record-Scene "11-talking-from-the-pc" 22 @(
     Start-Sleep -Seconds 21
     Stop-Pages
 }
+# 13: the floor plan on the office PC: hold a room to talk, double-click to ring (a made-up demo plan)
+Record-Scene "13-floor-plan-calls" 36 @(
+    @(0, 6, "Office PC (left): the school page with a demo floor plan. Right: room 214."),
+    @(6, 11, "Hold a room on the plan to talk to it: 214 hears a chime, then the office's voice."),
+    @(11, 17, "Double-click a room to ring it: no audio; 214 chimes every 2 s and blinks its lights."),
+    @(17, 22, "The teacher holds OFFICE (the blue button) to answer: the office hears them on the office unit."),
+    @(22, 30, "Rooms come from the drawing's walls: click anywhere in a room, or just outside its walls."),
+    @(30, 36, "Your school's own DXF stays in the office browser only; this video uses a made-up demo plan.")
+) {
+    Start-Unit "105" "--headless --web-port 8101 --web-pass video-demo-pass --quit-after 37"
+    foreach ($r in "101", "102", "103", "201", "202") { Start-Unit $r "--headless --quit-after 37" }
+    Start-Unit "214" "--pos 800,0 --press O@17+3 --quit-after 37"
+    Start-Sleep -Seconds 1
+    Start-Page "http://admin:video-demo-pass@localhost:8101/school#test-plan" "0,0,800,720" "--use-fake-device-for-media-stream --use-fake-ui-for-media-stream"
+    Start-Sleep -Seconds 35
+    Stop-Pages
+}
+
 # 12: the attention lights when the office calls and nobody answers
 Record-Scene "12-call-lights" 33 @(
     @(0, 6, "Room 214 (left) and the office console (right). Watch the CALL, RGB and WHT lights under the display."),
