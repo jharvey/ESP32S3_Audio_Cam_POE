@@ -114,6 +114,7 @@ public:
     bool canAnswer() const;         // TALK now answers the caller only (during a call and 10 s after)
     const UnitId& caller() const { return callFrom_; }
     bool callAnswered() const { return callAnswered_; }       // TALK answered the last call
+    bool testsLocked() const { return !hal_.store->loadText("testpass").empty(); }  // installer tests need a password
     bool missedCall() const { return frame_ < missedUntil_; }  // a call went unanswered: slow blink until a button
     bool callingOffice() const { return callingOffice_; }
     bool chiming() const { return soundActive_ && sound_ == Sound::Chime; }
@@ -215,6 +216,7 @@ private:
     UnitId callFrom_;             // last unit that called this room
     uint32_t callLast_ = 0;       // frame of its last packet; 0 = no call yet
     bool callAnswered_ = true;    // TALK answered it (until then the call LEDs blink to get attention)
+    bool testsOk_ = false;        // running a command inside "tests <password> ..." (password checked)
     uint32_t missedUntil_ = 0;    // missed-call blink runs until this frame (or until a button is pressed)
     uint32_t allCallUntil_ = 0;   // an office all-call is playing: room calls wait
     uint8_t lamp_[int(Lamp::Count)] = {0, 0, 0};

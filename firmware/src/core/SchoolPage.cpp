@@ -50,23 +50,30 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 <button id="talk" title="Hold the button (or the space bar) and speak">Hold to talk to everyone</button>
 <div class="meterbox"><div id="tmeter"></div></div><span id="tstate" class="mute">Uses this PC's microphone. Rooms answer on the office unit.</span></div>
 <div id="plan"></div>
-<div id="rooms"></div>
-<div class="panels">
-<section class="panel"><h2>Commands</h2>
- <div class="prow"><select id="ctarget"><option value="all">All units</option><option value="sel">The selected room</option></select>
- <input id="cmd" placeholder="stats" size="24"><button id="csend">Send</button></div>
- <div class="mute">The same commands as the USB console ("help" lists them), signed with this unit's network key.</div>
- <pre id="cout"></pre></section>
-<section class="panel"><h2>Timed events (kept on every unit)</h2>
- <pre id="sched">…</pre>
- <div class="prow"><input type="time" id="stime" value="11:30"><select id="sdays"><option>mon-fri</option><option>daily</option><option>weekend</option></select>
- <select id="ssound"><option>bell</option><option>lunch</option><option>chime</option><option>tone</option></select>
- <select id="swho"><option value="all">everyone</option><option value="room">the selected room</option><option value="floor">its floor</option></select>
- <button id="sadd">Add</button></div>
- <div class="prow">Delete number <input type="number" id="sdel" min="1" style="width:5em"><button id="sdelb">Delete</button>
- <button id="sskip">Skip today</button><button id="sresume">Resume today</button></div>
- <div class="prow">Day off <input type="date" id="soff"><button id="soffadd">Add</button><button id="soffdel">Remove</button></div>
-</section></div></main>
+<div id="rooms"></div>
+<div class="panels">
+<section class="panel"><h2>Commands</h2>
+ <div class="prow"><select id="ctarget"><option value="all">All units</option><option value="sel">The selected room</option></select>
+ <input id="cmd" placeholder="stats" size="24"><button id="csend">Send</button></div>
+ <div class="mute">The same commands as the USB console ("help" lists them), signed with this unit's network key.</div>
+ <pre id="cout"></pre></section>
+<section class="panel"><h2>Timed events (kept on every unit)</h2>
+ <pre id="sched">…</pre>
+ <div class="prow"><input type="time" id="stime" value="11:30"><select id="sdays"><option>mon-fri</option><option>daily</option><option>weekend</option></select>
+ <select id="ssound"><option>bell</option><option>lunch</option><option>chime</option><option>tone</option></select>
+ <select id="swho"><option value="all">everyone</option><option value="room">the selected room</option><option value="floor">its floor</option></select>
+ <button id="sadd">Add</button></div>
+ <div class="prow">Delete number <input type="number" id="sdel" min="1" style="width:5em"><button id="sdelb">Delete</button>
+ <button id="sskip">Skip today</button><button id="sresume">Resume today</button></div>
+ <div class="prow">Day off <input type="date" id="soff"><button id="soffadd">Add</button><button id="soffdel">Remove</button></div>
+</section>
+<section class="panel"><h2>Installer tests</h2>
+ <div class="prow"><button id="tclosed">Coupling test: doors closed</button><button id="topen">Coupling test: doors open</button></div>
+ <div class="prow"><button id="tcal">Auto-tune the selected room</button></div>
+ <div class="mute">Coupling test: every unit plays a short sweep in turn (about 1 s each) while the others listen, to find
+ rooms that hear each other. Run it once with the classroom doors closed and once with them open; rooms must be quiet.
+ Auto-tune: the room's unit plays noise for 2 s to set its echo canceller. Results show under Commands.</div></section>
+</div></main>
 <script>
 const FAULT=["","E1 no Ethernet (on Wi-Fi)","E2 no network","Lo battery low","dUP duplicate number","oL output shorted"];
 function card(u){
@@ -99,6 +106,7 @@ async function tick(){
     const floors={};for(const u of us){const fl=Math.floor(u.room/100);(floors[fl]=floors[fl]||[]).push(u);}
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
+    lastSchool=j;
     if(window.planUpdate)planUpdate(us);  // floor plan map (/floorplan.js)
   }catch(e){document.getElementById("err").textContent="Can't reach the unit: "+e.message;}
 }
@@ -190,6 +198,27 @@ document.getElementById("csend").addEventListener("click",async()=>{
   await sendTo(t,c);document.getElementById("cmd").value="";});
 document.getElementById("cmd").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("csend").click();});
 async function loadSched(){document.getElementById("sched").textContent=await cmd("sched");}
+// ---- Installer tests: need the tests password if one is set on the unit (USB: testpass) -----------
+let lastSchool={units:[]},testPw=null;
+async function testCmd(text){
+  if(lastSchool.tests_locked&&testPw===null){const p=prompt("Tests password");if(p===null)return null;testPw=p;}
+  const r=await cmd("tests "+(testPw||"-")+" "+text);
+  if(r.indexOf("password")>=0)testPw=null;
+  out("> "+text+"   ("+r+")");return r;}
+async function coupleTest(open){
+  const rooms=lastSchool.units.filter(u=>u.online).map(u=>u.room);
+  if(rooms.length<2){out("coupling test: needs at least two units online");return;}
+  if(!confirm(`Coupling test with the doors ${open?"OPEN":"CLOSED"}: every unit plays a short sweep in turn, about ${rooms.length+2} s. The rooms must be quiet. Start?`))return;
+  const c="couple run 1 auto "+rooms.join(",")+(open?" open":" closed");
+  const r=await testCmd("send all "+c);if(r===null||r.indexOf("sent")<0)return;
+  await testCmd(c);
+  setTimeout(async()=>{out("this unit: "+await cmd("couple"));sendTo("all","couple");},(rooms.length+3)*1000);}
+document.getElementById("tclosed").addEventListener("click",()=>coupleTest(false));
+document.getElementById("topen").addEventListener("click",()=>coupleTest(true));
+document.getElementById("tcal").addEventListener("click",async()=>{
+  if(!selRoom){out("auto-tune: click a room first");return;}
+  if(!confirm(`Auto-tune room ${selRoom.room}: its unit plays a 2-second noise burst. The room should be quiet. Start?`))return;
+  testCmd(String(selRoom.room)===lastSchool.self?"cal":"send "+selRoom.room+" cal");});
 async function schedAll(text){await sendTo("all",text);setTimeout(loadSched,1500);}
 document.getElementById("sadd").addEventListener("click",()=>{
   const w=document.getElementById("swho").value;let who="";

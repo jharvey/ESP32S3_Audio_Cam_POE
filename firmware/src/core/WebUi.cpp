@@ -236,7 +236,8 @@ std::string WebUi::schoolJson() {
     me.fault = ic_.faultCode();
     me.group = ic_.group();
     formatUnit(me.from, u);
-    std::string out = std::string("{\"self\":\"") + u + "\",\"units\":[" + one(me, true, 0);
+    std::string out = std::string("{\"self\":\"") + u + "\",\"tests_locked\":" + (ic_.testsLocked() ? "true" : "false") +
+                      ",\"units\":[" + one(me, true, 0);
     for (const Peer& s : ic_.known()) {
         double age = double(now - s.lastFrame) * kFrameMs / 1000.0;
         out += "," + one(s.status, age < 5.0, age);

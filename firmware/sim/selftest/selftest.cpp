@@ -944,6 +944,21 @@ static void testWeb() {
     a.ic->command("webpass s3cret-pass");
     CHECK(a.kv["web_pass"].find("s3cret") == std::string::npos && a.kv["web_pass"].size() > 64, "password stored as a hash");
 
+    // Installer tests password: none set = tests open to the web login; set = needed.
+    CHECK(!a.ic->testsLocked() && a.ic->command("tests - couple run", CmdSource::Web).find("usage") != std::string::npos,
+          "no tests password: \"tests -\" runs the command (here its usage)");
+    CHECK(a.ic->command("testpass gym-key", CmdSource::Web).find("USB") != std::string::npos, "testpass refused from the web");
+    a.ic->command("testpass gym-key");
+    CHECK(a.ic->testsLocked() && a.ic->command("cal", CmdSource::Web).find("tests password") != std::string::npos &&
+              a.ic->command("send all couple run 1 auto 101,214", CmdSource::Web).find("tests password") != std::string::npos,
+          "tests password set: auto-tune and coupling test refused straight from the web");
+    CHECK(a.ic->command("tests nope cal", CmdSource::Web).find("wrong") != std::string::npos, "wrong tests password refused");
+    CHECK(a.ic->command("tests gym-key couple run", CmdSource::Web).find("usage") != std::string::npos &&
+              a.ic->command("stats", CmdSource::Web).find("password") == std::string::npos,
+          "right tests password runs it; other commands don't need it");
+    a.ic->command("testpass off");
+    CHECK(!a.ic->testsLocked(), "testpass off: no tests password again");
+
     HttpResponse r = web.handle(req);
     CHECK(r.status == 401 && r.askLogin && r.realm == "Intercom 214", "no login: 401 asks for the password");
     req.authorization = basic("admin:wrong-pass");

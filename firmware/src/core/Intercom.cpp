@@ -69,6 +69,8 @@ const char* kHelp =
     "  lamp [white|ir|other 0-100|auto]  lamp outputs; other = call light (blinks for a call, on for an all-call)\n"
     "  ntp [server|default] the school's time server (from the next restart)\n"
     "  send all|ROOM CMD    send a console command to other units, signed with this unit's key (web / USB)\n"
+    "  testpass <pw>|off    password for installer tests (auto-tune, coupling) from the web console (USB only)\n"
+    "  tests <pw|-> CMD     run CMD (cal, couple run, send ... cal) with the tests password (the school page)\n"
     "  callofc [off]        call the office (as DOWN held 2 s; the console shows it until answered)\n"
     "  talk [seconds|off] [room N|floor N|group N]\n"
     "                       transmit as if TALK were held, to everyone or a target (USB only; default 5 s)\n"
@@ -161,6 +163,31 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
     if (a.empty()) return "";
     const std::string& c = a[0];
     char buf[256];
+
+    // Installer tests (auto-tune, coupling test) from the web console need the tests password, set on USB
+    // with "testpass" (none set = no password). The school page sends them as "tests <password|-> <command>".
+    if (c == "testpass") {
+        if (src != CmdSource::Local) return "testpass only works from the USB console";
+        if (a.size() == 2) hal_.store->saveText("testpass", a[1] == "off" ? "" : a[1]);
+        else if (a.size() != 1) return "usage: testpass <password> | testpass off";
+        return testsLocked() ? "tests password set" : "no tests password (installer tests open to the web console login)";
+    }
+    if (c == "tests") {
+        if (a.size() < 3) return "usage: tests <password|-> <command ...>";
+        if (testsLocked() && a[1] != hal_.store->loadText("testpass")) return "wrong tests password";
+        std::string inner;
+        for (size_t i = 2; i < a.size(); i++) inner += (i > 2 ? " " : "") + a[i];
+        testsOk_ = true;
+        std::string r = command(inner, src);
+        testsOk_ = false;
+        return r;
+    }
+    if (src == CmdSource::Web && testsLocked() && !testsOk_) {
+        // a test started straight from /api/cmd (also "send ... cal"): needs the password
+        size_t k = c == "send" && a.size() > 2 ? 2 : 0;
+        if (k < a.size() && (a[k] == "cal" || (a[k] == "couple" && k + 1 < a.size() && a[k + 1] == "run")))
+            return "installer tests need the tests password";
+    }
 
     if (c == "help" || c == "?") return std::string(kHelp) + TuneParams::help();
     if (c == "get") {
