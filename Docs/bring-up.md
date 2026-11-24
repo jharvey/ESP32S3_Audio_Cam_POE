@@ -19,11 +19,13 @@ or come from `firmware/tools/update-unit.bat`.
 
 ## 2. Strapping-pin fix (camera on GPIO45/46)
 
-The camera stays powered and drives GPIO45 during a reset, which can select 1.8 V flash and stop the board booting.
+On the `single-sided` board (camera remap of 2026-11-24) no camera output is on GPIO45: it carries MCLK, which
+only the ESP32 drives. The eFuse burn is no longer needed there. Camera D7 is on GPIO46, which only matters in
+download mode: if flashing over USB fails with the camera powered, power-cycle the unit (the camera starts off).
 
-- [ ] Burn the flash-voltage eFuse once per board: `update-unit.bat setup --burn-efuse` (asks you to type BURN). **This is permanent.**
+- [ ] Older boards (camera D1/D2 on GPIO45/46): burn the flash-voltage eFuse once per board: `update-unit.bat setup --burn-efuse` (asks you to type BURN). **This is permanent.**
 - [ ] Reset with the camera fitted 10 times (EN button, or power cycle): it must boot every time.
-- [ ] Long term: move camera D1/D2 off GPIO45/46 in the next board spin.
+- [ ] Hold BOOT and press EN with the camera powered: note whether it enters download mode (single-sided board; D7 on GPIO46).
 
 ## 3. Board self-test
 

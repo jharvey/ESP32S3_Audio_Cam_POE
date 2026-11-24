@@ -466,3 +466,43 @@ The layout keeps the AXP2101 block in place until you approve this plan.
 
 - Read the floor and room from U21 port 1 (see above).
 - No GPIO changes: everything else keeps its schematic pins.
+
+## Camera remap (2026-11-24)
+
+Before, the camera data lines sat on U7's top edge (pins 15-24), to the right of USB (pins 25/26), so USB and the
+camera had to cross and one of them needed vias. Now the fast camera lines (D0-D7, PCLK, XCLK/MCLK) are on the
+left and bottom edges, the side facing the series resistors R88-R98 and FPC1, in the same top-to-bottom order as
+the resistor column. USB runs straight up on the top layer; the camera lines reach the FPC on the top layer with no
+vias. The slow lines that moved to the top edge (SD, Ethernet SPI clock and CS, I2C SDA, camera SCCB, HREF, VSYNC)
+may use vias. Pin 49 (U0TXD, I2C.SCL) stays: a camera input there would fight the boot log.
+
+(The pin table above has pins 36 and 37 swapped: pin 36 is SPICLK_N = GPIO48, pin 37 is SPICLK_P = GPIO47.)
+
+| Pin | GPIO | Was | Now |
+|---|---|---|---|
+| 15 | GPIO10 | CAM.D2 | SD.CLK |
+| 16 | GPIO11 | CAM.D1 | SD.MOSI (SD CMD) |
+| 17 | GPIO12 | CAM.D3 | ETH.SCLK |
+| 18 | GPIO13 | CAM.D0 | ETH.CS |
+| 19 | GPIO14 | CAM.D4 | I2C.SDA |
+| 21 | GPIO15 | CAM.PCLK | CAM.SDA |
+| 23 | GPIO17 | CAM.D5 | CAM.SCL |
+| 24 | GPIO18 | CAM.D6 | CAM.VSYNC |
+| 27 | GPIO21 | CAM.MCLK | CAM.HREF |
+| 36 | GPIO48 | CAM.D7 | CAM.D2 |
+| 37 | GPIO47 | CAM.HREF | CAM.D1 |
+| 43 | GPIO38 | CAM.VSYNC | CAM.D3 |
+| 44 | GPIO39 | CAM.SCL | CAM.D0 |
+| 45 | GPIO40 | CAM.SDA | CAM.D4 |
+| 47 | GPIO41 | SD.MOSI | CAM.PCLK |
+| 48 | GPIO42 | ETH.CS | CAM.D5 |
+| 50 | GPIO44 | I2C.SDA | CAM.D6 |
+| 51 | GPIO45 | ETH.SCLK | CAM.MCLK |
+| 52 | GPIO46 | SD.CLK | CAM.D7 |
+
+Strapping pins: GPIO45 (flash voltage) carries MCLK, which only the ESP32 drives, so the camera can't hold it high
+at reset. GPIO46 carries D7, a camera output; GPIO46 only matters in download mode (GPIO0 low, where GPIO46 high is
+invalid). The camera is unpowered at power-up (TCA9555 P04 is an input at reset, R14 holds Q1 off), so this only
+matters if BOOT is held while the camera is on. J3 (DNP I2C pads) keeps I2C.SDA through a new label; its wire to
+pin 50 was cut. The board's pad nets were synced (tools/pcb_sync_netlist.py); 116 track/via pieces on the moved
+nets were removed for re-routing. Firmware: Pins.h on fw/r1-intercom.

@@ -44367,7 +44367,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 193.04) (xy 281.94 193.04)
+			(xy 247.65 193.04) (xy 248.92 193.04)
 		)
 		(stroke
 			(width 0)
@@ -49035,7 +49035,7 @@
 		)
 		(uuid "07f87311-54d0-4005-bc19-c98ca1b32f1b")
 	)
-	(label "CAM.D1"
+	(label "SD.MOSI"
 		(at 182.88 170.18 0)
 		(effects
 			(font
@@ -49085,7 +49085,7 @@
 		)
 		(uuid "0dd238a0-cefb-4384-882a-5c9ec4bfce6a")
 	)
-	(label "ETH.CS"
+	(label "CAM.D5"
 		(at 248.92 187.96 0)
 		(effects
 			(font
@@ -49255,7 +49255,7 @@
 		)
 		(uuid "2017ae08-40ba-482a-bc1e-699d1fe3c2c3")
 	)
-	(label "CAM.D4"
+	(label "I2C.SDA"
 		(at 182.88 177.8 0)
 		(effects
 			(font
@@ -49305,7 +49305,7 @@
 		)
 		(uuid "234cba06-ae92-4239-87ed-85ca4336c0c1")
 	)
-	(label "CAM.D5"
+	(label "CAM.SCL"
 		(at 182.88 180.34 0)
 		(effects
 			(font
@@ -49595,7 +49595,7 @@
 		)
 		(uuid "396e7017-8f0b-4e4f-957d-6674666c245f")
 	)
-	(label "CAM.D3"
+	(label "ETH.SCLK"
 		(at 182.88 172.72 0)
 		(effects
 			(font
@@ -49715,7 +49715,7 @@
 		)
 		(uuid "4242b495-9c96-420a-9570-65082e2351cc")
 	)
-	(label "CAM.PCLK"
+	(label "CAM.SDA"
 		(at 182.88 195.58 0)
 		(effects
 			(font
@@ -49885,7 +49885,7 @@
 		)
 		(uuid "4e2fe3a3-1373-402e-aabb-51c577811f01")
 	)
-	(label "CAM.VSYNC"
+	(label "CAM.D3"
 		(at 248.92 177.8 0)
 		(effects
 			(font
@@ -49905,7 +49905,7 @@
 		)
 		(uuid "4eb1339d-78af-421b-801c-000caf12d000")
 	)
-	(label "I2C.SDA"
+	(label "CAM.D6"
 		(at 248.92 193.04 0)
 		(effects
 			(font
@@ -49914,6 +49914,16 @@
 			(justify left bottom)
 		)
 		(uuid "4f384934-021a-478a-94ca-04d65baea4b2")
+	)
+	(label "I2C.SDA"
+		(at 281.94 193.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5b2cbe02-71af-4776-a9a5-857bbfc2b43a")
 	)
 	(label "PMU.Vsys"
 		(at 214.63 377.19 180)
@@ -49935,7 +49945,7 @@
 		)
 		(uuid "4fe8983a-4fd8-42e8-b88f-328141e46fc0")
 	)
-	(label "CAM.SDA"
+	(label "CAM.D4"
 		(at 248.92 182.88 0)
 		(effects
 			(font
@@ -50235,7 +50245,7 @@
 		)
 		(uuid "65b8c55a-512e-4ca3-bce4-46059b34c755")
 	)
-	(label "ETH.SCLK"
+	(label "CAM.MCLK"
 		(at 248.92 195.58 0)
 		(effects
 			(font
@@ -50646,7 +50656,7 @@
 		)
 		(uuid "87504d4b-911a-4077-99fc-657e70b4b5b0")
 	)
-	(label "SD.MOSI"
+	(label "CAM.PCLK"
 		(at 248.92 185.42 0)
 		(effects
 			(font
@@ -50947,7 +50957,7 @@
 		)
 		(uuid "a28dd16a-1051-4c1e-895a-763f560336ff")
 	)
-	(label "CAM.MCLK"
+	(label "CAM.HREF"
 		(at 182.88 190.5 0)
 		(effects
 			(font
@@ -50977,7 +50987,7 @@
 		)
 		(uuid "a40e831f-e730-4aaa-a437-8ef33a059220")
 	)
-	(label "CAM.D2"
+	(label "SD.CLK"
 		(at 182.88 167.64 0)
 		(effects
 			(font
@@ -51097,7 +51107,7 @@
 		)
 		(uuid "acb60bfe-cbab-4f2d-97aa-cb3ff7e26033")
 	)
-	(label "CAM.D0"
+	(label "ETH.CS"
 		(at 182.88 175.26 0)
 		(effects
 			(font
@@ -51497,7 +51507,7 @@
 		)
 		(uuid "cfb74be3-5864-4c0a-bf49-a7b766b7f664")
 	)
-	(label "CAM.SCL"
+	(label "CAM.D0"
 		(at 248.92 180.34 0)
 		(effects
 			(font
@@ -51547,7 +51557,7 @@
 		)
 		(uuid "d38f9078-25a6-4f85-97f8-eeda3eaaf22b")
 	)
-	(label "CAM.D6"
+	(label "CAM.VSYNC"
 		(at 182.88 182.88 0)
 		(effects
 			(font
@@ -51797,7 +51807,7 @@
 		)
 		(uuid "e7102bc2-88e1-4d96-b778-24f88a8f3ce8")
 	)
-	(label "SD.CLK"
+	(label "CAM.D7"
 		(at 248.92 198.12 0)
 		(effects
 			(font
@@ -51917,7 +51927,7 @@
 		)
 		(uuid "ef39e622-e41c-4411-a7a8-b7e26772c96c")
 	)
-	(label "CAM.D7"
+	(label "CAM.D2"
 		(at 248.92 160.02 0)
 		(effects
 			(font
@@ -51997,7 +52007,7 @@
 		)
 		(uuid "f4be818d-2184-4406-89d3-a69d61757a67")
 	)
-	(label "CAM.HREF"
+	(label "CAM.D1"
 		(at 248.92 162.56 0)
 		(effects
 			(font
