@@ -71508,7 +71508,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:TYPE-C-SMD_HX-TYPE-C-16PIN"
+		(property "Footprint" "Project-specific:USB-C-SMD_TYPE-C-16PIN-2MD-073"
 			(at 26.67 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -71543,7 +71543,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C2927039"
+		(property "LCSC" "C2765186"
 			(at 29.21 45.72 0)
 			(hide yes)
 			(show_name no)
