@@ -238,7 +238,7 @@ function hook(){
   const endHold=()=>{clearTimeout(holdT);if(holding){const h=holding;holding=null;if(window.onPlanHoldEnd)window.onPlanHoldEnd(h)}};
   svg.addEventListener("pointerdown",ev=>{
     if(sel||moving)return;const n=roomFrom(ev);if(!n)return;
-    ev.preventDefault();svg.setPointerCapture(ev.pointerId);down={n,t:Date.now()};hot=n;part();
+    ev.preventDefault();try{svg.setPointerCapture(ev.pointerId)}catch(e){}down={n,t:Date.now()};hot=n;part();
     if(window.onPlanHold)holdT=setTimeout(()=>{if(down&&down.n===n){holding=info(n);down=null;window.onPlanHold(holding)}},350)});
   svg.addEventListener("pointerup",ev=>{
     if(holding){endHold();return}clearTimeout(holdT);if(!down)return;const n=down.n;down=null;
