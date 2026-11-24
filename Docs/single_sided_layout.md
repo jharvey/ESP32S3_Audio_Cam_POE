@@ -532,3 +532,14 @@ MISO/MOSI also go up to the LoRa module, which needs a via or two. ETH.CS stays 
 Slow camera lines: SCCB SDA/SCL and VSYNC (pins 21, 23, 24) still start right of USB and need a via under it; the
 camera side of USB has only 12 usable pins for 14 camera lines. C22 (PCLK filter cap) should sit next to pin 47.
 
+### Assembly changes for JLC (2026-11-24)
+
+- U7's footprint attribute is SMD (its thermal vias had made KiCad call it through-hole, so the position file
+  could have skipped the ESP32).
+- R4/R5 (USB-C CC 5.1k) moved from the bottom to the top, beside J1 (141.0, 60.6 / 62.4): JLC assembles one side.
+- BT1 (18650 holder, bottom) is excluded from the BOM and position files: fit it by hand (LCSC C2988620).
+- R111/R112, 1k in series with the two front buttons PB1 (TALK) and PB7 (OFFICE), next to U22 (static protection
+  for the buttons people touch). Move them with U22 when it is rotated.
+- Still to fix in placement: TP141, TP2 and TP65 overlap BT1's pads (TP141 shorts COM to the battery pad).
+- On the JLC order: ask for U7's thermal-pad vias to be tented/filled; expect edge rails (parts near the edge).
+

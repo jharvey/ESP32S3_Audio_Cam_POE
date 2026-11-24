@@ -51427,7 +51427,7 @@
 		)
 		(uuid "c82cdf73-d560-4af8-ac5a-e8543860bc50")
 	)
-	(label "BTN.OFFICE"
+	(label "BTN.OFFICE_SW"
 		(at 275.59 261.62 0)
 		(effects
 			(font
@@ -51467,7 +51467,7 @@
 		)
 		(uuid "cbd0adc1-8531-4021-8300-3e7cbb59ef90")
 	)
-	(label "BTN.TALK1"
+	(label "BTN.TALK1_SW"
 		(at 229.87 248.92 0)
 		(effects
 			(font
@@ -107833,6 +107833,230 @@
 			(justify left bottom)
 		)
 		(uuid "54914480-9177-4205-8b4f-710f6c810731")
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
+		(at 256.54 295.91 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "90787884-ed50-471e-9175-3d67bb40daf3")
+		(property "Reference" "R111"
+			(at 259.08 295.91 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1kΩ"
+			(at 256.54 295.91 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 254.76 295.91 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010030_UNI-ROYAL-Uniroyal-Elec-0402WGF1004TCE_C26083.pdf"
+			(at 256.54 295.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 256.54 295.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C11702"
+			(at 256.54 295.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "63e78ed1-22bf-438d-9e5b-4d7e422af292")
+		)
+		(pin "2"
+			(uuid "08bfb15b-32a4-4a3f-8ae7-f4d963bca646")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R111")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "BTN.TALK1"
+		(at 256.54 292.10 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f6bb60c9-3b60-4f88-bd70-49b750a31266")
+	)
+	(label "BTN.TALK1_SW"
+		(at 256.54 299.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8a2aeae5-3574-409b-99f0-d76b399cd181")
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
+		(at 256.54 306.07 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "977b4720-a4fa-4d1e-a09a-9eb9e7a0bfb8")
+		(property "Reference" "R112"
+			(at 259.08 306.07 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1kΩ"
+			(at 256.54 306.07 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 254.76 306.07 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010030_UNI-ROYAL-Uniroyal-Elec-0402WGF1004TCE_C26083.pdf"
+			(at 256.54 306.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 256.54 306.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C11702"
+			(at 256.54 306.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "cd18dd90-030b-4e8c-8609-9ef3a2422020")
+		)
+		(pin "2"
+			(uuid "f20b4de7-3a57-4cda-bc41-3fbec4b04b6c")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R112")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "BTN.OFFICE"
+		(at 256.54 302.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4f7b7bd3-4904-4607-ae70-6112da6f1bfc")
+	)
+	(label "BTN.OFFICE_SW"
+		(at 256.54 309.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9d7d9bd3-ea6f-4c70-9409-d55aeb5c41a1")
 	)
 	(sheet_instances
 		(path "/"
