@@ -3,7 +3,8 @@
 // room, coloured by its status, refreshed with the room grid. The DXF and the unit positions stay in that
 // browser's local storage only: they are never sent to the unit (and so never end up in the firmware or
 // its repository). Units whose number isn't a room on the plan (gym units 299, 298 ...) are placed by
-// clicking: pick the unit, then click the map; click a dot to move it.
+// clicking: pick the unit, then click the map ("Move dots" rearranges them). Click a room to pick it; with
+// the school page's hooks, hold a room to talk to it and double-click it to ring it.
 #include "WebUi.h"
 
 namespace ic {
@@ -27,7 +28,7 @@ document.head.appendChild(st);
 const box=document.getElementById("plan");if(!box)return;
 function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
-let plan=load(KP,null),place=load(KU,{}),floor=load(KF,0),units=[],sel=null,msg="",moving=false,picked=null;
+let plan=load(KP,null),place=load(KU,{}),floor=load(KF,0),units=[],sel=null,msg="",moving=false;
 
 // ---- DXF -> floors ---------------------------------------------------------------------------------
 function parseDxf(txt){
@@ -108,32 +109,114 @@ function cls(u){const f=u.flags;if(!u.online)return"bad";if(f&32)return"call";if
 const rank={bad:4,call:3,warn:2,talk:1,ok:0};
 function where(u){return place[u.unit]||(plan&&plan.rooms[u.room])||null}
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
-function render(){
+
+// ---- room areas: the walls drawn thick enough to close the door gaps, flood-filled from each room's
+// label, then grown back to the walls plus a small margin, so a click on or near a room finds it.
+const regCache={};
+function regionsFor(fi){
+  if(regCache[fi])return regCache[fi];
+  const F=plan.floors[fi],W=F.x1-F.x0,H=F.y1-F.y0,M=Math.max(W,H),s=M/700;
+  const cw=Math.ceil(W/s)+3,ch=Math.ceil(H/s)+3,N=cw*ch,shut=0.011*M,grow=Math.ceil((shut+0.009*M)/s);
+  const cv=document.createElement("canvas");cv.width=cw;cv.height=ch;const c=cv.getContext("2d");
+  c.setTransform(1/s,0,0,1/s,-F.x0/s+1,-F.y0/s+1);c.lineWidth=2*shut;c.lineCap="round";c.lineJoin="round";
+  c.stroke(new Path2D(F.d));
+  const px=c.getImageData(0,0,cw,ch).data,wall=new Uint8Array(N);for(let i=0;i<N;i++)wall[i]=px[i*4+3]>40?1:0;
+  const own=new Int16Array(N).fill(-1),list=[];
+  for(const n in plan.rooms){const p=plan.rooms[n];if(p.f===fi)list.push({n:+n,x:Math.round((p.x-F.x0)/s+1),y:Math.round((p.y-F.y0)/s+1),k:list.length})}
+  const shareOf={};  // region id -> labels in it
+  const q=new Int32Array(N);
+  for(const L of list){
+    let st=-1;  // nearest free pixel to the label (labels can sit on a thick wall)
+    for(let r=0;r<8&&st<0;r++)for(let dy=-r;dy<=r&&st<0;dy++)for(let dx=-r;dx<=r;dx++){
+      const x=L.x+dx,y=L.y+dy;if(x<0||y<0||x>=cw||y>=ch)continue;const i=y*cw+x;if(!wall[i]){st=i;break}}
+    if(st<0)continue;
+    if(own[st]>=0){(shareOf[own[st]]=shareOf[own[st]]||[own[st]]).push(L.k);continue}
+    let h=0,t=0;q[t++]=st;own[st]=L.k;
+    while(h<t){const i=q[h++],x=i%cw;
+      for(const j of [x>0?i-1:-1,x<cw-1?i+1:-1,i-cw,i+cw])if(j>=0&&j<N&&!wall[j]&&own[j]<0){own[j]=L.k;q[t++]=j}}
+    if(t>0.35*N){for(let k=0;k<t;k++)own[q[k]]=-1;L.leak=true}  // ran outside through a gap: use a circle
+  }
+  for(const id in shareOf){  // several labels in one area: each pixel goes to the nearest label
+    const ls=shareOf[id].map(k=>list[k]);
+    for(let i=0;i<N;i++)if(own[i]==id){const x=i%cw,y=(i/cw)|0;let b=ls[0],bd=1e18;
+      for(const L of ls){const d=(L.x-x)**2+(L.y-y)**2;if(d<bd){bd=d;b=L}}own[i]=b.k}}
+  // Unlabelled pockets inside the building (court markings in the gym, closets, stair treads) join the
+  // nearest labelled room they touch across a wall or line; the outside (touching the edge) stays out.
+  {const seen=new Uint8Array(N),pk=new Int32Array(N),D=Math.ceil(2*shut/s)+3,dd=new Uint16Array(N);
+   for(let i0=0;i0<N;i0++){if(wall[i0]||own[i0]>=0||seen[i0])continue;
+     let n=0,edge=false,sx=0,sy=0;pk[n++]=i0;seen[i0]=1;
+     for(let h=0;h<n;h++){const i=pk[h],x=i%cw,y=(i/cw)|0;sx+=x;sy+=y;if(x===0||y===0||x===cw-1||y===ch-1)edge=true;
+       for(const j of [x>0?i-1:-1,x<cw-1?i+1:-1,i-cw,i+cw])if(j>=0&&j<N&&!wall[j]&&own[j]<0&&!seen[j]){seen[j]=1;pk[n++]=j}}
+     if(edge||n>0.35*N)continue;
+     const touch=new Set(),fr=[],mark=new Set();  // walk out through the walls / lines, up to D pixels
+     for(let k=0;k<n;k++){fr.push(pk[k]);dd[pk[k]]=0;mark.add(pk[k])}
+     for(let h=0;h<fr.length;h++){const i=fr[h],x=i%cw;if(dd[i]>=D)continue;
+       for(const j of [x>0?i-1:-1,x<cw-1?i+1:-1,i-cw,i+cw]){if(j<0||j>=N||mark.has(j))continue;mark.add(j);
+         if(own[j]>=0){touch.add(own[j]);continue}if(wall[j]){dd[j]=dd[i]+1;fr.push(j)}}}
+     if(!touch.size)continue;const cx=sx/n,cy=sy/n;let best=-1,bd=1e18;
+     for(const k of touch){const L=list[k],d=(L.x-cx)**2+(L.y-cy)**2;if(d<bd){bd=d;best=k}}
+     for(let k=0;k<n;k++)own[pk[k]]=best}}
+  // grow every area into the walls and a little beyond (the walls' own thickness plus a click margin)
+  let h=0,t=0;for(let i=0;i<N;i++)if(own[i]>=0)q[t++]=i;
+  const dist=new Uint16Array(N);
+  while(h<t){const i=q[h++],x=i%cw;if(dist[i]>=grow)continue;
+    for(const j of [x>0?i-1:-1,x<cw-1?i+1:-1,i-cw,i+cw])if(j>=0&&j<N&&own[j]<0){own[j]=own[i];dist[j]=dist[i]+1;q[t++]=j}}
+  for(const L of list)if(L.leak){const R=Math.round(0.03*M/s);
+    for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++){const x=L.x+dx,y=L.y+dy;
+      if(x>=0&&y>=0&&x<cw&&y<ch&&dx*dx+dy*dy<=R*R&&own[y*cw+x]<0)own[y*cw+x]=L.k}}
+  return regCache[fi]={s,cw,ch,own,list,F,img:{}};
+}
+function roomAt(fi,x,y){const g=regionsFor(fi),i=Math.round((y-g.F.y0)/g.s+1)*g.cw+Math.round((x-g.F.x0)/g.s+1);
+  const k=g.own[i];return k>=0&&k!==undefined?g.list[k].n:0}
+function highlight(fi,n){  // the room's area as a translucent image over the plan
+  const g=regionsFor(fi);if(g.img[n])return g.img[n];const L=g.list.find(l=>l.n===n);if(!L)return"";
+  const cv=document.createElement("canvas");cv.width=g.cw;cv.height=g.ch;const c=cv.getContext("2d"),im=c.createImageData(g.cw,g.ch);
+  for(let i=0;i<g.own.length;i++)if(g.own[i]===L.k){im.data[i*4]=29;im.data[i*4+1]=78;im.data[i*4+2]=216;im.data[i*4+3]=70}
+  c.putImageData(im,0,0);return g.img[n]=cv.toDataURL();
+}
+function unitsIn(fi,n){return units.filter(u=>{const p=where(u);return p&&p.f===fi&&(u.room===n||roomAt(fi,p.x,p.y)===n)})}
+
+let hot=0;  // room shown highlighted (picked, talking or ringing)
+function full(){
   if(!plan){box.innerHTML=`<div class="bar"><b>Floor plan</b><button id="pload">Load a DXF floor plan…</button>
     <span class="hint">Shows every unit on its room. The file stays in this browser only: it is not sent to the unit.</span>${msg?`<span class="hint">${esc(msg)}</span>`:""}</div>`;
     hook();return}
   if(floor>=plan.floors.length)floor=0;
-  const F=plan.floors[floor],w=F.x1-F.x0,h=F.y1-F.y0,m=Math.max(w,h)*0.03,r=Math.max(w,h)*0.011;
+  const F=plan.floors[floor],w=F.x1-F.x0,h=F.y1-F.y0,m=Math.max(w,h)*0.03;
+  box.innerHTML=`<div class="bar"><b>Floor plan</b>
+    <span style="margin-left:auto"></span><button id="pmove">Move dots</button><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
+    <div class="tabs" id="ptabs"></div><div id="phint"></div>
+    <svg id="psvg" viewBox="${F.x0-m} ${F.y0-m} ${w+2*m} ${h+2*m}" preserveAspectRatio="xMidYMid meet" style="touch-action:none">
+    <image id="phl" x="${F.x0-regionsFor(floor).s}" y="${F.y0-regionsFor(floor).s}" width="${regionsFor(floor).cw*regionsFor(floor).s}" height="${regionsFor(floor).ch*regionsFor(floor).s}" preserveAspectRatio="none"/>
+    <path class="wall" d="${F.d}" stroke-width="${Math.max(w,h)*0.0015}"/><g id="pdots"></g></svg>`;
+  hook();part();
+}
+function part(){  // what changes every refresh: tabs, hint, dots, highlight (the drawing itself stays)
+  if(!plan||!document.getElementById("psvg"))return full();
+  const F=plan.floors[floor],r=Math.max(F.x1-F.x0,F.y1-F.y0)*0.011;
   const fc=plan.floors.map(()=>({n:0,worst:"ok"}));const un=[];
   for(const u of units){const p=where(u);if(!p){un.push(u);continue}const c=fc[p.f];if(!c)continue;c.n++;if(rank[cls(u)]>rank[c.worst])c.worst=cls(u)}
-  const tabs=plan.floors.map((f,i)=>`<button data-f="${i}" class="${i===floor?"sel":""}">${esc(f.name)} · ${fc[i].n}${fc[i].worst!=="ok"?` <span style="color:var(--${fc[i].worst==="talk"?"talk":fc[i].worst})">●</span>`:""}</button>`).join("");
-  // dots: units sharing a spot sit side by side
+  document.getElementById("ptabs").innerHTML=plan.floors.map((f,i)=>`<button data-f="${i}" class="${i===floor?"sel":""}">${esc(f.name)} · ${fc[i].n}${fc[i].worst!=="ok"?` <span style="color:var(--${fc[i].worst==="talk"?"talk":fc[i].worst})">●</span>`:""}</button>`).join("");
   const spots={};for(const u of units){const p=where(u);if(!p||p.f!==floor)continue;const k=p.x+","+p.y;(spots[k]=spots[k]||[]).push(u)}
   let dots="";
   for(const k in spots){const us=spots[k],p=where(us[0]);us.forEach((u,i)=>{const x=p.x+(i-(us.length-1)/2)*r*2.3,y=p.y+r*1.6;
-    dots+=`<g data-u="${u.unit}"><circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${sel===String(u.unit)||picked===String(u.unit)?` style="stroke:var(--call);stroke-width:${r*0.45}"`:""}><title>${esc(u.unit)}</title></circle>`+
+    dots+=`<g data-u="${u.unit}"><circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${sel===String(u.unit)?` style="stroke:var(--call);stroke-width:${r*0.45}"`:""}><title>${esc(u.unit)}</title></circle>`+
       `<text class="num" x="${x}" y="${y+r*0.36}" font-size="${r*0.95}" text-anchor="middle">${esc(u.unit)}</text></g>`})}
+  document.getElementById("pdots").innerHTML=dots;
+  const hl=document.getElementById("phl"),href=hot?highlight(floor,hot):"";if(hl.getAttribute("href")!==href)hl.setAttribute("href",href);
   const chips=un.map(u=>`<button class="chip ${sel===String(u.unit)?"sel":""}" data-u="${u.unit}">${esc(u.unit)}</button>`).join("");
-  box.innerHTML=`<div class="bar"><b>Floor plan</b>
-    <span style="margin-left:auto"></span><button id="pmove" class="${moving?"sel":""}">${moving?"Done moving":"Move dots"}</button><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
-    <div class="tabs">${tabs}</div>
-    ${sel?`<div class="hint"><b>Unit ${esc(sel)}:</b> click the map where it is. <button id="pcancel">Cancel</button>${place[sel]?` <button id="preset">Back to its room</button>`:""}</div>`:
-      un.length?`<div class="hint">Not on the plan (no room with that number): ${chips} pick one, then click the map.</div>`:
-      `<div class="hint">${moving?"Click a dot, then click where it goes.":"Click a dot to pick its room."}</div>`}
-    ${msg?`<div class="hint">${esc(msg)}</div>`:""}
-    <svg id="psvg" viewBox="${F.x0-m} ${F.y0-m} ${w+2*m} ${h+2*m}" preserveAspectRatio="xMidYMid meet">
-    <path class="wall" d="${F.d}" stroke-width="${Math.max(w,h)*0.0015}"/>${dots}</svg>`;
-  hook();
+  const act=window.onPlanHold?"Click a room to pick it, hold it to talk to it, double-click it to ring it.":"Click a room to pick it.";
+  document.getElementById("phint").innerHTML=
+    sel?`<div class="hint"><b>Unit ${esc(sel)}:</b> click the map where it is. <button id="pcancel">Cancel</button>${place[sel]?` <button id="preset">Back to its room</button>`:""}</div>`:
+    moving?`<div class="hint">Click a dot, then click where it goes.</div>`:
+    un.length?`<div class="hint">${act} Not on the plan yet: ${chips} pick one, then click the map.</div>`:`<div class="hint">${act}</div>`;
+  const mv=document.getElementById("pmove");mv.textContent=moving?"Done moving":"Move dots";mv.className=moving?"sel":"";
+  if(msg)document.getElementById("phint").innerHTML+=`<div class="hint">${esc(msg)}</div>`;
+  const b=id=>document.getElementById(id);
+  if(b("pcancel"))b("pcancel").onclick=()=>{sel=null;part()};
+  if(b("preset"))b("preset").onclick=()=>{delete place[sel];save(KU,place);sel=null;part()};
+  box.querySelectorAll("#ptabs button").forEach(t=>t.onclick=()=>{floor=+t.dataset.f;save(KF,floor);hot=0;full()});
+  box.querySelectorAll("button.chip").forEach(t=>t.onclick=()=>{sel=t.dataset.u;part()});
 }
 function hook(){
   const fi=document.getElementById("pfile")||Object.assign(document.createElement("input"),{type:"file",accept:".dxf",id:"pfile",hidden:true});
@@ -141,36 +224,48 @@ function hook(){
     const rd=new FileReader();rd.onload=()=>loadText(rd.result);rd.readAsText(f);fi.value=""})}
   const b=id=>document.getElementById(id);
   if(b("pload"))b("pload").onclick=()=>fi.click();
-  if(b("pmove"))b("pmove").onclick=()=>{moving=!moving;sel=null;render()};
-  if(b("pdel"))b("pdel").onclick=()=>{if(confirm("Remove the floor plan from this browser? Unit positions you placed are kept.")){plan=null;try{localStorage.removeItem(KP)}catch(e){}render()}};
-  if(b("pcancel"))b("pcancel").onclick=()=>{sel=null;render()};
-  if(b("preset"))b("preset").onclick=()=>{delete place[sel];save(KU,place);sel=null;render()};
-  box.querySelectorAll(".tabs button").forEach(t=>t.onclick=()=>{floor=+t.dataset.f;save(KF,floor);render()});
-  box.querySelectorAll("button.chip").forEach(t=>t.onclick=()=>{sel=t.dataset.u;render()});
+  if(b("pmove"))b("pmove").onclick=()=>{moving=!moving;sel=null;part()};
+  if(b("pdel"))b("pdel").onclick=()=>{if(confirm("Remove the floor plan from this browser? Unit positions you placed are kept.")){plan=null;try{localStorage.removeItem(KP)}catch(e){}full()}};
   const svg=b("psvg");if(!svg)return;
-  svg.addEventListener("click",ev=>{
+  const at=ev=>{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;return pt.matrixTransform(svg.getScreenCTM().inverse())};
+  // Gestures (not while placing or moving dots): click = pick the room; hold = talk to it while held;
+  // two quick clicks = ring it. The school page supplies onPlanPick / onPlanHold / onPlanHoldEnd / onPlanRing.
+  let down=null,holdT=0,holding=null,last=null;
+  const info=n=>({room:n,units:unitsIn(floor,n)});
+  const roomFrom=ev=>{const g=ev.target.closest&&ev.target.closest("g[data-u]");
+    if(g){const u=units.find(x=>String(x.unit)===g.dataset.u);if(u){const p=where(u);return roomAt(floor,p.x,p.y)||u.room}}
+    const q=at(ev);return roomAt(floor,q.x,q.y)};
+  const endHold=()=>{clearTimeout(holdT);if(holding){const h=holding;holding=null;if(window.onPlanHoldEnd)window.onPlanHoldEnd(h)}};
+  svg.addEventListener("pointerdown",ev=>{
+    if(sel||moving)return;const n=roomFrom(ev);if(!n)return;
+    ev.preventDefault();svg.setPointerCapture(ev.pointerId);down={n,t:Date.now()};hot=n;part();
+    if(window.onPlanHold)holdT=setTimeout(()=>{if(down&&down.n===n){holding=info(n);down=null;window.onPlanHold(holding)}},350)});
+  svg.addEventListener("pointerup",ev=>{
+    if(holding){endHold();return}clearTimeout(holdT);if(!down)return;const n=down.n;down=null;
+    if(last&&last.n===n&&Date.now()-last.t<450&&window.onPlanRing){last=null;window.onPlanRing(info(n));return}
+    last={n,t:Date.now()};if(window.onPlanPick)window.onPlanPick(info(n))});
+  for(const e of ["pointercancel","lostpointercapture"])svg.addEventListener(e,()=>{down=null;endHold()});
+  svg.addEventListener("click",ev=>{  // placing or moving a dot
+    if(!sel&&!moving)return;
     const g=ev.target.closest&&ev.target.closest("g[data-u]");
-    if(g&&!sel){
-      if(moving){sel=g.dataset.u;render();return}
-      // pick the room, as clicking its card does (the school page sets window.onPlanPick)
-      picked=g.dataset.u;const u=units.find(x=>String(x.unit)===picked);
-      if(u&&window.onPlanPick)window.onPlanPick(u);
-      render();return}
+    if(g&&!sel){sel=g.dataset.u;part();return}
     if(!sel)return;
-    const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse());
-    // dots are drawn a little below their spot (a room's label sits on the spot): store the spot
-    const F=plan.floors[floor];place[sel]={f:floor,x:Math.round(q.x),y:Math.round(q.y-Math.max(F.x1-F.x0,F.y1-F.y0)*0.011*1.6)};
-    save(KU,place);sel=null;render()});
+    const q=at(ev),F=plan.floors[floor];  // dots sit a little below their spot: store the spot
+    place[sel]={f:floor,x:Math.round(q.x),y:Math.round(q.y-Math.max(F.x1-F.x0,F.y1-F.y0)*0.011*1.6)};
+    save(KU,place);sel=null;part()});
 }
+function render(){full()}
 function loadText(txt){
-  try{const p=build(parseDxf(txt));plan=p;floor=0;save(KF,0);
+  try{const p=build(parseDxf(txt));plan=p;floor=0;save(KF,0);for(const k in regCache)delete regCache[k];
     msg=save(KP,p)?"":"Loaded, but too big to keep in this browser: load it again next time.";
   }catch(e){msg="Couldn't read that DXF: "+e.message}
-  render();
+  full();
 }
-window.planUpdate=us=>{units=us||[];render()};
+window.planUpdate=us=>{units=us||[];part()};
+window.planHot=n=>{hot=n||0;part()};  // the page can highlight a room (e.g. while ringing it)
 window.planLoadText=loadText;  // also used by the scripted check
-render();
+window.planRoomAt=(fi,x,y)=>roomAt(fi,x,y);  // scripted check
+full();
 })();)JS";
 }
 
