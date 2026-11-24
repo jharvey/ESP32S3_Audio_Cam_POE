@@ -19,12 +19,20 @@ Today: the PC office console (`firmware/sim/console`), a Windows program. *(Plan
 - **Mute TALK 15 min / Unmute:** stops the selected unit's TALK (a stuck button, misuse). The room still hears
   all-calls and other rooms. The mute ends by itself after 15 minutes.
 
-## Web console *(planned, R1.7)*
+## School status page (web console, step 1)
 
-A page on the office unit, opened in Chrome, Edge or Firefox on the office PC:
-- a grid of the 40 rooms with their status and faults (`dUP` and faults in red);
-- pick a room, a floor or everyone, hold Talk and speak with the PC's microphone; hear the room answer;
-- the first time, accept the unit's certificate in the browser (the microphone needs HTTPS).
+Open `http://<office unit's address>/school` in Chrome, Edge or Firefox on the office PC (same login as the
+unit's own page; the office unit is room 100, so `http://10.42.1.100/school`). It shows every unit, floor by floor,
+updated every 2 seconds:
+- green OK; yellow talking; blue calling the office; orange degraded (on Wi-Fi with PoE power, muted);
+- red: offline (with when it was last heard), duplicate number, TALK held, battery low, output shorted (`oL`);
+- the line at the top counts units online, offline, calling, talking and needing attention.
+
+Any unit can show this page, so it still works if the office unit is the one that failed.
+
+*(Planned, next step: pick a room, a floor or everyone on this page, hold Talk and speak with the PC's
+microphone, and hear the room answer. The first time, accept the unit's certificate in the browser: the
+microphone needs HTTPS.)*
 
 ## Watching for problems
 

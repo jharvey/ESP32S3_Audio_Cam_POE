@@ -69,6 +69,8 @@ public:
     const CalResult* lastCal() const { return haveCal_ ? &cal_.result() : nullptr; }
     int talkersPlaying() const { return playing_; }
     const std::vector<Peer>& peers() const { return peers_; }
+    // Every unit heard since start, with when it was last heard (peers() drops silent ones after 3.5 s).
+    const std::vector<Peer>& known() const { return known_; }
     uint8_t micLevel() const { return micLevel_; }
     uint8_t sentLevel() const { return sentLevel_; }
     uint8_t speakerLevel() const { return spkLevel_; }
@@ -140,6 +142,7 @@ private:
     uint8_t shownDots_ = 0xff;
     std::vector<std::unique_ptr<Talker>> talkers_;
     std::vector<Peer> peers_;
+    std::vector<Peer> known_;  // up to 200 units, never pruned (the school status page shows them offline)
     std::vector<std::pair<uint32_t, uint32_t>> heard_;
     uint32_t toneFrames_ = 0;  // test tone frames left ("tone" command)
     static constexpr uint32_t kTalkHeldFrames = 120000 / kFrameMs;  // 2 minutes

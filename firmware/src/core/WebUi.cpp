@@ -101,6 +101,19 @@ HttpResponse WebUi::handle(const HttpRequest& req) {
         r.body = webPage();
         return r;
     }
+    if (path == "/school") {
+        if (req.method != "GET") return text(405, "GET only");
+        HttpResponse r;
+        r.contentType = "text/html; charset=utf-8";
+        r.body = schoolPage();
+        return r;
+    }
+    if (path == "/api/school") {
+        HttpResponse r;
+        r.contentType = "application/json";
+        r.body = schoolJson();
+        return r;
+    }
     if (path == "/api/status") {
         HttpResponse r;
         r.contentType = "application/json";
@@ -114,6 +127,39 @@ HttpResponse WebUi::handle(const HttpRequest& req) {
         return text(200, ic_.command(req.body, CmdSource::Web));
     }
     return text(404, "not found");
+}
+
+std::string WebUi::schoolJson() {
+    const uint32_t now = ic_.frame();
+    char buf[320], u[8], ip[16];
+    auto one = [&](const StatusPacket& st, bool online, double ageS) {
+        formatUnit(st.from, u);
+        formatIp(st.from, ip);
+        snprintf(buf, sizeof(buf),
+                 "{\"unit\":\"%s\",\"room\":%u,\"ip\":\"%s\",\"group\":%u,\"link\":\"%s\",\"power\":\"%s\",\"battery\":%u,"
+                 "\"flags\":%u,\"fault\":%u,\"online\":%s,\"age_s\":%.1f}",
+                 u, unsigned(st.from.room), ip, unsigned(st.group ? st.group : st.from.room), linkName(st.link),
+                 st.power == PowerSource::Battery ? "battery" : "poe", unsigned(st.battery), unsigned(st.flags),
+                 unsigned(st.fault), online ? "true" : "false", ageS);
+        return std::string(buf);
+    };
+    // this unit too
+    StatusPacket me;
+    me.from = ic_.unit();
+    me.link = ic_.link();
+    PowerState pw = ic_.power();
+    me.power = pw.source;
+    me.battery = pw.hasBattery ? pw.batteryPct : 0;
+    me.flags = uint8_t((ic_.transmitting() ? kStatusTalking : 0) | (ic_.muted() ? kStatusMuted : 0) | (ic_.talkHeld() ? kStatusTalkHeld : 0));
+    me.fault = ic_.faultCode();
+    me.group = ic_.group();
+    formatUnit(me.from, u);
+    std::string out = std::string("{\"self\":\"") + u + "\",\"units\":[" + one(me, true, 0);
+    for (const Peer& s : ic_.known()) {
+        double age = double(now - s.lastFrame) * kFrameMs / 1000.0;
+        out += "," + one(s.status, age < 5.0, age);
+    }
+    return out + "]}";
 }
 
 std::string WebUi::statusJson() const {
