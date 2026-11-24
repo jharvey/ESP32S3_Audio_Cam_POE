@@ -32,6 +32,8 @@ struct IntercomOptions {
     // Wall clock, UTC seconds (NTP on the board, the PC clock in the simulator); 0 = not known yet.
     // Without it the office console's "time" command sets the clock.
     std::function<int64_t()> utcNow;
+    // Restarts the unit ("reboot"); download = into the ROM's USB flashing mode. Empty = not available.
+    std::function<void(bool download)> restart;
 };
 
 struct AudioStats {
@@ -183,6 +185,8 @@ private:
     std::unique_ptr<AudioEncoder> encoder_;
     uint16_t group_ = 0;       // room group, 0 = this unit's own room number
     uint32_t dupUntil_ = 0;    // another unit with our room number was heard until this frame
+    uint32_t restartAt_ = 0;   // "reboot": restart at this frame (0.5 s later, so the reply still goes out)
+    bool restartDownload_ = false;
     uint32_t groupTalkUntil_ = 0;  // a unit in our room group was talking until this frame: our speaker stays quiet
     uint32_t dupUid_ = 0;
     uint8_t outFaults_ = 0;    // output switches shut down by a fault (IDiag::outputFaults)

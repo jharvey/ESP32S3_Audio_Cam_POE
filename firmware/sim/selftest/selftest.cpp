@@ -264,6 +264,8 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag {
     std::unique_ptr<Intercom> ic;
     sim::TestVoice voice;
     PowerState pw;
+    int restarts = 0;
+    bool restartDownload = false;
 
     FakeUnit(Bus* b, UnitId u, float f0, uint32_t uid = 0) : bus(b), id(u), voice(f0, u.room) {
         bus->queues.push_back(&rx);
@@ -271,6 +273,7 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag {
         opt.unitUid = uid ? uid : 0xA0000000u + u.room;  // stands in for the board's MAC
         opt.utcNow = [this] { return g_clock0 ? g_clock0 + int64_t(ic->frame()) / 50 : int64_t(0); };
         if (!g_bootTest) kv["boottest"] = "off";
+        opt.restart = [this](bool d) { restarts++; restartDownload = d; };
         ic.reset(new Intercom(Hal{this, this, this, this, this, this, this, this}, aec, opt));
         ic->begin();
     }
@@ -605,6 +608,11 @@ static void testConsole() {
     std::string rep = a.ic->command("set mu 0.08 nlp_db -20");
     CHECK(rep.rfind("ok", 0) == 0 && std::fabs(a.ic->params().mu - 0.08f) < 1e-6f, "set: %s", rep.c_str());
     CHECK(a.ic->command("set mu banana").find("bad") != std::string::npos, "bad value refused");
+    CHECK(a.ic->command("reboot now").find("usage") != std::string::npos, "reboot: bad argument refused");
+    CHECK(a.ic->command("reboot download", CmdSource::Network).find("flashing") != std::string::npos && a.restarts == 0,
+          "reboot download accepted, not at once (the reply goes out first)");
+    for (int k = 0; k < 30; k++) a.step();
+    CHECK(a.restarts == 1 && a.restartDownload, "0.5 s later the unit restarts into USB flashing mode");
     a.ic->command("save");
     CHECK(a.kv["tune"].find("mu=0.08") != std::string::npos, "save writes flash");
     a.ic->command("defaults");

@@ -21,6 +21,7 @@
 #include <esp_netif.h>
 #include <esp_system.h>
 #include <esp_task_wdt.h>
+#include <soc/rtc_cntl_reg.h>
 
 #include "Intercom.h"
 #include "NlmsAec.h"
@@ -580,6 +581,11 @@ void setup() {
         configTime(0, 0, ntp.length() ? ntp.c_str() : "pool.ntp.org", "time.google.com");
     }
     io.utcNow = [] { return int64_t(time(nullptr)); };
+    io.restart = [](bool download) {
+        // download: the ROM stays in its USB flashing mode after this reset (as if BOOT were held)
+        if (download) REG_WRITE(RTC_CNTL_OPTION1_REG, RTC_CNTL_FORCE_DOWNLOAD_BOOT);
+        esp_restart();
+    };
     gConsole = xQueueCreate(4, sizeof(ConsoleLine));
     gWebJobs = xQueueCreate(1, sizeof(WebJob));
     // Auto-tune's analysis runs in a low-priority task on core 0, so audio keeps going.
