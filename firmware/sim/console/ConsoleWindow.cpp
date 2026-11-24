@@ -125,7 +125,10 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     auto* web = new QPushButton("Open web page");
     auto* mute = new QPushButton("Mute TALK 15 min");
     auto* unmute = new QPushButton("Unmute");
-    auto* coupleBtn = new QPushButton("Coupling test");
+    auto* coupleBtn = new QPushButton("Coupling test: doors closed");
+    auto* coupleOpenBtn = new QPushButton("... doors open");
+    coupleOpenBtn->setToolTip("The same test with the classroom doors open: kept as a second result; rooms play each other "
+                              "quieter by the louder of the two (room groups come from the doors-closed test)");
     coupleBtn->setToolTip("Every unit plays a short sweep in turn while the others listen (about 1 s per unit; rooms must be quiet). "
                           "Units in one room (the gym) group themselves; rooms that hear each other through a wall play each other a little quieter.");
     mute->setToolTip("Stops the selected unit's TALK (stuck button, misuse); it still hears everyone");
@@ -142,6 +145,7 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     row->addWidget(mute);
     row->addWidget(unmute);
     row->addWidget(coupleBtn);
+    row->addWidget(coupleOpenBtn);
     cl->addLayout(row);
     log_ = new QPlainTextEdit;
     log_->setReadOnly(true);
@@ -158,7 +162,7 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     };
     connect(mute, &QPushButton::clicked, this, [muteSel] { muteSel("mute 15"); });
     connect(unmute, &QPushButton::clicked, this, [muteSel] { muteSel("mute off"); });
-    connect(coupleBtn, &QPushButton::clicked, this, [this] {
+    auto couple = [this](bool open) {
         QStringList rooms;
         qint64 now = clock_.elapsed();
         QList<UnitRow> rows = units_.values();
@@ -166,10 +170,12 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
         for (const UnitRow& u : rows)
             if (u.lastSeen >= 0 && now - u.lastSeen <= kOfflineMs) rooms << QString::number(u.status.from.room);
         if (rooms.size() < 2) return appendLog("coupling test: needs at least two units online");
-        appendLog(QString("coupling test: %1 units, about %2 s. Keep the rooms quiet.").arg(rooms.size()).arg(rooms.size() + 1));
-        sendText("all", "couple run 1 auto " + rooms.join(','));
+        appendLog(QString("coupling test, doors %1: %2 units, about %3 s. Keep the rooms quiet.").arg(open ? "open" : "closed").arg(rooms.size()).arg(rooms.size() + 1));
+        sendText("all", "couple run 1 auto " + rooms.join(',') + (open ? " open" : " closed"));
         QTimer::singleShot(int((rooms.size() + 3) * 1000), this, [this] { sendText("all", "couple"); });
-    });
+    };
+    connect(coupleBtn, &QPushButton::clicked, this, [couple] { couple(false); });
+    connect(coupleOpenBtn, &QPushButton::clicked, this, [couple] { couple(true); });
     connect(web, &QPushButton::clicked, this, [this] {
         QString u = selectedUnit();
         if (u.isEmpty()) return appendLog("select a unit first");

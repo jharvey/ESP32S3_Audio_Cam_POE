@@ -1456,6 +1456,22 @@ static void testCoupling() {
     };
     double from214 = playLevel(r214), from102 = playLevel(r102);
     CHECK(from214 - from102 > 4 && from214 - from102 < 8, "101 plays 102 quieter than 214 (%.1f dB)", from214 - from102);
+
+    // Doors open: 101 and 214 now hear each other through the open doors. Run again labelled "open":
+    // a second map, kept apart from the doors-closed one; ducking uses the louder of the two.
+    G[0][2] = G[2][0] = 0.0316f;
+    run(60);
+    for (auto* u : all) u->ic->command("couple run 1 auto 101,102,214,298,299 open");
+    run(300);
+    CHECK(r101.kv["couple_open_map"].find("214:") != std::string::npos && db(r101, 214) < -98,
+          "doors-open result saved on its own; the doors-closed map still says 101 and 214 don't hear each other");
+    CHECK(std::fabs(r101.ic->couplingDb(214) + 20) < 4 && std::fabs(r101.ic->couplingDb(102) + 20) < 4,
+          "ducking uses the louder of doors open / closed (214 %.1f dB, 102 %.1f dB)",
+          double(r101.ic->couplingDb(214)), double(r101.ic->couplingDb(102)));
+    CHECK(g298.ic->group() == 299 && r101.ic->group() == 101 && r214.ic->group() == 214,
+          "a doors-open run doesn't change room groups");
+    std::string c = r101.ic->command("couple");
+    CHECK(c.find("doors closed") != std::string::npos && c.find("doors open") != std::string::npos, "\"couple\" shows both: %s", c.c_str());
 }
 
 int main() {
