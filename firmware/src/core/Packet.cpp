@@ -137,7 +137,7 @@ bool decodeStatus(const uint8_t* buf, size_t len, StatusPacket* s) {
     s->uptimeS = get32(buf + 12);
     s->unitUid = get32(buf + 16);
     s->group = get16(buf + 20);
-    s->fault = buf[11] <= uint8_t(Fault::Duplicate) ? Fault(buf[11]) : Fault::None;
+    s->fault = buf[11] <= uint8_t(Fault::Overload) ? Fault(buf[11]) : Fault::None;
     return true;
 }
 

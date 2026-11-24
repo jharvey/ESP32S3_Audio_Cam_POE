@@ -39,6 +39,7 @@ A page on the office unit, opened in Chrome, Edge or Firefox on the office PC:
 | Unit offline (red) | No network or no power |
 | On Wi-Fi with PoE power (`E1` on the unit) | The network cable or switch port is faulty |
 | Battery and low | A portable unit away from its cable |
+| `oL` output shorted (red) | A lamp, MISC or servo cable is shorted or overloaded; the unit switched that output off and keeps working. Check the cable |
 | Duplicate (`dUP`) | Two units on one room number |
 | TALK held over 2 minutes (red) | A button may be stuck: **Mute TALK 15 min**, then have the button checked |
 | Muted (orange) | The office muted the unit's TALK; it ends by itself or with **Unmute** |

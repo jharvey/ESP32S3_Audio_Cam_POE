@@ -682,6 +682,7 @@ void Intercom::updatePanel() {
 const char* Intercom::fault() const {
     if (duplicate()) return "dUP";
     if (link_ == LinkType::None) return "E2 ";                        // no network at all
+    if (outFaults_) return "oL ";                                     // an output (lamp, MISC, servos) shorted / overloaded
     if (power_.source == PowerSource::PoE && !ethUp_) return "E1 ";  // PoE power but no Ethernet link
     if (power_.source == PowerSource::Battery && power_.hasBattery && power_.batteryPct < kLowBatteryPct) return "Lo ";
     return "";
@@ -692,6 +693,7 @@ Fault Intercom::faultCode() const {
     if (f[0] == 'd') return Fault::Duplicate;
     if (f[0] == 'E') return f[1] == '1' ? Fault::NoEthernet : Fault::NoNetwork;
     if (f[0] == 'L') return Fault::LowBattery;
+    if (f[0] == 'o') return Fault::Overload;
     return Fault::None;
 }
 
@@ -889,7 +891,18 @@ bool Intercom::sameGroup(const UnitId& from) const {
     return theirs == group();
 }
 
-void Intercom::refreshPower() { power_ = hal_.power->read(); }
+void Intercom::refreshPower() {
+    power_ = hal_.power->read();
+    uint8_t of = hal_.diag ? hal_.diag->outputFaults() : 0;
+    if (of != outFaults_) {
+        static const char* names[] = {"white lamp (J13)", "IR lamp (J12)", "call light (J11)", "MISC1 (J17)",
+                                      "MISC2 (J18)",      "MISC3 (J19)",   "servo power"};
+        for (int i = 0; i < 7; i++)
+            if ((of & ~outFaults_) & (1u << i))
+                logf("OUTPUT OVERLOAD: %s shorted or overloaded, switched off (check its cable)", names[i]);
+        outFaults_ = of;
+    }
+}
 
 AudioStats Intercom::audioStats() const {
     AudioStats s = retired_;

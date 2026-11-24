@@ -373,6 +373,13 @@ public:
     }
 
     // "selftest": which chips answer and what the links are doing.
+    uint8_t outputFaults() override {
+        uint16_t tr = gPwm.tripped();
+        uint8_t out = 0;
+        for (size_t i = 0; i < sizeof(kOutputs) / sizeof(kOutputs[0]); i++)
+            if (tr & (1u << kOutputs[i].ch)) out |= uint8_t(1u << i);
+        return out;
+    }
     std::string boardTest() override {
         std::string r;
         auto line = [&r](bool ok, const char* what) {

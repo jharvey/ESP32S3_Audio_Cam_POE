@@ -72,6 +72,9 @@ class IDiag {
 public:
     virtual ~IDiag() = default;
     virtual std::string boardTest() = 0;
+    // Output switches that shut down on over-current / overheating and were switched off
+    // (bit 0 white lamp, 1 IR lamp, 2 call light J11, 3-5 MISC1-3, 6 servo power).
+    virtual uint8_t outputFaults() { return 0; }
 };
 
 class ILog {

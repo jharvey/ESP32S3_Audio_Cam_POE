@@ -398,7 +398,8 @@ void ConsoleWindow::refreshTable() {
                 talking++;
                 bg = QColor(255, 236, 179);
             }
-            static const char* faults[] = {"", "E1 no Ethernet (on Wi-Fi)", "E2 no network", "Lo battery low", "dUP duplicate number"};
+            static const char* faults[] = {"",          "E1 no Ethernet (on Wi-Fi)", "E2 no network", "Lo battery low", "dUP duplicate number",
+                                           "oL output shorted (lamp / MISC / servo cable)"};
             bool dup = s.fault == ic::Fault::Duplicate || (u.otherSeen >= 0 && now - u.otherSeen <= kOfflineMs);
             QStringList notes;
             if (s.flags & ic::kStatusTalkHeld) notes << "TALK HELD >2 min";
@@ -410,7 +411,7 @@ void ConsoleWindow::refreshTable() {
             if (s.flags & ic::kStatusCalling) {
                 bg = QColor(170, 205, 255);  // blue: a room wants the office
                 problems++;
-            } else if (dup || (s.flags & ic::kStatusTalkHeld) || s.fault == ic::Fault::LowBattery) {
+            } else if (dup || (s.flags & ic::kStatusTalkHeld) || s.fault == ic::Fault::LowBattery || s.fault == ic::Fault::Overload) {
                 bg = QColor(255, 160, 160);  // red: needs someone now
                 problems++;
             } else if (s.fault != ic::Fault::None || (s.flags & ic::kStatusMuted)) {

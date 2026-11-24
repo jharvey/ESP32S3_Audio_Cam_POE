@@ -56,7 +56,7 @@ enum StatusFlags : uint8_t {
     kStatusCalling = 0x20,   // the room is calling the office (DOWN held 2 s)
 };
 // Status fault byte: what the unit's display is flashing.
-enum class Fault : uint8_t { None = 0, NoEthernet = 1, NoNetwork = 2, LowBattery = 3, Duplicate = 4 };
+enum class Fault : uint8_t { None = 0, NoEthernet = 1, NoNetwork = 2, LowBattery = 3, Duplicate = 4, Overload = 5 };
 
 // Who TALK reaches (office unit / bring-up). A unit answering a call always replies to the caller only.
 struct TalkTarget {
