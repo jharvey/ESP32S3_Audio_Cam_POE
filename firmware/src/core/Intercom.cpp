@@ -72,7 +72,7 @@ const char* kHelp =
     "  send all|ROOM CMD    send a console command to other units, signed with this unit's key (web / USB)\n"
     "  testpass <pw>|off    password for installer tests (auto-tune, coupling) from the web console (USB only)\n"
     "  tests <pw|-> CMD     run CMD (cal, couple run, send ... cal) with the tests password (the school page)\n"
-    "  callofc [off]        call the office (as DOWN held 2 s; the console shows it until answered)\n"
+    "  callofc [off]        call the office (as OFFICE, or DOWN held 2 s; the console shows it until answered)\n"
     "  ring [ROOM]          the office rings this room: chime every 2 s and blinking lights for 10 s; TALK\n"
     "                       answers ROOM (the office unit; none = the office console): send 214 ring 105\n"
     "  talk [seconds|off] [room N|floor N|group N]\n"
@@ -1239,7 +1239,16 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     }
     const bool web = webState_ == 2;
     bool talk = (((held & talkBit) || talkFrames_) && !setup_.active() && !muted()) || web;
-    // DOWN held 2 s (outside setup) = call the office; again = cancel. It gives up after 5 minutes.
+    // OFFICE (front): held while a call or ring waits = answer it (as TALK); otherwise a press calls the
+    // office (again = cancel). After a missed call it calls the office back.
+    const bool office = (held & (1u << kBtnOffice)) && !setup_.active();
+    if (office && canAnswer()) {
+        if (!muted()) talk = true;
+    } else if (office && !officeDown_) {
+        setCallingOffice(!callingOffice_, "OFFICE");
+    }
+    officeDown_ = office;
+    // DOWN held 2 s (outside setup) = call the office too (under the cover); again = cancel. Gives up after 5 min.
     if (held == (1u << kBtnDown) && !setup_.active()) {
         if (!downSince_) downSince_ = frame_;
         else if (frame_ - downSince_ == kCallHoldFrames) setCallingOffice(!callingOffice_, "DOWN");

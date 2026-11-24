@@ -19,7 +19,7 @@ the office console, with a caption bar explaining each step. Re-record them afte
 | Video | Shows |
 |---|---|
 | [06-office-calls-a-room.mp4](06-office-calls-a-room.mp4) | The office calls one room; the room hears a chime, sees `CAL`, and answers the office only |
-| [07-calling-the-office.mp4](07-calling-the-office.mp4) | A teacher calls the office with DOWN held 2 s (`oFC`); the office console shows it and calls back |
+| [07-calling-the-office.mp4](07-calling-the-office.mp4) | A teacher calls the office with the OFFICE button (`oFC`); the office console shows it and calls back |
 | [08-setting-the-room-number.mp4](08-setting-the-room-number.mp4) | Changing a unit's room number with the hidden SETUP button (101 to 305) |
 | [09-power-up-light-test.mp4](09-power-up-light-test.mp4) | The 4-second light test at power-up: every segment, the lamps and the RGB light |
 | [12-call-lights.mp4](12-call-lights.mp4) | The office calls a room: white, blue and call lights blink with `CAL` until answered; a missed call keeps a short blink until a button is pressed |

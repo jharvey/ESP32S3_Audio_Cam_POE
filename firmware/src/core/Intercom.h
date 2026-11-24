@@ -223,6 +223,7 @@ private:
     bool testsOk_ = false;        // running a command inside "tests <password> ..." (password checked)
     uint32_t missedUntil_ = 0;    // missed-call blink runs until this frame (or until a button is pressed)
     uint32_t ringUntil_ = 0;      // "ring": chime every 2 s until this frame or until TALK answers
+    bool officeDown_ = false;     // OFFICE was held last frame (a press = one call)
     uint32_t allCallUntil_ = 0;   // an office all-call is playing: room calls wait
     uint8_t lamp_[int(Lamp::Count)] = {0, 0, 0};
     uint32_t rgb_ = 0;

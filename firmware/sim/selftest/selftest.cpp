@@ -1273,6 +1273,27 @@ static void testRoomCalls() {
     CHECK(r214.ic->callAnswered() && office.replies > repliesBefore + 40, "ring answered with TALK: the office hears 214 (%d frames)",
           office.replies - repliesBefore);
     run(520);
+    // OFFICE (front button): a press calls the office, another cancels; held while rung, it answers.
+    r214.held = 1u << kBtnOffice;
+    run(3);
+    r214.held = 0;
+    run(10);
+    CHECK(r214.ic->callingOffice(), "OFFICE pressed: 214 calls the office");
+    r214.held = 1u << kBtnOffice;
+    run(3);
+    r214.held = 0;
+    run(10);
+    CHECK(!r214.ic->callingOffice(), "OFFICE pressed again: the call to the office is cancelled");
+    r214.ic->command("ring", CmdSource::Network);
+    run(20);
+    repliesBefore = office.replies;
+    r214.held = 1u << kBtnOffice;
+    run(50);
+    r214.held = 0;
+    run(10);
+    CHECK(r214.ic->callAnswered() && office.replies > repliesBefore + 40 && !r214.ic->callingOffice(),
+          "rung, OFFICE held: it answers the office (%d frames), no new call", office.replies - repliesBefore);
+    run(520);
 
     // Floor 1: 101 and 102, not 214.
     uint32_t h214 = r214.heardFrom(kOffice);

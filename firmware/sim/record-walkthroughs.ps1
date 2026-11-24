@@ -146,12 +146,12 @@ Record-Scene "06-office-calls-a-room" 26 @(
 # 07: a room calls the office
 Record-Scene "07-calling-the-office" 26 @(
     @(0, 6, "Room 214 (left) needs the office, but not the whole school."),
-    @(6, 10, "The teacher holds DOWN for 2 seconds: the display alternates oFC and the room number."),
+    @(6, 10, "The teacher presses OFFICE (the blue front button): the display alternates oFC and the room number."),
     @(10, 15, "The office console beeps and shows 214 in blue: CALLING THE OFFICE. Nobody else hears anything."),
     @(15, 21, "The office calls 214 back (select it, hold 'Call selected room'): that answers the call."),
     @(21, 26, "The calls list: '214 -> office, answered by the office after 11 s'. Unanswered calls show MISSED in red.")
 ) {
-    Start-Unit "214" "--pos 0,0 --press D@6.5+2.3 --quit-after 26"
+    Start-Unit "214" "--pos 0,0 --press O@6.5+0.3 --quit-after 26"
     Start-Console "--rooms 214 --auto-talk 16,4,214 --quit-after 26"
 }
 
@@ -221,7 +221,7 @@ Record-Scene "12-call-lights" 33 @(
     @(6, 11, "The office calls 214: the white lamp, the blue RGB light and the call light blink together; CAL flashes."),
     @(11, 20, "Nobody answers. The lights keep blinking for the 10 seconds TALK would still answer the office."),
     @(20, 27, "Missed call: a short blink every 2 seconds and CAL alternating with 214, for up to 5 minutes."),
-    @(27, 33, "The teacher presses any button: the missed call is cleared. Holding DOWN 2 s would call the office back.")
+    @(27, 33, "Any button clears the missed call; OFFICE (the blue button) would also call the office back.")
 ) {
     Start-Unit "214" "--pos 0,0 --press M@27+0.3 --quit-after 33"
     Start-Console "--rooms 214 --auto-talk 6,4,214 --quit-after 33"
