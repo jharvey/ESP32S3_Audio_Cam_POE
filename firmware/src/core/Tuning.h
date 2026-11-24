@@ -21,6 +21,7 @@ struct TuneParams {
     float calLevelDb = -20;   // auto-tune noise burst level, dBFS
     bool opus = true;         // send Opus (falls back to PCM if Opus isn't built in)
     int bitrateKbps = 24;     // Opus bitrate
+    float coupleDuckDb = -6;  // play talkers this unit hears through a wall / door this much quieter (coupling test)
 
     // Text form "key=value key=value ...", used for flash storage and the console.
     std::string toString() const;

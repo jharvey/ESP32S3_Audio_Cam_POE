@@ -51,6 +51,8 @@ const char* kHelp =
     "  stats                echo canceller and link state\n"
     "  unit [214]           show or set the room number (sets the IP address 10.42.<floor>.<room>)\n"
     "  group [299|off]      room group: units in one room (the gym: 299, 298 ...) do not play each other\n"
+    "  couple [run S auto|manual 101,102,...|clear]  room coupling test: every unit in the list plays a sweep in\n"
+    "                       turn (S s each, sent to all units at once by the office); couple = result\n"
     "  tone [seconds]       play a 1 kHz test tone on this unit's speaker (default 2 s, 0 stops)\n"
     "  mute [minutes|off]   stop this unit's TALK for a while (office: stuck button, misuse); it still hears\n"
     "  time [utc_seconds]   show the clock / set it (the office console does this when there's no NTP)\n"
@@ -92,6 +94,7 @@ void Intercom::begin() {
     group_ = uint16_t(std::strtoul(hal_.store->loadText(kGroupKey).c_str(), nullptr, 10));
     sched_.fromString(hal_.store->loadText(kSchedKey));
     if (hal_.store->loadText("boottest") != "off") bootT0_ = 1;  // runs from the first frame
+    couplings_ = CouplingTest::fromString(hal_.store->loadText("couple_map"));
     refreshPower();
     hal_.links->setWifi(hal_.store->loadText(kWifiSsidKey), hal_.store->loadText(kWifiPassKey));
     lastNonce_ = netauth::loadNonce(*hal_.store);
@@ -278,6 +281,43 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         if (a.size() > 1) hal_.store->saveText("ntp", a[1] == "default" ? "" : a[1]);
         std::string s = hal_.store->loadText("ntp");
         return "ntp server: " + (s.empty() ? std::string("pool.ntp.org (default)") : s) + (a.size() > 1 ? " (from the next restart)" : "");
+    }
+    if (c == "couple") {
+        if (a.size() > 1 && a[1] == "clear") {
+            couplings_.clear();
+            hal_.store->saveText("couple_map", "");
+            return "coupling map cleared (no ducking)";
+        }
+        if (a.size() > 1 && a[1] == "run") {
+            if (a.size() < 5) return "usage: couple run <seconds per unit, 1-3> auto|manual 101,102,214,...";
+            if (cal_.active() || testPhase_ || couple_.active()) return "busy (auto-tune, self-test or coupling test running)";
+            float secs = std::strtof(a[2].c_str(), nullptr);
+            std::vector<uint16_t> order;
+            std::stringstream ss(a[4]);
+            std::string r;
+            while (std::getline(ss, r, ',')) {
+                unsigned long n = std::strtoul(r.c_str(), nullptr, 10);
+                if (n >= 1 && n <= 999) order.push_back(uint16_t(n));
+            }
+            std::string err = couple_.start(order, unit_.room, frame_, uint32_t(secs * 1000 / kFrameMs), a[3] == "auto");
+            if (!err.empty()) return "couple: " + err;
+            for (auto& t : talkers_) t->jb.reset();
+            logf("coupling test started: %u units, %.0f s", unsigned(order.size()), double(couple_.totalFrames() * kFrameMs / 1000));
+            snprintf(buf, sizeof(buf), "coupling test running, about %.0f s; then \"couple\" shows the result",
+                     double(couple_.totalFrames() * kFrameMs / 1000));
+            return buf;
+        }
+        if (couple_.active()) return "coupling test running";
+        if (couplings_.empty()) return "no coupling test run yet";
+        std::string out = "coupling (dB vs this unit's own speaker):";
+        for (const auto& r : couplings_) {
+            char b[64];
+            if (!r.heard) snprintf(b, sizeof(b), " %u not heard;", unsigned(r.room));
+            else snprintf(b, sizeof(b), " %u %.0f dB%s;", unsigned(r.room), double(r.db),
+                          r.db >= CouplingTest::kSameRoomDb ? " (same room)" : r.db >= CouplingTest::kCoupledDb ? " (through wall/door)" : "");
+            out += b;
+        }
+        return out;
     }
     if (c == "mute") {  // office: stop a unit's TALK (stuck button, misuse); it still hears everyone
         if (a.size() > 1 && a[1] == "off") {
@@ -531,7 +571,7 @@ void Intercom::receive() {
         PacketType type = peekType(buf, n, &ok);
         if (!ok) continue;
         if (type == PacketType::Audio) {
-            if (cal_.measuring() || testPhase_) continue;  // the room must stay quiet while measuring
+            if (cal_.measuring() || testPhase_ || couple_.active()) continue;  // the room must stay quiet while measuring
             AudioHeader h;
             const uint8_t* payload;
             size_t plen;
@@ -903,6 +943,38 @@ size_t Intercom::webTalk(const int16_t* pcm, size_t samples) {
     return webBuf_.size();
 }
 
+float Intercom::coupling(uint16_t room) const {
+    for (const auto& r : couplings_)
+        if (r.room == room) return r.heard ? r.db : -99;
+    return -99;
+}
+
+void Intercom::finishCouple() {
+    logf("%s", couple_.summary().c_str());
+    if (!couple_.ok()) return;  // keep the old map
+    couplings_ = couple_.results();
+    hal_.store->saveText("couple_map", CouplingTest::toString(couplings_));
+    if (couple_.autoGroup()) {
+        // Units that hear each other about as loud as their own speaker are one room (the gym):
+        // the group is the highest room number among them, which every member works out the same way.
+        uint16_t g = unit_.room;
+        bool shared = false;
+        for (const auto& r : couplings_)
+            if (r.heard && r.db >= CouplingTest::kSameRoomDb) {
+                shared = true;
+                g = std::max(g, r.room);
+            }
+        // group_ 0 means "my own room number": the unit with the highest number keeps 0, the others point at it.
+        uint16_t want = (shared && g != unit_.room) ? g : 0;
+        if (want != group_) {
+            group_ = want;
+            hal_.store->saveText(kGroupKey, group_ ? std::to_string(group_) : "");
+            logf("room group set from the coupling test: %u", unsigned(group()));
+            sendStatus();
+        }
+    }
+}
+
 bool Intercom::sameGroup(const UnitId& from) const {
     if (from.room == unit_.room) return true;
     uint16_t theirs = from.room;
@@ -980,6 +1052,20 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
             updatePanel();
             return;
         }
+    }
+
+    if (couple_.active()) {  // coupling test: nothing else plays or sends while the sweeps run
+        transmitting_ = false;
+        sentLevel_ = playing_ = 0;
+        std::memset(speaker, 0, sizeof(int16_t) * kFrameSamples);
+        if (couple_.frame(frame_, mic, speaker, kFrameSamples)) finishCouple();
+        spkLevel_ = frameLevel(speaker, kFrameSamples);
+        aec_.playback(speaker);
+        updateLink();
+        receive();
+        if (frame_ % kStatusEveryFrames == 0) sendStatus();
+        updatePanel();
+        return;
     }
 
     int16_t clean[kFrameSamples];
@@ -1083,6 +1169,13 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         Talker& t = *talkers_[i];
         uint8_t lvl;
         if (t.jb.pop(frames[n], &lvl)) {
+            // A talker this room also hears through a wall / door plays a little quieter, so less of
+            // it leaks back into the talker's own room (coupling test, couple_duck_db).
+            float c = coupling(t.id.room);
+            if (c > CouplingTest::kCoupledDb && c < CouplingTest::kSameRoomDb && params_.coupleDuckDb < 0) {
+                float g = std::pow(10.0f, params_.coupleDuckDb / 20.0f);
+                for (int s = 0; s < kFrameSamples; s++) frames[n][s] = int16_t(frames[n][s] * g);
+            }
             in[n].pcm = frames[n];
             in[n].level = lvl;
             n++;
