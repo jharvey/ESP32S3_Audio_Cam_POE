@@ -39,7 +39,12 @@ function Record-Scene([string]$id, [int]$seconds, $captions, [scriptblock]$actio
     & $actions
     $ff.WaitForExit()
     $vf = Caption-Filter $captions
-    & ffmpeg -y -loglevel error -i $raw -vf $vf -c:v libx264 -crf 30 -pix_fmt yuv420p -movflags +faststart (Join-Path $out "$id.mp4")
+    # PRIVACY: the windows take a moment to open and close by themselves at the end, and anything behind
+    # them (the user's desktop, other apps) would be recorded. Keep only the part where they are up:
+    # drop the first $lead s and stop $tail s before the end. Caption times stay in recording time.
+    $lead = 2.5; $tail = 1.5
+    $keep = [string]::Format([Globalization.CultureInfo]::InvariantCulture, "{0:0.0}", $seconds - $lead - $tail)
+    & ffmpeg -y -loglevel error -i $raw -vf $vf -ss $lead -t $keep -c:v libx264 -crf 30 -pix_fmt yuv420p -movflags +faststart (Join-Path $out "$id.mp4")
     Start-Sleep -Seconds 2
 }
 
