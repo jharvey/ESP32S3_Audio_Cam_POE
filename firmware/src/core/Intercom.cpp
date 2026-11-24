@@ -583,6 +583,18 @@ Fault Intercom::faultCode() const {
     return Fault::None;
 }
 
+size_t Intercom::webTalk(const int16_t* pcm, size_t samples) {
+    const size_t kMax = kSampleRate;  // 1 s: more means the page sends faster than real time; drop the oldest
+    webBuf_.insert(webBuf_.end(), pcm, pcm + samples);
+    if (webBuf_.size() > kMax) webBuf_.erase(webBuf_.begin(), webBuf_.end() - long(kMax));
+    webLast_ = frame_;
+    if (webState_ == 0) {
+        webState_ = 1;
+        logf("web console talk started");
+    }
+    return webBuf_.size();
+}
+
 bool Intercom::sameGroup(const UnitId& from) const {
     if (from.room == unit_.room) return true;
     uint16_t theirs = from.room;
@@ -675,7 +687,16 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         logf("mute ended");
         sendStatus();
     }
-    bool talk = ((held & talkBit) || talkFrames_) && !setup_.active() && !muted();
+    // Web console talk: start once ~120 ms is buffered (the page posts every ~100 ms), stop 0.3 s after
+    // the audio stops coming and the buffer is empty.
+    if (webState_ == 1 && webBuf_.size() >= size_t(6 * kFrameSamples)) webState_ = 2;
+    if (webState_ && frame_ - webLast_ > 15 && webBuf_.size() < size_t(kFrameSamples)) {
+        webState_ = 0;
+        webBuf_.clear();
+        logf("web console talk ended");
+    }
+    const bool web = webState_ == 2;
+    bool talk = (((held & talkBit) || talkFrames_) && !setup_.active() && !muted()) || web;
     if (talk != transmitting_) {
         transmitting_ = talk;
         talkSince_ = talk ? frame_ : 0;
@@ -688,8 +709,14 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
 
     updateLink();
 
-    if (transmitting_ && link_ != LinkType::None) {
-        if (params_.micGainDb != 0) {
+    bool webFrame = false;
+    if (web && webBuf_.size() >= size_t(kFrameSamples)) {  // the office PC's voice replaces this unit's mic
+        std::copy(webBuf_.begin(), webBuf_.begin() + kFrameSamples, clean);
+        webBuf_.erase(webBuf_.begin(), webBuf_.begin() + kFrameSamples);
+        webFrame = true;
+    }
+    if (transmitting_ && link_ != LinkType::None && (!web || webFrame)) {  // an empty web buffer skips a frame (receivers conceal it)
+        if (params_.micGainDb != 0 && !webFrame) {
             float g = std::pow(10.0f, params_.micGainDb / 20.0f);
             for (int i = 0; i < kFrameSamples; i++) {
                 float v = clean[i] * g;
@@ -698,6 +725,7 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         }
         AudioHeader h;
         h.from = unit_;
+        if (webFrame) h.flags = uint8_t(h.flags | kAudioFromConsole);
         h.seq = seq_++;
         h.level = sentLevel_ = frameLevel(clean, kFrameSamples);
         uint8_t coded[kMaxCodedBytes], buf[kMaxPacketBytes];

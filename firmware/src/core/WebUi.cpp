@@ -114,6 +114,17 @@ HttpResponse WebUi::handle(const HttpRequest& req) {
         r.body = schoolJson();
         return r;
     }
+    if (path == "/api/talk") {
+        if (req.method != "POST") return text(405, "POST only");
+        if (req.xIntercom != "1") return text(403, "missing X-Intercom header");
+        if (req.body.size() > 16000) return text(400, "too much audio in one post (max 0.375 s)");
+        std::vector<uint8_t> raw;
+        if (!base64Decode(req.body, &raw) || raw.size() % 2) return text(400, "body must be base64 of 16-bit PCM");
+        std::vector<int16_t> pcm(raw.size() / 2);
+        for (size_t i = 0; i < pcm.size(); i++) pcm[i] = int16_t(raw[2 * i] | (raw[2 * i + 1] << 8));
+        size_t waiting = ic_.webTalk(pcm.data(), pcm.size());
+        return text(200, "ok " + std::to_string(waiting));
+    }
     if (path == "/api/status") {
         HttpResponse r;
         r.contentType = "application/json";
@@ -127,6 +138,32 @@ HttpResponse WebUi::handle(const HttpRequest& req) {
         return text(200, ic_.command(req.body, CmdSource::Web));
     }
     return text(404, "not found");
+}
+
+bool base64Decode(const std::string& in, std::vector<uint8_t>* out) {
+    auto val = [](char c) -> int {
+        if (c >= 'A' && c <= 'Z') return c - 'A';
+        if (c >= 'a' && c <= 'z') return c - 'a' + 26;
+        if (c >= '0' && c <= '9') return c - '0' + 52;
+        if (c == '+') return 62;
+        if (c == '/') return 63;
+        return -1;
+    };
+    out->clear();
+    uint32_t acc = 0;
+    int bits = 0;
+    for (char c : in) {
+        if (c == '=' || c == '\n' || c == '\r' || c == ' ') continue;
+        int v = val(c);
+        if (v < 0) return false;
+        acc = (acc << 6) | uint32_t(v);
+        bits += 6;
+        if (bits >= 8) {
+            bits -= 8;
+            out->push_back(uint8_t(acc >> bits));
+        }
+    }
+    return true;
 }
 
 std::string WebUi::schoolJson() {

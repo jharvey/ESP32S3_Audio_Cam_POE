@@ -81,6 +81,11 @@ public:
     const char* fault() const;
     Fault faultCode() const;
     uint8_t outputFaults() const { return outFaults_; }
+    // Web console talk: 16 kHz mono PCM from the office PC's microphone (via the web page). While it
+    // keeps coming, this unit transmits it instead of its own mic, marked as coming from the office.
+    // Returns how many samples are waiting (the page uses it to see the unit keeps up).
+    size_t webTalk(const int16_t* pcm, size_t samples);
+    bool webTalking() const { return webState_ == 2; }
     bool muted() const { return muteUntil_ != 0; }
     bool talkHeld() const { return talkSince_ && frame_ - talkSince_ >= kTalkHeldFrames; }
     Codec sendCodec() const { return encoder_ ? encoder_->codec() : Codec::Pcm16; }
@@ -149,6 +154,9 @@ private:
     uint32_t muteUntil_ = 0;  // frame the office mute ends; 0 = not muted
     uint32_t talkSince_ = 0;  // frame TALK went down; 0 = not talking
     uint32_t talkFrames_ = 0;  // "talk" command: transmit as if TALK were held
+    std::vector<int16_t> webBuf_;  // web console talk audio waiting to be sent (up to 1 s)
+    int webState_ = 0;             // 0 idle, 1 buffering (waits for ~120 ms of audio), 2 sending
+    uint32_t webLast_ = 0;         // frame the last web audio arrived
     uint64_t lastNonce_ = 0;   // last accepted network command (replay protection)
     int testPhase_ = 0;        // selftest: 0 idle, 1 quiet, 2 tone
     int testCount_ = 0;

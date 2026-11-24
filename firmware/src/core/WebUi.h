@@ -8,6 +8,8 @@
 //   GET  /api/status   live state as JSON (polled by the page once a second)
 //   GET  /school       whole-school status: every unit this one hears, as a grid of rooms
 //   GET  /api/school   that list as JSON (offline units stay listed, marked offline)
+//   POST /api/talk     web console talk: body = base64 of 16 kHz mono 16-bit PCM (about 100 ms per post);
+//                      this unit transmits it as an office all-call. Needs X-Intercom: 1.
 //   POST /api/cmd      body = one console command, reply = its text. Needs header X-Intercom: 1
 //                      (a browser on another site can't add it, which blocks cross-site requests).
 //
@@ -15,6 +17,7 @@
 // web interface is off. 5 wrong passwords lock it for 30 s. Firmware can't be uploaded here.
 #pragma once
 #include <string>
+#include <vector>
 
 #include "Intercom.h"
 
@@ -56,5 +59,6 @@ private:
 
 const char* webPage();     // WebPage.cpp
 const char* schoolPage();  // SchoolPage.cpp
+bool base64Decode(const std::string& in, std::vector<uint8_t>* out);
 
 }  // namespace ic
