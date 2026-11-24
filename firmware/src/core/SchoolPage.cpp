@@ -136,7 +136,19 @@ document.getElementById("rooms").addEventListener("click",e=>{
   document.querySelectorAll(".room.sel").forEach(x=>x.classList.remove("sel"));c.classList.add("sel");updTarget();});
 document.getElementById("tkind").addEventListener("change",updTarget);
 // a dot clicked on the floor plan picks its room, as clicking its card does
-window.onPlanPick=u=>{const c=document.querySelector('.room[data-room="'+u.room+'"]');if(c)c.click();};
+// Floor plan (/floorplan.js): click a room = pick it (as clicking its card); hold = talk to it while held;
+// double-click = ring it (it chimes and blinks for 10 s; the teacher answers with TALK, heard on this unit).
+function planSel(info){const u=info.units[0];
+  if(!u){setState("No unit in room "+info.room+" yet.","st");return false;}
+  const c=document.querySelector('.room[data-room="'+u.room+'"]');if(c&&!c.classList.contains("sel"))c.click();return true;}
+let planHolding=false;
+window.onPlanPick=info=>{planSel(info);};
+window.onPlanHold=async info=>{if(talking||!planSel(info))return;planHolding=true;
+  document.getElementById("tkind").value="room";updTarget();await startTalk();if(!planHolding)stopTalk();};
+window.onPlanHoldEnd=()=>{planHolding=false;stopTalk();};
+window.onPlanRing=async info=>{if(!planSel(info))return;
+  for(const u of info.units){const r=await cmd("send "+u.room+" ring "+lastSchool.self);out("> "+u.room+" ring   ("+r+")");}
+  setState("Ringing room "+info.room+" for 10 s: the teacher answers with TALK, heard on this office unit.","st");};
 function setState(t,cls){const e=document.getElementById("tstate");e.textContent=t;e.className=cls||"mute";}
 async function startTalk(){
   if(talking)return;
