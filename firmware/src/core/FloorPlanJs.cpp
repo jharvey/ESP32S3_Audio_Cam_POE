@@ -93,8 +93,11 @@ function build(dxf){
     const lbl=byLay[lay].map(r=>[R(r.t.x),R(-r.t.y)]);  // room labels: only used to frame the view
     // view: the drawing, but no further than 30% beyond the rooms, so a stray far-off bit doesn't shrink the floor
     const mn=a=>a.reduce((m,v)=>Math.min(m,v),1e18),mx=a=>a.reduce((m,v)=>Math.max(m,v),-1e18);
-    const lx=lbl.map(t=>t[0]),ly=lbl.map(t=>t[1]),lw=mx(lx)-mn(lx),lh=mx(ly)-mn(ly),e=0.3*Math.max(lw,lh);
-    const x0=Math.max(mn(xs),mn(lx)-e),x1=Math.min(mx(xs),mx(lx)+e),y0=Math.max(mn(ys),mn(ly)-e),y1=Math.min(mx(ys),mx(ly)+e);
+    const lx=lbl.map(t=>t[0]),ly=lbl.map(t=>t[1]),lw=mx(lx)-mn(lx),lh=mx(ly)-mn(ly);
+    const dw=mx(xs)-mn(xs),dh=mx(ys)-mn(ys),few=Math.max(lw,lh)<0.2*Math.max(dw,dh);  // one room or a few close together
+    const e=few?1e18:Math.max(0.3*Math.max(lw,lh),0.15*Math.max(dw,dh));  // few: frame the whole drawing
+    let x0=Math.max(mn(xs),mn(lx)-e),x1=Math.min(mx(xs),mx(lx)+e),y0=Math.max(mn(ys),mn(ly)-e),y1=Math.min(mx(ys),mx(ly)+e);
+    if(x1-x0<1){x0-=1;x1+=1}if(y1-y0<1){y0-=1;y1+=1}
     const hund=hundOf(lay);
     floors.push({name:"Floor "+hund,x0,y0,x1,y1,d});
     for(const r of byLay[lay]){const old=rooms[r.n];
@@ -266,7 +269,7 @@ function demoDxf(){
   const L=(lay,x1,y1,x2,y2)=>{o+=`0\nLINE\n8\n${lay}\n10\n${x1}\n20\n${y1}\n11\n${x2}\n21\n${y2}\n`};
   const T=(lay,x,y,s)=>{o+=`0\nTEXT\n8\n${lay}\n10\n${x}\n20\n${y}\n40\n24\n1\n${s}\n`};
   for(const f in fl){
-    const rs=fl[f],lay="demo"+f,half=Math.ceil(rs.length/2),len=half*W,M=Math.max(len,2*D+C),g=Math.max(12,0.0095*M);
+    const rs=fl[f],lay="demo"+f,half=Math.ceil(rs.length/2),len=half*W,M=Math.max(len,2*D+C),g=Math.max(2,0.004*M);
     rs.forEach((r,i)=>{const top=i<half,x=(top?i:i-half)*W,y0=top?C/2:-C/2,y1=top?C/2+D:-C/2-D,mid=x+W/2;
       L(lay,x,y0,x,y1);L(lay,x+W,y0,x+W,y1);L(lay,x,y1,x+W,y1);L(lay,x,y0,mid-g,y0);L(lay,mid+g,y0,x+W,y0);
       T(lay,mid-60,(y0+y1)/2,"ROOM "+r)});
