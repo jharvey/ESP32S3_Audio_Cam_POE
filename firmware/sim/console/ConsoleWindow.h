@@ -5,10 +5,12 @@
 //   - Console commands to one unit, a room or all, signed with the network key.
 // Works the same with simulated units and real ones (same multicast packets).
 #pragma once
+#include <QDateTime>
 #include <QElapsedTimer>
 #include <QMainWindow>
 #include <QMap>
 #include <QStringList>
+#include <QVector>
 #include <QTimer>
 #include <memory>
 
@@ -100,6 +102,24 @@ private:
     QCheckBox* listen_;
     QLabel* talkState_;
     QLabel* summary_;
+    // Call history (R2.7): rooms calling the office, and the office's calls to rooms.
+    struct CallRec {
+        QDateTime when;
+        QString from, to, result;
+        qint64 startMs = 0, endMs = -1;  // clock_ ms; endMs -1 = still going
+        bool roomCall = false;           // a room calling the office (can be missed)
+        bool done = false;
+        uint16_t room = 0, floor = 0, group = 0;  // office call target (one of them)
+    };
+    QVector<CallRec> calls_;
+    QTableWidget* callsTable_ = nullptr;
+    QMap<quint32, int> roomCallOpen_;  // unit key -> index of its open call to the office
+    int officeCall_ = -1;              // index of the office's call in progress / last one
+    int missed_ = 0;
+    int addCall(const QString& from, const QString& to, bool roomCall);
+    void finishCall(int i, const QString& result);
+    void showCall(int i);
+    bool officeCallReaches(const CallRec& c, const ic::UnitId& u) const;
     QComboBox* target_;
     QLineEdit* cmd_;
     QLineEdit* key_;

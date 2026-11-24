@@ -155,7 +155,7 @@ boards and adds what a teacher needs around it.
 | 2.4 | Room answers: TALK during a room call or within 10 s after replies to the caller only (`kAudioReply`; target 0 = the office console). Works between two units as well (`talk 5 room 214` on the office unit) | done (sim) / code |
 | 2.5 | Call the office: DOWN held 2 s (no extra button needed; a dedicated CALL key can go on a free key-scan position, K1+SEG7) or `callofc`. Status flag `kStatusCalling`; the display alternates `oFC`; the console shows the room blue with a beep; cleared when the office calls back, cancelled by DOWN again, gives up after 5 min | done (sim) / code |
 | 2.6 | All-call still wins: while an office all-call plays, room calls and answers aren't played (emergency: R3) | done (sim) / code |
-| 2.7 | Console: room-call history with times, missed calls from rooms | new |
+| 2.7 | Console: call history (rooms calling the office: answered after N s / MISSED in red; office calls: answered by / no answer), missed-call count, every call appended to intercom-calls.csv. Web console: with R1.7 | done (PC console) |
 | 2.8 | Privacy: no listening to a room without the room seeing it; listen-in stays out unless the school decides otherwise | decide |
 | 2.8a | **Visual call indicator:** a room call pulses the lamp output LED.OTH slowly (red or amber LED) and shows `CAL` until answered; steady glow during an all-call. Flashing at most 2 per second; never white-strobe like the fire alarm | new |
 

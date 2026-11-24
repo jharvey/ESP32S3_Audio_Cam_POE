@@ -19,6 +19,10 @@ Today: the PC office console (`firmware/sim/console`), a Windows program. *(Plan
 - **Call its floor:** every room on the selected room's floor (214 -> all 2xx rooms).
 - **Rooms calling the office:** a room that holds DOWN 2 s shows blue, "CALLING THE OFFICE", with a beep. Call
   it back to answer; that clears it.
+- **Calls list:** every call, newest first: rooms calling the office ("answered by the office after 12 s", or
+  **MISSED** in red if the room stopped calling before anyone called back) and the office's calls ("answered by
+  214" or "no answer"). The line above the room grid counts missed calls. Every call is also added to
+  `intercom-calls.csv` next to the console program, for a record you can open in Excel.
 - **Commands:** send a console command to one unit, a room or all units (signed with the network key), for example
   `get`, `set volume_db -6`, `save`, `cal`, `selftest result`.
 - **Open web page** of the selected unit.

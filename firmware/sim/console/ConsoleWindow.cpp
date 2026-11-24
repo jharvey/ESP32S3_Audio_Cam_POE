@@ -4,7 +4,10 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDateTime>
+#include <QCoreApplication>
 #include <QDesktopServices>
+#include <QFile>
+#include <QTextStream>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -88,6 +91,19 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     tl->addWidget(listen_);
     tl->addWidget(talkState_, 1);
     root->addWidget(talkBox);
+
+    // Call history: newest first. Saved to intercom-calls.csv next to the program.
+    auto* callsBox = new QGroupBox("Calls (newest first; missed calls in red)");
+    auto* cbl = new QVBoxLayout(callsBox);
+    callsTable_ = new QTableWidget(0, 4);
+    callsTable_->setHorizontalHeaderLabels({"Time", "From", "To", "Result"});
+    callsTable_->horizontalHeader()->setStretchLastSection(true);
+    callsTable_->verticalHeader()->hide();
+    callsTable_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    callsTable_->setSelectionMode(QAbstractItemView::NoSelection);
+    callsTable_->setMaximumHeight(140);
+    cbl->addWidget(callsTable_);
+    root->addWidget(callsBox);
     connect(allBtn_, &QPushButton::pressed, this, [this] { startTalk(kTalkAll); });
     connect(roomBtn_, &QPushButton::pressed, this, [this] { startTalk(kTalkRoom); });
     connect(floorBtn_, &QPushButton::pressed, this, [this] { startTalk(kTalkFloor); });
@@ -218,6 +234,24 @@ void ConsoleWindow::startTalk(int kind) {
         micSrc_->setCurrentIndex(1);
     }
     talking_ = true;
+    if (kind != kTalkAll) {  // a call: history, and it answers any room in its reach that is calling the office
+        officeCall_ = addCall("office", what, false);
+        CallRec& oc = calls_[officeCall_];
+        if (talkFlags_ & ic::kAudioFloor) oc.floor = talkTarget_;
+        else if (talkFlags_ & ic::kAudioGroupCall) oc.group = talkTarget_;
+        else oc.room = talkTarget_;
+        for (auto it = roomCallOpen_.begin(); it != roomCallOpen_.end();) {
+            ic::UnitId u;
+            u.room = uint16_t(it.key() >> 8);
+            if (officeCallReaches(calls_[officeCall_], u)) {
+                CallRec& rc = calls_[it.value()];
+                finishCall(it.value(), QString("answered by the office after %1 s").arg((clock_.elapsed() - rc.startMs) / 1000));
+                it = roomCallOpen_.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
     talkState_->setText(kind == kTalkAll ? QString("TALKING to everyone")
                                          : QString("CALLING %1 (it hears a chime first; it can answer for 10 s)").arg(what));
     talkState_->setStyleSheet("color:#c62828;font-weight:600");
@@ -226,6 +260,70 @@ void ConsoleWindow::startTalk(int kind) {
 void ConsoleWindow::stopTalk() {
     talking_ = false;
     talkState_->clear();
+    if (officeCall_ >= 0 && calls_[officeCall_].endMs < 0) {
+        calls_[officeCall_].endMs = clock_.elapsed();
+        showCall(officeCall_);
+    }
+}
+
+// ---- call history ----------------------------------------------------------------------------
+int ConsoleWindow::addCall(const QString& from, const QString& to, bool roomCall) {
+    CallRec c;
+    c.when = QDateTime::currentDateTime();
+    c.from = from;
+    c.to = to;
+    c.roomCall = roomCall;
+    c.startMs = clock_.elapsed();
+    c.result = roomCall ? "calling..." : "talking...";
+    calls_.push_back(c);
+    callsTable_->insertRow(0);
+    showCall(calls_.size() - 1);
+    return calls_.size() - 1;
+}
+
+void ConsoleWindow::showCall(int i) {
+    const CallRec& c = calls_[i];
+    int row = calls_.size() - 1 - i;  // newest on top
+    QString res = c.result;
+    if (!c.done && c.endMs >= 0 && !c.roomCall) res = QString("%1 s, waiting for an answer").arg((c.endMs - c.startMs + 500) / 1000);
+    QStringList cells = {c.when.toString("ddd hh:mm:ss"), c.from, c.to, res};
+    bool missed = c.done && c.roomCall && c.result.startsWith("MISSED");
+    for (int col = 0; col < 4; col++) {
+        QTableWidgetItem* it = callsTable_->item(row, col);
+        if (!it) callsTable_->setItem(row, col, it = new QTableWidgetItem);
+        it->setText(cells[col]);
+        it->setBackground(missed ? QBrush(QColor(255, 160, 160)) : QBrush());
+        it->setForeground(missed ? QBrush(Qt::black) : QBrush());
+    }
+}
+
+void ConsoleWindow::finishCall(int i, const QString& result) {
+    CallRec& c = calls_[i];
+    if (c.done) return;
+    c.done = true;
+    c.result = result;
+    if (c.endMs < 0) c.endMs = clock_.elapsed();
+    if (c.roomCall && result.startsWith("MISSED")) missed_++;
+    showCall(i);
+    QFile f(QCoreApplication::applicationDirPath() + "/intercom-calls.csv");
+    bool fresh = !f.exists();
+    if (f.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&f);
+        if (fresh) out << "start,from,to,seconds,result\n";
+        out << c.when.toString(Qt::ISODate) << "," << c.from << "," << c.to << "," << (c.endMs - c.startMs) / 1000 << ","
+            << QString(c.result).replace(',', ';') << "\n";
+    }
+}
+
+bool ConsoleWindow::officeCallReaches(const CallRec& c, const ic::UnitId& u) const {
+    if (c.room) return u.room == c.room;
+    if (c.floor) return u.room / 100 == c.floor;
+    if (c.group) {
+        quint32 k = u.key();
+        uint16_t g = units_.contains(k) ? units_[k].status.group : 0;
+        return u.room == c.group || g == c.group;
+    }
+    return false;
 }
 
 void ConsoleWindow::tick() {
@@ -237,7 +335,14 @@ void ConsoleWindow::tick() {
         framesRun_++;
         frame();
     }
-    if (framesRun_ % 25 == 0) refreshTable();
+    if (framesRun_ % 25 == 0) {
+        refreshTable();
+        // an office call nobody answered within 10 s of the end; a room calling the office for over 5 min
+        if (officeCall_ >= 0 && !calls_[officeCall_].done && calls_[officeCall_].endMs >= 0 && now - calls_[officeCall_].endMs > 10000)
+            finishCall(officeCall_, QString("no answer (%1 s call)").arg((calls_[officeCall_].endMs - calls_[officeCall_].startMs + 500) / 1000));
+        else if (officeCall_ >= 0 && !calls_[officeCall_].done)
+            showCall(officeCall_);
+    }
 
     double t = now / 1000.0;
     if (opt_.autoTalkAt >= 0) {
@@ -342,6 +447,11 @@ void ConsoleWindow::receive() {
             if ((s.flags & ic::kStatusCalling) && !u.callingLogged) {
                 appendLog(unitName(s.from) + " is CALLING THE OFFICE - select it and hold \"Call selected room\" to answer");
                 QApplication::beep();
+                roomCallOpen_[s.from.key()] = addCall(unitName(s.from), "office", true);
+            }
+            if (!(s.flags & ic::kStatusCalling) && u.callingLogged && roomCallOpen_.contains(s.from.key())) {
+                int i = roomCallOpen_.take(s.from.key());  // the room stopped calling before the office called back
+                finishCall(i, QString("MISSED (stopped calling after %1 s)").arg((clock_.elapsed() - calls_[i].startMs) / 1000));
             }
             u.callingLogged = s.flags & ic::kStatusCalling;
             if ((s.flags & ic::kStatusMuted) != (u.status.flags & ic::kStatusMuted) && u.lastSeen >= 0)
@@ -360,7 +470,11 @@ void ConsoleWindow::receive() {
             auto& t = talkers_[h.from.key()];
             if (!t) t = std::make_shared<Talker>();
             t->jb.push(h.seq, h.codec, payload, plen, h.level);
-            if ((h.flags & ic::kAudioReply) && !t->answerLogged) appendLog(unitName(h.from) + " answers the office");
+            if ((h.flags & ic::kAudioReply) && !t->answerLogged) {
+                appendLog(unitName(h.from) + " answers the office");
+                if (officeCall_ >= 0 && !calls_[officeCall_].done && officeCallReaches(calls_[officeCall_], h.from))
+                    finishCall(officeCall_, "answered by " + unitName(h.from));
+            }
             t->answerLogged = h.flags & ic::kAudioReply;
             t->lastPacket = clock_.elapsed();
         } else if (type == ic::PacketType::Reply) {
@@ -437,7 +551,8 @@ void ConsoleWindow::refreshTable() {
         }
         if (cells[0] == keep) table_->selectRow(r);
     }
-    summary_->setText(QString("%1 online   %2 offline   %3 on battery   %4 talking   %5 need attention").arg(online).arg(offline).arg(battery).arg(talking).arg(problems));
+    summary_->setText(QString("%1 online   %2 offline   %3 on battery   %4 talking   %5 need attention   %6 missed calls")
+                          .arg(online).arg(offline).arg(battery).arg(talking).arg(problems).arg(missed_));
 }
 
 void ConsoleWindow::sendCommand() {
