@@ -51427,7 +51427,7 @@
 		)
 		(uuid "c82cdf73-d560-4af8-ac5a-e8543860bc50")
 	)
-	(label "BTN.TALK7"
+	(label "BTN.OFFICE"
 		(at 275.59 261.62 0)
 		(effects
 			(font
@@ -51767,7 +51767,7 @@
 		)
 		(uuid "e4a1c3c5-d804-4e53-9b63-e224e4d81b63")
 	)
-	(label "BTN.TALK7"
+	(label "BTN.OFFICE"
 		(at 208.28 259.08 0)
 		(effects
 			(font
