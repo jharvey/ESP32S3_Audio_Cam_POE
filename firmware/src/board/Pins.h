@@ -1,5 +1,7 @@
 // ESP32-S3 (U7) pin map, taken from the schematic netlist after the 2026-11-22 pin remap
-// (pins re-assigned to untangle the ratsnest for the single-sided layout).
+// (pins re-assigned to untangle the ratsnest for the single-sided layout), and the 2026-11-24 camera remap:
+// the camera's fast lines (D0-D7, PCLK, XCLK) moved to U7's left and bottom edges, nearest the FPC, so they
+// reach it on the top layer without crossing USB (pins 25/26).
 // Regenerate this if the schematic changes.
 #pragma once
 
@@ -9,13 +11,13 @@ constexpr int RGB_LED_GPIO = 0;  // D9 WS2812B data on GPIO0 (CHIP_BOOT strap: d
 
 // I2C bus: PCA9685 0x40 (U20), TCA9555 0x20 (U21), AXP2101 0x34 (U18)
 constexpr int I2C_SCL = 43;
-constexpr int I2C_SDA = 44;
+constexpr int I2C_SDA = 14;
 
 // Shared SPI: W5500 Ethernet (U9) and RFM95 LoRa (U19)
 constexpr int SPI_MOSI = 4;     // GPIO matrix
 constexpr int SPI_MISO = 3;
-constexpr int SPI_SCLK = 45;   // strapping pin: driven only by the ESP32, no pull-up
-constexpr int ETH_CS = 42;
+constexpr int SPI_SCLK = 12;   // FSPICLK IO_MUX pin
+constexpr int ETH_CS = 13;
 constexpr int LORA_CS = 5;
 constexpr int LORA_DIO0 = 6;   // LORA_IRQ
 
@@ -29,21 +31,24 @@ constexpr int SPK_WS = 8;     // net /ESP.I2S.WS
 constexpr int SPK_DOUT = 2;   // net /SPK.DIN
 
 // SD card, SDMMC 1-bit (DAT3 pulled up by R29, not on a GPIO)
-constexpr int SD_CLK = 46;   // strapping pin: driven only by the ESP32, no pull-up
-constexpr int SD_CMD = 41;
+constexpr int SD_CLK = 10;
+constexpr int SD_CMD = 11;   // net /SD.MOSI
 constexpr int SD_D0 = 1;
 
 // Camera (OV2640 / OV5640). No PWDN/RESET GPIOs; power via TCA9555 P03.
-constexpr int CAM_XCLK = 21;
-constexpr int CAM_SIOD = 40;  // CAM.SDA
-constexpr int CAM_SIOC = 39;  // CAM.SCL
-constexpr int CAM_VSYNC = 38;
-constexpr int CAM_HREF = 47;  // U7 pin 37, SPICLK_P = GPIO47
-constexpr int CAM_PCLK = 15;
-constexpr int CAM_D0 = 13, CAM_D1 = 11, CAM_D2 = 10, CAM_D3 = 12;
-constexpr int CAM_D4 = 14, CAM_D5 = 17, CAM_D6 = 18, CAM_D7 = 48;  // D7: U7 pin 36, SPICLK_N = GPIO48
-// GPIO45 and GPIO46 are strapping pins. After the remap they carry ETH.SCLK and SD.CLK, which only the
-// ESP32 drives and which have no pull-ups, so nothing can hold them high during a reset.
+constexpr int CAM_XCLK = 45;  // net /CAM.MCLK, U7 pin 51. Strapping pin, but only the ESP32 drives it
+constexpr int CAM_SIOD = 15;  // CAM.SDA
+constexpr int CAM_SIOC = 17;  // CAM.SCL
+constexpr int CAM_VSYNC = 18;
+constexpr int CAM_HREF = 21;
+constexpr int CAM_PCLK = 41;  // U7 pin 47
+constexpr int CAM_D0 = 39, CAM_D1 = 47, CAM_D2 = 48, CAM_D3 = 38;  // pins 44, 37 (SPICLK_P), 36 (SPICLK_N), 43
+constexpr int CAM_D4 = 40, CAM_D5 = 42, CAM_D6 = 44, CAM_D7 = 46;  // pins 45, 48, 50 (U0RXD), 52 (strapping)
+// GPIO45 (VDD_SPI voltage strap) carries XCLK, an ESP32 output: the camera can't hold it high at reset.
+// GPIO46 carries D7, a camera output. GPIO46 only matters with GPIO0 low (download mode): GPIO0 = 0 and
+// GPIO46 = 1 is not a valid boot mode. At power-up the camera is off (TCA9555 P04 is an input at reset, R14
+// holds Q1 off), so this only bites if the camera is powered when BOOT is held. Keep it that way: power the camera off (CAM_PWR high) before
+// any restart. Normal SPI boot (GPIO0 high) ignores GPIO46.
 // GPIO3 (ETH.MISO) is the JTAG-source strap; it is ignored unless the STRAP_JTAG_SEL eFuse is burned.
 
 // TCA9555 (U21) port bits

@@ -104,7 +104,7 @@ public:
         out_ = 0;  // TM1637 CLK/DIO output latches stay 0: they are driven open-drain via cfg_
         out_ |= 1u << pins::exp::ETH_RST | 1u << pins::exp::LORA_RST;
         out_ |= 1u << pins::exp::PWM_OE;   // /OE high: PCA9685 outputs LOW (MODE2 OUTNE = 00) = all switches off
-        out_ |= 1u << pins::exp::CAM_PWR;  // TODO: confirm Q1 polarity (camera stays powered)
+        out_ |= 1u << pins::exp::CAM_PWR;  // high = Q1 (P-FET) off = camera unpowered
         write();
         // Port 0 directions: 1 = input. PMU_IRQ and ETH_INT are inputs; TM1637 lines start
         // released (input, pulled up by R38/R39).
