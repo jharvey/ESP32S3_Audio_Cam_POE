@@ -11,6 +11,8 @@ How the documents are organised (development vs final, per release): [documentat
 |---|---|
 | [teacher_guide.md](teacher_guide.md) | Teachers: talking, what the display shows, setting a room number |
 | [office_guide.md](office_guide.md) | The office: console, room grid, faults, planned room calls and chimes |
+| [quick_start.md](quick_start.md) | One page: one unit from the box to talking |
+| [code_card.html](code_card.html) | Printable card for beside each unit: buttons and display codes |
 | [install_guide.md](install_guide.md) | Installers: network, mounting, first setup, echo tuning, check list |
 | [maintenance_guide.md](maintenance_guide.md) | Upkeep: updates (USB / SD), tuning files, replacing a unit, faults |
 | Videos | Simulator walkthroughs, see `videos/README.md` (recorded from the PC simulator) |

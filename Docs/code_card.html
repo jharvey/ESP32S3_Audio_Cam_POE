@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Intercom code card</title>
+<style>
+@page{size:auto;margin:10mm}
+body{font:12pt/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#111;margin:0;background:#fff}
+.card{width:180mm;border:2px solid #111;border-radius:6mm;padding:7mm 9mm;margin:6mm auto}
+h1{font-size:18pt;margin:0 0 3mm}
+.how{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm;margin:0 0 4mm}
+.how div{border:1px solid #888;border-radius:3mm;padding:3mm}
+.how b{display:block;font-size:12.5pt;margin-bottom:1mm}
+table{width:100%;border-collapse:collapse;font-size:11pt}
+td,th{border-bottom:1px solid #bbb;padding:1.4mm 2mm;text-align:left;vertical-align:top}
+th{font-size:10pt;color:#444}
+code{font:700 13pt ui-monospace,Consolas,monospace;background:#111;color:#7fb8ff;padding:0 1.6mm;border-radius:1mm;letter-spacing:1px}
+.foot{font-size:9pt;color:#555;margin-top:2mm}
+@media print{.noprint{display:none}}
+</style></head><body>
+<p class="noprint" style="text-align:center;font-size:10pt;color:#555">Print this page (Ctrl+P). One card per unit.</p>
+<div class="card">
+<h1>Intercom</h1>
+<div class="how">
+ <div><b>Talk to the school</b>Hold <b style="display:inline">TALK</b> and speak. Let go when finished.</div>
+ <div><b>Answer the office</b>Display shows <code>CAL</code>: hold TALK. Only the office hears you.</div>
+ <div><b>Call the office</b>Hold <b style="display:inline">DOWN</b> 2 seconds. Shows <code>oFC</code> until answered.</div>
+</div>
+<table>
+<tr><th>Display</th><th>Means</th><th>Do</th></tr>
+<tr><td><code>214</code></td><td>Working</td><td>–</td></tr>
+<tr><td>dot after 1st / 2nd digit</td><td>You're talking / someone talks to you</td><td>–</td></tr>
+<tr><td><code>CAL</code></td><td>The office is calling this room</td><td>Hold TALK to answer</td></tr>
+<tr><td><code>oFC</code></td><td>This room is calling the office</td><td>Wait for the office</td></tr>
+<tr><td><code>E1</code> <code>E2</code></td><td>Network problem (E1: on Wi-Fi, E2: none)</td><td>Tell the office</td></tr>
+<tr><td><code>Lo</code></td><td>Battery low</td><td>Plug in the PoE cable</td></tr>
+<tr><td><code>oL</code></td><td>A light / accessory cable is shorted</td><td>Tell the office</td></tr>
+<tr><td><code>dUP</code></td><td>Two units with one room number</td><td>Tell the office</td></tr>
+<tr><td><code>---</code></td><td>No room number set</td><td>Tell the office</td></tr>
+</table>
+<div class="foot">Codes flash briefly over the room number. <code style="font-size:9pt">CAL</code> and <code style="font-size:9pt">oFC</code>: firmware R2 and later.</div>
+</div>
+</body></html>
