@@ -26,11 +26,11 @@ hardware; **living** = kept current as work goes on; **to write**; **frozen at R
 | Document | For | Status |
 |---|---|---|
 | [teacher_guide.md](teacher_guide.md) | Teachers | draft (frozen at R1) |
-| Code card (printable, one page) | By each unit: display codes, TALK, CALL | to write (from the teacher's guide) |
+| [code_card.md](code_card.md) / [code_card.html](code_card.html) (printable) | By each unit: display codes, TALK, answer, call the office | draft |
 | [office_guide.md](office_guide.md) | The office | draft (frozen at R1, extended at R2 / R3) |
 | [install_guide.md](install_guide.md) | Installers / IT | draft (frozen at R1) |
 | [maintenance_guide.md](maintenance_guide.md) | Upkeep | draft (frozen at R1) |
-| Quick start (one page) | Setting up a single unit | to write |
+| [quick_start.md](quick_start.md) | Setting up a single unit | draft |
 | Product sheet | Features, power (PoE class), network needs, audio, camera, sizes | to write |
 | Release notes / changelog | What changed in each firmware release | to write (from R1) |
 | Manufacturing pack | Gerbers, drill, BOM and CPL for JLC, assembly notes (hand-fitted parts), case STL / STEP | to write (when the board is final) |
