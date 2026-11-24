@@ -105,6 +105,9 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     auto* web = new QPushButton("Open web page");
     auto* mute = new QPushButton("Mute TALK 15 min");
     auto* unmute = new QPushButton("Unmute");
+    auto* coupleBtn = new QPushButton("Coupling test");
+    coupleBtn->setToolTip("Every unit plays a short sweep in turn while the others listen (about 1 s per unit; rooms must be quiet). "
+                          "Units in one room (the gym) group themselves; rooms that hear each other through a wall play each other a little quieter.");
     mute->setToolTip("Stops the selected unit's TALK (stuck button, misuse); it still hears everyone");
     key_ = new QLineEdit(opt_.key);
     key_->setEchoMode(QLineEdit::Password);
@@ -118,6 +121,7 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     row->addWidget(web);
     row->addWidget(mute);
     row->addWidget(unmute);
+    row->addWidget(coupleBtn);
     cl->addLayout(row);
     log_ = new QPlainTextEdit;
     log_->setReadOnly(true);
@@ -134,6 +138,18 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     };
     connect(mute, &QPushButton::clicked, this, [muteSel] { muteSel("mute 15"); });
     connect(unmute, &QPushButton::clicked, this, [muteSel] { muteSel("mute off"); });
+    connect(coupleBtn, &QPushButton::clicked, this, [this] {
+        QStringList rooms;
+        qint64 now = clock_.elapsed();
+        QList<UnitRow> rows = units_.values();
+        std::sort(rows.begin(), rows.end(), [](const UnitRow& a, const UnitRow& b) { return a.status.from.room < b.status.from.room; });
+        for (const UnitRow& u : rows)
+            if (u.lastSeen >= 0 && now - u.lastSeen <= kOfflineMs) rooms << QString::number(u.status.from.room);
+        if (rooms.size() < 2) return appendLog("coupling test: needs at least two units online");
+        appendLog(QString("coupling test: %1 units, about %2 s. Keep the rooms quiet.").arg(rooms.size()).arg(rooms.size() + 1));
+        sendText("all", "couple run 1 auto " + rooms.join(','));
+        QTimer::singleShot(int((rooms.size() + 3) * 1000), this, [this] { sendText("all", "couple"); });
+    });
     connect(web, &QPushButton::clicked, this, [this] {
         QString u = selectedUnit();
         if (u.isEmpty()) return appendLog("select a unit first");

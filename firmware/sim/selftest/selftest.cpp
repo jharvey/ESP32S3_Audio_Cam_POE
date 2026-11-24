@@ -1023,6 +1023,75 @@ static void testWeb() {
     CHECK(web.handle(req).status == 403, "webpass off turns the web interface off");
 }
 
+// Room coupling test with a simple acoustic model between the units: each mic hears its own speaker
+// at -10 dB, its wall neighbour at -30 dB, and a unit in the same gym at -12 dB.
+static void testCoupling() {
+    printf("room coupling test (acoustic model between units)\n");
+    Bus bus;
+    FakeUnit r101(&bus, {101, 0}, 120), r102(&bus, {102, 0}, 135), r214(&bus, {214, 0}, 160), g299(&bus, {299, 0}, 190),
+        g298(&bus, {298, 0}, 230);
+    std::vector<FakeUnit*> all = {&r101, &r102, &r214, &g299, &g298};
+    const int N = 5;
+    float G[N][N] = {};
+    for (int i = 0; i < N; i++) G[i][i] = 0.316f;  // -10 dB: own speaker
+    G[0][1] = G[1][0] = 0.0316f;                   // 101 <-> 102 through the wall: -30 dB
+    G[3][4] = G[4][3] = 0.25f;                     // 299 <-> 298 in the gym: -12 dB
+    std::vector<std::vector<int16_t>> spk(N, std::vector<int16_t>(kFrameSamples, 0));
+    std::vector<double> spkSum(N, 0);
+    auto run = [&](int frames) {
+        for (int k = 0; k < frames; k++) {
+            std::vector<std::vector<int16_t>> next(N, std::vector<int16_t>(kFrameSamples, 0));
+            for (int i = 0; i < N; i++) {
+                int16_t mic[kFrameSamples];
+                if (all[i]->held & 1) all[i]->voice.render(mic, kFrameSamples);
+                else memset(mic, 0, sizeof(mic));
+                for (int s = 0; s < kFrameSamples; s++) {
+                    float v = mic[s] + 3.0f * float((s * 7919 + k * 104729 + i * 31) % 200 - 100) / 100.0f;  // a little room noise
+                    for (int j = 0; j < N; j++) v += G[i][j] * spk[j][s];
+                    mic[s] = int16_t(std::max(-32767.0f, std::min(32767.0f, v)));
+                }
+                all[i]->ic->processFrame(mic, next[i].data());
+                double p = 0;
+                for (int16_t x : next[i]) p += double(x) * x;
+                spkSum[i] += p;
+            }
+            spk = next;
+        }
+    };
+    run(60);
+    for (auto* u : all) u->ic->command("couple run 1 auto 101,102,214,298,299");
+    CHECK(r101.ic->couplingTest(), "coupling test started on every unit");
+    run(300);
+    auto db = [](FakeUnit& u, uint16_t room) {
+        for (const auto& r : u.ic->couplings())
+            if (r.room == room) return r.heard ? r.db : -99.0f;
+        return -100.0f;
+    };
+    CHECK(std::fabs(db(r101, 102) + 20) < 4 && std::fabs(db(r102, 101) + 20) < 4,
+          "101 and 102 hear each other through the wall at about -20 dB (%.1f / %.1f)", double(db(r101, 102)), double(db(r102, 101)));
+    CHECK(db(r101, 214) < -98 && db(r214, 101) < -98, "101 and 214 don't hear each other");
+    CHECK(db(g299, 298) > -6 && db(g298, 299) > -6, "the gym units hear each other like their own speaker (%.1f dB)", double(db(g299, 298)));
+    CHECK(g298.ic->group() == 299 && g299.ic->group() == 299 && r101.ic->group() == 101 && r102.ic->group() == 102,
+          "auto: the gym units are now room group 299; 101 and 102 stay separate");
+    CHECK(r101.kv["couple_map"].find("102:") != std::string::npos, "the coupling map is saved");
+    CHECK(r101.ic->command("couple").find("102 -2") != std::string::npos || r101.ic->command("couple").find("through wall") != std::string::npos,
+          "\"couple\" shows the result: %s", r101.ic->command("couple").c_str());
+
+    // Ducking: 101 plays 102 (heard through the wall) about 6 dB quieter than 214 (not heard).
+    auto playLevel = [&](FakeUnit& talker) {
+        run(40);
+        std::fill(spkSum.begin(), spkSum.end(), 0.0);
+        talker.held = 1;
+        run(150);
+        talker.held = 0;
+        double p = spkSum[0];
+        run(40);
+        return 10 * std::log10(p + 1);
+    };
+    double from214 = playLevel(r214), from102 = playLevel(r102);
+    CHECK(from214 - from102 > 4 && from214 - from102 < 8, "101 plays 102 quieter than 214 (%.1f dB)", from214 - from102);
+}
+
 int main() {
     testTuning();
     testAutoTune();
@@ -1036,6 +1105,7 @@ int main() {
     testJitter();
     testMixer();
     testIntercom();
+    testCoupling();
     testAec();
     testCrossRoom();
     printf(g_fail ? "\n%d FAILED\n" : "\nALL PASS\n", g_fail);

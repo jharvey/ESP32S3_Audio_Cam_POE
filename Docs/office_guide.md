@@ -18,6 +18,8 @@ Today: the PC office console (`firmware/sim/console`), a Windows program. *(Plan
 - **Open web page** of the selected unit.
 - **Mute TALK 15 min / Unmute:** stops the selected unit's TALK (a stuck button, misuse). The room still hears
   all-calls and other rooms. The mute ends by itself after 15 minutes.
+- **Coupling test:** run once after installation (and after moving units), with the school quiet: every unit
+  plays a short sweep in turn and works out which rooms hear each other (see the installation guide).
 
 ## School status page (web console, step 1)
 

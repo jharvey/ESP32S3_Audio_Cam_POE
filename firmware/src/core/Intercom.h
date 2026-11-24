@@ -12,6 +12,7 @@
 
 #include "AudioCodec.h"
 #include "Calibrator.h"
+#include "Coupling.h"
 #include "EchoCanceller.h"
 #include "Hal.h"
 #include "JitterBuffer.h"
@@ -71,6 +72,8 @@ public:
     const std::vector<Peer>& peers() const { return peers_; }
     // Every unit heard since start, with when it was last heard (peers() drops silent ones after 3.5 s).
     const std::vector<Peer>& known() const { return known_; }
+    const std::vector<CouplingResult>& couplings() const { return couplings_; }
+    bool couplingTest() const { return couple_.active(); }
     uint8_t micLevel() const { return micLevel_; }
     uint8_t sentLevel() const { return sentLevel_; }
     uint8_t speakerLevel() const { return spkLevel_; }
@@ -121,6 +124,10 @@ private:
     IntercomOptions opt_;
     TuneParams params_;
     Calibrator cal_;
+    CouplingTest couple_;
+    std::vector<CouplingResult> couplings_;  // last coupling test result (saved)
+    void finishCouple();
+    float coupling(uint16_t room) const;     // dB vs our own speaker, -99 = not heard / unknown
     bool haveCal_ = false;
     uint32_t showResultUntil_ = 0;
     uint32_t comboSince_ = 0;

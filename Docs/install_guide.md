@@ -44,8 +44,14 @@ unit_tool.py setup --wifi <ssid> <password>          # portable units
   `unit_tool.py tune get --file room214.txt`, then `unit_tool.py tune set --file room214.txt --save` on another unit.
 - Every setting can also be changed one at a time over USB, the web page or the office console (`set key value`,
   then `save`). `help` lists them.
-- **Coupling test** *(planned)*: each unit chirps in turn while the others listen; the office sees which rooms hear
-  each other, gym units group themselves, and units next to a talker can play it a little quieter.
+- **Coupling test** (after all units are on the walls and tuned, with the rooms quiet): press **Coupling test** in
+  the office console. Each unit plays a short sweep in turn (about 1 s each) while the others listen. Then:
+  - units in the same room (the gym) group themselves (room group = their highest number), so they don't play
+    each other back;
+  - rooms that hear each other through a wall or an open door play each other about 6 dB quieter
+    (`couple_duck_db`), which cuts the talker's own voice coming back from next door;
+  - the console log shows each unit's result, e.g. `102 -20 dB (through wall/door); 214 not heard`.
+  Run it again after moving units. `couple clear` on a unit forgets its result; `group off` undoes a group.
 
 ## 5. Check list per room
 
