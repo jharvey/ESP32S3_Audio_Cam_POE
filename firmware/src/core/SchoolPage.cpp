@@ -22,6 +22,8 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 .floor{margin:0 0 6px;font-size:14px;color:var(--mute);font-weight:600}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:18px}
 .room{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--ok);border-radius:8px;padding:8px 10px;min-height:74px}
+.room{cursor:pointer}.room.sel{outline:3px solid var(--call);outline-offset:1px}
+#tkind{font:inherit;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
 .room b{font-size:22px;letter-spacing:.5px}.room .st{font-size:13px;font-weight:600}.room .d{font-size:12px;color:var(--mute)}
 .ok{border-left-color:var(--ok)}.ok .st{color:var(--ok)}
 .warn{border-left-color:var(--warn);background:var(--warnbg)}.warn .st{color:var(--warn)}
@@ -29,10 +31,19 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 .call{border-left-color:var(--call);background:var(--callbg)}.call .st{color:var(--call)}
 .talk{border-left-color:var(--talk);background:var(--talkbg)}.talk .st{color:var(--talk)}
 #err{color:var(--bad);font-weight:600}
+.talkbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 16px}
+#talk{font:600 17px system-ui,sans-serif;padding:14px 26px;border-radius:10px;border:2px solid var(--bad);background:var(--card);color:var(--bad);cursor:pointer;user-select:none;touch-action:none}
+#talk.on{background:var(--bad);color:#fff}
+#tstate{font-weight:600}.meterbox{width:140px;height:8px;background:var(--line);border-radius:4px;overflow:hidden}#tmeter{height:100%;width:0;background:var(--ok)}
 </style></head><body>
 <header><h1>School intercom</h1><span id="sum"></span><span class="mute" id="via"></span>
 <span class="mute" style="margin-left:auto"><a href="/">this unit's page</a></span></header>
-<main><div id="err"></div><div id="rooms"></div></main>
+<main><div id="err"></div>
+<div class="talkbar"><select id="tkind" title="Who hears you"><option value="all">Everyone</option>
+<option value="room">The selected room</option><option value="floor">The selected room's floor</option></select>
+<button id="talk" title="Hold the button (or the space bar) and speak">Hold to talk to everyone</button>
+<div class="meterbox"><div id="tmeter"></div></div><span id="tstate" class="mute">Uses this PC's microphone. Rooms answer on the office unit.</span></div>
+<div id="rooms"></div></main>
 <script>
 const FAULT=["","E1 no Ethernet (on Wi-Fi)","E2 no network","Lo battery low","dUP duplicate number","oL output shorted"];
 function card(u){
@@ -46,7 +57,8 @@ function card(u){
   else if(u.fault===4||u.fault===5||u.fault===3||(f&16)){cls="bad";st=(f&16)?"TALK HELD >2 min":FAULT[u.fault];}
   else if(u.fault||(f&8)){cls="warn";st=u.fault?FAULT[u.fault]:"TALK muted";}
   else if(f&1){cls="talk";st="talking";}
-  return `<div class="room ${cls}"><b>${u.unit}</b><div class="st">${st}</div><div class="d">${d.join(" · ")}</div></div>`;
+  const sel=selRoom&&selRoom.room===u.room?" sel":"";
+  return `<div class="room ${cls}${sel}" data-room="${u.room}" data-group="${u.group}"><b>${u.unit}</b><div class="st">${st}</div><div class="d">${d.join(" · ")}</div></div>`;
 }
 async function tick(){
   try{
@@ -67,6 +79,77 @@ async function tick(){
   }catch(e){document.getElementById("err").textContent="Can't reach the unit: "+e.message;}
 }
 tick();setInterval(tick,2000);
+
+// ---- Talk from this PC's microphone -------------------------------------------------------------
+// The page captures the mic, converts it to 16 kHz 16-bit mono and posts ~100 ms at a time (in order)
+// to /api/talk; the unit sends it as an office all-call. Browsers only allow the mic on HTTPS pages or
+// localhost: see the office guide for the office PC setting.
+let ctx=null,stream=null,src=null,proc=null,talking=false,chunks=[],have=0,busy=false,pos=0;
+// Who hears you: everyone, the room picked by clicking its card (all units of its group, e.g. the gym), or its floor.
+let selRoom=null,to="all",toText="everyone";
+function updTarget(){
+  const k=document.getElementById("tkind").value;
+  if(k!=="all"&&!selRoom){to="all";toText="everyone (click a room first)";}
+  else if(k==="room"){to=selRoom.group&&selRoom.group!==selRoom.room?"group:"+selRoom.group:"room:"+selRoom.room;
+    toText=selRoom.group&&selRoom.group!==selRoom.room?"room group "+selRoom.group:"room "+selRoom.room;}
+  else if(k==="floor"){const f=Math.floor(selRoom.room/100);to="floor:"+f;toText="floor "+f;}
+  else{to="all";toText="everyone";}
+  document.getElementById("talk").textContent=(to==="all"?"Hold to talk to ":"Hold to call ")+toText.replace(" (click a room first)","");
+  if(!talking&&k!=="all"&&!selRoom)setState("Click a room to pick it.","st");
+}
+document.getElementById("rooms").addEventListener("click",e=>{
+  const c=e.target.closest(".room");if(!c||talking)return;
+  selRoom={room:+c.dataset.room,group:+c.dataset.group};
+  if(document.getElementById("tkind").value==="all")document.getElementById("tkind").value="room";
+  document.querySelectorAll(".room.sel").forEach(x=>x.classList.remove("sel"));c.classList.add("sel");updTarget();});
+document.getElementById("tkind").addEventListener("change",updTarget);
+function setState(t,cls){const e=document.getElementById("tstate");e.textContent=t;e.className=cls||"mute";}
+async function startTalk(){
+  if(talking)return;
+  if(!window.isSecureContext){setState("The browser blocks the microphone on this address (needs HTTPS): see the office guide.","st bad");return;}
+  try{
+    stream=stream||await navigator.mediaDevices.getUserMedia({audio:{channelCount:1,echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
+    ctx=ctx||new AudioContext();await ctx.resume();
+    src=ctx.createMediaStreamSource(stream);proc=ctx.createScriptProcessor(2048,1,1);
+    const step=ctx.sampleRate/16000;pos=0;
+    proc.onaudioprocess=e=>{
+      if(!talking)return;
+      const f=e.inputBuffer.getChannelData(0);const out=[];let peak=0;
+      for(;pos<f.length;pos+=step){  // 48 kHz (or 44.1) -> 16 kHz: average the samples in each step
+        const a=Math.floor(pos),b=Math.min(f.length,Math.floor(pos+step));let s=0,n=0;
+        for(let i=a;i<b;i++){s+=f[i];n++;}const v=n?s/n:f[a];peak=Math.max(peak,Math.abs(v));
+        out.push(Math.max(-32767,Math.min(32767,Math.round(v*32767))));}
+      pos-=f.length;
+      chunks.push(Int16Array.from(out));have+=out.length;
+      document.getElementById("tmeter").style.width=Math.min(100,peak*140)+"%";
+      if(have>=1600)send();};
+    src.connect(proc);proc.connect(ctx.destination);
+    talking=true;document.getElementById("talk").classList.add("on");setState((to==="all"?"TALKING to ":"CALLING ")+toText+(to==="all"?"":" (it hears a chime; it answers on the office unit)"),"st bad");
+  }catch(e){setState("No microphone: "+e.message,"st bad");}
+}
+function send(){
+  if(busy||!have)return;
+  const all=new Int16Array(have);let o=0;for(const c of chunks){all.set(c,o);o+=c.length;}chunks=[];have=0;
+  const b=new Uint8Array(all.buffer);let s="";for(let i=0;i<b.length;i+=8192)s+=String.fromCharCode.apply(null,b.subarray(i,i+8192));
+  busy=true;
+  fetch(location.origin+"/api/talk?to="+encodeURIComponent(to),{method:"POST",headers:{"X-Intercom":"1","Content-Type":"text/plain"},body:btoa(s)})
+    .then(r=>{if(!r.ok)setState("The unit refused the audio: "+r.status,"st bad");})
+    .catch(()=>setState("Can't reach the unit","st bad"))
+    .finally(()=>{busy=false;if(have>=1600||(!talking&&have))send();});
+}
+function stopTalk(){
+  if(!talking)return;talking=false;send();
+  if(proc){proc.disconnect();src.disconnect();proc=null;src=null;}
+  document.getElementById("talk").classList.remove("on");document.getElementById("tmeter").style.width="0";
+  setState("Uses this PC's microphone. Rooms answer on the office unit.","mute");
+}
+const tb=document.getElementById("talk");
+tb.addEventListener("pointerdown",e=>{e.preventDefault();tb.setPointerCapture(e.pointerId);startTalk();});
+for(const ev of ["pointerup","pointercancel","lostpointercapture"])tb.addEventListener(ev,stopTalk);
+document.addEventListener("keydown",e=>{if(e.code==="Space"&&!e.repeat&&e.target===document.body){e.preventDefault();startTalk();}});
+document.addEventListener("keyup",e=>{if(e.code==="Space")stopTalk();});
+window.addEventListener("blur",stopTalk);
+if(location.hash==="#test-talk"){setTimeout(startTalk,1500);setTimeout(stopTalk,5500);}  // scripted check: talk 4 s
 </script></body></html>)PAGE";
 }
 

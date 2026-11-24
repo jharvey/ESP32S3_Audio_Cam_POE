@@ -40,9 +40,23 @@ updated every 2 seconds:
 
 Any unit can show this page, so it still works if the office unit is the one that failed.
 
-*(Planned, next step: pick a room, a floor or everyone on this page, hold Talk and speak with the PC's
-microphone, and hear the room answer. The first time, accept the unit's certificate in the browser: the
-microphone needs HTTPS.)*
+**Talking from the PC:** hold **Hold to talk to everyone** (or the space bar) and speak into the PC's microphone
+or headset: the unit sends it to every room as an office all-call, and the meter shows your voice level. Rooms
+that answer are heard on the office unit's own speaker. Use a headset if the PC is next to the office unit.
+
+**Calling one room or a floor (R2):** click the room's card (it gets a blue outline), choose **The selected room**
+or **The selected room's floor** in the list, and hold **Hold to call room 214**. Only that room (all units of a
+room group, e.g. the gym) or that floor hears you, after a chime; the room's answer comes back to the office unit.
+
+The first time, the browser asks to use the microphone: allow it. Browsers only allow the microphone on secure
+pages, and the unit's page is plain `http://` on the intercom network, so set this once on the office PC:
+- **Chrome / Edge:** open `chrome://flags/#unsafely-treat-insecure-origin-as-secure` (Edge:
+  `edge://flags/#unsafely-treat-insecure-origin-as-secure`), enable it, enter the office unit's address (for
+  example `http://10.42.1.100`) and restart the browser.
+- **Firefox:** in `about:config` set `media.devices.insecure.enabled` and `media.getusermedia.insecure.enabled`
+  to `true`.
+
+*(Planned: HTTPS on the units, so no setting is needed.)*
 
 ## Watching for problems
 

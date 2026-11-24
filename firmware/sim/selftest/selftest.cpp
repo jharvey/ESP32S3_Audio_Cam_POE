@@ -979,6 +979,59 @@ static void testWeb() {
     CHECK(web.handle(req).body.find("USB") != std::string::npos && a.ic->command("webpass").find("on") != std::string::npos,
           "web can't change the password");
 
+    // Web console talk: the office PC posts its microphone in 100 ms chunks; the unit sends it as an
+    // office all-call and the other unit hears it.
+    {
+        sim::TestVoice office(110.0f, 9);
+        uint32_t before = b.heardFrom(a.id);
+        HttpRequest t;
+        t.method = "POST";
+        t.path = "/api/talk";
+        t.authorization = req.authorization;
+        t.xIntercom = "1";
+        bool ok = true;
+        for (int chunk = 0; chunk < 10; chunk++) {
+            int16_t pcm[1600];
+            office.render(pcm, 1600);
+            std::string bytes(reinterpret_cast<const char*>(pcm), sizeof(pcm));
+            t.body = basic(bytes).substr(6);  // base64 (basic() = "Basic " + base64)
+            ok &= web.handle(t).status == 200;
+            for (int k = 0; k < 5; k++) { a.step(); b.step(); }
+        }
+        CHECK(ok && a.ic->webTalking(), "web talk accepted and being sent");
+        for (int k = 0; k < 40; k++) { a.step(); b.step(); }
+        CHECK(b.heardFrom(a.id) > before + 35 && !a.ic->webTalking(), "the other unit heard the office's web talk (%u frames); it stopped after",
+              b.heardFrom(a.id) - before);
+        t.xIntercom = "";
+        CHECK(web.handle(t).status == 403, "web talk without X-Intercom refused (cross-site)");
+        t.xIntercom = "1";
+        t.body = "not base64!";
+        CHECK(web.handle(t).status == 400, "bad audio refused");
+
+        // R2: a call to one room from the web page reaches that room only.
+        auto webCall = [&](const char* to) {
+            t.path = std::string("/api/talk?to=") + to;
+            for (int chunk = 0; chunk < 8; chunk++) {
+                int16_t pcm[1600];
+                office.render(pcm, 1600);
+                t.body = basic(std::string(reinterpret_cast<const char*>(pcm), sizeof(pcm))).substr(6);
+                web.handle(t);
+                for (int k = 0; k < 5; k++) { a.step(); b.step(); }
+            }
+            for (int k = 0; k < 40; k++) { a.step(); b.step(); }
+        };
+        uint32_t h0 = b.heardFrom(a.id);
+        webCall("room:101");
+        uint32_t h1 = b.heardFrom(a.id);
+        CHECK(h1 > h0 + 25 && b.ic->canAnswer(), "web call to room 101: 101 hears it as a call (%u frames)", h1 - h0);
+        for (int k = 0; k < 600; k++) { a.step(); b.step(); }  // past 101's answer window
+        uint32_t h2 = b.heardFrom(a.id);
+        webCall("room:305");
+        CHECK(b.heardFrom(a.id) == h2, "web call to room 305: 101 doesn't hear it");
+        t.path = "/api/talk?to=planet:3";
+        CHECK(web.handle(t).status == 400, "bad target refused");
+    }
+
     req.body = "tone 1";
     web.handle(req);
     int16_t mic[kFrameSamples] = {}, spk[kFrameSamples];
