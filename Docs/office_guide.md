@@ -41,7 +41,7 @@ removes it). No password is set at first, so anyone with the web login can run t
 ## School status page (web console, step 1)
 
 Open `http://<office unit's address>/school` in Chrome, Edge or Firefox on the office PC (same login as the
-unit's own page; for example, if the office unit is set to room 100: `http://10.42.1.100/school`). It shows every unit, floor by floor,
+unit's own page; the office unit is room 105: `http://10.42.1.5/school`). It shows every unit, floor by floor,
 updated every 2 seconds:
 - green OK; yellow talking; blue calling the office; orange degraded (on Wi-Fi with PoE power, muted);
 - red: offline (with when it was last heard), duplicate number, TALK held, battery low, output shorted (`oL`);
@@ -69,7 +69,7 @@ The first time, the browser asks to use the microphone: allow it. Browsers only 
 pages, and the unit's page is plain `http://` on the intercom network, so set this once on the office PC:
 - **Chrome / Edge:** open `chrome://flags/#unsafely-treat-insecure-origin-as-secure` (Edge:
   `edge://flags/#unsafely-treat-insecure-origin-as-secure`), enable it, enter the office unit's address (for
-  example `http://10.42.1.100`) and restart the browser.
+  example `http://10.42.1.5`, the office unit, room 105) and restart the browser.
 - **Firefox:** in `about:config` set `media.devices.insecure.enabled` and `media.getusermedia.insecure.enabled`
   to `true`.
 
