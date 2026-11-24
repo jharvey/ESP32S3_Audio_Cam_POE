@@ -216,12 +216,24 @@ void SimUnit::tick() {
         if (!poe_ && battery_ <= 0.5) powerUpdate();
     }
 
+    // "reboot" (asked from inside processFrame, so the firmware is stopped here, between frames).
+    if (restartReq_) {
+        restartReq_ = false;
+        stopFirmware();
+        bootAt_ = now;
+        text_[0] = text_[1] = text_[2] = ' ';
+        dots_ = 0;
+    }
     // Boot finished: the firmware starts.
     if (powered_ && !ic_ && now - bootAt_ >= kBootMs) {
         aec_.reset(new ic::NlmsAec(2048, 0));
         ic::IntercomOptions io;
         io.maxTaps = 4096;  // a PC can run more; the S3 limit is set in the firmware
         io.unitUid = QRandomGenerator::global()->generate() | 1u;  // stands in for the board's MAC (finds duplicates)
+        io.restart = [this](bool download) {
+            log(download ? "sim: reboot into USB flashing mode (simulated as a normal restart)" : "sim: reboot");
+            restartReq_ = true;
+        };
         io.runBackground = [this](std::function<void()> job) {
             if (analysis_.joinable()) analysis_.join();
             analysis_ = std::thread(std::move(job));

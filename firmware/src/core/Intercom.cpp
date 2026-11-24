@@ -49,6 +49,7 @@ const char* kHelp =
     "                       or open: every unit in the list plays a sweep in turn (S s each, sent to all\n"
     "                       units at once by the office); couple = both results\n"
     "  tone [seconds]       play a 1 kHz test tone on this unit's speaker (default 2 s, 0 stops)\n"
+    "  reboot [download]    restart the unit; download = into USB flashing mode (no BOOT button needed)\n"
     "  mute [minutes|off]   stop this unit's TALK for a while (office: stuck button, misuse); it still hears\n"
     "  talk [seconds|off]   transmit as if TALK were held (USB only; default 5 s, bring-up without the panel)\n"
     "  selftest [result]    check the board and the speaker->mic path (plays a short tone)\n"
@@ -239,6 +240,16 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         return buf;
     }
     if (c == "version") return std::string("firmware ") + kFirmwareVersion;
+    if (c == "reboot") {
+        if (a.size() > 2 || (a.size() == 2 && a[1] != "download")) return "usage: reboot [download]";
+        if (!opt_.restart) return "reboot is not available on this platform";
+        restartDownload_ = a.size() == 2;
+        restartAt_ = frame_ + 25;
+        logf("restart requested (%s)%s", src == CmdSource::Local ? "USB" : src == CmdSource::Web ? "web" : "network",
+             restartDownload_ ? ": USB flashing mode" : "");
+        return restartDownload_ ? "restarting into USB flashing mode in 0.5 s (flash it, then reset or power-cycle)"
+                                : "restarting in 0.5 s";
+    }
     if (c == "couple") {
         if (a.size() > 1 && a[1] == "clear") {
             couplings_.clear();
@@ -726,6 +737,10 @@ AudioStats Intercom::audioStats() const {
 // ---- the frame -------------------------------------------------------------------------
 void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     frame_++;
+    if (restartAt_ && frame_ >= restartAt_) {
+        restartAt_ = 0;
+        opt_.restart(restartDownload_);  // on the board this does not return
+    }
     micLevel_ = frameLevel(mic, kFrameSamples);
     uint8_t held = hal_.panel->buttons();
     const uint8_t talkBit = 1u << kBtnTalk;

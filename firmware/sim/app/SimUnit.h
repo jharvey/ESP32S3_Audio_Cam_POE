@@ -135,6 +135,7 @@ private:
     double battery_ = 80;
     bool powered_ = false;
     qint64 bootAt_ = 0;
+    bool restartReq_ = false;  // "reboot": restart the firmware at the next tick
     bool ethUp_ = false, wifiAssoc_ = false;
     qint64 ethChangeAt_ = 0, wifiChangeAt_ = 0;
     ic::LinkType link_ = ic::LinkType::None;

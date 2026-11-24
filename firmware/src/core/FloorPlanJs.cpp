@@ -27,7 +27,7 @@ document.head.appendChild(st);
 const box=document.getElementById("plan");if(!box)return;
 function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
-let plan=load(KP,null),place=load(KU,{}),floor=load(KF,0),units=[],sel=null,msg="";
+let plan=load(KP,null),place=load(KU,{}),floor=load(KF,0),units=[],sel=null,msg="",moving=false,picked=null;
 
 // ---- DXF -> floors ---------------------------------------------------------------------------------
 function parseDxf(txt){
@@ -121,15 +121,15 @@ function render(){
   const spots={};for(const u of units){const p=where(u);if(!p||p.f!==floor)continue;const k=p.x+","+p.y;(spots[k]=spots[k]||[]).push(u)}
   let dots="";
   for(const k in spots){const us=spots[k],p=where(us[0]);us.forEach((u,i)=>{const x=p.x+(i-(us.length-1)/2)*r*2.3,y=p.y+r*1.6;
-    dots+=`<g data-u="${u.unit}"><circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${sel===String(u.unit)?` style="stroke:var(--call);stroke-width:${r*0.45}"`:""}><title>${esc(u.unit)}</title></circle>`+
+    dots+=`<g data-u="${u.unit}"><circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${sel===String(u.unit)||picked===String(u.unit)?` style="stroke:var(--call);stroke-width:${r*0.45}"`:""}><title>${esc(u.unit)}</title></circle>`+
       `<text class="num" x="${x}" y="${y+r*0.36}" font-size="${r*0.95}" text-anchor="middle">${esc(u.unit)}</text></g>`})}
   const chips=un.map(u=>`<button class="chip ${sel===String(u.unit)?"sel":""}" data-u="${u.unit}">${esc(u.unit)}</button>`).join("");
   box.innerHTML=`<div class="bar"><b>Floor plan</b>
-    <span style="margin-left:auto"></span><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
+    <span style="margin-left:auto"></span><button id="pmove" class="${moving?"sel":""}">${moving?"Done moving":"Move dots"}</button><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
     <div class="tabs">${tabs}</div>
     ${sel?`<div class="hint"><b>Unit ${esc(sel)}:</b> click the map where it is. <button id="pcancel">Cancel</button>${place[sel]?` <button id="preset">Back to its room</button>`:""}</div>`:
-      un.length?`<div class="hint">Not on the plan (no room with that number): ${chips} pick one, then click the map. Click a dot to move it.</div>`:
-      `<div class="hint">Click a dot to move it.</div>`}
+      un.length?`<div class="hint">Not on the plan (no room with that number): ${chips} pick one, then click the map.</div>`:
+      `<div class="hint">${moving?"Click a dot, then click where it goes.":"Click a dot to pick its room."}</div>`}
     ${msg?`<div class="hint">${esc(msg)}</div>`:""}
     <svg id="psvg" viewBox="${F.x0-m} ${F.y0-m} ${w+2*m} ${h+2*m}" preserveAspectRatio="xMidYMid meet">
     <path class="wall" d="${F.d}" stroke-width="${Math.max(w,h)*0.0015}"/>${dots}</svg>`;
@@ -141,6 +141,7 @@ function hook(){
     const rd=new FileReader();rd.onload=()=>loadText(rd.result);rd.readAsText(f);fi.value=""})}
   const b=id=>document.getElementById(id);
   if(b("pload"))b("pload").onclick=()=>fi.click();
+  if(b("pmove"))b("pmove").onclick=()=>{moving=!moving;sel=null;render()};
   if(b("pdel"))b("pdel").onclick=()=>{if(confirm("Remove the floor plan from this browser? Unit positions you placed are kept.")){plan=null;try{localStorage.removeItem(KP)}catch(e){}render()}};
   if(b("pcancel"))b("pcancel").onclick=()=>{sel=null;render()};
   if(b("preset"))b("preset").onclick=()=>{delete place[sel];save(KU,place);sel=null;render()};
@@ -149,7 +150,12 @@ function hook(){
   const svg=b("psvg");if(!svg)return;
   svg.addEventListener("click",ev=>{
     const g=ev.target.closest&&ev.target.closest("g[data-u]");
-    if(g&&!sel){sel=g.dataset.u;render();return}
+    if(g&&!sel){
+      if(moving){sel=g.dataset.u;render();return}
+      // pick the room, as clicking its card does (the school page sets window.onPlanPick)
+      picked=g.dataset.u;const u=units.find(x=>String(x.unit)===picked);
+      if(u&&window.onPlanPick)window.onPlanPick(u);
+      render();return}
     if(!sel)return;
     const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse());
     // dots are drawn a little below their spot (a room's label sits on the spot): store the spot
