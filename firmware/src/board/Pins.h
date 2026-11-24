@@ -9,7 +9,8 @@
 
 namespace pins {
 
-constexpr int RGB_LED_GPIO = 0;  // D9 WS2812B data on GPIO0 (CHIP_BOOT strap: driven only after boot)
+constexpr int RGB_LED_GPIO = 0;  // D9 WS2812B data on GPIO0 via R110 33R (CHIP_BOOT strap: driven only after
+                                 // boot; R109 10k pull-up holds it high at reset; C71 debounce cap not fitted)
 
 // I2C bus: PCA9685 0x40 (U20), TCA9555 0x20 (U21), AXP2101 0x34 (U18)
 constexpr int I2C_SCL = 43;
