@@ -72,7 +72,9 @@ public:
     const std::vector<Peer>& peers() const { return peers_; }
     // Every unit heard since start, with when it was last heard (peers() drops silent ones after 3.5 s).
     const std::vector<Peer>& known() const { return known_; }
-    const std::vector<CouplingResult>& couplings() const { return couplings_; }
+    const std::vector<CouplingResult>& couplings() const { return couplings_; }          // doors closed
+    const std::vector<CouplingResult>& couplingsOpen() const { return couplingsOpen_; }  // doors open
+    float couplingDb(uint16_t room) const { return coupling(room); }  // louder of the two, -99 = not heard
     bool couplingTest() const { return couple_.active(); }
     uint8_t micLevel() const { return micLevel_; }
     uint8_t sentLevel() const { return sentLevel_; }
@@ -126,7 +128,9 @@ private:
     TuneParams params_;
     Calibrator cal_;
     CouplingTest couple_;
-    std::vector<CouplingResult> couplings_;  // last coupling test result (saved)
+    std::vector<CouplingResult> couplings_;      // last coupling test with the doors closed (saved)
+    std::vector<CouplingResult> couplingsOpen_;  // ... with the doors open (saved apart)
+    bool coupleOpen_ = false;                    // the test running now is a doors-open one
     void finishCouple();
     float coupling(uint16_t room) const;     // dB vs our own speaker, -99 = not heard / unknown
     bool haveCal_ = false;

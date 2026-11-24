@@ -45,8 +45,9 @@ const char* kHelp =
     "  unit [214]           show or set the room number (sets the IP address 10.42.<floor>.<room>)\n"
     "  group [299|off]      room group: units in one room (the gym: 299, 298 ...) do not play each other,\n"
     "                         and go quiet while one of them talks\n"
-    "  couple [run S auto|manual 101,102,...|clear]  room coupling test: every unit in the list plays a sweep in\n"
-    "                       turn (S s each, sent to all units at once by the office); couple = result\n"
+    "  couple [run S auto|manual 101,102,... [closed|open]|clear]  room coupling test, doors closed (default)\n"
+    "                       or open: every unit in the list plays a sweep in turn (S s each, sent to all\n"
+    "                       units at once by the office); couple = both results\n"
     "  tone [seconds]       play a 1 kHz test tone on this unit's speaker (default 2 s, 0 stops)\n"
     "  mute [minutes|off]   stop this unit's TALK for a while (office: stuck button, misuse); it still hears\n"
     "  talk [seconds|off]   transmit as if TALK were held (USB only; default 5 s, bring-up without the panel)\n"
@@ -77,6 +78,7 @@ void Intercom::begin() {
     unit_.sub = 0;  // letters are gone since protocol 2
     group_ = uint16_t(std::strtoul(hal_.store->loadText(kGroupKey).c_str(), nullptr, 10));
     couplings_ = CouplingTest::fromString(hal_.store->loadText("couple_map"));
+    couplingsOpen_ = CouplingTest::fromString(hal_.store->loadText("couple_open_map"));
     refreshPower();
     hal_.links->setWifi(hal_.store->loadText(kWifiSsidKey), hal_.store->loadText(kWifiPassKey));
     lastNonce_ = netauth::loadNonce(*hal_.store);
@@ -240,11 +242,14 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
     if (c == "couple") {
         if (a.size() > 1 && a[1] == "clear") {
             couplings_.clear();
+            couplingsOpen_.clear();
             hal_.store->saveText("couple_map", "");
-            return "coupling map cleared (no ducking)";
+            hal_.store->saveText("couple_open_map", "");
+            return "coupling maps cleared (no ducking)";
         }
         if (a.size() > 1 && a[1] == "run") {
-            if (a.size() < 5) return "usage: couple run <seconds per unit, 1-3> auto|manual 101,102,214,...";
+            if (a.size() < 5 || (a.size() > 5 && a[5] != "open" && a[5] != "closed"))
+                return "usage: couple run <seconds per unit, 1-3> auto|manual 101,102,214,... [closed|open] (doors; default closed)";
             if (cal_.active() || testPhase_ || couple_.active()) return "busy (auto-tune, self-test or coupling test running)";
             float secs = std::strtof(a[2].c_str(), nullptr);
             std::vector<uint16_t> order;
@@ -256,6 +261,7 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
             }
             std::string err = couple_.start(order, unit_.room, frame_, uint32_t(secs * 1000 / kFrameMs), a[3] == "auto");
             if (!err.empty()) return "couple: " + err;
+            coupleOpen_ = a.size() > 5 && a[5] == "open";
             for (auto& t : talkers_) t->jb.reset();
             logf("coupling test started: %u units, %.0f s", unsigned(order.size()), double(couple_.totalFrames() * kFrameMs / 1000));
             snprintf(buf, sizeof(buf), "coupling test running, about %.0f s; then \"couple\" shows the result",
@@ -263,14 +269,19 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
             return buf;
         }
         if (couple_.active()) return "coupling test running";
-        if (couplings_.empty()) return "no coupling test run yet";
+        if (couplings_.empty() && couplingsOpen_.empty()) return "no coupling test run yet";
         std::string out = "coupling (dB vs this unit's own speaker):";
-        for (const auto& r : couplings_) {
-            char b[64];
-            if (!r.heard) snprintf(b, sizeof(b), " %u not heard;", unsigned(r.room));
-            else snprintf(b, sizeof(b), " %u %.0f dB%s;", unsigned(r.room), double(r.db),
-                          r.db >= CouplingTest::kSameRoomDb ? " (same room)" : r.db >= CouplingTest::kCoupledDb ? " (through wall/door)" : "");
-            out += b;
+        for (int open = 0; open < 2; open++) {
+            const auto& m = open ? couplingsOpen_ : couplings_;
+            out += open ? "\ndoors open:" : "\ndoors closed:";
+            if (m.empty()) out += " not run yet";
+            for (const auto& r : m) {
+                char b[64];
+                if (!r.heard) snprintf(b, sizeof(b), " %u not heard;", unsigned(r.room));
+                else snprintf(b, sizeof(b), " %u %.0f dB%s;", unsigned(r.room), double(r.db),
+                              r.db >= CouplingTest::kSameRoomDb ? " (same room)" : r.db >= CouplingTest::kCoupledDb ? " (through wall/door)" : "");
+                out += b;
+            }
         }
         return out;
     }
@@ -643,14 +654,22 @@ size_t Intercom::webTalk(const int16_t* pcm, size_t samples) {
 }
 
 float Intercom::coupling(uint16_t room) const {
-    for (const auto& r : couplings_)
-        if (r.room == room) return r.heard ? r.db : -99;
-    return -99;
+    // Louder of the doors-closed and doors-open results: doors are often left open.
+    float best = -99;
+    for (const auto* m : {&couplings_, &couplingsOpen_})
+        for (const auto& r : *m)
+            if (r.room == room && r.heard) best = std::max(best, r.db);
+    return best;
 }
 
 void Intercom::finishCouple() {
-    logf("%s", couple_.summary().c_str());
+    logf("%s%s", couple_.summary().c_str(), coupleOpen_ ? " (doors open)" : "");
     if (!couple_.ok()) return;  // keep the old map
+    if (coupleOpen_) {  // doors open: kept apart, used for ducking only (room groups come from doors closed)
+        couplingsOpen_ = couple_.results();
+        hal_.store->saveText("couple_open_map", CouplingTest::toString(couplingsOpen_));
+        return;
+    }
     couplings_ = couple_.results();
     hal_.store->saveText("couple_map", CouplingTest::toString(couplings_));
     if (couple_.autoGroup()) {
