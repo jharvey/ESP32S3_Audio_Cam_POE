@@ -894,7 +894,7 @@ static void testPanelDriver() {
     // Buttons are on U22 (TCA9555 0x21), one input each, pressed = 0.
     struct Case { int bit; Button b; const char* name; };
     const Case cases[] = {{0, kBtnTalk, "PB1 TALK"}, {1, kBtnMode, "PB2 MODE"}, {2, kBtnUp, "PB4 UP"}, {3, kBtnDown, "PB5 DOWN"},
-                          {4, kBtnSetup, "PB6 SETUP"}, {5, kBtnTalk, "PB7 TALK"}, {6, kBtnTalk, "PB8 TALK"}, {7, kBtnTalk, "PB9 TALK"},
+                          {4, kBtnSetup, "PB6 SETUP"}, {5, kBtnOffice, "PB7 OFFICE"}, {6, kBtnTalk, "PB8 TALK"}, {7, kBtnTalk, "PB9 TALK"},
                           {8, kBtnTalk, "PB10 TALK"}, {9, kBtnTalk, "PB11 TALK"}, {10, kBtnTalk, "PB12 TALK"}};
     for (const Case& c : cases)
         CHECK(board::buttonsFromInputs(uint16_t(~(1u << c.bit))) == (1u << c.b), "U22 P%d%d low -> %s", c.bit / 8, c.bit % 8, c.name);

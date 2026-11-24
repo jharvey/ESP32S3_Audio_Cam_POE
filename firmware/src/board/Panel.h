@@ -24,7 +24,7 @@ constexpr PinMap kPanelPins[] = {
     {2, ic::kBtnUp},     // PB4
     {3, ic::kBtnDown},   // PB5
     {4, ic::kBtnSetup},  // PB6 (hidden)
-    {5, ic::kBtnTalk},   // PB7
+    {5, ic::kBtnOffice}, // PB7 (front: OFFICE)
     {6, ic::kBtnTalk},   // PB8
     {7, ic::kBtnTalk},   // PB9
     {8, ic::kBtnTalk},   // PB10
