@@ -506,3 +506,29 @@ invalid). The camera is unpowered at power-up (TCA9555 P04 is an input at reset,
 matters if BOOT is held while the camera is on. J3 (DNP I2C pads) keeps I2C.SDA through a new label; its wire to
 pin 50 was cut. The board's pad nets were synced (tools/pcb_sync_netlist.py); 116 track/via pieces on the moved
 nets were removed for re-routing. Firmware: Pins.h on fw/r1-intercom.
+
+### SD and Ethernet to the right edge (2026-11-24)
+
+The SD card and the W5500 are lower left of U7, but their lines left from the top and right edges and crossed USB,
+the flash and the camera. Now they use the right edge's free pins 6-11 (GPIO1-6): the lines leave the bottom-right
+corner and run under the camera bundle without crossing it. SD is innermost (its card is higher on the board), then
+Ethernet. They pass the crystal (Y1) and the antenna feed (pin 1, L3/C12): keep them a little clear there. Ethernet
+MISO/MOSI also go up to the LoRa module, which needs a via or two. ETH.CS stays on the top edge (vias are fine).
+
+| Pin | GPIO | Was | Now |
+|---|---|---|---|
+| 6 | GPIO1 | SD.MISO | SD.MISO (SD D0) |
+| 7 | GPIO2 | SPK.DIN | SD.CLK |
+| 8 | GPIO3 | ETH.MISO | SD.MOSI (SD CMD) |
+| 9 | GPIO4 | ETH.MOSI | ETH.SCLK |
+| 10 | GPIO5 | LORA_CS | ETH.MISO |
+| 11 | GPIO6 | LORA_IRQ | ETH.MOSI |
+| 15 | GPIO10 | SD.CLK | LORA_IRQ |
+| 16 | GPIO11 | SD.MOSI | LORA_CS |
+| 17 | GPIO12 | ETH.SCLK | I2C.SDA |
+| 18 | GPIO13 | ETH.CS | ETH.CS |
+| 19 | GPIO14 | I2C.SDA | SPK.DIN |
+
+Slow camera lines: SCCB SDA/SCL and VSYNC (pins 21, 23, 24) still start right of USB and need a via under it; the
+camera side of USB has only 12 usable pins for 14 camera lines. C22 (PCLK filter cap) should sit next to pin 47.
+

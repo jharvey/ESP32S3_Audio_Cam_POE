@@ -49035,7 +49035,7 @@
 		)
 		(uuid "07f87311-54d0-4005-bc19-c98ca1b32f1b")
 	)
-	(label "SD.MOSI"
+	(label "LORA_CS"
 		(at 182.88 170.18 0)
 		(effects
 			(font
@@ -49105,7 +49105,7 @@
 		)
 		(uuid "0e998db9-3f8b-4f26-aa4b-6d65f7c9426d")
 	)
-	(label "LORA_IRQ"
+	(label "ETH.MOSI"
 		(at 182.88 157.48 0)
 		(effects
 			(font
@@ -49255,7 +49255,7 @@
 		)
 		(uuid "2017ae08-40ba-482a-bc1e-699d1fe3c2c3")
 	)
-	(label "I2C.SDA"
+	(label "SPK.DIN"
 		(at 182.88 177.8 0)
 		(effects
 			(font
@@ -49335,7 +49335,7 @@
 		)
 		(uuid "24adf0af-1ab1-46b0-ba11-fa4d6b977200")
 	)
-	(label "ETH.MOSI"
+	(label "ETH.SCLK"
 		(at 182.88 152.4 0)
 		(effects
 			(font
@@ -49595,7 +49595,7 @@
 		)
 		(uuid "396e7017-8f0b-4e4f-957d-6674666c245f")
 	)
-	(label "ETH.SCLK"
+	(label "I2C.SDA"
 		(at 182.88 172.72 0)
 		(effects
 			(font
@@ -49805,7 +49805,7 @@
 		)
 		(uuid "4a0879b0-7360-42fc-bf0c-70fd365586e5")
 	)
-	(label "LORA_CS"
+	(label "ETH.MISO"
 		(at 182.88 154.94 0)
 		(effects
 			(font
@@ -50325,7 +50325,7 @@
 		)
 		(uuid "718bee47-7c12-4d4e-b357-0465a9e67c7b")
 	)
-	(label "SPK.DIN"
+	(label "SD.CLK"
 		(at 182.88 147.32 0)
 		(effects
 			(font
@@ -50987,7 +50987,7 @@
 		)
 		(uuid "a40e831f-e730-4aaa-a437-8ef33a059220")
 	)
-	(label "SD.CLK"
+	(label "LORA_IRQ"
 		(at 182.88 167.64 0)
 		(effects
 			(font
@@ -51377,7 +51377,7 @@
 		)
 		(uuid "c2ce1aa8-ddc7-43ae-aeba-be119fffde53")
 	)
-	(label "ETH.MISO"
+	(label "SD.MOSI"
 		(at 182.88 149.86 0)
 		(effects
 			(font
