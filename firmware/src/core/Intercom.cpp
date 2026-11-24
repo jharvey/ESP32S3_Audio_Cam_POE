@@ -73,6 +73,8 @@ const char* kHelp =
     "  testpass <pw>|off    password for installer tests (auto-tune, coupling) from the web console (USB only)\n"
     "  tests <pw|-> CMD     run CMD (cal, couple run, send ... cal) with the tests password (the school page)\n"
     "  callofc [off]        call the office (as DOWN held 2 s; the console shows it until answered)\n"
+    "  ring [ROOM]          the office rings this room: chime every 2 s and blinking lights for 10 s; TALK\n"
+    "                       answers ROOM (the office unit; none = the office console): send 214 ring 105\n"
     "  talk [seconds|off] [room N|floor N|group N]\n"
     "                       transmit as if TALK were held, to everyone or a target (USB only; default 5 s)\n"
     "  selftest [result]    check the board and the speaker->mic path (plays a short tone)\n"
@@ -451,6 +453,19 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         std::string cmd;
         for (size_t i = 2; i < a.size(); i++) cmd += (i > 2 ? " " : "") + a[i];
         return sendSigned(a[1], cmd);
+    }
+    if (c == "ring") {  // the office rings this room (no audio): attention until TALK answers, then talk to the office
+        UnitId from;
+        if (a.size() > 1 && !parseTarget(a[1], &from.room, &from.sub)) return "usage: ring [office unit, e.g. 105]";
+        if (from.sub == kTargetAnySub) from.sub = 0;
+        callFrom_ = from;
+        callLast_ = frame_ ? frame_ : 1;
+        callAnswered_ = false;
+        missedUntil_ = 0;
+        ringUntil_ = callLast_ + kAnswerFrames;
+        startSound(Sound::Chime);
+        logf("ringing (answers go to %s)", from.room ? ("unit " + std::to_string(from.room)).c_str() : "the office console");
+        return "ringing for 10 s (TALK answers)";
     }
     if (c == "callofc") {
         setCallingOffice(!(a.size() > 1 && a[1] == "off"), src == CmdSource::Local ? "USB" : "console");
@@ -1261,6 +1276,10 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         logf("missed call from %s", callFrom_.room ? std::to_string(callFrom_.room).c_str() : "the office");
     }
     if (held && missedUntil_) missedUntil_ = 0;  // any button: the missed call was seen
+    if (ringUntil_) {  // "ring": chime again every 2 s until answered or the 10 s are up
+        if (callAnswered_ || frame_ >= ringUntil_) ringUntil_ = 0;
+        else if ((ringUntil_ - frame_) % 100 == 0 && !soundActive_) startSound(Sound::Chime);
+    }
     if (talkSince_ && frame_ - talkSince_ == kTalkHeldFrames) {
         logf("TALK held for over 2 minutes (stuck button?)");
         sendStatus();

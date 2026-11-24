@@ -1252,6 +1252,27 @@ static void testRoomCalls() {
     run(5);
     CHECK(!r214.ic->missedCall() && r214.ic->rgb() == 0 && r214.ic->lampLevel(Lamp::Other) == 0,
           "a button press clears the missed call and its lights");
+    // The office rings 214 (no audio, from the school page's floor plan): chime every 2 s and the attention
+    // lights until TALK answers; the answer goes to the office.
+    CHECK(r214.ic->command("ring", CmdSource::Network).find("ringing") != std::string::npos, "ring accepted");
+    run(3);
+    CHECK(r214.ic->chiming() && r214.ic->canAnswer() && !r214.ic->callAnswered(), "ring: 214 chimes, TALK would answer");
+    {
+        bool again = false;
+        for (int k = 0; k < 140; k++) {
+            run(1);
+            if (k > 60 && r214.ic->chiming()) again = true;
+        }
+        CHECK(again && !r214.ic->callAnswered(), "ring: it chimes again 2 s later while nobody answers");
+    }
+    int repliesBefore = office.replies;
+    r214.held = 1;
+    run(50);
+    r214.held = 0;
+    run(10);
+    CHECK(r214.ic->callAnswered() && office.replies > repliesBefore + 40, "ring answered with TALK: the office hears 214 (%d frames)",
+          office.replies - repliesBefore);
+    run(520);
 
     // Floor 1: 101 and 102, not 214.
     uint32_t h214 = r214.heardFrom(kOffice);
