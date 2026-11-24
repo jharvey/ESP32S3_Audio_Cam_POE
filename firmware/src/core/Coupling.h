@@ -24,7 +24,7 @@ class CouplingTest {
 public:
     static constexpr uint32_t kLeadFrames = 25;  // 0.5 s noise floor
     static constexpr float kSameRoomDb = -8;     // within 8 dB of our own speaker: same room
-    static constexpr float kCoupledDb = -35;     // louder than this: heard through a wall / door
+    static constexpr float kCoupledDb = -40;     // louder than this: heard through a wall / door (uninsulated stud walls)
 
     // order: every unit's room in sweep order (must include me). slotFrames: 50 = 1 s per unit.
     // Returns an error text, or "" when started.
