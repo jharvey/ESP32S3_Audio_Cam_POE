@@ -67,6 +67,7 @@ function build(dxf){
         if(a1<=a0)a1+=360;const n=Math.max(3,Math.ceil((a1-a0)/12)),pts=[];
         for(let k=0;k<=n;k++){const a=(a0+(a1-a0)*k/n)*Math.PI/180;pts.push(P(cx+r*Math.cos(a),cy+r*Math.sin(a)))}add(lay,pts);break}
       case "INSERT":{const b=dxf.blocks[g1(e,2,"")];if(!b||depth>6)break;
+        if(!/door/i.test(b.name))break;  // keep it basic: walls and doors only (no cars, sinks, furniture)
         const ix=num(e,10,0),iy=num(e,20,0),sx=num(e,41,1),sy=num(e,42,1),ro=num(e,50,0)*Math.PI/180,co=Math.cos(ro),si=Math.sin(ro);
         walk(b.ents,(x,y)=>{const u=(x-b.x)*sx,v=(y-b.y)*sy;return xf(ix+u*co-v*si,iy+u*si+v*co)},lay,depth+1);break}
       case "TEXT":case "MTEXT":if(depth===0){let s="";for(const p of e.g)if(p[0]===3)s+=p[1];s+=g1(e,1,"");
@@ -88,13 +89,13 @@ function build(dxf){
   lays.forEach((lay,fi)=>{
     const R=v=>Math.round(v*2)/2;let d="";const xs=[],ys=[];
     for(const pl of lines[lay]){d+="M"+pl.map(p=>{xs.push(p[0]);ys.push(-p[1]);return R(p[0])+" "+R(-p[1])}).join("L")}
-    const lbl=texts.filter(t=>t.lay===lay&&t.s).map(t=>[R(t.x),R(-t.y),t.s.slice(0,40)]);
-    // view: the drawing, but no further than 30% beyond the labels, so a stray far-off bit doesn't shrink the floor
+    const lbl=byLay[lay].map(r=>[R(r.t.x),R(-r.t.y)]);  // room labels: only used to frame the view
+    // view: the drawing, but no further than 30% beyond the rooms, so a stray far-off bit doesn't shrink the floor
     const mn=a=>a.reduce((m,v)=>Math.min(m,v),1e18),mx=a=>a.reduce((m,v)=>Math.max(m,v),-1e18);
     const lx=lbl.map(t=>t[0]),ly=lbl.map(t=>t[1]),lw=mx(lx)-mn(lx),lh=mx(ly)-mn(ly),e=0.3*Math.max(lw,lh);
     const x0=Math.max(mn(xs),mn(lx)-e),x1=Math.min(mx(xs),mx(lx)+e),y0=Math.max(mn(ys),mn(ly)-e),y1=Math.min(mx(ys),mx(ly)+e);
     const hund=hundOf(lay);
-    floors.push({name:"Floor "+hund+" ("+lay+")",x0,y0,x1,y1,d,lbl});
+    floors.push({name:"Floor "+hund,x0,y0,x1,y1,d});
     for(const r of byLay[lay]){const old=rooms[r.n];
       if(!old||Math.floor(r.n/100)===hund)rooms[r.n]={f:fi,x:R(r.t.x),y:R(-r.t.y)}}
   });
@@ -115,16 +116,15 @@ function render(){
   const F=plan.floors[floor],w=F.x1-F.x0,h=F.y1-F.y0,m=Math.max(w,h)*0.03,r=Math.max(w,h)*0.011;
   const fc=plan.floors.map(()=>({n:0,worst:"ok"}));const un=[];
   for(const u of units){const p=where(u);if(!p){un.push(u);continue}const c=fc[p.f];if(!c)continue;c.n++;if(rank[cls(u)]>rank[c.worst])c.worst=cls(u)}
-  const tabs=plan.floors.map((f,i)=>`<button data-f="${i}" class="${i===floor?"sel":""}">${esc(f.name.replace(/ \(.*/,""))} · ${fc[i].n}${fc[i].worst!=="ok"?` <span style="color:var(--${fc[i].worst==="talk"?"talk":fc[i].worst})">●</span>`:""}</button>`).join("");
+  const tabs=plan.floors.map((f,i)=>`<button data-f="${i}" class="${i===floor?"sel":""}">${esc(f.name)} · ${fc[i].n}${fc[i].worst!=="ok"?` <span style="color:var(--${fc[i].worst==="talk"?"talk":fc[i].worst})">●</span>`:""}</button>`).join("");
   // dots: units sharing a spot sit side by side
   const spots={};for(const u of units){const p=where(u);if(!p||p.f!==floor)continue;const k=p.x+","+p.y;(spots[k]=spots[k]||[]).push(u)}
   let dots="";
   for(const k in spots){const us=spots[k],p=where(us[0]);us.forEach((u,i)=>{const x=p.x+(i-(us.length-1)/2)*r*2.3,y=p.y+r*1.6;
     dots+=`<g data-u="${u.unit}"><circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${sel===String(u.unit)?` style="stroke:var(--call);stroke-width:${r*0.45}"`:""}><title>${esc(u.unit)}</title></circle>`+
       `<text class="num" x="${x}" y="${y+r*0.36}" font-size="${r*0.95}" text-anchor="middle">${esc(u.unit)}</text></g>`})}
-  const lbl=F.lbl.map(t=>`<text class="lbl" x="${t[0]}" y="${t[1]}" font-size="${r*0.9}">${esc(t[2])}</text>`).join("");
   const chips=un.map(u=>`<button class="chip ${sel===String(u.unit)?"sel":""}" data-u="${u.unit}">${esc(u.unit)}</button>`).join("");
-  box.innerHTML=`<div class="bar"><b>Floor plan</b><span class="hint">loaded ${esc(plan.when)} · stored in this browser only</span>
+  box.innerHTML=`<div class="bar"><b>Floor plan</b>
     <span style="margin-left:auto"></span><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
     <div class="tabs">${tabs}</div>
     ${sel?`<div class="hint"><b>Unit ${esc(sel)}:</b> click the map where it is. <button id="pcancel">Cancel</button>${place[sel]?` <button id="preset">Back to its room</button>`:""}</div>`:
@@ -132,7 +132,7 @@ function render(){
       `<div class="hint">Click a dot to move it.</div>`}
     ${msg?`<div class="hint">${esc(msg)}</div>`:""}
     <svg id="psvg" viewBox="${F.x0-m} ${F.y0-m} ${w+2*m} ${h+2*m}" preserveAspectRatio="xMidYMid meet">
-    <path class="wall" d="${F.d}" stroke-width="${Math.max(w,h)*0.0015}"/>${lbl}${dots}</svg>`;
+    <path class="wall" d="${F.d}" stroke-width="${Math.max(w,h)*0.0015}"/>${dots}</svg>`;
   hook();
 }
 function hook(){
@@ -158,7 +158,7 @@ function hook(){
 }
 function loadText(txt){
   try{const p=build(parseDxf(txt));plan=p;floor=0;save(KF,0);
-    msg=save(KP,p)?`${p.floors.length} floors, ${Object.keys(p.rooms).length} rooms found.`:"Loaded, but too big to keep in this browser: load it again next time.";
+    msg=save(KP,p)?"":"Loaded, but too big to keep in this browser: load it again next time.";
   }catch(e){msg="Couldn't read that DXF: "+e.message}
   render();
 }
