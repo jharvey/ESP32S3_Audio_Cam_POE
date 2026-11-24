@@ -952,9 +952,11 @@ void Intercom::checkSchedule() {
     }
 }
 
-// The call light on the "other" lamp output (J11): blinks 0.6 s on / 0.6 s off while a call for this
-// room is on (and while TALK would answer it), steady during an office all-call. White and IR stay
-// off unless set by hand (R3: night vision, emergency).
+// Attention lights for a call to this room: the white lamp, the RGB LED (blue) and the misc output J11
+// (an extra light can be wired there) blink together, 0.6 s on / 0.6 s off, until TALK answers. Once
+// answered only the RGB stays on (steady) while the conversation is open. A missed call: a short blink
+// of all three every 2 s until a button is pressed. J11 is steady during an office all-call. IR stays
+// off unless set by hand (R3: night vision).
 void Intercom::updateLamps() {
     uint8_t want[int(Lamp::Count)] = {0, 0, 0};
     uint32_t rgb = 0;
@@ -963,16 +965,14 @@ void Intercom::updateLamps() {
     if (bootT0_ && bootTestStep(t, &d, want, &rgb) >= 0) {
         // power-up light test drives the lamps and the RGB LED
     } else if (canAnswer() && !transmitting_) {
-        // A call for this room: the call light and the RGB LED (blue) blink together until TALK answers;
-        // once answered the RGB stays on while the conversation is open.
-        bool on = (frame_ / 30) % 2 == 0;
-        want[int(Lamp::Other)] = on ? 100 : 0;
+        bool on = (frame_ / 30) % 2 == 0 && !callAnswered_;
+        want[int(Lamp::Other)] = want[int(Lamp::White)] = on ? 100 : 0;
         rgb = (on || callAnswered_) ? kCallRgb : 0;
     } else if (frame_ < allCallUntil_) {
         want[int(Lamp::Other)] = 100;
     } else if (missedCall()) {  // nobody answered: a short blink every 2 s until a button is pressed
         bool on = frame_ % 100 < 12;
-        want[int(Lamp::Other)] = on ? 100 : 0;
+        want[int(Lamp::Other)] = want[int(Lamp::White)] = on ? 100 : 0;
         rgb = on ? kCallRgb : 0;
     }
     for (int i = 0; i < int(Lamp::Count); i++) {

@@ -1196,12 +1196,14 @@ static void testRoomCalls() {
         run(1);
         (r214.ic->lampLevel(Lamp::Other) ? lampOn : lampOff)++;
         (r214.ic->rgb() ? rgbOn : rgbOff)++;
-        if ((r214.ic->rgb() != 0) == (r214.ic->lampLevel(Lamp::Other) != 0)) rgbSync++;
+        if ((r214.ic->rgb() != 0) == (r214.ic->lampLevel(Lamp::Other) != 0) &&
+            r214.ic->lampLevel(Lamp::White) == r214.ic->lampLevel(Lamp::Other))
+            rgbSync++;
         if (r101.ic->lampLevel(Lamp::Other) || r101.ic->rgb()) lampElsewhere++;
     }
     CHECK(lampOn > 15 && lampOff > 15 && !lampElsewhere, "call light blinks at 214 only (%d on, %d off frames)", lampOn, lampOff);
     CHECK(rgbOn > 15 && rgbOff > 15 && rgbSync == 57 && !r214.ic->callAnswered(),
-          "the RGB LED blinks blue with the call light until answered (%d on, %d off)", rgbOn, rgbOff);
+          "the white lamp and the RGB LED (blue) blink with the call light until answered (%d on, %d off)", rgbOn, rgbOff);
     CHECK(r214.heardFrom(kOffice) > 40 && r101.heardFrom(kOffice) == 0 && gymA.heardFrom(kOffice) == 0,
           "room call: 214 heard the office (%u frames), 101 and 299 did not", r214.heardFrom(kOffice));
     // 214 answers with TALK within 10 s: only the office hears it.
@@ -1211,7 +1213,9 @@ static void testRoomCalls() {
     run(10);
     CHECK(office.replies > 40 && office.lastReplyFrom == r214.id, "214's answer went to the office (%d frames)", office.replies);
     CHECK(r101.heardFrom(r214.id) == 0 && gymA.heardFrom(r214.id) == 0, "nobody else heard the answer");
-    CHECK(r214.ic->callAnswered() && r214.ic->rgb() != 0, "answered: the RGB LED stops blinking and stays on during the call");
+    CHECK(r214.ic->callAnswered() && r214.ic->rgb() != 0 && r214.ic->lampLevel(Lamp::White) == 0 &&
+              r214.ic->lampLevel(Lamp::Other) == 0,
+          "answered: white lamp and J11 off, the RGB LED stays on (steady) during the call");
     run(520);  // more than 10 s after the call
     CHECK(!r214.ic->canAnswer(), "the answer window closes 10 s after the call");
     r214.held = 1;
