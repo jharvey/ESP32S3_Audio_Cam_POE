@@ -26,9 +26,9 @@ BT_H = 20.5      # holder with a cell in it, above the board. The holder alone i
 POE_H = 13.85    # PoE module U14, on the back of the board: 13.35 +/- 0.5 mm (SDAPO DP9900M drawing, page 7)
 BACK_H = (BT_H if BATTERY else POE_H) + 0.55    # room behind the board
 FRONT_H = 6.55 + 0.55   # room in front of the board: the Ethernet transformer T1 (6.55 mm, its 3D model) is the tallest
-                 # part there. The RJ45 J9 is on the back now; 2.70 mm of it shows on the front through its notch.
+                 # part there, apart from the RJ45 J9 (8.85 mm), which gets a raised bump in the face (JACK_BUMP).
                  # The 3-pin headers J5-J8 must be left off or fitted lying down (upright they are about 8.5 mm).
-BAY = 45.0       # room below the board for the RJ45 plug and the cable's bend (0 = no bay)
+BAY = 48.0       # room below the board for the RJ45 plug and the cable's bend (0 = no bay)
 LIP_T, LIP_H = 1.6, 4.0   # lip on the back plate that the cover fits around
 FIT = 0.2        # play between lip and cover wall
 POST_D = 8.0     # posts under the board
@@ -58,7 +58,7 @@ LABEL_H, LABEL_DEPTH = 3.6, 0.6   # engraved text height and depth
 CORNER_R = 7.0   # the case's four corners
 FACE_R = 2.5     # rounding of the front edge
 CARD_W, CARD_H = 80.0, 42.0   # the use card (paper or laminated, up to 0.8 mm thick), in the area below the board
-CARD_TOP = 99.5  # its top edge (KiCad y); it slides down into its holder from above
+CARD_TOP = 103.5 # its top edge, below the jack's bump (KiCad y); it slides down into its holder from above
 CARD_RAIL, CARD_LIP, CARD_SLOT = 2.4, 2.0, 0.9   # rail width, how far the rail grips over the card, room for the card
 MIC_D = 1.5      # microphone ports
 CAM_D = 12.0     # camera lens opening
@@ -85,6 +85,8 @@ def cyl_x(y, z, d, x0, x1):  # a cylinder along x
     return cq.Workplane("XY").circle(d / 2).extrude(x1 - x0).rotate((0, 0, 0), (0, 1, 0), 90).translate((x0, Y(y), z))
 def cyl_y(x, z, d, y0, y1):  # a cylinder along y, from KiCad y0 to y1
     return cq.Workplane("XY").circle(d / 2).extrude(y1 - y0).rotate((0, 0, 0), (1, 0, 0), 90).translate((x, Y(y0), z))
+def rrect(w, h, r, z0, z1, cx=0.0, cy=0.0):  # rounded rectangle block, centre at KiCad (cx, cy)
+    return cq.Workplane("XY").box(w, h, z1 - z0, centered=(True, True, False)).edges("|Z").fillet(r).translate((cx, Y(cy), z0))
 
 XL_IN, XR_IN = -GAP, W + GAP                    # inside of the cover walls
 YT_IN, YB_IN = -GAP, H + max(BAY, GAP)
@@ -96,6 +98,9 @@ Z_TOP = Z_FACE + FACE
 GUIDE_H = min(6.0, Z_FACE - max(SW_TOP + 0.9, 4.16 + 0.3))   # button guides stop above the switches and the 4.16 mm display
 BODY_Z0 = max(Z_FACE - 5.0, 4.5)                # the cap is solid above this height, clear of the 4.16 mm display
 j9 = box_of("J9", 1.0); u14 = box_of("U14")
+J9_BACK = part("J9")["back"]
+JACK_H = 8.85    # RJ45 J9 above the board (HCTL drawing); 2.70 mm below it
+JACK_BUMP = 0 if J9_BACK else max(0.0, JACK_H + 0.55 - FRONT_H)   # how far the face rises over the jack
 
 # ---- back plate ------------------------------------------------------------------------------------------
 back = slab(XL, YT, XR, YB, Z_BACK, Z_FLOOR).edges("|Z").fillet(CORNER_R)
@@ -139,6 +144,16 @@ for hx in HOOK_X:                               # pockets for the hooks (closed 
 cover = cover.cut(cyl_y(LOCK_X, LOCK_Z, SCREW_D, YB_IN - 1, YB + 1)).cut(cyl_y(LOCK_X, LOCK_Z, HEAD_D, YB - 1.4, YB + 1))
 for sx_ in SNAP_X:                              # grooves for the snap ridges
     cover = cover.cut(cyl_x(YB_IN, Z_FLOOR + SNAP_Z, 2 * SNAP_R + 0.2, sx_ - SNAP_W / 2, sx_ + SNAP_W / 2))
+# the lower part of the face (over the RJ45 jack, its plug and the cable bay) is raised by JACK_BUMP, so the rest of
+# the face can sit low over the board. The use card sits on the raised part.
+STEP_Y = j9[1] - 1.6 - FACE                     # where the face steps up (KiCad y)
+if JACK_BUMP > 0:
+    outline = slab(XL, YT, XR, YB, Z_TOP - 1, Z_TOP + JACK_BUMP).edges("|Z").fillet(CORNER_R)
+    step = outline.intersect(slab(XL - 1, STEP_Y, XR + 1, YB + 1, Z_TOP - 1, Z_TOP + JACK_BUMP))
+    try: step = step.faces(">Z").edges().fillet(min(FACE_R, JACK_BUMP * 0.8))
+    except Exception: pass
+    cover = cover.union(step).cut(slab(XL_IN, STEP_Y + FACE, XR_IN, YB_IN, Z_FACE - 1, Z_FACE + JACK_BUMP).edges("|Z").fillet(CORNER_R - WALL))
+Z_LOW = Z_TOP + JACK_BUMP                       # top of the raised lower part
 # knock-out for a surface cable: the bottom wall is left 0.6 mm thick here
 cover = cover.cut(slab(KNOCK_X[0], YB_IN - 0.1, KNOCK_X[1], YB - 0.6, Z_FLOOR - 0.1, Z_FLOOR + 7))
 # display window
@@ -149,8 +164,6 @@ DISP_TOP = 4.16  # height of the display above the board (its 3D model; the part
 cover = cover.union(slab(d[0] - 1.2, d[1] - 1.2, d[2] + 1.2, d[3] + 1.2, DISP_TOP + 0.3, Z_FACE).cut(slab(d[0], d[1], d[2], d[3], DISP_TOP, Z_FACE + 1)))
 # TALK (PB1) and OFFICE (PB7): a guide under the face, bored for the caps
 btn = [TALK_AT, OFFICE_AT]
-def rrect(w, h, r, z0, z1, cx=0.0, cy=0.0):  # rounded rectangle block, centre at KiCad (cx, cy)
-    return cq.Workplane("XY").box(w, h, z1 - z0, centered=(True, True, False)).edges("|Z").fillet(r).translate((cx, Y(cy), z0))
 FW, FH = BTN_W + 2 * BTN_FLANGE, BTN_H + 2 * BTN_FLANGE
 for bx, by in btn: cover = cover.union(rrect(FW + 2.8, FH + 2.8, BTN_R + 2.2, Z_FACE - GUIDE_H, Z_FACE, bx, by + CAP_DY))
 for bx, by in btn:
@@ -200,17 +213,17 @@ if part("CN1"):
 # down from the top; a gap in the bottom rail lets a finger push it back up to read its other side. -------------
 cx0, cx1 = W / 2 - CARD_W / 2 - 0.3, W / 2 + CARD_W / 2 + 0.3
 cy0, cy1 = CARD_TOP, CARD_TOP + CARD_H + 0.3
-zt = Z_TOP + CARD_SLOT + 0.9
-holder = slab(cx0 - CARD_RAIL, cy0, cx0, cy1 + CARD_RAIL, Z_TOP - 0.2, zt)
-holder = holder.union(slab(cx1, cy0, cx1 + CARD_RAIL, cy1 + CARD_RAIL, Z_TOP - 0.2, zt))
-holder = holder.union(slab(cx0 - CARD_RAIL, cy1, cx1 + CARD_RAIL, cy1 + CARD_RAIL, Z_TOP - 0.2, zt))
-holder = holder.union(slab(cx0, cy0, cx0 + CARD_LIP, cy1, Z_TOP + CARD_SLOT, zt))
-holder = holder.union(slab(cx1 - CARD_LIP, cy0, cx1, cy1, Z_TOP + CARD_SLOT, zt))
-holder = holder.union(slab(cx0, cy1 - CARD_LIP, cx1, cy1, Z_TOP + CARD_SLOT, zt))
+zt = Z_LOW + CARD_SLOT + 0.9
+holder = slab(cx0 - CARD_RAIL, cy0, cx0, cy1 + CARD_RAIL, Z_LOW - 0.2, zt)
+holder = holder.union(slab(cx1, cy0, cx1 + CARD_RAIL, cy1 + CARD_RAIL, Z_LOW - 0.2, zt))
+holder = holder.union(slab(cx0 - CARD_RAIL, cy1, cx1 + CARD_RAIL, cy1 + CARD_RAIL, Z_LOW - 0.2, zt))
+holder = holder.union(slab(cx0, cy0, cx0 + CARD_LIP, cy1, Z_LOW + CARD_SLOT, zt))
+holder = holder.union(slab(cx1 - CARD_LIP, cy0, cx1, cy1, Z_LOW + CARD_SLOT, zt))
+holder = holder.union(slab(cx0, cy1 - CARD_LIP, cx1, cy1, Z_LOW + CARD_SLOT, zt))
 holder = holder.edges("|Z").fillet(0.9)
-holder = holder.cut(cyl(W / 2, cy1 + CARD_RAIL, 18.0, Z_TOP, zt + 1))   # finger gap in the bottom rail
+holder = holder.cut(cyl(W / 2, cy1 + CARD_RAIL, 18.0, Z_LOW, zt + 1))   # finger gap in the bottom rail
 cover = cover.union(holder)
-use_card = slab(cx0 + 0.3, cy1 - 0.3 - CARD_H, cx1 - 0.3, cy1 - 0.3, Z_TOP + 0.1, Z_TOP + 0.6)   # the card itself, for the pictures only
+use_card = slab(cx0 + 0.3, cy1 - 0.3 - CARD_H, cx1 - 0.3, cy1 - 0.3, Z_LOW + 0.1, Z_LOW + 0.6)   # the card itself, for the pictures only
 
 # ---- looks: an engraved ring round the speaker and round the status light, a bevel on the camera opening ------
 def ring(x, y, d_out, width):
@@ -243,14 +256,15 @@ for bx, by in btn:
 # ---- a stand-in for the board, to check the fit ----------------------------------------------------------
 board = slab(0, 0, W, H, -PCB_T, 0)
 for hx, hy in B["holes"]: board = board.cut(cyl(hx, hy, 3.2, -PCB_T - 1, 1))
-board = board.union(slab(j9[0] + 1, j9[1] + 1, j9[2] - 1, j9[3] - 1, -PCB_T - 8.85, 2.7))   # J9 on the back
+jz = (-PCB_T - JACK_H, 2.7) if J9_BACK else (-PCB_T - 2.7, JACK_H)
+board = board.union(slab(j9[0] + 1, j9[1] + 1, j9[2] - 1, j9[3] - 1, jz[0], jz[1]))
 board = board.union(slab(u14[0], u14[1], u14[2], u14[3], -PCB_T - POE_H, -PCB_T))
 if BATTERY:
     bt = box_of("BT1"); board = board.union(slab(bt[0], bt[1], bt[2], bt[3], -PCB_T - BT_H, -PCB_T))
 dd = box_of("DISP1"); board = board.union(slab(dd[0], dd[1], dd[2], dd[3], 0, DISP_TOP))
 for bx, by in btn: board = board.union(slab(bx - 2.5, by - 2.5, bx + 2.5, by + 2.5, 0, SW_TOP))
 if BAY >= 30:  # the RJ45 plug with its boot
-    board = board.union(slab(j9[0] + 4, j9[3] - 1, j9[2] - 4, j9[3] + 24, -PCB_T - 8.4, -PCB_T - 0.4))
+    board = board.union(slab(j9[0] + 4, j9[3] - 1, j9[2] - 4, j9[3] + 24, *((-PCB_T - 8.4, -PCB_T - 0.4) if J9_BACK else (0.5, 8.4))))
 
 out = os.path.join(here, "out_clam"); os.makedirs(out, exist_ok=True)
 for name, s in (("clam_back", back), ("clam_cover", cover), ("clam_button", cap), ("clam_buttons", caps), ("board_standin", board), ("use_card", use_card), ("paint", paint)):
@@ -286,7 +300,7 @@ def card_face():  # the card's printed front (make_card.py draws it) laid on the
     if not os.path.exists(png): return actor("use_card", white)
     r = vtk.vtkPNGReader(); r.SetFileName(png)
     t = vtk.vtkTexture(); t.SetInputConnection(r.GetOutputPort()); t.InterpolateOn()
-    x0_, x1_, yb_, yt_, z_ = cx0 + 0.3, cx1 - 0.3, Y(cy1 - 0.3), Y(cy1 - 0.3 - CARD_H), Z_TOP + 0.62
+    x0_, x1_, yb_, yt_, z_ = cx0 + 0.3, cx1 - 0.3, Y(cy1 - 0.3), Y(cy1 - 0.3 - CARD_H), Z_LOW + 0.62
     pl = vtk.vtkPlaneSource(); pl.SetOrigin(x0_, yb_, z_); pl.SetPoint1(x1_, yb_, z_); pl.SetPoint2(x0_, yt_, z_)
     m = vtk.vtkPolyDataMapper(); m.SetInputConnection(pl.GetOutputPort())
     a = vtk.vtkActor(); a.SetMapper(m); a.SetTexture(t); a.GetProperty().LightingOff()
@@ -310,5 +324,5 @@ def shot_at(fname, actors, focal, pos, up=(0, 0, 1)):
     p = vtk.vtkPNGWriter(); p.SetFileName(os.path.join(out, fname)); p.SetInputConnection(f.GetOutputPort()); p.Write()
 shot_at("preview_buttons.png", [actor("board_standin", green), actor("clam_buttons", red)], (28, -26, 6), (10, -60, 22))
 shot_at("preview_labels.png", [actor("clam_back", grey), actor("clam_cover", blue), actor("clam_buttons", red)], (50, -30, Z_TOP), (0, -40, 150), (0, 1, 0))
-shot_at("preview_card.png", [actor("clam_cover", beige), actor("use_card", white)], (50, -122, Z_TOP), (30, -70, 90), (0, 1, 0))
+shot_at("preview_card.png", [actor("clam_cover", beige), actor("use_card", white)], (50, -122, Z_LOW), (30, -70, 90), (0, 1, 0))
 shot("preview_bottom.png", [actor("clam_back", grey), actor("clam_cover", blue)], (40, -260, 60), (0, 0, 1))
