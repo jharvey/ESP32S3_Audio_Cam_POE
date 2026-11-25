@@ -25,8 +25,9 @@ BT_H = 20.5      # holder with a cell in it, above the board. The holder alone i
                  # of the cell ends up is AN ESTIMATE, measure one
 POE_H = 13.85    # PoE module U14, on the back of the board: 13.35 +/- 0.5 mm (SDAPO DP9900M drawing, page 7)
 BACK_H = (BT_H if BATTERY else POE_H) + 0.55    # room behind the board
-FRONT_H = 8.85 + 0.55   # room in front of the board: the RJ45 J9 stands 8.85 mm above it (HCTL drawing), the tallest part
-                 # there. The upright 3-pin headers J5-J8 (8.5 mm) and the transformer T1 (6.55 mm) are lower.
+FRONT_H = 6.55 + 0.55   # room in front of the board: the Ethernet transformer T1 (6.55 mm, its 3D model) is the tallest
+                 # part there. The RJ45 J9 is on the back now; 2.70 mm of it shows on the front through its notch.
+                 # The 3-pin headers J5-J8 must be left off or fitted lying down (upright they are about 8.5 mm).
 BAY = 45.0       # room below the board for the RJ45 plug and the cable's bend (0 = no bay)
 LIP_T, LIP_H = 1.6, 4.0   # lip on the back plate that the cover fits around
 FIT = 0.2        # play between lip and cover wall
@@ -49,7 +50,7 @@ BTN_R = 2.0      # its corner radius
 BTN_FLANGE = 1.0 # rim behind the face that keeps the cap in
 CAP_DY = 2.5     # the cap sits this much lower than its switch, to stay clear of the display window
 BTN_PROUD = 1.5  # how far the cap stands out of the face
-SW_TOP = 3.5     # top of the push button above the board: A GUESS, check the part
+SW_TOP = 1.5     # top of the push button above the board (its 3D model; the switch's drawing is not checked)
 SW_TRAVEL = 0.25 # how far the switch moves to click: A GUESS, check the part
 STOP_EXTRA = 0.15  # the cap's two legs land on the board this much after the click, so a hard press goes into the FR4
 LEG_X0, LEG_HALF_W = 2.95, 0.9   # legs stand left and right of the switch, between its two pads on each side
@@ -92,8 +93,8 @@ Z_FLOOR = -PCB_T - BACK_H                       # front face of the back plate
 Z_BACK = Z_FLOOR - FLOOR                        # against the wall
 Z_FACE = FRONT_H                                # inside face of the front
 Z_TOP = Z_FACE + FACE
-GUIDE_H = min(6.0, Z_FACE - SW_TOP - 0.9)       # depth of the button guides: they stay above the other switches
-BODY_Z0 = max(Z_FACE - 5.0, 4.7)                # the cap is solid above this height, clear of the 4.16 mm display
+GUIDE_H = min(6.0, Z_FACE - max(SW_TOP + 0.9, 4.16 + 0.3))   # button guides stop above the switches and the 4.16 mm display
+BODY_Z0 = max(Z_FACE - 5.0, 4.5)                # the cap is solid above this height, clear of the 4.16 mm display
 j9 = box_of("J9", 1.0); u14 = box_of("U14")
 
 # ---- back plate ------------------------------------------------------------------------------------------
@@ -144,7 +145,7 @@ cover = cover.cut(slab(KNOCK_X[0], YB_IN - 0.1, KNOCK_X[1], YB - 0.6, Z_FLOOR - 
 d = box_of("DISP1", -2.0)
 cover = cover.cut(slab(d[0], d[1], d[2], d[3], Z_FACE - 1, Z_TOP + 1))
 # a box from the face down to the display, so you see the digits and not the inside of the case
-DISP_TOP = 3.85  # height of the display above the board (SLS0563, from the parts list)
+DISP_TOP = 4.16  # height of the display above the board (its 3D model; the parts list says 3.85)
 cover = cover.union(slab(d[0] - 1.2, d[1] - 1.2, d[2] + 1.2, d[3] + 1.2, DISP_TOP + 0.3, Z_FACE).cut(slab(d[0], d[1], d[2], d[3], DISP_TOP, Z_FACE + 1)))
 # TALK (PB1) and OFFICE (PB7): a guide under the face, bored for the caps
 btn = [TALK_AT, OFFICE_AT]
@@ -242,14 +243,14 @@ for bx, by in btn:
 # ---- a stand-in for the board, to check the fit ----------------------------------------------------------
 board = slab(0, 0, W, H, -PCB_T, 0)
 for hx, hy in B["holes"]: board = board.cut(cyl(hx, hy, 3.2, -PCB_T - 1, 1))
-board = board.union(slab(j9[0] + 1, j9[1] + 1, j9[2] - 1, j9[3] - 1, -PCB_T - 2.7, 8.85))
+board = board.union(slab(j9[0] + 1, j9[1] + 1, j9[2] - 1, j9[3] - 1, -PCB_T - 8.85, 2.7))   # J9 on the back
 board = board.union(slab(u14[0], u14[1], u14[2], u14[3], -PCB_T - POE_H, -PCB_T))
 if BATTERY:
     bt = box_of("BT1"); board = board.union(slab(bt[0], bt[1], bt[2], bt[3], -PCB_T - BT_H, -PCB_T))
 dd = box_of("DISP1"); board = board.union(slab(dd[0], dd[1], dd[2], dd[3], 0, DISP_TOP))
 for bx, by in btn: board = board.union(slab(bx - 2.5, by - 2.5, bx + 2.5, by + 2.5, 0, SW_TOP))
 if BAY >= 30:  # the RJ45 plug with its boot
-    board = board.union(slab(j9[0] + 4, j9[3] - 1, j9[2] - 4, j9[3] + 24, 0.5, 8.5))
+    board = board.union(slab(j9[0] + 4, j9[3] - 1, j9[2] - 4, j9[3] + 24, -PCB_T - 8.4, -PCB_T - 0.4))
 
 out = os.path.join(here, "out_clam"); os.makedirs(out, exist_ok=True)
 for name, s in (("clam_back", back), ("clam_cover", cover), ("clam_button", cap), ("clam_buttons", caps), ("board_standin", board), ("use_card", use_card), ("paint", paint)):
