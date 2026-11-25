@@ -20,10 +20,10 @@ GAP = 2.5        # board edge to the inside of the cover wall (room for the back
 WALL = 2.8
 FLOOR = 2.4      # back plate thickness
 FACE = 2.0       # front panel thickness
-BACK_H = 3.0     # room behind the board: use countersunk wall screws; the cable goes through the hole in the bay
-FRONT_H = 14.8   # room in front of the board. The PoE module U14 sets it: the gull-wing "M" package is 13.85 mm tall,
-                 # 14.30 max (Silvertel Ag9900M(T) drawing, Docs/; the SDAPO DP9900M clone's own drawing is NOT checked).
-                 # The RJ45 J9 stands 9.05 mm above the board and 2.5 mm below it (its 3D model).
+BACK_H = 3.3     # room behind the board: the RJ45 J9 reaches 2.70 mm below the board (HCTL drawing, 11.55 +/- 0.2
+                 # overall). Use countersunk wall screws; the cable goes through the hole in the bay.
+FRONT_H = 14.4   # room in front of the board. The PoE module U14 sets it: 13.35 +/- 0.5 mm tall (SDAPO DP9900M drawing,
+                 # page 7 of its datasheet; the board's 3D model agrees). The RJ45 stands 8.85 mm above the board.
 BAY = 45.0       # room below the board for the RJ45 plug and the cable's bend (0 = no bay)
 LIP_T, LIP_H = 1.6, 4.0   # lip on the back plate that the cover fits around
 FIT = 0.2        # play between lip and cover wall
@@ -237,8 +237,8 @@ for bx, by in btn:
 # ---- a stand-in for the board, to check the fit ----------------------------------------------------------
 board = slab(0, 0, W, H, -PCB_T, 0)
 for hx, hy in B["holes"]: board = board.cut(cyl(hx, hy, 3.2, -PCB_T - 1, 1))
-board = board.union(slab(j9[0] + 1, j9[1] + 1, j9[2] - 1, j9[3] - 1, -PCB_T - 2.5, 9.05))
-board = board.union(slab(u14[0], u14[1], u14[2], u14[3], 0, 14.3))
+board = board.union(slab(j9[0] + 1, j9[1] + 1, j9[2] - 1, j9[3] - 1, -PCB_T - 2.7, 8.85))
+board = board.union(slab(u14[0], u14[1], u14[2], u14[3], 0, 13.85))
 dd = box_of("DISP1"); board = board.union(slab(dd[0], dd[1], dd[2], dd[3], 0, DISP_TOP))
 for bx, by in btn: board = board.union(slab(bx - 2.5, by - 2.5, bx + 2.5, by + 2.5, 0, SW_TOP))
 if BAY >= 30:  # the RJ45 plug with its boot
