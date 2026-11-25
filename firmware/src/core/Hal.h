@@ -97,6 +97,18 @@ public:
     virtual void setRgb(uint8_t r, uint8_t g, uint8_t b) { (void)r; (void)g; (void)b; }
 };
 
+// Firmware update over the network (R3.0): writes a new image to the spare firmware slot. The running
+// firmware is untouched until finish(true), so a failed or interrupted update changes nothing.
+class IFirmware {
+public:
+    virtual ~IFirmware() = default;
+    virtual bool begin(size_t size) = 0;                      // start an image of this many bytes
+    virtual bool write(const uint8_t* data, size_t len) = 0;  // the next bytes, in order
+    // commit: check the written image and start it at the next restart. Otherwise drop it.
+    virtual bool finish(bool commit) = 0;
+    virtual std::string error() { return ""; }                // why the last call failed
+};
+
 struct Hal {
     INet* net;
     ILinks* links;
@@ -106,6 +118,7 @@ struct Hal {
     ILog* log;
     IDiag* diag = nullptr;  // optional
     ILamps* lamps = nullptr;  // optional
+    IFirmware* fw = nullptr;  // optional: no network updates without it
 };
 
 }  // namespace ic

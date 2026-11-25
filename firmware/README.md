@@ -160,7 +160,8 @@ Security:
 - **Login:** the browser asks for a password (any user name).
   - The password is stored as a salted, slow hash, never as text.
   - 5 wrong passwords lock the page for 30 s.
-- **No firmware upload.** Updates are USB only.
+- **Firmware upload is a separate switch.** It is off until `netupdate on` is typed on the USB console, and
+  then still needs the web password. See "Updates over the network" below.
 - **Cross-site protection:** commands need a header that other websites can't send.
 - **Not encrypted (plain HTTP).** Keep the intercom on its own VLAN.
 
@@ -259,9 +260,32 @@ Where the files live:
 The NAS is slow, so a clean build takes about 50 minutes. Rebuilds after small changes are much faster.
 If that's too slow, move `core_dir` to a local short path such as `C:/pio`.
 
+## Updates over the network (R3.0)
+
+Status: tested in the simulator's self-test and fuzzer, and the ESP32 build compiles. Not yet run on a board.
+
+A unit that has a web password and `netupdate on` (both set once over USB; `unit_tool.py setup --netupdate`)
+takes new firmware from its own web page ("Firmware update") or from a PC:
+
+    python tools/net_update.py firmware.bin --rooms 214
+    python tools/net_update.py firmware.bin --rooms 101-112,201-212
+    python tools/net_update.py --rooms 101-112 --info
+
+The file goes up in 4 KB pieces into the spare firmware slot. The running firmware is not touched until the
+whole image has arrived and checked out, then the unit restarts into it with its settings kept.
+
+- **Calls come first.** While the unit talks, plays a call or a sound, the transfer waits and then carries on.
+- **What is refused:** a wrong size, a damaged image (SHA-256), a file that is not an ESP32 image, and
+  firmware of another project (the image must carry this firmware's tag). A transfer that stalls for 30 s
+  is dropped. On battery below 30 % it does not start.
+- **One unit at a time.** `net_update.py` stops at the first unit that fails or does not come back, so a bad
+  image reaches one room, not the school.
+- **Recovery** if a unit does not come back: USB (`update-unit.bat`) or `/firmware.bin` on an SD card.
+- **Not there yet:** automatic fall-back to the old firmware if the new one crashes at start-up.
+
 ## USB updates and first-time setup
 
-Updates are USB only. `tools/update-unit.bat` makes each room visit one command.
+`tools/update-unit.bat` makes each room visit one command.
 It uses PlatformIO's own Python, so nothing extra needs installing.
 
 1. **Build and publish a release:**

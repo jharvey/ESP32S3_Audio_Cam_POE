@@ -85,6 +85,53 @@ static std::string hex(const uint8_t* d, size_t n) {
     return out;
 }
 
+void Sha256::reset() {
+    static const uint32_t k0[8] = {0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19};
+    std::memcpy(h_, k0, sizeof(h_));
+    fill_ = 0;
+    total_ = 0;
+}
+
+void Sha256::add(const uint8_t* p, size_t n) {
+    total_ += n;
+    while (n) {
+        if (fill_ == 0 && n >= 64) {  // whole blocks straight from the input
+            block(h_, p);
+            p += 64;
+            n -= 64;
+            continue;
+        }
+        size_t take = n < 64 - fill_ ? n : 64 - fill_;
+        std::memcpy(buf_ + fill_, p, take);
+        fill_ += take;
+        p += take;
+        n -= take;
+        if (fill_ == 64) {
+            block(h_, buf_);
+            fill_ = 0;
+        }
+    }
+}
+
+std::string Sha256::hex() {
+    uint8_t tail[128] = {};
+    std::memcpy(tail, buf_, fill_);
+    tail[fill_] = 0x80;
+    size_t len = fill_ + 1 + 8 <= 64 ? 64 : 128;
+    uint64_t bits = total_ * 8;
+    for (int j = 0; j < 8; j++) tail[len - 1 - j] = uint8_t(bits >> (8 * j));
+    block(h_, tail);
+    if (len == 128) block(h_, tail + 64);
+    uint8_t out[32];
+    for (int j = 0; j < 8; j++) {
+        out[4 * j] = uint8_t(h_[j] >> 24);
+        out[4 * j + 1] = uint8_t(h_[j] >> 16);
+        out[4 * j + 2] = uint8_t(h_[j] >> 8);
+        out[4 * j + 3] = uint8_t(h_[j]);
+    }
+    return ic::hex(out, 32);
+}
+
 std::string sha256Hex(const std::string& data) {
     uint8_t d[32];
     sha256(reinterpret_cast<const uint8_t*>(data.data()), data.size(), d);

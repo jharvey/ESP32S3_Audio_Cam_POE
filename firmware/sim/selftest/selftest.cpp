@@ -249,7 +249,25 @@ struct Bus {
 static int64_t g_clock0 = 0;  // test wall clock: UTC at frame 0 (0 = no clock)
 static bool g_bootTest = false;  // power-up light test in new FakeUnits (off: it would light lamps in other tests)
 
-struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag {
+struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFirmware {
+    // the spare firmware slot
+    std::vector<uint8_t> fwSlot, fwBooting;  // being written / committed (starts at the next restart)
+    size_t fwSize = 0;
+    int fwDropped = 0;
+    bool fwWriteFails = false;
+    bool begin(size_t size) override { fwSlot.clear(); fwSize = size; return true; }
+    bool write(const uint8_t* d, size_t n) override {
+        if (fwWriteFails) return false;
+        fwSlot.insert(fwSlot.end(), d, d + n);
+        return true;
+    }
+    bool finish(bool commit) override {
+        if (!commit) { fwDropped++; fwSlot.clear(); return true; }
+        if (fwSlot.size() != fwSize) return false;
+        fwBooting = fwSlot;
+        return true;
+    }
+    std::string error() override { return "fake flash error"; }
     uint8_t outFaults = 0;
     std::string boardTest() override { return "ok fake board\n"; }
     uint8_t outputFaults() override { return outFaults; }
@@ -274,7 +292,7 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag {
         opt.utcNow = [this] { return g_clock0 ? g_clock0 + int64_t(ic->frame()) / 50 : int64_t(0); };
         if (!g_bootTest) kv["boottest"] = "off";
         opt.restart = [this](bool d) { restarts++; restartDownload = d; };
-        ic.reset(new Intercom(Hal{this, this, this, this, this, this, this, this}, aec, opt));
+        ic.reset(new Intercom(Hal{this, this, this, this, this, this, this, this, this}, aec, opt));
         ic->begin();
     }
     void send(const uint8_t* d, size_t n) override {
@@ -1163,6 +1181,173 @@ struct FakeOffice {
     bool isCalling(uint16_t room) const { return std::find(calling.begin(), calling.end(), room) != calling.end(); }
 };
 
+// Firmware update over the network (R3.0).
+static void testFirmwareUpdate() {
+    printf("firmware update over the network\n");
+    {   // the piecewise hash against the one-shot one, with awkward piece sizes
+        std::string msg;
+        for (int i = 0; i < 1000; i++) msg += char(i * 7 + 3);
+        bool same = true;
+        for (size_t piece : {size_t(1), size_t(63), size_t(64), size_t(65), size_t(127), size_t(1000)}) {
+            Sha256 h;
+            for (size_t o = 0; o < msg.size(); o += piece)
+                h.add(reinterpret_cast<const uint8_t*>(msg.data()) + o, std::min(piece, msg.size() - o));
+            same = same && h.hex() == sha256Hex(msg);
+        }
+        CHECK(same, "SHA-256 fed in pieces = SHA-256 in one go");
+    }
+    Bus bus;
+    FakeUnit a(&bus, {214, 0}, 120), b(&bus, {101, 0}, 160);
+    auto run = [&](int n) { for (int k = 0; k < n; k++) { a.step(); b.step(); } };
+    run(60);
+    a.ic->command("webpass s3cret-pass");
+    WebUi web(*a.ic);
+    // POST (or GET) to a unit's web interface, logged in, with the X-Intercom header.
+    auto post = [](WebUi& w, const std::string& path, const std::string& body = "", const char* method = "POST") {
+        HttpRequest q;
+        q.method = method;
+        q.path = path;
+        q.authorization = basic("admin:s3cret-pass");
+        q.xIntercom = "1";
+        q.body = body;
+        return w.handle(q);
+    };
+    auto b64 = [](const uint8_t* p, size_t n) { return basic(std::string(reinterpret_cast<const char*>(p), n)).substr(6); };
+    // An image: the ESP32 start byte, noise, and this firmware's tag lying across the 4096-byte piece boundary.
+    auto image = [](size_t n, uint32_t seed) {
+        std::vector<uint8_t> im(n);
+        for (auto& v : im) v = uint8_t((seed = seed * 1664525u + 1013904223u) >> 24);
+        im[0] = kFwMagic;
+        memcpy(&im[4090], kFwTag, strlen(kFwTag));
+        return im;
+    };
+    auto shaOf = [](const std::vector<uint8_t>& im) { return sha256Hex(std::string(im.begin(), im.end())); };
+    auto piece = [&](WebUi& w, const std::vector<uint8_t>& im, size_t off, size_t n) {
+        return post(w, "/api/fw/data?off=" + std::to_string(off), b64(&im[off], std::min(n, im.size() - off)));
+    };
+    std::vector<uint8_t> im = image(100000, 1);
+
+    HttpResponse r = post(web, "/api/fw/begin?size=100000");
+    CHECK(r.status == 403 && r.body.find("netupdate on") != std::string::npos, "off until switched on: %s", r.body.c_str());
+    CHECK(a.ic->command("netupdate on", CmdSource::Web).find("USB") != std::string::npos &&
+              a.ic->command("netupdate on", CmdSource::Network).find("USB") != std::string::npos && !a.ic->netUpdateAllowed(),
+          "netupdate can't be switched on from the web or the network");
+    CHECK(a.ic->command("netupdate on").find(": on") != std::string::npos && a.kv["netupdate"] == "on", "netupdate on from USB, saved");
+    r = post(web, "/api/fw", "", "GET");
+    CHECK(r.status == 200 && r.body.find("\"allowed\":true") != std::string::npos && r.body.find("\"state\":\"idle\"") != std::string::npos,
+          "state JSON: %s", r.body.c_str());
+    HttpRequest bare;
+    bare.method = "POST";
+    bare.path = "/api/fw/begin?size=100000";
+    bare.authorization = basic("admin:s3cret-pass");
+    CHECK(web.handle(bare).status == 403, "needs the X-Intercom header");
+    bare.authorization.clear();
+    bare.xIntercom = "1";
+    CHECK(web.handle(bare).status == 401, "needs the web password");
+    CHECK(post(web, "/api/fw/begin?size=100").status == 400 && post(web, "/api/fw/begin?size=99999999").status == 400 &&
+              post(web, "/api/fw/begin?size=-5").status == 400 && post(web, "/api/fw/begin").status == 400 &&
+              post(web, "/api/fw/begin?size=100000&sha=xyz").status == 400,
+          "bad sizes and a bad hash are refused");
+    CHECK(piece(web, im, 0, 4096).status == 400 && post(web, "/api/fw/end").status == 400, "data and end without begin are refused");
+
+    // The good path, with the hiccups a real transfer has.
+    CHECK(post(web, "/api/fw/begin?size=100000&sha=" + shaOf(im)).status == 200, "begin");
+    CHECK(piece(web, im, 0, 4096).body == "ok 4096", "first piece");
+    r = piece(web, im, 0, 4096);
+    CHECK(r.status == 409 && r.body == "expected offset 4096", "a repeated piece: told where to go on (%s)", r.body.c_str());
+    r = piece(web, im, 9000, 100);
+    CHECK(r.status == 409 && a.fwSlot.size() == 4096, "a piece from further on is not written");
+    CHECK(post(web, "/api/fw/data?off=4096", "not base64!").status == 400 &&
+              post(web, "/api/fw/data?off=4096", std::string(12000, 'A')).status == 400 && a.fwSlot.size() == 4096,
+          "a damaged or oversize piece is refused, the transfer stays open");
+    b.held = 1;  // a call comes in: it goes first
+    run(30);
+    r = piece(web, im, 4096, 4096);
+    CHECK(r.status == 503 && a.fwSlot.size() == 4096 && a.ic->talkersPlaying() == 1, "while a call plays the piece waits (503)");
+    b.held = 0;
+    run(60);
+    CHECK(post(web, "/api/fw/end").status == 400 && a.fwBooting.empty(), "end before everything arrived is refused");
+    bool sent = true;
+    for (size_t o = 4096; o < im.size() && sent; o += 4096) sent = piece(web, im, o, 4096).status == 200;
+    CHECK(sent && a.fwSlot.size() == im.size(), "the rest arrives after the call");
+    int restarts0 = a.restarts;
+    r = post(web, "/api/fw/end");
+    CHECK(r.status == 200 && r.body.find(shaOf(im)) != std::string::npos && a.fwBooting == im, "end: image committed (%s)", r.body.c_str());
+    run(30);
+    CHECK(a.restarts == restarts0 + 1 && !a.restartDownload, "the unit restarts into it");
+    CHECK(a.kv["web_pass"].size() > 64 && a.kv["netupdate"] == "on", "settings are untouched");
+    CHECK(post(web, "/api/fw/begin?size=100000").status == 400, "no second update before the restart");
+
+    // What must not get in: each on a fresh unit.
+    auto refused = [&](const char* what, const std::vector<uint8_t>& bad, const std::string& sha, size_t declared) {
+        Bus own;  // its own network: the unit is gone again at the end of this check
+        FakeUnit u(&own, {215, 0}, 130);
+        u.ic->command("webpass s3cret-pass");
+        u.ic->command("netupdate on");
+        WebUi w(*u.ic);
+        std::string why;
+        bool began = post(w, "/api/fw/begin?size=" + std::to_string(declared) + (sha.empty() ? "" : "&sha=" + sha)).status == 200;
+        for (size_t o = 0; began && o < bad.size(); o += 4096) {
+            HttpResponse x = piece(w, bad, o, 4096);
+            if (x.status != 200) { why = x.body; break; }
+        }
+        if (why.empty()) why = post(w, "/api/fw/end").body;
+        for (int k = 0; k < 40; k++) u.step();
+        CHECK(began && u.fwBooting.empty() && u.restarts == 0 && why.compare(0, 2, "ok") != 0, "%s: refused (%s)", what, why.c_str());
+    };
+    std::vector<uint8_t> bad = im;
+    bad[0] = 0x7f;
+    refused("not an ESP32 image", bad, "", bad.size());
+    bad = im;
+    bad[4095] ^= 1;  // breaks the tag
+    refused("another project's firmware (no tag)", bad, "", bad.size());
+    bad = im;
+    bad[50000] ^= 0x10;
+    refused("one bit flipped on the way (hash)", bad, shaOf(im), bad.size());
+    bad = im;
+    bad.resize(90000);
+    refused("cut short", bad, "", 100000);
+    refused("longer than declared", im, "", 98000);
+
+    // Flash write error, a stalled transfer, an abort, and a new begin replacing an unfinished one.
+    FakeUnit c(&bus, {216, 0}, 140);
+    c.ic->command("webpass s3cret-pass");
+    c.ic->command("netupdate on");
+    WebUi wc(*c.ic);
+    post(wc, "/api/fw/begin?size=100000");
+    c.fwWriteFails = true;
+    r = piece(wc, im, 0, 4096);
+    CHECK(r.status == 400 && r.body.find("fake flash error") != std::string::npos && wc.firmware().state() == FwUpdate::State::Failed,
+          "a flash write error stops the update and says why (%s)", r.body.c_str());
+    c.fwWriteFails = false;
+    post(wc, "/api/fw/begin?size=100000");
+    piece(wc, im, 0, 4096);
+    for (int k = 0; k < 31 * 50; k++) c.step();
+    r = piece(wc, im, 4096, 4096);
+    CHECK(r.status == 400 && wc.firmware().error().find("stalled") != std::string::npos, "a transfer that stalls for 30 s is dropped");
+    post(wc, "/api/fw/begin?size=100000");
+    piece(wc, im, 0, 4096);
+    int dropped0 = c.fwDropped;
+    CHECK(post(wc, "/api/fw/abort").status == 200 && c.fwDropped == dropped0 + 1 && wc.firmware().state() == FwUpdate::State::Failed, "abort drops it");
+    post(wc, "/api/fw/begin?size=100000");
+    piece(wc, im, 0, 4096);
+    std::vector<uint8_t> im2 = image(70000, 9);
+    bool ok2 = post(wc, "/api/fw/begin?size=70000").status == 200;
+    for (size_t o = 0; o < im2.size() && ok2; o += 8192) ok2 = piece(wc, im2, o, 8192).status == 200;
+    CHECK(ok2 && post(wc, "/api/fw/end").status == 200 && c.fwBooting == im2, "a new begin replaces an unfinished transfer (8192-byte pieces)");
+
+    FakeUnit d(&bus, {217, 0}, 150);
+    d.pw.source = PowerSource::Battery;
+    d.pw.hasBattery = true;
+    d.pw.batteryPct = 20;
+    d.ic->command("webpass s3cret-pass");
+    d.ic->command("netupdate on");
+    for (int k = 0; k < 120; k++) d.step();
+    WebUi wd(*d.ic);
+    r = post(wd, "/api/fw/begin?size=100000");
+    CHECK(r.status == 409, "on battery below 30 %%: not started (%s)", r.body.c_str());
+}
+
 static void testRoomCalls() {
     printf("room calls (R2.0): office, floors, groups, answers, call the office\n");
     Bus bus;
@@ -1549,6 +1734,7 @@ int main() {
     testAutoTune();
     testConsole();
     testWeb();
+    testFirmwareUpdate();
     testPanelDriver();
     testNetAuth();
     testBringUp();

@@ -50,6 +50,7 @@ const char* HttpResponse::reason() const {
         case 403: return "Forbidden";
         case 404: return "Not Found";
         case 405: return "Method Not Allowed";
+        case 409: return "Conflict";
         case 429: return "Too Many Requests";
         case 503: return "Service Unavailable";
         default: return "Error";
@@ -74,6 +75,7 @@ bool WebUi::authorized(const std::string& header) {
 }
 
 HttpResponse WebUi::handle(const HttpRequest& req) {
+    fw_.tick(ic_.frame());
     if (!auth::hasPassword(ic_.store())) {
         goodHeader_.clear();
         return text(403, "Web interface is off. Set a password on the USB console: webpass <password>");
@@ -175,11 +177,89 @@ HttpResponse WebUi::handle(const HttpRequest& req) {
         r.body = statusJson();
         return r;
     }
+    if (path.compare(0, 7, "/api/fw") == 0) return firmwareRequest(req, path);
     if (path == "/api/cmd") {
         if (req.method != "POST") return text(405, "POST only");
         if (req.xIntercom != "1") return text(403, "missing X-Intercom header");
         if (req.body.size() > kMaxCommandBytes) return text(400, "command too long");
         return text(200, ic_.command(req.body, CmdSource::Web));
+    }
+    return text(404, "not found");
+}
+
+namespace {
+// "?size=123&sha=ab" -> the value of one name, or "".
+std::string queryValue(const std::string& path, const char* name) {
+    size_t q = path.find('?');
+    while (q != std::string::npos && q + 1 < path.size()) {
+        size_t end = path.find('&', q + 1);
+        std::string kv = path.substr(q + 1, end == std::string::npos ? std::string::npos : end - q - 1);
+        size_t eq = kv.find('=');
+        if (eq != std::string::npos && kv.compare(0, eq, name) == 0) return kv.substr(eq + 1);
+        q = end;
+    }
+    return "";
+}
+// Digits only, at most 9 of them (no overflow, no signs, no spaces).
+bool parseSize(const std::string& s, size_t* out) {
+    if (s.empty() || s.size() > 9) return false;
+    size_t v = 0;
+    for (char c : s) {
+        if (c < '0' || c > '9') return false;
+        v = v * 10 + size_t(c - '0');
+    }
+    *out = v;
+    return true;
+}
+}  // namespace
+
+HttpResponse WebUi::firmwareRequest(const HttpRequest& req, const std::string& path) {
+    static const char* kStates[] = {"idle", "receiving", "done", "failed"};
+    if (path == "/api/fw") {
+        HttpResponse r;
+        r.contentType = "application/json";
+        r.body = std::string("{\"available\":") + (fw_.available() ? "true" : "false") + ",\"allowed\":" +
+                 (ic_.netUpdateAllowed() ? "true" : "false") + ",\"version\":\"" + kFirmwareVersion + "\",\"state\":\"" +
+                 kStates[int(fw_.state())] + "\",\"size\":" + std::to_string(fw_.size()) + ",\"received\":" +
+                 std::to_string(fw_.received()) + ",\"max_chunk\":" + std::to_string(kFwMaxChunk) + ",\"sha\":\"" + fw_.sha() +
+                 "\",\"error\":" + jsonString(fw_.error()) + "}";
+        return r;
+    }
+    if (req.method != "POST") return text(405, "POST only");
+    if (req.xIntercom != "1") return text(403, "missing X-Intercom header");
+    if (!fw_.available()) return text(404, "firmware updates over the network are not available on this unit");
+    if (!ic_.netUpdateAllowed()) return text(403, "firmware updates are off. Switch them on at the USB console: netupdate on");
+    if (path == "/api/fw/begin") {
+        size_t size = 0;
+        if (!parseSize(queryValue(req.path, "size"), &size)) return text(400, "size=N (bytes) is needed");
+        PowerState pw = ic_.power();
+        if (pw.source == PowerSource::Battery && pw.batteryPct < 30) return text(409, "on battery below 30 %: connect PoE first");
+        std::string err = fw_.begin(size, queryValue(req.path, "sha"), ic_.frame());
+        if (!err.empty()) return text(400, err);
+        return text(200, "ok");
+    }
+    if (path == "/api/fw/data") {
+        // Calls come first: a flash write stalls the audio for a moment, so wait while anything plays or is sent.
+        if (ic_.transmitting() || ic_.talkersPlaying() || ic_.soundPlaying() || ic_.calibrating() || ic_.couplingTest())
+            return text(503, "busy: audio is playing, send this piece again");
+        size_t off = 0;
+        if (!parseSize(queryValue(req.path, "off"), &off)) return text(400, "off=N is needed");
+        if (req.body.size() > kFwMaxChunk * 4 / 3 + 8) return text(400, "piece too large (8192 bytes at most)");
+        std::vector<uint8_t> raw;
+        if (!base64Decode(req.body, &raw) || raw.empty()) return text(400, "body must be base64");
+        std::string err = fw_.data(off, raw.data(), raw.size(), ic_.frame());
+        if (err.empty()) return text(200, "ok " + std::to_string(fw_.received()));
+        return text(err.compare(0, 15, "expected offset") == 0 ? 409 : 400, err);
+    }
+    if (path == "/api/fw/end") {
+        std::string err = fw_.end();
+        if (!err.empty()) return text(400, err);
+        std::string r = ic_.command("reboot", CmdSource::Web);
+        return text(200, "ok sha256 " + fw_.sha() + "; " + r);
+    }
+    if (path == "/api/fw/abort") {
+        fw_.abort("stopped by the sender");
+        return text(200, "ok");
     }
     return text(404, "not found");
 }

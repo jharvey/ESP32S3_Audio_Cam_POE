@@ -13,13 +13,23 @@
 //                      this unit transmits it as an office all-call. Needs X-Intercom: 1.
 //   POST /api/cmd      body = one console command, reply = its text. Needs header X-Intercom: 1
 //                      (a browser on another site can't add it, which blocks cross-site requests).
+//   Firmware update (R3.0, FwUpdate.h). Off until "netupdate on" is typed on the USB console. All POSTs
+//   need X-Intercom: 1.
+//   GET  /api/fw               state as JSON (available, allowed, state, size, received, error)
+//   POST /api/fw/begin?size=N[&sha=HEX]   start an image of N bytes (SHA-256 optional)
+//   POST /api/fw/data?off=N    body = base64 of the next piece (up to 8192 bytes). 409 "expected offset M":
+//                              send from M. 503: a call or sound is playing, send the piece again shortly.
+//   POST /api/fw/end           check the image, switch to it and restart
+//   POST /api/fw/abort         drop an unfinished transfer
 //
 // Security: HTTP Basic login with the password set over USB ("webpass"). No password = the
-// web interface is off. 5 wrong passwords lock it for 30 s. Firmware can't be uploaded here.
+// web interface is off. 5 wrong passwords lock it for 30 s. Firmware uploads are a separate switch
+// ("netupdate on", USB only) on top of the password.
 #pragma once
 #include <string>
 #include <vector>
 
+#include "FwUpdate.h"
 #include "Intercom.h"
 
 namespace ic {
@@ -43,15 +53,18 @@ struct HttpResponse {
 
 class WebUi {
 public:
-    explicit WebUi(Intercom& ic) : ic_(ic) {}
+    explicit WebUi(Intercom& ic) : ic_(ic), fw_(ic.firmware()) {}
+    const FwUpdate& firmware() const { return fw_; }
     HttpResponse handle(const HttpRequest& req);
     std::string statusJson() const;
     std::string schoolJson();
 
 private:
     bool authorized(const std::string& header);
+    HttpResponse firmwareRequest(const HttpRequest& req, const std::string& path);
 
     Intercom& ic_;
+    FwUpdate fw_;
     std::string goodHeader_;  // hash of the last accepted Authorization header (skips the slow check)
     std::string goodFor_;     // ...valid only while the stored password is unchanged
     int failures_ = 0;

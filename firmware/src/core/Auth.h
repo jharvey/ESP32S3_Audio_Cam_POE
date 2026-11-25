@@ -11,6 +11,20 @@
 namespace ic {
 
 void sha256(const uint8_t* data, size_t len, uint8_t out[32]);
+// The same hash fed in pieces (a firmware image arriving in chunks).
+class Sha256 {
+public:
+    Sha256() { reset(); }
+    void reset();
+    void add(const uint8_t* data, size_t len);
+    std::string hex();  // finishes the hash; reset() before using it again
+
+private:
+    uint32_t h_[8];
+    uint8_t buf_[64];
+    size_t fill_ = 0;
+    uint64_t total_ = 0;
+};
 std::string sha256Hex(const std::string& data);
 std::string hmacSha256Hex(const std::string& key, const std::string& msg);
 bool base64Decode(const std::string& in, std::string* out);

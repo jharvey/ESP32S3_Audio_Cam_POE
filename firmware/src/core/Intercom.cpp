@@ -60,6 +60,7 @@ const char* kHelp =
     "                       units at once by the office); couple = both results\n"
     "  tone [seconds]       play a 1 kHz test tone on this unit's speaker (default 2 s, 0 stops)\n"
     "  reboot [download]    restart the unit; download = into USB flashing mode (no BOOT button needed)\n"
+    "  netupdate [on|off]   allow firmware updates from the web page (needs the web password; USB only)\n"
     "  mute [minutes|off]   stop this unit's TALK for a while (office: stuck button, misuse); it still hears\n"
     "  time [utc_seconds]   show the clock / set it (the office console does this when there's no NTP)\n"
     "  tz MIN [none|us|eu]  time zone: standard-time offset in minutes (US Eastern -300) and daylight-saving rule\n"
@@ -519,6 +520,16 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         std::string ssid = hal_.store->loadText(kWifiSsidKey);
         if (ssid.empty()) return "wifi off (usage: wifi <ssid> <password>; names with spaces are not supported)";
         return "wifi \"" + ssid + "\" " + (hal_.links->wifiUp() ? "connected" : "not connected");
+    }
+    if (c == "netupdate") {  // firmware updates from the web page / net_update.py: switched on over USB only
+        if (a.size() > 2 || (a.size() == 2 && a[1] != "on" && a[1] != "off")) return "usage: netupdate [on|off]";
+        if (a.size() == 2) {
+            if (src != CmdSource::Local) return "netupdate only works from the USB console";
+            if (!hal_.fw) return "firmware updates over the network are not available on this unit";
+            hal_.store->saveText("netupdate", a[1] == "on" ? "on" : "");
+            logf("firmware updates over the network: %s", a[1].c_str());
+        }
+        return std::string("firmware updates over the network: ") + (netUpdateAllowed() ? "on" : "off");
     }
     if (c == "webpass") {
         if (src != CmdSource::Local) return "webpass only works from the USB console";

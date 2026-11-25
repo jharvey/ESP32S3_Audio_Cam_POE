@@ -67,6 +67,9 @@ public:
     const UnitId& unit() const { return unit_; }
     PowerState power() const { return power_; }
     IStore& store() const { return *hal_.store; }
+    // Firmware update over the network (R3.0): off until "netupdate on" is typed on the USB console.
+    IFirmware* firmware() const { return hal_.fw; }
+    bool netUpdateAllowed() const { return hal_.fw && hal_.store->loadText("netupdate") == "on"; }
     bool toneActive() const { return toneFrames_ > 0; }
     LinkType link() const { return link_; }
     bool transmitting() const { return transmitting_; }

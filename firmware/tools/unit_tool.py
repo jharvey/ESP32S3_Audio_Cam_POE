@@ -1,6 +1,7 @@
 """Intercom unit tool: USB firmware updates and first-time setup.
 
-Updates are USB only (no network updates), so this makes each room visit one command.
+This is the USB side: the first flash, first-time setup, and recovery. Once a unit has
+"netupdate on" (setup --netupdate), later updates can go over the network with net_update.py.
 It never erases flash, so a unit keeps its room number, tuning, web password and
 network key across updates.
 
@@ -242,6 +243,8 @@ def cmd_setup(a):
         cmds.append("webpass " + a.webpass)
     if a.netkey:
         cmds.append("netkey " + a.netkey)
+    if a.netupdate:
+        cmds.append("netupdate on")
     if a.group:
         cmds.append("group " + a.group)
     if a.wifi:
@@ -322,6 +325,7 @@ def main():
     s.add_argument("--wifi", nargs=2, metavar=("SSID", "PASSWORD"), help="Wi-Fi for failover and portable units")
     s.add_argument("--webpass", help="web interface password (8+ characters)")
     s.add_argument("--netkey", help="network command key, shared by the office console (16+ characters)")
+    s.add_argument("--netupdate", action="store_true", help="allow later firmware updates over the network (net_update.py)")
     s.add_argument("--flash", action="store_true", help="flash the newest release first")
     s.add_argument("--release", help="release folder for --flash")
     s.add_argument("--burn-efuse", action="store_true", help="burn the flash-voltage eFuse (permanent; see Docs)")

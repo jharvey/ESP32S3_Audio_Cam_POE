@@ -62,6 +62,12 @@ pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px s
 </section>
 <section><h2>Last auto-tune</h2><pre id="cal">No auto-tune run since start-up.</pre></section>
 <section><h2>Other units heard</h2><table><thead><tr><th>Unit</th><th>Link</th><th>Power</th><th>Up</th></tr></thead><tbody id="peers"></tbody></table></section>
+<section id="fwsec" style="display:none"><h2>Firmware update</h2>
+ <div class="mute" id="fwnote">Sends a new firmware file to this unit over the network. The unit keeps its settings and restarts when the file has arrived and checked out. Calls come first: the transfer waits while the unit talks or plays.</div>
+ <div class="btns"><input type="file" id="fwfile" accept=".bin"><button class="primary" id="bfw">Update</button></div>
+ <div class="meter" style="margin:10px 0"><i id="fwbar"></i></div>
+ <div id="fwmsg" class="mute"></div>
+</section>
 <section class="wide"><h2>Console</h2>
  <div class="mute">Same commands as the USB console (type <b>help</b>). The web password can only be changed over USB.</div>
  <div class="btns"><input type="text" id="cmd" placeholder="stats" style="flex:1;min-width:200px"><button id="bcmd">Send</button></div>
@@ -135,6 +141,42 @@ $('broom').onclick=async()=>{const r=$('room').value.trim();if(!r)return;
   $('msg').textContent=await cmd('unit '+r);};
 $('bcmd').onclick=async()=>{const c=$('cmd').value.trim();if(c){await cmd(c);$('cmd').value='';refresh();}};
 $('cmd').addEventListener('keydown',e=>{if(e.key==='Enter')$('bcmd').click();});
+// Firmware update: the file goes up in 4 KB pieces; the unit says where to resume and when to wait.
+const fwPost=(p,b)=>fetch(p,{method:'POST',headers:{'X-Intercom':'1'},body:b||''});
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function fwInit(){
+  try{const r=await fetch('/api/fw');if(!r.ok)return;const f=await r.json();if(!f.available)return;
+    $('fwsec').style.display='';
+    if(!f.allowed){$('bfw').disabled=true;$('fwfile').disabled=true;$('fwmsg').textContent='Off. To allow updates from this page, type "netupdate on" at the USB console of this unit.';}
+  }catch(e){}
+}
+$('bfw').onclick=async()=>{
+  const f=$('fwfile').files[0],say=t=>$('fwmsg').textContent=t;
+  if(!f){say('Choose a firmware .bin file first.');return;}
+  if(!confirm('Update this unit with '+f.name+' ('+f.size+' bytes)? It restarts when the update is done.'))return;
+  $('bfw').disabled=true;
+  try{
+    const buf=new Uint8Array(await f.arrayBuffer());
+    let r=await fwPost('/api/fw/begin?size='+buf.length);
+    if(!r.ok){say('Not started: '+await r.text());return;}
+    let off=0,errs=0;
+    while(off<buf.length){
+      const part=buf.subarray(off,Math.min(off+4096,buf.length));
+      let s='';for(let i=0;i<part.length;i++)s+=String.fromCharCode(part[i]);
+      try{r=await fwPost('/api/fw/data?off='+off,btoa(s));}
+      catch(e){if(++errs>20){say('Stopped: the unit does not answer.');return;}await sleep(1000);continue;}
+      const t=await r.text();
+      if(r.status===503){say('Waiting: the unit is in a call ('+Math.round(off*100/buf.length)+'% sent).');await sleep(700);continue;}
+      if(r.status===409&&t.startsWith('expected offset ')){off=parseInt(t.slice(16))||0;continue;}
+      if(!r.ok){say('Stopped: '+t);fwPost('/api/fw/abort').catch(()=>{});return;}
+      errs=0;off+=part.length;$('fwbar').style.width=(off*100/buf.length)+'%';say('Sending: '+Math.round(off*100/buf.length)+'%');
+    }
+    r=await fwPost('/api/fw/end');const t=await r.text();
+    say(r.ok?'Update written. The unit is restarting; this page shows the new version in a few seconds. ('+t+')':'Update refused: '+t);
+  }catch(e){say('Stopped: '+e);}
+  finally{$('bfw').disabled=false;}
+};
+fwInit();
 refresh();setInterval(refresh,1000);
 </script></body></html>)PAGE";
 }

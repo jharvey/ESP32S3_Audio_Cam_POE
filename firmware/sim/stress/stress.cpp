@@ -88,7 +88,23 @@ struct Net {
 };
 
 // --------------------------------------------------------------------------------- one unit
-struct Unit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag {
+struct Unit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFirmware {
+    // the spare firmware slot: nothing may be written outside begin..finish or past the declared size
+    size_t fwSize = 0, fwGot = 0;
+    bool fwOpen = false;
+    int fwCommits = 0;
+    bool begin(size_t size) override { fwSize = size; fwGot = 0; fwOpen = true; return true; }
+    bool write(const uint8_t*, size_t n) override {
+        if (!fwOpen || n > fwSize - fwGot) { fprintf(stderr, "firmware write outside an update or past its size\n"); abort(); }
+        fwGot += n;
+        return true;
+    }
+    bool finish(bool commit) override {
+        if (commit && (!fwOpen || fwGot != fwSize)) { fprintf(stderr, "incomplete firmware committed\n"); abort(); }
+        fwOpen = false;
+        if (commit) fwCommits++;
+        return true;
+    }
     Net* net;
     std::deque<Net::Item> rx;
     UnitId id, id0;
@@ -125,7 +141,7 @@ struct Unit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag {
         used = LinkType::None;
         held = 0;
         webTalk = false;
-        ic.reset(new Intercom(Hal{this, this, this, this, this, this, this, this}, *aec, opt));
+        ic.reset(new Intercom(Hal{this, this, this, this, this, this, this, this, this}, *aec, opt));
         ic->begin();
         web.reset(new WebUi(*ic));
         boots++;
@@ -186,7 +202,7 @@ struct Unit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag {
 static const char* kWords[] = {
     "boottest", "cal", "callofc", "couple", "dayoff", "defaults", "get", "group", "help", "lamp", "load", "mute", "netkey",
     "ntp", "play", "reboot", "ring", "save", "sched", "selftest", "send", "set", "skip", "stats", "talk", "testpass", "tests",
-    "time", "tone", "tz", "undo", "unit", "version", "webpass", "wifi", "run", "open", "closed", "off", "on", "all", "floor",
+    "time", "tone", "tz", "undo", "unit", "version", "webpass", "wifi", "netupdate", "run", "open", "closed", "off", "on", "all", "floor",
     "room", "add", "del", "list", "clear", "bell", "chime", "alarm", "white", "ir", "other", "rgb", "download", "opus", "vol",
     "gain", "taps", "mu", "nlp", "duck", "-", "?", "status", "stop", "map", "show", "now", "mon", "tue", "sat", "daily",
     "0", "1", "2", "5", "50", "100", "101", "105", "214", "299", "999", "65535", "65536", "-1", "4294967296", "1e9", "0x10",
@@ -288,10 +304,17 @@ static void fuzzCommands(Rng& r, long n) {
     Unit* us[] = {&a, &b};
     size_t longest = 0;
     static const char* paths[] = {"/", "/school", "/floorplan.js", "/api/status", "/api/school", "/api/cmd", "/api/talk",
-                                  "/api/target", "/api/replies", "/api/x", "", "/api/cmd/../..", "//", "/api/talk?x=1"};
-    static const char* auths[] = {"", "Basic ", "Basic YWRtaW46", "Basic YWRtaW46YWRtaW4=", "Basic !!!!", "Bearer x", "Basic ="};
+                                  "/api/target", "/api/replies", "/api/x", "", "/api/cmd/../..", "//", "/api/talk?x=1",
+                                  "/api/fw", "/api/fw/begin?size=70000", "/api/fw/begin?size=", "/api/fw/begin?size=70000&sha=zz",
+                                  "/api/fw/data?off=0", "/api/fw/data?off=", "/api/fw/data", "/api/fw/end", "/api/fw/abort", "/api/fwx"};
+    static const char* auths[] = {"", "Basic ", "Basic YWRtaW46", "Basic YWRtaW46YWRtaW4=", "Basic !!!!", "Bearer x", "Basic =",
+                                  "Basic YWRtaW46ZnV6ei1wYXNzLTE="};  // admin:fuzz-pass-1, set below
     for (long k = 0; k < n; k++) {
         Unit* u = us[k & 1];
+        if (k % 500 < 2) {  // the web interface and network updates on (random commands switch them off again)
+            u->ic->command("webpass fuzz-pass-1");
+            u->ic->command("netupdate on");
+        }
         std::string line = randomCommand(r);
         std::string out = u->ic->command(line, CmdSource(pick(r, 3)));
         longest = std::max(longest, out.size());
@@ -302,6 +325,10 @@ static void fuzzCommands(Rng& r, long n) {
         if (chance(r, 0.1)) q.authorization = "Basic " + randomCommand(r);
         q.xIntercom = chance(r, 0.5) ? "1" : "";
         q.body = chance(r, 0.6) ? randomCommand(r) : std::string(size_t(pick(r, 3000)), char(r()));
+        if (chance(r, 0.2)) {  // base64 of something that may start like firmware
+            q.body.assign(size_t(pick(r, 11000)), 'A');
+            if (chance(r, 0.7)) q.body.replace(0, std::min<size_t>(2, q.body.size()), "6Q");
+        }
         u->web->handle(q);
         if (k % 4 == 0) {
             net.now++;
@@ -309,7 +336,8 @@ static void fuzzCommands(Rng& r, long n) {
             b.step();
         }
     }
-    printf("  [ok] no crash (%d + %d restarts asked, longest reply %zu bytes)\n", a.restarts, b.restarts, longest);
+    printf("  [ok] no crash (%d + %d restarts asked, %d firmware images committed, longest reply %zu bytes)\n", a.restarts, b.restarts,
+           a.fwCommits + b.fwCommits, longest);
 }
 
 // --------------------------------------------------------------------------------- chaos

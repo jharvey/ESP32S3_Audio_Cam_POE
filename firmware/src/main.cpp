@@ -314,8 +314,25 @@ Preferences gPrefs;
 
 // ---- HAL for the core ----------------------------------------------------------------
 class Board : public ic::INet, public ic::ILinks, public ic::IPower, public ic::IPanel, public ic::IStore, public ic::ILog, public ic::IDiag,
-              public ic::ILamps {
+              public ic::ILamps, public ic::IFirmware {
 public:
+    // Firmware update over the network (R3.0): Arduino's Update writes the spare OTA slot (erasing each
+    // 4 KB block as it gets there) and only switches the boot slot in end(), after its own image check.
+    // Runs on the audio task: one 4 KB piece is roughly one block erase + write. To time on hardware.
+    bool begin(size_t size) override {
+        if (Update.isRunning()) Update.abort();
+        return Update.begin(size, U_FLASH);
+    }
+    bool write(const uint8_t* data, size_t len) override { return Update.write(const_cast<uint8_t*>(data), len) == len; }
+    bool finish(bool commit) override {
+        if (!commit) {
+            Update.abort();
+            return true;
+        }
+        return Update.end(false);
+    }
+    std::string error() override { return Update.errorString(); }
+
     void set(ic::Lamp lamp, uint8_t pct) override { gLamps[int(lamp)] = pct; }
     void setRgb(uint8_t r, uint8_t g, uint8_t b) override { gRgb = uint32_t(r) << 16 | uint32_t(g) << 8 | b; }
     // Network: one UDP socket on the multicast group. Ethernet and Wi-Fi carry the same IP
@@ -603,7 +620,7 @@ void setup() {
     gEspAec = new board::EspSrAec();
     ic::EchoCanceller& aec = gEspAec->ok() ? static_cast<ic::EchoCanceller&>(*gEspAec) : gNlms;
     Serial.printf("echo canceller: %s\n", gEspAec->ok() ? "ESP-SR" : "NLMS (ESP-SR did not start)");
-    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, aec, io);
+    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, aec, io);
     gIntercom = &intercom;
     intercom.begin();
     static ic::WebUi web(intercom);
