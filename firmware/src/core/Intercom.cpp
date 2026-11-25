@@ -43,11 +43,21 @@ constexpr uint32_t kEmergencySoundFrames = 60 * 50;      // the signal sounds fo
 constexpr uint32_t kEvacuateSoundFrames = 5 * 60 * 50;   // ... or 5 min (evacuate); display and lamp stay on
 constexpr uint32_t kEmergencyRgb = 0xC00000;
 const char* const kEmergencyNames[] = {"clear", "lockdown", "evacuate", "shelter"};
+// R3.2
+const char* const kFeatureNames[] = {"reason", "queue", "zones", "dnd", "quiet", "silent", "failover"};
+constexpr uint32_t kUrgentHoldFrames = 75;            // OFFICE held 1.5 s = "help needed"
+constexpr uint32_t kSilentHoldFrames = 250;           // OFFICE held 5 s = silent help call
+constexpr uint32_t kSilentTxFrames = 2 * 60 * 50;     // the office hears the room for 2 minutes
+constexpr uint32_t kSilentFrames = 30 * 60 * 50;      // the silent call stays up for 30 minutes unless cleared
+const char* const kFeatureUsage = "usage: feature [reason|queue|zones|dnd|quiet|silent|failover|all on|off]";
+const char* const kZoneUsage = "usage: zone | zone N NAME ROOMS (N 1-8, e.g. zone 1 east 101-112,201) | zone N off";
+const char* const kQuietUsage = "usage: quiet | quiet HH:MM HH:MM DB (e.g. quiet 18:00 07:00 -12; DB -30 to 0) | quiet off";
 
 std::string targetText(uint8_t flags, uint16_t target) {
     if (flags & kAudioReply) return target ? "room " + std::to_string(target) + " (answer)" : "the office console (answer)";
     if (target == 0) return "everyone";
     if (flags & kAudioFloor) return "floor " + std::to_string(target);
+    if (flags & kAudioZone) return "zone " + std::to_string(target);
     if (flags & kAudioGroupCall) return "group " + std::to_string(target);
     return "room " + std::to_string(target);
 }
@@ -100,6 +110,11 @@ const char* kHelp =
     "                       transmit as if TALK were held, to everyone or a target (USB only; default 5 s)\n"
     "  selftest [result]    check the board and the speaker->mic path (plays a short tone)\n"
     "  version              firmware version\n"
+    "  feature [NAME|all on|off]  optional features: reason queue zones dnd quiet silent failover (all off at first)\n"
+    "  office [ROOM [STAND-IN]]   the office unit, and the unit that takes over while it is offline (failover)\n"
+    "  zone [N NAME ROOMS|N off]  zones for paging: zone 1 east 101-112,201 (zones)\n"
+    "  dnd [minutes|off]    do not disturb: only the office and emergencies get through, no bells (dnd)\n"
+    "  quiet [HH:MM HH:MM DB|off]  quieter between two times of day (quiet); emergency signals stay loud\n"
     "  log [calls|faults] [N]  the event log: faults and calls this unit saw, school-wide (last 30)\n"
     "  selfcheck [HH:MM|off|now]  nightly speaker->microphone check; a failure shows on the school page\n"
     "  emergency [lockdown|evacuate|shelter|clear] [all]  emergency signal here; all = on every unit (USB / web)\n"
@@ -136,6 +151,119 @@ void Intercom::event(EventKind k, uint16_t room, const char* fmt, ...) {
     if (hal_.log) hal_.log->log((std::string(k == EventKind::Fault ? "FAULT: " : k == EventKind::Call ? "call: " : "event: ") + buf).c_str());
 }
 
+// Feature switches, the office unit and its stand-in, quiet hours and zones, from flash.
+void Intercom::loadFeatures() {
+    features_ = uint8_t(std::strtoul(hal_.store->loadText("features").c_str(), nullptr, 10) & 0x7f);
+    unsigned o = 0, b = 0;
+    std::sscanf(hal_.store->loadText("office").c_str(), "%u %u", &o, &b);
+    office_ = uint16_t(o <= 999 ? o : 0);
+    office2_ = uint16_t(b <= 999 ? b : 0);
+    quietFrom_ = quietTo_ = -1;
+    quietSetDb_ = 0;
+    unsigned h1 = 0, m1 = 0, h2 = 0, m2 = 0;
+    float db = 0;
+    if (std::sscanf(hal_.store->loadText("quiet").c_str(), "%u:%u %u:%u %f", &h1, &m1, &h2, &m2, &db) == 5 && h1 < 24 && m1 < 60 &&
+        h2 < 24 && m2 < 60 && db <= 0 && db >= -30) {
+        quietFrom_ = int(h1 * 60 + m1);
+        quietTo_ = int(h2 * 60 + m2);
+        quietSetDb_ = db;
+    }
+    zones_.clear();  // "1=east:101-112,201;2=gym:296-299"
+    std::stringstream zs(hal_.store->loadText("zones"));
+    std::string item;
+    while (std::getline(zs, item, ';')) {
+        size_t eq = item.find('='), co = item.find(':');
+        if (eq == std::string::npos || co == std::string::npos || co < eq) continue;
+        unsigned long n = std::strtoul(item.c_str(), nullptr, 10);
+        if (n < 1 || n > 8 || zones_.size() >= 8) continue;
+        zones_.push_back(Zone{uint8_t(n), item.substr(eq + 1, co - eq - 1), item.substr(co + 1)});
+    }
+}
+
+bool Intercom::inZone(uint16_t zone, uint16_t room) const {
+    for (const Zone& z : zones_) {
+        if (z.n != zone) continue;
+        std::stringstream ss(z.rooms);
+        std::string part;
+        while (std::getline(ss, part, ',')) {
+            unsigned lo = 0, hi = 0;
+            int got = std::sscanf(part.c_str(), "%u-%u", &lo, &hi);
+            if (got == 1) hi = lo;
+            if (got >= 1 && room >= lo && room <= hi) return true;
+        }
+    }
+    return false;
+}
+
+// The office unit, or its stand-in while the office unit is not heard (feature failover).
+uint16_t Intercom::actingOffice() const {
+    if (!office_) return 0;
+    auto up = [&](uint16_t r) {
+        if (r == unit_.room) return true;
+        for (const auto& p : peers_)
+            if (p.status.from.room == r) return true;
+        return false;
+    };
+    if (up(office_) || !feature(kFeatFailover) || !office2_ || !up(office2_)) return office_;
+    return office2_;
+}
+
+std::vector<Intercom::Waiting> Intercom::callQueue() const {
+    std::vector<Waiting> q = waiting_;
+    std::stable_sort(q.begin(), q.end(), [](const Waiting& a, const Waiting& b) {
+        if (a.silent != b.silent) return a.silent;
+        if (a.urgent != b.urgent) return a.urgent;
+        return a.since < b.since;
+    });
+    return q;
+}
+
+// Silent help call: nothing sounds or shows in the room; its microphone goes to the office for 2 minutes.
+void Intercom::setSilent(bool on, const char* why) {
+    if (on == silentHelp()) return;
+    if (on) {
+        callingOffice_ = false;  // without the "call ended" line and display change of a normal call
+        urgent_ = false;
+        silentUntil_ = frame_ + kSilentFrames;
+        silentTxUntil_ = frame_ + kSilentTxFrames;
+        event(EventKind::Fault, unit_.room, "room %u: SILENT HELP CALL (%s)", unsigned(unit_.room), why);
+    } else {
+        silentUntil_ = silentTxUntil_ = 0;
+        event(EventKind::Info, unit_.room, "room %u: silent help call ended (%s)", unsigned(unit_.room), why);
+    }
+    sendStatus();
+}
+
+// Once a second: who acts as the office, quiet hours, and the timers of do-not-disturb and the silent call.
+void Intercom::everySecond() {
+    if (frame_ > 250) {  // not in the first 5 s, before the other units were heard
+        const uint16_t act = actingOffice();
+        if (act != actingWas_) {
+            if (actingWas_ && office2_ && act == office2_)
+                event(EventKind::Fault, act, "room %u is acting as the office (room %u is offline)", unsigned(act), unsigned(office_));
+            else if (actingWas_ && actingWas_ == office2_ && act == office_)
+                event(EventKind::Info, act, "room %u is the office again", unsigned(act));
+            actingWas_ = act;
+        }
+    }
+    quietNowDb_ = 0;
+    if (feature(kFeatQuiet) && quietFrom_ >= 0) {
+        int64_t now = utcNow();
+        if (now) {
+            LocalTime lt = sched_.local(now);
+            const int m = lt.hour * 60 + lt.minute;
+            const bool in = quietFrom_ <= quietTo_ ? (m >= quietFrom_ && m < quietTo_) : (m >= quietFrom_ || m < quietTo_);
+            if (in) quietNowDb_ = quietSetDb_;
+        }
+    }
+    if (dndUntil_ && frame_ >= dndUntil_) {
+        dndUntil_ = 0;
+        event(EventKind::Info, unit_.room, "room %u: do not disturb ended", unsigned(unit_.room));
+        sendStatus();
+    }
+    if (silentUntil_ && frame_ >= silentUntil_) setSilent(false, "30 minutes passed");
+}
+
 void Intercom::loadSelfCheck() {
     selfMin_ = -1;
     unsigned h = 0, m = 0;
@@ -152,6 +280,7 @@ void Intercom::begin() {
     couplingsOpen_ = CouplingTest::fromString(hal_.store->loadText("couple_open_map"));
     refreshPower();
     loadSelfCheck();
+    loadFeatures();
     if (!opt_.bootNote.empty())
         event(opt_.bootFault ? EventKind::Fault : EventKind::Info, unit_.room, "room %u started: %s", unsigned(unit_.room), opt_.bootNote.c_str());
     hal_.links->setWifi(hal_.store->loadText(kWifiSsidKey), hal_.store->loadText(kWifiPassKey));
@@ -449,13 +578,14 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
             if (a[2] == "room") t.kind = TalkTarget::Room;
             else if (a[2] == "floor") t.kind = TalkTarget::Floor;
             else if (a[2] == "group") t.kind = TalkTarget::Group;
+            else if (a[2] == "zone") t.kind = TalkTarget::Zone;
             else n = 0;
-            if (n < 1 || n > 999) return "usage: talk [seconds] [room N|floor N|group N]";
+            if (n < 1 || n > 999) return "usage: talk [seconds] [room N|floor N|group N|zone N]";
             t.n = uint16_t(n);
         }
         talkTarget_ = t;
         talkFrames_ = uint32_t(secs * 1000 / kFrameMs);
-        static const char* kinds[] = {"everyone", "room", "floor", "group"};
+        static const char* kinds[] = {"everyone", "room", "floor", "group", "zone"};
         std::string num = t.kind ? " " + std::to_string(t.n) : std::string();
         snprintf(buf, sizeof(buf), "talking for %.0f s to %s%s (\"talk off\" stops)", double(secs), kinds[t.kind], num.c_str());
         return buf;
@@ -514,8 +644,25 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         return "ringing for 10 s (TALK answers)";
     }
     if (c == "callofc") {
-        setCallingOffice(!(a.size() > 1 && a[1] == "off"), src == CmdSource::Local ? "USB" : "console");
-        return callingOffice_ ? "calling the office" : "not calling the office";
+        const char* by = src == CmdSource::Local ? "USB" : "console";
+        const std::string how = a.size() > 1 ? a[1] : "";
+        if (how == "silent") {  // as OFFICE held 5 s
+            if (!feature(kFeatSilent)) return "the silent feature is off (feature silent on)";
+            setSilent(true, by);
+            return "silent help call started";
+        }
+        if (how == "off") setSilent(false, by);
+        if (how == "help") {  // as OFFICE held 1.5 s
+            if (!feature(kFeatReason)) return "the reason feature is off (feature reason on)";
+            const bool was = callingOffice_;
+            urgent_ = true;
+            if (was) {
+                event(EventKind::Fault, unit_.room, "room %u: HELP NEEDED (%s)", unsigned(unit_.room), by);
+                sendStatus();
+            }
+        }
+        setCallingOffice(how != "off", by);
+        return callingOffice_ ? (urgent_ ? "calling the office: help needed" : "calling the office") : "not calling the office";
     }
     if (c == "selftest") {
         if (a.size() > 1 && a[1] == "result") return testResult_.empty() ? "no self-test run yet" : testResult_;
@@ -562,6 +709,104 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         std::string ssid = hal_.store->loadText(kWifiSsidKey);
         if (ssid.empty()) return "wifi off (usage: wifi <ssid> <password>; names with spaces are not supported)";
         return "wifi \"" + ssid + "\" " + (hal_.links->wifiUp() ? "connected" : "not connected");
+    }
+    if (c == "feature") {
+        if (a.size() == 3 && (a[2] == "on" || a[2] == "off")) {
+            int k = -1;
+            for (int i = 0; i < 7; i++)
+                if (a[1] == kFeatureNames[i]) k = i;
+            if (k < 0 && a[1] != "all") return kFeatureUsage;
+            const uint8_t bits = k < 0 ? uint8_t(0x7f) : uint8_t(1u << k);
+            features_ = a[2] == "on" ? uint8_t(features_ | bits) : uint8_t(features_ & ~bits);
+            hal_.store->saveText("features", features_ ? std::to_string(features_) : "");
+            if (!feature(kFeatDnd)) dndUntil_ = 0;
+            if (!feature(kFeatReason)) urgent_ = false;
+            logf("feature %s %s", a[1].c_str(), a[2].c_str());
+            sendStatus();
+        } else if (a.size() != 1) {
+            return kFeatureUsage;
+        }
+        std::string out = "features:";
+        for (int i = 0; i < 7; i++) out += std::string(" ") + kFeatureNames[i] + ((features_ >> i) & 1 ? "=on" : "=off");
+        return out;
+    }
+    if (c == "office") {  // "office 105 104": the office unit and its stand-in
+        if (a.size() > 1) {
+            const bool off = a[1] == "off";
+            unsigned long o = off ? 0 : std::strtoul(a[1].c_str(), nullptr, 10), b = a.size() > 2 ? std::strtoul(a[2].c_str(), nullptr, 10) : 0;
+            if (a.size() > 3 || o > 999 || b > 999 || (!off && o == 0) || (off && a.size() > 2) || (b && b == o))
+                return "usage: office | office ROOM [STAND-IN ROOM] | office off";
+            hal_.store->saveText("office", o ? std::to_string(o) + " " + std::to_string(b) : "");
+            loadFeatures();
+        }
+        if (!office_) return "no office unit set (usage: office ROOM [STAND-IN ROOM])";
+        snprintf(buf, sizeof(buf), "office unit %u, stand-in %u%s, acting now: %u", unsigned(office_), unsigned(office2_),
+                 office2_ ? (feature(kFeatFailover) ? "" : " (feature failover is off)") : " (none)", unsigned(actingOffice()));
+        return buf;
+    }
+    if (c == "zone") {
+        if (a.size() > 1) {
+            unsigned long n = std::strtoul(a[1].c_str(), nullptr, 10);
+            if (n < 1 || n > 8 || a.size() < 3 || a.size() > 4 || (a.size() == 3 && a[2] != "off")) return kZoneUsage;
+            if (a.size() == 4) {
+                if (a[2].empty() || a[2].size() > 12 || a[3].size() > 100) return kZoneUsage;
+                for (char ch : a[2])
+                    if (!((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '-' || ch == '_')) return kZoneUsage;
+                for (char ch : a[3])
+                    if (!((ch >= '0' && ch <= '9') || ch == '-' || ch == ',')) return kZoneUsage;
+            }
+            std::string s;
+            for (const Zone& z : zones_)
+                if (z.n != n) s += std::to_string(z.n) + "=" + z.name + ":" + z.rooms + ";";
+            if (a.size() == 4) s += std::to_string(n) + "=" + a[2] + ":" + a[3] + ";";
+            hal_.store->saveText("zones", s);
+            loadFeatures();
+        }
+        if (zones_.empty()) return std::string("no zones. ") + kZoneUsage;
+        std::string out = feature(kFeatZones) ? "" : "(feature zones is off)\n";
+        for (const Zone& z : zones_)
+            out += "zone " + std::to_string(z.n) + " " + z.name + ": " + z.rooms + (inZone(z.n, unit_.room) ? "  (this room is in it)\n" : "\n");
+        return out;
+    }
+    if (c == "dnd") {
+        if (a.size() == 2 && a[1] == "off") {
+            if (dndUntil_) event(EventKind::Info, unit_.room, "room %u: do not disturb ended", unsigned(unit_.room));
+            dndUntil_ = 0;
+            sendStatus();
+        } else if (a.size() == 2) {
+            if (!feature(kFeatDnd)) return "the dnd feature is off (feature dnd on)";
+            float mins = std::strtof(a[1].c_str(), nullptr);
+            if (!(mins >= 1) || mins > 240) return "usage: dnd <minutes 1-240> | dnd off | dnd";
+            dndUntil_ = frame_ + uint32_t(mins * 60000 / kFrameMs);
+            event(EventKind::Info, unit_.room, "room %u: do not disturb for %u min", unsigned(unit_.room), unsigned(mins));
+            sendStatus();
+        } else if (a.size() != 1) {
+            return "usage: dnd <minutes 1-240> | dnd off | dnd";
+        }
+        if (!dnd()) return "do not disturb off";
+        snprintf(buf, sizeof(buf), "do not disturb, %u min left", unsigned(((dndUntil_ - frame_) * kFrameMs + 59999) / 60000));
+        return buf;
+    }
+    if (c == "quiet") {
+        if (a.size() == 2 && a[1] == "off") {
+            hal_.store->saveText("quiet", "");
+            loadFeatures();
+        } else if (a.size() == 4) {
+            unsigned h1 = 0, m1 = 0, h2 = 0, m2 = 0;
+            float db = std::strtof(a[3].c_str(), nullptr);
+            if (std::sscanf(a[1].c_str(), "%u:%u", &h1, &m1) != 2 || std::sscanf(a[2].c_str(), "%u:%u", &h2, &m2) != 2 || h1 > 23 || m1 > 59 ||
+                h2 > 23 || m2 > 59 || !(db <= 0) || db < -30)
+                return kQuietUsage;
+            snprintf(buf, sizeof(buf), "%02u:%02u %02u:%02u %.0f", h1, m1, h2, m2, double(db));
+            hal_.store->saveText("quiet", buf);
+            loadFeatures();
+        } else if (a.size() != 1) {
+            return kQuietUsage;
+        }
+        if (quietFrom_ < 0) return std::string("no quiet hours. ") + kQuietUsage;
+        snprintf(buf, sizeof(buf), "quiet hours %02d:%02d to %02d:%02d, %.0f dB%s%s", (quietFrom_ / 60) % 100, quietFrom_ % 60, (quietTo_ / 60) % 100,
+                 quietTo_ % 60, double(quietSetDb_), feature(kFeatQuiet) ? "" : " (feature quiet is off)", quietNowDb_ < 0 ? " (on now)" : "");
+        return buf;
     }
     if (c == "log") {  // "log", "log calls", "log faults", "log 50"
         int want = -1;
@@ -857,6 +1102,9 @@ void Intercom::receive() {
                 continue;
             }
             if (!isForMe(h)) continue;                                                     // a call for another room
+            const bool fromOffice = (h.flags & kAudioFromConsole) || (office_ && h.from.room == actingOffice());
+            if (dnd() && !fromOffice) continue;                                            // do not disturb: only the office gets through
+            if (silentHelp() && (h.target != 0 || (h.flags & kAudioReply))) continue;      // silent help call: no call may sound in this room
             if (h.target == 0 && !(h.flags & kAudioReply) && (h.flags & kAudioFromConsole))
                 allCallUntil_ = frame_ + kAllCallHoldFrames;
             if (h.target != 0 || (h.flags & kAudioReply)) {
@@ -869,13 +1117,13 @@ void Intercom::receive() {
                         startSound(Sound::Chime);
                         // A call to this room alone: the call LEDs blink until TALK answers (a floor or group
                         // announcement doesn't ask for an answer, so no attention blink or missed call).
-                        callAnswered_ = (h.flags & (kAudioFloor | kAudioGroupCall)) != 0;
+                        callAnswered_ = (h.flags & (kAudioFloor | kAudioGroupCall | kAudioZone)) != 0;
                         missedUntil_ = 0;
                     }
                 }
                 callFrom_ = h.from;
                 callLast_ = frame_;
-                if (h.flags & kAudioFromConsole) setCallingOffice(false, "the office answered");
+                if (fromOffice) setCallingOffice(false, "the office answered");
             }
             if (Talker* t = talkerFor(h.from)) {
                 t->jb.push(h.seq, h.codec, payload, plen, h.level);
@@ -900,6 +1148,20 @@ void Intercom::receive() {
             for (auto& q : known_)
                 if (q.status.from == s.from) k = &q;
             peerEvents(p ? &p->status : nullptr, s, k && k->offlineLogged);
+            {   // the queue of rooms waiting for the office
+                const bool wants = (s.flags & kStatusCalling) || (s.flags2 & kStatus2Silent);
+                size_t w = 0;
+                while (w < waiting_.size() && waiting_[w].room != s.from.room) w++;
+                if (wants && w == waiting_.size() && waiting_.size() < 64) waiting_.push_back(Waiting{s.from.room, false, false, frame_});
+                if (w < waiting_.size()) {
+                    if (!wants) {
+                        waiting_.erase(waiting_.begin() + long(w));
+                    } else {
+                        waiting_[w].urgent = (s.flags & kStatusUrgent) != 0;
+                        waiting_[w].silent = (s.flags2 & kStatus2Silent) != 0;
+                    }
+                }
+            }
             if (!p) {
                 peers_.push_back(Peer());
                 p = &peers_.back();
@@ -945,6 +1207,11 @@ void Intercom::receive() {
     }
     for (size_t i = 0; i < peers_.size();) {
         if (frame_ - peers_[i].lastFrame > uint32_t(kPeerTimeoutFrames)) {
+            for (size_t w = 0; w < waiting_.size(); w++)
+                if (waiting_[w].room == peers_[i].status.from.room) {
+                    waiting_.erase(waiting_.begin() + long(w));
+                    break;
+                }
             // With our own network down every room falls silent: that is this unit's fault, already logged.
             if (link_ != LinkType::None) {
                 const uint16_t room = peers_[i].status.from.room;
@@ -997,7 +1264,11 @@ void Intercom::peerEvents(const StatusPacket* old, const StatusPacket& s, bool b
         else event(EventKind::Info, s.from.room, "room %u back on PoE", r);
     }
     const uint8_t up = uint8_t(s.flags & ~old->flags);
-    if (up & kStatusCalling) event(EventKind::Call, s.from.room, "room %u is calling the office", r);
+    if (up & kStatusUrgent) event(EventKind::Fault, s.from.room, "room %u: HELP NEEDED", r);
+    else if (up & kStatusCalling) event(EventKind::Call, s.from.room, "room %u is calling the office", r);
+    const uint8_t up2 = uint8_t(s.flags2 & ~old->flags2);
+    if (up2 & kStatus2Silent) event(EventKind::Fault, s.from.room, "room %u: SILENT HELP CALL", r);
+    if (up2 & kStatus2Dnd) event(EventKind::Info, s.from.room, "room %u: do not disturb", r);
     if (up & kStatusAudioFault) event(EventKind::Fault, s.from.room, "room %u: self-check failed (speaker or microphone)", r);
     if (up & kStatusTalkHeld) event(EventKind::Fault, s.from.room, "room %u: TALK held over 2 minutes (stuck button?)", r);
     if (s.emergency != old->emergency && s.emergency)
@@ -1014,6 +1285,7 @@ void Intercom::sendStatus() {
     s.power = pw.source;
     s.battery = pw.hasBattery ? pw.batteryPct : 0;
     s.flags = statusFlags();
+    s.flags2 = statusFlags2();
     s.fwVer = packVersion(kFirmwareVersion);
     s.emergency = uint8_t(emerg_);
     s.fault = faultCode();
@@ -1026,7 +1298,7 @@ void Intercom::sendStatus() {
 
 uint8_t Intercom::statusFlags() const {
     return uint8_t((transmitting_ ? kStatusTalking : 0) | (muted() ? kStatusMuted : 0) | (talkHeld() ? kStatusTalkHeld : 0) |
-                   (callingOffice_ ? kStatusCalling : 0) | (emerg_ != Emergency::None ? kStatusEmergency : 0) |
+                   (callingOffice_ ? kStatusCalling : 0) | (urgent() ? kStatusUrgent : 0) | (emerg_ != Emergency::None ? kStatusEmergency : 0) |
                    (audioFault_ ? kStatusAudioFault : 0));
 }
 
@@ -1069,6 +1341,21 @@ void Intercom::updatePanel() {
             std::memcpy(text, "CAL", 3);
         } else if (callingOffice_ && !transmitting_ && (frame_ / 50) % 2) {  // calling the office: oFC / number
             std::memcpy(text, "oFC", 3);
+            if (urgent_) {  // help needed: HLP
+                text[0] = char(0x80 | 0x76);
+                text[1] = 'L';
+                text[2] = 'P';
+            }
+        } else if (dnd() && (frame_ / 100) % 2) {  // do not disturb: dnd / number, 2 s each
+            std::memcpy(text, "dnd", 3);
+        }
+        // The acting office unit, with rooms waiting: the first one's number every other second, third dot lit.
+        if (feature(kFeatQueue) && office_ && !waiting_.empty() && !canAnswer() && (frame_ / 50) % 2 && actingOffice() == unit_.room) {
+            const unsigned q = callQueue()[0].room % 1000;
+            text[0] = q >= 100 ? char('0' + q / 100) : ' ';
+            text[1] = q >= 10 ? char('0' + (q / 10) % 10) : ' ';
+            text[2] = char('0' + q % 10);
+            dots |= 0x04;
         }
         if (emerg_ != Emergency::None && (frame_ / 50) % 2 == 0) {  // LoC / EUA / SHE, a second each with the room number
             static const char kText[4][3] = {{' ', ' ', ' '}, {'L', 'o', 'C'}, {'E', 'U', 'A'}, {char(0x80 | 0x6d), char(0x80 | 0x76), 'E'}};
@@ -1114,6 +1401,7 @@ bool Intercom::isForMe(const AudioHeader& h) const {
     if (h.flags & kAudioReply) return h.target != 0 && h.target == unit_.room;  // 0 = an answer to the office console
     if (h.target == 0) return true;
     if (h.flags & kAudioFloor) return unit_.room / 100 == h.target;
+    if (h.flags & kAudioZone) return feature(kFeatZones) && inZone(h.target, unit_.room);
     if (h.flags & kAudioGroupCall) return group() == h.target || unit_.room == h.target;
     return h.target == unit_.room;
 }
@@ -1205,7 +1493,7 @@ void Intercom::checkSchedule() {
     if (minute == lastSchedMinute_) return;
     bool first = lastSchedMinute_ == 0;
     lastSchedMinute_ = minute;
-    if (emerg_ != Emergency::None) return;  // no bells during an emergency
+    if (emerg_ != Emergency::None || dnd()) return;  // no bells during an emergency or do-not-disturb
     LocalTime lt = sched_.local(now);
     if (first && lt.second > 20) return;  // just started mid-minute: don't play an event late
     if (sched_.isDayOff(lt)) return;
@@ -1307,7 +1595,9 @@ void Intercom::setCallingOffice(bool on, const char* why) {
     if (on == callingOffice_) return;
     callingOffice_ = on;
     callingSince_ = frame_;
-    if (on) event(EventKind::Call, unit_.room, "room %u is calling the office (%s)", unsigned(unit_.room), why);
+    if (!on) urgent_ = false;
+    if (on && urgent_) event(EventKind::Fault, unit_.room, "room %u: HELP NEEDED (%s)", unsigned(unit_.room), why);
+    else if (on) event(EventKind::Call, unit_.room, "room %u is calling the office (%s)", unsigned(unit_.room), why);
     else logf("call to the office ended (%s)", why);
     sendStatus();
 }
@@ -1433,7 +1723,8 @@ void Intercom::noteCameraView() {
 
 // ---- settings backup (R3.1) ----------------------------------------------------------------
 namespace {
-const char* const kBackupKeys[] = {"group", "tune", "sched", "ntp", "boottest", "selfcheck", "couple_map", "couple_open_map"};
+const char* const kBackupKeys[] = {"group", "tune", "sched", "ntp", "boottest", "selfcheck", "couple_map", "couple_open_map",
+                                   "features", "office", "zones", "quiet"};
 }
 
 std::string Intercom::backupText() const {
@@ -1499,6 +1790,13 @@ std::string Intercom::restoreLine(const std::string& lineIn) {
         if (std::sscanf(v.c_str(), "%u:%u", &h, &m) != 2 || h > 23 || m > 59) return "selfcheck: not a time";
         hal_.store->saveText("selfcheck", v);
         loadSelfCheck();
+        return "";
+    }
+    if (k == "features" || k == "office" || k == "zones" || k == "quiet") {
+        for (char ch : v)
+            if (ch < ' ' || ch > '~') return k + ": bad character";
+        hal_.store->saveText(k.c_str(), v);
+        loadFeatures();
         return "";
     }
     if (k == "ntp" || k == "boottest") {
@@ -1626,15 +1924,32 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         logf("web console talk ended");
     }
     const bool web = webState_ == 2;
-    bool talk = (((held & talkBit) || talkFrames_) && !setup_.active() && !muted()) || web;
+    // Silent help call: this room's microphone goes to the acting office unit, as an answer only it plays.
+    const bool silentTx = silentTxUntil_ && frame_ < silentTxUntil_ && actingOffice() != 0 && actingOffice() != unit_.room;
+    bool talk = (((held & talkBit) || talkFrames_) && !setup_.active() && !muted()) || web || silentTx;
     // OFFICE (front): held while a call or ring waits = answer it (as TALK); otherwise a press calls the
     // office (again = cancel). After a missed call it calls the office back.
     const bool office = (held & (1u << kBtnOffice)) && !setup_.active();
     if (office && canAnswer()) {
         if (!muted()) talk = true;
     } else if (office && !officeDown_) {
-        setCallingOffice(!callingOffice_, "OFFICE");
+        if (silentHelp()) setSilent(false, "OFFICE pressed");
+        else setCallingOffice(!callingOffice_, "OFFICE");
+        officeSince_ = frame_;
+    } else if (office && officeSince_ && frame_ - officeSince_ == kUrgentHoldFrames && feature(kFeatReason)) {
+        // held 1.5 s: "help needed" (a short press is a question)
+        const bool was = callingOffice_;
+        urgent_ = true;
+        if (was) {
+            event(EventKind::Fault, unit_.room, "room %u: HELP NEEDED (OFFICE held)", unsigned(unit_.room));
+            sendStatus();
+        } else {
+            setCallingOffice(true, "OFFICE held");
+        }
+    } else if (office && officeSince_ && frame_ - officeSince_ == kSilentHoldFrames && feature(kFeatSilent)) {
+        setSilent(true, "OFFICE held 5 s");
     }
+    if (!office) officeSince_ = 0;
     officeDown_ = office;
     // DOWN held 2 s (outside setup) = call the office too (under the cover); again = cancel. Gives up after 5 min.
     if (held == (1u << kBtnDown) && !setup_.active()) {
@@ -1651,22 +1966,30 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         transmitting_ = talk;
         talkSince_ = talk ? frame_ : 0;
         if (talk) {  // who this transmission goes to
-            if (web) {  // web console: the target picked on the school page
-                static const uint8_t wflags[] = {kAudioAllCall, 0, kAudioFloor, kAudioGroupCall};
+            if (silentTx && !web && !(held & talkBit)) {
+                txTarget_ = actingOffice();
+                txFlags_ = kAudioReply;
+            } else if (web) {  // web console: the target picked on the school page
+                static const uint8_t wflags[] = {kAudioAllCall, 0, kAudioFloor, kAudioGroupCall, kAudioZone};
                 txTarget_ = webTarget_.kind == TalkTarget::All ? 0 : webTarget_.n;
                 txFlags_ = wflags[webTarget_.kind];
             } else if (canAnswer()) {
                 txTarget_ = callFrom_.room;  // 0 = the office console
                 txFlags_ = kAudioReply;
             } else {
-                static const uint8_t flags[] = {kAudioAllCall, 0, kAudioFloor, kAudioGroupCall};
+                static const uint8_t flags[] = {kAudioAllCall, 0, kAudioFloor, kAudioGroupCall, kAudioZone};
                 txTarget_ = talkTarget_.kind == TalkTarget::All ? 0 : talkTarget_.n;
                 txFlags_ = flags[talkTarget_.kind];
+                // The acting office unit, with rooms waiting: TALK answers the first in the queue.
+                if (feature(kFeatQueue) && talkTarget_.kind == TalkTarget::All && office_ && !waiting_.empty() && actingOffice() == unit_.room) {
+                    txTarget_ = callQueue()[0].room;
+                    txFlags_ = 0;
+                }
             }
         }
         sendStatus();
     }
-    if (talk && txFlags_ == kAudioReply) {  // keep the conversation open while answering
+    if (talk && txFlags_ == kAudioReply && !silentTx) {  // keep the conversation open while answering
         callLast_ = frame_;
         callAnswered_ = true;
     }
@@ -1756,7 +2079,8 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         }
     }
     playing_ = n;
-    float gainDb = params_.volumeDb + ((transmitting_ && params_.duck) ? params_.duckDb : 0.0f);
+    float gainDb = params_.volumeDb + ((transmitting_ && params_.duck) ? params_.duckDb : 0.0f) +
+                   (emerg_ == Emergency::None ? quietNowDb_ : 0.0f);  // quiet hours, never during an emergency
     if (groupTalking() && !transmitting_) n = 0;  // another unit in this room is talking (see receive())
     if (n) mixer_.mix(in, n, std::pow(10.0f, gainDb / 20.0f), speaker);
     else std::memset(speaker, 0, sizeof(int16_t) * kFrameSamples);
@@ -1769,6 +2093,7 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         }
     }
     // Timed events: a waiting chime plays once nobody is talking (up to 60 s late); a call or all-call cuts one.
+    if (frame_ % kStatusEveryFrames == 0) everySecond();
     if (frame_ % kStatusEveryFrames == 0) checkSchedule();
     const bool busy = n > 0 || transmitting_ || inCall();
     if (frame_ % kStatusEveryFrames == 0) checkSelfCheck(busy);
@@ -1784,7 +2109,17 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         logf("timed event skipped: a call lasted over a minute");
     }
     if (soundActive_) {  // the call chime or a timed sound, mixed in before the echo canceller's reference
-        soundActive_ = renderSound(sound_, soundPos_, speaker, kFrameSamples);
+        if (quietNowDb_ < 0) {  // quiet hours turn chimes and bells down too (the emergency signals never)
+            int16_t tmp[kFrameSamples] = {};
+            soundActive_ = renderSound(sound_, soundPos_, tmp, kFrameSamples);
+            const float g = std::pow(10.0f, quietNowDb_ / 20.0f);
+            for (int i = 0; i < kFrameSamples; i++) {
+                int v = speaker[i] + int(float(tmp[i]) * g);
+                speaker[i] = int16_t(v > 32767 ? 32767 : v < -32767 ? -32767 : v);
+            }
+        } else {
+            soundActive_ = renderSound(sound_, soundPos_, speaker, kFrameSamples);
+        }
         soundPos_ += kFrameSamples;
     }
     if (emerg_ != Emergency::None && frame_ < emergSoundUntil_) {

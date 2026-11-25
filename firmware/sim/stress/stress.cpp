@@ -201,7 +201,7 @@ struct Unit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFirmwa
 // --------------------------------------------------------------------------------- random commands
 static const char* kWords[] = {
     "boottest", "cal", "callofc", "couple", "dayoff", "defaults", "get", "group", "help", "lamp", "load", "mute", "netkey",
-    "ntp", "log", "selfcheck", "emergency", "backup", "restore", "play", "reboot", "ring", "save", "sched", "selftest", "send", "set", "skip", "stats", "talk", "testpass", "tests",
+    "ntp", "feature", "office", "zone", "dnd", "quiet", "silent", "help", "reason", "queue", "zones", "failover", "log", "selfcheck", "emergency", "backup", "restore", "play", "reboot", "ring", "save", "sched", "selftest", "send", "set", "skip", "stats", "talk", "testpass", "tests",
     "time", "tone", "tz", "undo", "unit", "version", "webpass", "wifi", "netupdate", "run", "open", "closed", "off", "on", "all", "floor",
     "room", "add", "del", "list", "clear", "bell", "chime", "alarm", "white", "ir", "other", "rgb", "download", "opus", "vol",
     "gain", "taps", "mu", "nlp", "duck", "-", "?", "status", "stop", "map", "show", "now", "mon", "tue", "sat", "daily",
@@ -480,6 +480,10 @@ static bool chaosRun(uint32_t seed, int seconds, bool verbose) {
     for (auto& u : units) {
         u->ic->command("defaults");
         u->ic->command("mute off");
+        u->ic->command("feature all off");
+        u->ic->command("dnd off");
+        u->ic->command("callofc off");
+        u->ic->command("emergency clear");
         u->ic->command(u->id0.room >= 296 ? "group 299" : "group 0");
         TalkTarget all;
         u->ic->setTalkTarget(all);

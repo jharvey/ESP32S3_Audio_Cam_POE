@@ -55,7 +55,7 @@ size_t encodeStatus(const StatusPacket& s, uint8_t* out) {
     out[8] = uint8_t(s.power);
     out[9] = s.battery;
     out[10] = s.flags;
-    out[11] = uint8_t(s.fault);
+    out[11] = uint8_t(uint8_t(s.fault) | uint8_t(s.flags2 << 4));
     put32(out + 12, s.uptimeS);
     put32(out + 16, s.unitUid);
     put16(out + 20, s.group);
@@ -152,7 +152,8 @@ bool decodeStatus(const uint8_t* buf, size_t len, StatusPacket* s) {
     s->group = get16(buf + 20);
     s->fwVer = uint16_t(get16(buf + 22) & 0x3fff);
     s->emergency = uint8_t(get16(buf + 22) >> 14);
-    s->fault = buf[11] <= uint8_t(Fault::Overload) ? Fault(buf[11]) : Fault::None;
+    s->fault = (buf[11] & 0x0f) <= uint8_t(Fault::Overload) ? Fault(buf[11] & 0x0f) : Fault::None;
+    s->flags2 = uint8_t(buf[11] >> 4);
     return true;
 }
 

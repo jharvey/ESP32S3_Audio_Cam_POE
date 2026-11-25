@@ -320,6 +320,28 @@ tested without one.
 - **Camera, emergencies only.** `/api/cam.jpg` gives a picture only while an emergency is on at that unit,
   and each viewing goes into the event log. The camera is powered only then. The unit page shows it.
 
+## Optional features (R3.2)
+
+Status: 32 checks in the simulator's self-test, fuzzer and chaos test run over the new commands, ESP32
+build compiles. Not yet run on a board; the page controls have not been tried in a browser.
+
+Every feature here is **off** until it is switched on: `feature NAME on` on the USB console, the tick
+boxes under "Features" on the school page (they set this unit and send to all), or a signed network
+command (`send all feature dnd on`). `feature` lists them; `feature all on|off` sets all seven.
+
+| Feature | What it does | Commands |
+|---|---|---|
+| `reason` | OFFICE held 1.5 s calls the office as "help needed" (display `HLP`); a short press stays a question. | `callofc help` |
+| `queue` | Rooms calling the office wait in order: silent help, then help, then longest wait. The school page lists them; the office unit shows the first room's number (third dot lit) and its TALK answers that room. | |
+| `zones` | Up to 8 named sets of rooms to page. | `zone 1 east 101-112,201`, `zone 1 off`, `talk 5 zone 1` |
+| `dnd` | Do not disturb for 1 to 240 minutes (exams): calls from rooms and timed bells are not played; the office and emergencies still are. Display `dnd`. | `dnd 45`, `dnd off` |
+| `quiet` | Quieter between two times of day (over midnight too). Calls, chimes and bells are turned down; emergency signals never are. | `quiet 18:00 07:00 -12`, `quiet off` |
+| `silent` | OFFICE held 5 s: a silent help call. Nothing sounds or shows in the room except the small "sending" dot; its microphone goes to the office unit for 2 minutes; no call is played in that room meanwhile. Ends on OFFICE, when the office clears it (`callofc off`), or after 30 minutes. This is a live microphone: decide on it as school policy before switching it on. | `callofc silent` |
+| `failover` | While the office unit is offline, the stand-in acts as the office: it gets the queue and the silent calls. | `office 105 104` |
+
+`office ROOM [STAND-IN]` names the office unit and its stand-in on every unit (send it to all). Zones,
+the office, quiet hours and the switches are part of the settings backup.
+
 ## USB updates and first-time setup
 
 `tools/update-unit.bat` makes each room visit one command.

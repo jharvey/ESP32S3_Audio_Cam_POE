@@ -49,6 +49,7 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 <option value="room">The selected room</option><option value="floor">The selected room's floor</option></select>
 <button id="talk" title="Hold the button (or the space bar) and speak">Hold to talk to everyone</button>
 <div class="meterbox"><div id="tmeter"></div></div><span id="tstate" class="mute">Uses this PC's microphone. Rooms answer on the office unit.</span></div>
+<div id="queue"></div>
 <div id="plan"></div>
 <div id="rooms"></div>
 <div class="panels">
@@ -57,6 +58,17 @@ main{padding:14px;max-width:1300px;margin:0 auto}
  <div id="estate" class="mute">…</div>
  <div class="mute">Every unit plays the signal (and its recorded message, if it has one) for a minute, evacuate for five. Then it stays
  quiet with its display and alarm light on until All clear. Talking from this page still gets through.</div></section>
+<section class="panel"><h2>Features</h2>
+ <div class="prow" id="feats"></div>
+ <div class="mute">Each feature is off until ticked. A tick sets it on this unit and sends it to all units.</div>
+ <div class="prow">Office unit <input type="number" id="ofc" min="1" max="999" style="width:5em"> stand-in <input type="number" id="ofc2" min="1" max="999" style="width:5em">
+ <button id="ofcset">Set on all units</button><span class="mute" id="ofcnow"></span></div>
+ <div class="prow">Quiet hours <input type="time" id="q1" value="18:00"> to <input type="time" id="q2" value="07:00"> by
+ <input type="number" id="qdb" value="-12" min="-30" max="0" style="width:5em"> dB <button id="qset">Set on all units</button><button id="qoff">Off</button></div>
+ <div class="prow">Zone <input type="number" id="zn" min="1" max="8" value="1" style="width:4em"><input id="zname" placeholder="east" size="8">
+ <input id="zrooms" placeholder="101-112,201" size="16"><button id="zset">Set on all units</button><button id="zdel">Remove</button></div>
+ <div class="prow">The selected room: <button id="dnd45">Do not disturb 45 min</button><button id="dndoff">End it</button>
+ <button id="helpclr">Clear its call for help</button></div></section>
 <section class="panel"><h2>Log: faults and calls</h2>
  <div class="prow"><select id="lkind"><option value="">Faults and calls</option><option value="0">Faults</option><option value="1">Calls</option>
  <option value="all">Everything</option></select><span class="mute">Seen by this unit since it started. Newest first.</span></div>
@@ -94,9 +106,12 @@ function card(u){
   d.push(u.power==="battery"?"battery "+u.battery+"%":"PoE");
   if(u.group&&u.group!==u.room)d.push("group "+u.group);
   if(u.fw&&selfFw&&u.fw!==selfFw)d.push("firmware "+u.fw);
+  if(u.flags2&1)d.push("do not disturb");
   const f=u.flags;
   if(!u.online){cls="bad";st="OFFLINE";d=["last heard "+u.age_s.toFixed(0)+" s ago"];}
   else if(u.emergency){cls="bad";st="EMERGENCY: "+EMERG[u.emergency];}
+  else if(u.flags2&2){cls="bad";st="SILENT HELP CALL";}
+  else if((f&32)&&(f&128)){cls="bad";st="HELP NEEDED";}
   else if(f&32){cls="call";st="CALLING THE OFFICE";}
   else if(f&64){cls="bad";st="SELF-CHECK FAILED";}
   else if(u.fault===4||u.fault===5||u.fault===3||(f&16)){cls="bad";st=(f&16)?"TALK HELD >2 min":FAULT[u.fault];}
@@ -121,13 +136,42 @@ async function tick(){
     const floors={};for(const u of us){const fl=Math.floor(u.room/100);(floors[fl]=floors[fl]||[]).push(u);}
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
-    lastSchool=j;selfFw=j.fw||"";
+    lastSchool=j;selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);drawZones((j.features&4)?j.zones||[]:[]);
+    document.getElementById("ofcnow").textContent=j.office?"Now: office "+j.office+(j.standin?", stand-in "+j.standin:"")+", acting "+j.acting:"No office unit set.";
     {const em=us.filter(u=>u.online&&u.emergency);
      document.getElementById("estate").textContent=em.length?EMERG[em[0].emergency]+" on "+em.length+" of "+c.on+" units online":"No emergency.";}
     if(window.planUpdate)planUpdate(us);  // floor plan map (/floorplan.js)
   }catch(e){document.getElementById("err").textContent="Can't reach the unit: "+e.message;}
 }
 tick();setInterval(tick,2000);
+
+// ---- Features (R3.2): switches, office and stand-in, quiet hours, zones, the waiting queue ----------
+const FEATS=[["reason","Help needed: OFFICE held 1.5 s (a short press is a question)"],["queue","Call queue: rooms wait in order, help first"],
+  ["zones","Zones: page a set of rooms"],["dnd","Do not disturb for a room"],["quiet","Quiet hours"],
+  ["silent","Silent help call: OFFICE held 5 s, the office hears the room"],["failover","Stand-in office unit"]];
+let featBits=-1,zoneSig="";
+function drawFeats(bits){if(bits===featBits)return;featBits=bits;
+  document.getElementById("feats").innerHTML=FEATS.map((f,i)=>`<label style="display:block"><input type="checkbox" data-f="${f[0]}" ${bits&(1<<i)?"checked":""}> ${f[1]}</label>`).join("");}
+async function both(c){const r=await cmd(c);out("> "+c+"   ("+r+")");return sendTo("all",c);}
+document.getElementById("feats").addEventListener("change",async e=>{const f=e.target.dataset.f;if(!f)return;
+  if(f==="silent"&&e.target.checked&&!confirm("A silent help call opens the room's microphone to the office for 2 minutes with no sound in the room. Switch it on for all units?")){e.target.checked=false;return;}
+  await both("feature "+f+(e.target.checked?" on":" off"));featBits=-1;});
+function drawQueue(q){
+  document.getElementById("queue").innerHTML=q.length?'<div class="floor">Waiting for the office</div><div class="grid">'+q.map((w,i)=>
+    `<div class="room ${w.silent||w.urgent?"bad":"call"}"><b>${i+1}. Room ${w.room}</b><div class="st">${w.silent?"SILENT HELP CALL":w.urgent?"HELP NEEDED":"question"}</div><div class="d">waiting ${w.wait_s} s</div></div>`).join("")+"</div>":"";}
+function drawZones(zs){const sig=JSON.stringify(zs);if(sig===zoneSig)return;zoneSig=sig;const s=document.getElementById("tkind");
+  [...s.querySelectorAll("option[data-z]")].forEach(o=>o.remove());
+  for(const z of zs){const o=document.createElement("option");o.value="zone:"+z.n;o.dataset.z="1";o.textContent="Zone "+z.n+": "+z.name+" ("+z.rooms+")";s.appendChild(o);}}
+const val=id=>document.getElementById(id).value.trim();
+document.getElementById("ofcset").onclick=()=>{if(val("ofc"))both("office "+val("ofc")+(val("ofc2")?" "+val("ofc2"):""));};
+document.getElementById("qset").onclick=()=>{if(val("q1")&&val("q2"))both("quiet "+val("q1")+" "+val("q2")+" "+(val("qdb")||"-12"));};
+document.getElementById("qoff").onclick=()=>both("quiet off");
+document.getElementById("zset").onclick=()=>{if(val("zn")&&val("zname")&&val("zrooms"))both("zone "+val("zn")+" "+val("zname")+" "+val("zrooms"));};
+document.getElementById("zdel").onclick=()=>{if(val("zn"))both("zone "+val("zn")+" off");};
+function selCmd(c){if(!selRoom){out("Click a room first.");return;}sendTo(String(selRoom.room),c);}
+document.getElementById("dnd45").onclick=()=>selCmd("dnd 45");
+document.getElementById("dndoff").onclick=()=>selCmd("dnd off");
+document.getElementById("helpclr").onclick=()=>selCmd("callofc off");
 
 // ---- Emergency, event log, nightly self-check (R3.1) --------------------------------------------
 async function emerg(kind,ask){if(!confirm(ask))return;const r=await cmd("emergency "+kind+" all");out("> emergency "+kind+"   ("+r+")");tick();}
@@ -160,13 +204,14 @@ let ctx=null,stream=null,src=null,proc=null,talking=false,chunks=[],have=0,busy=
 let selRoom=null,to="all",toText="everyone";
 function updTarget(){
   const k=document.getElementById("tkind").value;
-  if(k!=="all"&&!selRoom){to="all";toText="everyone (click a room first)";}
+  if(k.startsWith("zone:")){to=k;toText="zone "+k.slice(5);}
+  else if(k!=="all"&&!selRoom){to="all";toText="everyone (click a room first)";}
   else if(k==="room"){to=selRoom.group&&selRoom.group!==selRoom.room?"group:"+selRoom.group:"room:"+selRoom.room;
     toText=selRoom.group&&selRoom.group!==selRoom.room?"room group "+selRoom.group:"room "+selRoom.room;}
   else if(k==="floor"){const f=Math.floor(selRoom.room/100);to="floor:"+f;toText="floor "+f;}
   else{to="all";toText="everyone";}
   document.getElementById("talk").textContent=(to==="all"?"Hold to talk to ":"Hold to call ")+toText.replace(" (click a room first)","");
-  if(!talking&&k!=="all"&&!selRoom)setState("Click a room to pick it.","st");
+  if(!talking&&k!=="all"&&!k.startsWith("zone:")&&!selRoom)setState("Click a room to pick it.","st");
 }
 document.getElementById("rooms").addEventListener("click",e=>{
   const c=e.target.closest(".room");if(!c||talking)return;

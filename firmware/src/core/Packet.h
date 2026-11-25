@@ -46,6 +46,7 @@ enum AudioFlags : uint8_t {
     kAudioFromConsole = 0x02,
     kAudioFloor = 0x04,      // target = a floor (room / 100): every unit on that floor plays it
     kAudioGroupCall = 0x08,  // target = a room group: every unit in the group plays it
+    kAudioZone = 0x20,       // target = a zone number: every unit whose room is in that zone plays it (R3.2)
     kAudioReply = 0x10,      // an answer to a call: only the caller (target = its room; 0 = the office console)
 };
 enum StatusFlags : uint8_t {
@@ -56,13 +57,19 @@ enum StatusFlags : uint8_t {
     kStatusTalkHeld = 0x10,  // TALK held for over 2 minutes: stuck button or something on it
     kStatusCalling = 0x20,   // the room is calling the office (DOWN held 2 s)
     kStatusAudioFault = 0x40,  // the last speaker->microphone self-check failed (R3.1)
+    kStatusUrgent = 0x80,      // with kStatusCalling: "help needed", not a question (R3.2)
+};
+// More status bits (R3.2), carried in the high half of the fault byte (older firmware reads that as "no fault").
+enum StatusFlags2 : uint8_t {
+    kStatus2Dnd = 0x01,     // do not disturb: only the office gets through
+    kStatus2Silent = 0x02,  // silent help call
 };
 // Status fault byte: what the unit's display is flashing.
 enum class Fault : uint8_t { None = 0, NoEthernet = 1, NoNetwork = 2, LowBattery = 3, Duplicate = 4, Overload = 5 };
 
 // Who TALK reaches (office unit / bring-up). A unit answering a call always replies to the caller only.
 struct TalkTarget {
-    enum Kind : uint8_t { All = 0, Room = 1, Floor = 2, Group = 3 } kind = All;
+    enum Kind : uint8_t { All = 0, Room = 1, Floor = 2, Group = 3, Zone = 4 } kind = All;
     uint16_t n = 0;  // room, floor or group number
 };
 
@@ -88,6 +95,7 @@ struct StatusPacket {
     Fault fault = Fault::None;
     uint16_t fwVer = 0;     // firmware version, packVersion(); 0 = older firmware that does not send it
     uint8_t emergency = 0;  // 0 none, 1 lockdown, 2 evacuate, 3 shelter (R3.1)
+    uint8_t flags2 = 0;     // StatusFlags2 (R3.2)
 };
 // "0.5.0" <-> 14 bits (major 0-15, minor 0-31, patch 0-31), carried in the status packet.
 uint16_t packVersion(const char* text);

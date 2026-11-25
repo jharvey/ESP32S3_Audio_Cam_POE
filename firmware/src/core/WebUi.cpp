@@ -143,7 +143,8 @@ HttpResponse WebUi::handle(const HttpRequest& req) {
             if (kind == "room") tt.kind = TalkTarget::Room;
             else if (kind == "floor") tt.kind = TalkTarget::Floor;
             else if (kind == "group") tt.kind = TalkTarget::Group;
-            else if (kind != "all") return text(400, "to= must be all, room:N, floor:N or group:N");
+            else if (kind == "zone") tt.kind = TalkTarget::Zone;
+            else if (kind != "all") return text(400, "to= must be all, room:N, floor:N, group:N or zone:N");
             if (tt.kind != TalkTarget::All && (n < 1 || n > 999)) return text(400, "bad room / floor / group number");
             tt.n = uint16_t(n);
         }
@@ -355,10 +356,10 @@ std::string WebUi::schoolJson() {
         formatIp(st.from, ip);
         snprintf(buf, sizeof(buf),
                  "{\"unit\":\"%s\",\"room\":%u,\"ip\":\"%s\",\"group\":%u,\"link\":\"%s\",\"power\":\"%s\",\"battery\":%u,"
-                 "\"flags\":%u,\"fault\":%u,\"online\":%s,\"age_s\":%.1f,\"fw\":\"%s\",\"emergency\":%u}",
+                 "\"flags\":%u,\"fault\":%u,\"online\":%s,\"age_s\":%.1f,\"fw\":\"%s\",\"emergency\":%u,\"flags2\":%u}",
                  u, unsigned(st.from.room), ip, unsigned(st.group ? st.group : st.from.room), linkName(st.link),
                  st.power == PowerSource::Battery ? "battery" : "poe", unsigned(st.battery), unsigned(st.flags),
-                 unsigned(st.fault), online ? "true" : "false", ageS, versionText(st.fwVer).c_str(), unsigned(st.emergency));
+                 unsigned(st.fault), online ? "true" : "false", ageS, versionText(st.fwVer).c_str(), unsigned(st.emergency), unsigned(st.flags2));
         return std::string(buf);
     };
     // this unit too
@@ -371,11 +372,29 @@ std::string WebUi::schoolJson() {
     me.flags = ic_.statusFlags();
     me.fwVer = packVersion(kFirmwareVersion);
     me.emergency = uint8_t(ic_.emergency());
+    me.flags2 = ic_.statusFlags2();
+    // R3.2: feature switches, the office and who acts as it, zones, and the rooms waiting for the office
+    std::string extra = "\"features\":" + std::to_string(ic_.features()) + ",\"office\":" + std::to_string(ic_.officeRoom()) +
+                        ",\"standin\":" + std::to_string(ic_.officeStandIn()) + ",\"acting\":" + std::to_string(ic_.actingOffice()) + ",\"zones\":[";
+    bool firstX = true;
+    for (const auto& z : ic_.zones()) {
+        extra += std::string(firstX ? "" : ",") + "{\"n\":" + std::to_string(z.n) + ",\"name\":" + jsonString(z.name) + ",\"rooms\":" + jsonString(z.rooms) + "}";
+        firstX = false;
+    }
+    extra += "],\"queue\":[";
+    firstX = true;
+    if (ic_.feature(Intercom::kFeatQueue))
+        for (const auto& w : ic_.callQueue()) {
+            extra += std::string(firstX ? "" : ",") + "{\"room\":" + std::to_string(w.room) + ",\"urgent\":" + (w.urgent ? "true" : "false") +
+                     ",\"silent\":" + (w.silent ? "true" : "false") + ",\"wait_s\":" + std::to_string((now - w.since) / 50) + "}";
+            firstX = false;
+        }
+    extra += "],";
     me.fault = ic_.faultCode();
     me.group = ic_.group();
     formatUnit(me.from, u);
     std::string out = std::string("{\"self\":\"") + u + "\",\"fw\":\"" + kFirmwareVersion + "\",\"tests_locked\":" + (ic_.testsLocked() ? "true" : "false") +
-                      ",\"units\":[" + one(me, true, 0);
+                      "," + extra + "\"units\":[" + one(me, true, 0);
     for (const Peer& s : ic_.known()) {
         double age = double(now - s.lastFrame) * kFrameMs / 1000.0;
         out += "," + one(s.status, age < 5.0, age);

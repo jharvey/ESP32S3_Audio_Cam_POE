@@ -1945,6 +1945,200 @@ static void testR31() {
     g_clock0 = clock0;
 }
 
+// R3.2: the optional features and their switches.
+static void testR32() {
+    printf("R3.2: optional features (reason, queue, zones, dnd, quiet hours, silent help, office stand-in)\n");
+    const int64_t clock0 = g_clock0;
+    g_clock0 = 1795451390;  // Mon 2026-11-23 16:29:50 UTC at frame 0
+    auto has = [](FakeUnit& u, const char* text, int kind = -1) {
+        for (const auto& e : u.ic->events())
+            if (e.text.find(text) != std::string::npos && (kind < 0 || int(e.kind) == kind)) return true;
+        return false;
+    };
+    auto showed = [](FakeUnit& u, const char* text, uint8_t dot = 0) {
+        for (const auto& s : u.shown)
+            if (s.compare(0, 3, text) == 0 && (uint8_t(s[3]) & dot) == dot) return true;
+        return false;
+    };
+    const uint8_t kOffice = uint8_t(1u << kBtnOffice);
+    Bus bus;
+    FakeUnit ofc(&bus, {105, 0}, 120), prin(&bus, {104, 0}, 130), r1(&bus, {101, 0}, 140), r2(&bus, {214, 0}, 150);
+    std::vector<FakeUnit*> all = {&ofc, &prin, &r1, &r2};
+    auto run = [&](int frames) { for (int k = 0; k < frames; k++) for (auto* u : all) u->step(); };
+    run(60);
+
+    // ---- the switches ----
+    CHECK(ofc.ic->features() == 0 && r1.ic->command("dnd 10").find("feature is off") != std::string::npos &&
+              r1.ic->command("callofc help").find("feature is off") != std::string::npos &&
+              r1.ic->command("callofc silent").find("feature is off") != std::string::npos,
+          "every feature is off at first, and its command says so");
+    r1.held = kOffice;
+    run(300);
+    r1.held = 0;
+    run(30);
+    CHECK(r1.ic->callingOffice() && !r1.ic->urgent() && !r1.ic->silentHelp(), "with the features off a long OFFICE press is a plain call");
+    r1.ic->command("callofc off");
+    for (auto* u : all) {
+        u->ic->command("feature all on");
+        u->ic->command("office 105 104");
+    }
+    CHECK(r1.kv["features"] == "127" && r1.ic->command("feature").find("silent=on") != std::string::npos &&
+              r1.ic->command("feature bogus on").find("usage") != std::string::npos,
+          "feature all on is saved; an unknown name is refused");
+    CHECK(r1.ic->command("feature queue off", CmdSource::Web).find("queue=off") != std::string::npos &&
+              r1.ic->command("feature queue on", CmdSource::Network).find("queue=on") != std::string::npos,
+          "a feature can be switched from the web page and by a network command");
+    run(300);
+
+    // ---- a reason for the call, and the queue ----
+    r2.held = kOffice;
+    run(10);
+    r2.held = 0;
+    run(60);
+    CHECK(r2.ic->callingOffice() && !r2.ic->urgent(), "a short OFFICE press is a question");
+    r1.held = kOffice;
+    run(100);
+    r1.held = 0;
+    run(60);
+    CHECK(r1.ic->callingOffice() && r1.ic->urgent() && has(ofc, "room 101: HELP NEEDED", 0) && showed(r1, "\xf6LP"),
+          "OFFICE held 1.5 s is \"help needed\": display HLP, logged at the office as a fault");
+    auto q = ofc.ic->callQueue();
+    CHECK(q.size() == 2 && q[0].room == 101 && q[0].urgent && q[1].room == 214 && !q[1].urgent, "the queue puts help first, though it came later");
+    CHECK(showed(ofc, "101", 4), "the office unit shows the first waiting room");
+    ofc.ic->command("webpass s3cret-pass");
+    WebUi wo(*ofc.ic);
+    HttpRequest sq;
+    sq.method = "GET";
+    sq.path = "/api/school";
+    sq.authorization = basic("admin:s3cret-pass");
+    std::string sj = wo.handle(sq).body;
+    CHECK(sj.find("\"queue\":[{\"room\":101,\"urgent\":true") != std::string::npos && sj.find("\"features\":127") != std::string::npos &&
+              sj.find("\"office\":105,\"standin\":104,\"acting\":105") != std::string::npos,
+          "the school page gets the queue, the switches and the office");
+    ofc.held = 1;
+    run(100);
+    ofc.held = 0;
+    run(60);
+    CHECK(r1.heardFrom(ofc.id) > 80 && r2.heardFrom(ofc.id) == 0 && !r1.ic->callingOffice() && r2.ic->callingOffice(),
+          "the office unit's TALK answers the first waiting room only (101 heard %u frames, 214 %u)", r1.heardFrom(ofc.id), r2.heardFrom(ofc.id));
+    r2.ic->command("callofc off");
+    run(600);  // the answer windows close
+
+    // ---- zones ----
+    for (auto* u : all) u->ic->command("zone 1 east 101-103,214");
+    CHECK(r1.ic->command("zone").find("this room is in it") != std::string::npos && prin.ic->command("zone").find("this room") == std::string::npos &&
+              r1.ic->command("zone 9 x 1").find("usage") != std::string::npos && r1.ic->command("zone 2 bad;name 1").find("usage") != std::string::npos,
+          "zone 1 east 101-103,214 is saved; bad zones are refused");
+    uint32_t h1 = r1.heardFrom(ofc.id), h2 = r2.heardFrom(ofc.id), hp = prin.heardFrom(ofc.id);
+    ofc.ic->command("talk 2 zone 1");
+    run(160);
+    CHECK(r1.heardFrom(ofc.id) > h1 + 80 && r2.heardFrom(ofc.id) > h2 + 80 && prin.heardFrom(ofc.id) == hp, "a zone call reaches the zone's rooms only");
+    r2.ic->command("feature zones off");
+    h2 = r2.heardFrom(ofc.id);
+    ofc.ic->command("talk 2 zone 1");
+    run(160);
+    CHECK(r2.heardFrom(ofc.id) == h2, "a unit with zones switched off ignores zone calls");
+    r2.ic->command("feature zones on");
+    run(600);
+
+    // ---- do not disturb ----
+    CHECK(r2.ic->command("dnd 30").find("30 min left") != std::string::npos && r2.ic->command("dnd 999").find("usage") != std::string::npos, "dnd 30");
+    run(60);
+    h2 = r2.heardFrom(r1.id);
+    hp = prin.heardFrom(r1.id);
+    r1.held = 1;
+    run(100);
+    r1.held = 0;
+    run(60);
+    CHECK(r2.heardFrom(r1.id) == h2 && prin.heardFrom(r1.id) > hp + 80, "a room in do-not-disturb does not play another room's call");
+    h2 = r2.heardFrom(ofc.id);
+    ofc.held = 1;
+    run(100);
+    ofc.held = 0;
+    run(60);
+    CHECK(r2.heardFrom(ofc.id) > h2 + 80, "the office still gets through");
+    r2.ic->command("emergency lockdown");
+    run(20);
+    CHECK(r2.ic->speakerLevel() > 50, "and so does an emergency");
+    r2.ic->command("emergency clear");
+    CHECK(showed(r2, "dnd") && has(ofc, "room 214: do not disturb", 2) && (ofc.ic->known().size() == 3), "display dnd; the office log has it");
+    r2.ic->command("dnd off");
+    run(200);
+
+    // ---- quiet hours (the clock reads 16:3x) ----
+    CHECK(r1.ic->command("quiet 16:00 17:00 -20").find("-20 dB") != std::string::npos && r1.ic->command("quiet 16:00 17:00 5").find("usage") != std::string::npos,
+          "quiet 16:00 17:00 -20");
+    run(60);
+    r1.ic->command("play bell");
+    prin.ic->command("play bell");
+    run(20);
+    int diff = int(prin.ic->speakerLevel()) - int(r1.ic->speakerLevel());
+    CHECK(r1.ic->quietDb() == -20 && diff >= 18 && diff <= 22, "inside quiet hours the bell is 20 dB down (%d dB)", diff);
+    run(150);
+    r1.ic->command("emergency evacuate");
+    prin.ic->command("emergency evacuate");
+    run(20);
+    diff = int(prin.ic->speakerLevel()) - int(r1.ic->speakerLevel());
+    CHECK(diff >= -1 && diff <= 1 && r1.ic->speakerLevel() > 50, "the emergency signal is not turned down (%d dB)", diff);
+    r1.ic->command("emergency clear");
+    prin.ic->command("emergency clear");
+    r1.ic->command("quiet 22:00 07:00 -12");
+    run(120);
+    CHECK(r1.ic->quietDb() == 0, "outside quiet hours (22:00 to 07:00, over midnight) nothing is turned down");
+
+    // ---- silent help call ----
+    uint32_t ho = ofc.heardFrom(r2.id), hpr = prin.heardFrom(r2.id);
+    r2.held = kOffice;
+    run(260);
+    r2.held = 0;
+    run(100);
+    CHECK(r2.ic->silentHelp() && !r2.ic->callingOffice() && has(ofc, "room 214: SILENT HELP CALL", 0), "OFFICE held 5 s is a silent help call, logged at the office");
+    q = ofc.ic->callQueue();
+    CHECK(q.size() == 1 && q[0].room == 214 && q[0].silent, "it is first in the office queue");
+    CHECK(ofc.heardFrom(r2.id) > ho + 80 && prin.heardFrom(r2.id) == hpr, "the office unit hears the room, the other units do not (%u frames)",
+          ofc.heardFrom(r2.id) - ho);
+    h2 = r2.heardFrom(ofc.id);
+    ofc.held = 1;  // the office answers by reflex
+    run(100);
+    ofc.held = 0;
+    run(30);
+    CHECK(r2.heardFrom(ofc.id) == h2 && r2.ic->speakerLevel() == 0, "the room stays silent even when the office answers");
+    r2.ic->command("callofc off", CmdSource::Network);
+    run(60);
+    CHECK(!r2.ic->silentHelp() && ofc.ic->callQueue().empty(), "the office clears it");
+    run(600);
+
+    // ---- the stand-in office ----
+    r1.held = kOffice;
+    run(10);
+    r1.held = 0;
+    ofc.eth = false;  // the office unit fails
+    run(400);
+    CHECK(r1.ic->actingOffice() == 104 && prin.ic->actingOffice() == 104 && has(r1, "room 104 is acting as the office (room 105 is offline)", 0),
+          "with the office unit offline its stand-in acts as the office");
+    CHECK(showed(prin, "101", 4), "the stand-in shows the waiting room");
+    uint32_t hs = r1.heardFrom(prin.id);
+    prin.held = 1;
+    run(100);
+    prin.held = 0;
+    run(60);
+    CHECK(r1.heardFrom(prin.id) > hs + 80 && !r1.ic->callingOffice(), "its TALK answers the waiting room, and the call is done");
+    ofc.eth = true;
+    run(400);
+    CHECK(r1.ic->actingOffice() == 105 && has(r1, "room 105 is the office again", 2), "the office unit takes over again when it is back");
+    prin.ic->command("feature failover off");
+    r1.ic->command("feature failover off");
+    ofc.eth = false;
+    run(300);
+    CHECK(r1.ic->actingOffice() == 105, "with failover switched off nobody takes over");
+
+    std::string bk = r1.ic->backupText();
+    CHECK(bk.find("\nfeatures=") != std::string::npos && bk.find("\noffice=105 104\n") != std::string::npos &&
+              bk.find("\nzones=1=east:101-103,214;\n") != std::string::npos && bk.find("\nquiet=22:00 07:00 -12\n") != std::string::npos,
+          "the settings backup carries the switches, office, zones and quiet hours");
+    g_clock0 = clock0;
+}
+
 int main() {
     testBootLightTest();
     testTuning();
@@ -1953,6 +2147,7 @@ int main() {
     testWeb();
     testFirmwareUpdate();
     testR31();
+    testR32();
     testPanelDriver();
     testNetAuth();
     testBringUp();

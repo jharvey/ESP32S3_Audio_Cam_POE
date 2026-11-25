@@ -164,6 +164,39 @@ public:
     // Settings backup: "key=value" lines, without passwords and keys. restoreLine takes one such line.
     std::string backupText() const;
     std::string restoreLine(const std::string& line);  // error text or ""
+    // ---- R3.2: optional features. Each is off until "feature NAME on" (USB, web page, or a signed
+    // network command, so the office can set all units at once).
+    enum Feature : uint8_t {
+        kFeatReason = 0x01,    // OFFICE held 1.5 s = "help needed"; a short press is a question
+        kFeatQueue = 0x02,     // calls to the office wait in order; the office unit's TALK answers the first
+        kFeatZones = 0x04,     // page a named set of rooms
+        kFeatDnd = 0x08,       // do not disturb for a set time (exams); the office and emergencies still get through
+        kFeatQuiet = 0x10,     // quieter between two times of day
+        kFeatSilent = 0x20,    // OFFICE held 5 s = silent help call: no sound here, the office hears the room
+        kFeatFailover = 0x40,  // the stand-in office unit takes over while the office unit is offline
+    };
+    bool feature(Feature f) const { return (features_ & f) != 0; }
+    uint8_t features() const { return features_; }
+    uint8_t statusFlags2() const { return uint8_t((dnd() ? kStatus2Dnd : 0) | (silentHelp() ? kStatus2Silent : 0)); }
+    uint16_t officeRoom() const { return office_; }
+    uint16_t officeStandIn() const { return office2_; }
+    uint16_t actingOffice() const;  // the office unit, or its stand-in while the office unit is offline; 0 = none set
+    bool urgent() const { return urgent_ && callingOffice_; }
+    bool dnd() const { return dndUntil_ != 0; }
+    bool silentHelp() const { return silentUntil_ != 0; }
+    float quietDb() const { return quietNowDb_; }  // what quiet hours take off the volume right now (0 or negative)
+    struct Waiting {
+        uint16_t room;
+        bool urgent, silent;
+        uint32_t since;
+    };
+    std::vector<Waiting> callQueue() const;  // rooms waiting for the office: silent help first, then help, then longest wait
+    struct Zone {
+        uint8_t n;
+        std::string name, rooms;  // rooms: "101-112,201"
+    };
+    const std::vector<Zone>& zones() const { return zones_; }
+    bool inZone(uint16_t zone, uint16_t room) const;
     // Talkers heard since start, for tests: (unit key, frames played).
     const std::vector<std::pair<uint32_t, uint32_t>>& heard() const { return heard_; }
 
@@ -204,6 +237,19 @@ private:
     void startSelfTest(bool automatic);
     void checkSelfCheck(bool busy);
     void setEmergency(Emergency e, const char* why);
+    void loadFeatures();
+    void setSilent(bool on, const char* why);
+    void everySecond();
+    uint8_t features_ = 0;
+    uint16_t office_ = 0, office2_ = 0, actingWas_ = 0;
+    bool urgent_ = false;
+    uint32_t officeSince_ = 0;                     // frame OFFICE went down (for the long presses)
+    uint32_t dndUntil_ = 0;
+    uint32_t silentUntil_ = 0, silentTxUntil_ = 0;  // the flag (30 min) and the open microphone (2 min)
+    int quietFrom_ = -1, quietTo_ = -1;            // quiet hours, minutes of the day; -1 = not set
+    float quietSetDb_ = 0, quietNowDb_ = 0;
+    std::vector<Zone> zones_;
+    std::vector<Waiting> waiting_;
 
     std::vector<Event> events_;
     uint32_t eventN_ = 0;
