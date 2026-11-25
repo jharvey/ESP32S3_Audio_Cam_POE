@@ -280,8 +280,45 @@ whole image has arrived and checked out, then the unit restarts into it with its
   is dropped. On battery below 30 % it does not start.
 - **One unit at a time.** `net_update.py` stops at the first unit that fails or does not come back, so a bad
   image reaches one room, not the school.
-- **Recovery** if a unit does not come back: USB (`update-unit.bat`) or `/firmware.bin` on an SD card.
-- **Not there yet:** automatic fall-back to the old firmware if the new one crashes at start-up.
+- **Recovery** if a unit does not come back and did not fall back: USB (`update-unit.bat`) or `/firmware.bin` on an SD card.
+- **Fall-back (R3.1):** new firmware is on trial for its first minute. See the next section.
+
+## Fall-back, event log, emergency messages, self-check, backup, camera (R3.1)
+
+Status: 39 checks in the simulator's self-test, with the fuzzer and chaos test run over the new commands,
+and the ESP32 build compiles. Nothing here has run on a board yet; the camera and SD card parts cannot be
+tested without one.
+
+- **Fall-back after a bad update.** Firmware that came from an update is on trial until it has run for a
+  minute with a network link. If it crashes or hangs before that, the bootloader starts the old firmware
+  again at the next restart. If it runs but has no network link for 5 minutes, it goes back by itself.
+  A power cut in that first minute also puts the old firmware back. `net_update.py` waits for the unit to
+  confirm before it goes on to the next one. Firmware flashed over USB is not on trial.
+- **Event log.** Every unit keeps the last 200 faults and calls it saw, for the whole school: rooms going
+  offline and coming back, restarts, battery power, fault codes, failed self-checks, calls to the office,
+  missed calls, and who talked to whom for how long. `log`, `log faults`, `log calls` on the console; the
+  school page has a "Log" panel. The log is kept in memory, so a restart of that unit clears it.
+- **Firmware version per room.** Status packets carry the version; the school page names a room whose
+  firmware differs from the unit you are looking at.
+- **Emergency messages.** `emergency lockdown|evacuate|shelter|clear`, with `all` to tell every unit (USB or
+  web page; the school page has the four buttons). Needs the network key and a set clock, like `send`.
+  - Each kind has its own signal. It sounds for 1 minute (evacuate: 5), then the room is left quiet.
+  - The display shows `LoC`, `EUA` or `SHE`, the alarm light (J11) flashes and the RGB LED is red until
+    `emergency clear`. An emergency nobody clears ends by itself after 4 hours.
+  - A live voice comes first: the office can still talk to every room. Timed bells are off meanwhile.
+  - The command goes out ten times, 2 s apart, then every 30 s, so a lost packet or a unit that starts
+    late does not leave a room out.
+  - Recorded messages: put `/msg/lockdown.wav`, `/msg/evacuate.wav`, `/msg/shelter.wav` on the unit's SD
+    card (16 kHz, mono, 16-bit WAV, up to 30 s). The message plays after each signal. Loaded at start.
+- **Nightly self-check.** `selfcheck 02:30` (or the school page: "Set on all units"). At that time each
+  idle unit plays the 1 s test tone and listens for it; rooms start a few seconds apart. A failure is
+  tried once more 30 s later, then shows as "SELF-CHECK FAILED" on the school page and in the log.
+  `selfcheck off` stops it, `selfcheck now` runs one.
+- **Settings backup.** The unit page saves room number, group, tuning, timed events, self-check time and
+  coupling results to a text file and restores them on a replacement unit (`backup` / `restore key=value`
+  on the console). Passwords and keys are never in the file.
+- **Camera, emergencies only.** `/api/cam.jpg` gives a picture only while an emergency is on at that unit,
+  and each viewing goes into the event log. The camera is powered only then. The unit page shows it.
 
 ## USB updates and first-time setup
 

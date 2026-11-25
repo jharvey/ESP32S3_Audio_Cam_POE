@@ -59,8 +59,21 @@ size_t encodeStatus(const StatusPacket& s, uint8_t* out) {
     put32(out + 12, s.uptimeS);
     put32(out + 16, s.unitUid);
     put16(out + 20, s.group);
-    put16(out + 22, 0);
+    put16(out + 22, uint16_t((s.fwVer & 0x3fff) | (uint16_t(s.emergency & 3) << 14)));
     return 24;
+}
+
+uint16_t packVersion(const char* text) {
+    unsigned a = 0, b = 0, c = 0;
+    if (std::sscanf(text, "%u.%u.%u", &a, &b, &c) < 2) return 0;
+    return uint16_t(((a & 15) << 10) | ((b & 31) << 5) | (c & 31));
+}
+
+std::string versionText(uint16_t v) {
+    if (!v) return "";
+    char buf[16];
+    snprintf(buf, sizeof(buf), "%u.%u.%u", (unsigned(v) >> 10) & 15, (unsigned(v) >> 5) & 31, unsigned(v) & 31);
+    return buf;
 }
 
 size_t encodeAudioData(const AudioHeader& h, const uint8_t* data, size_t len, uint8_t* out) {
@@ -137,6 +150,8 @@ bool decodeStatus(const uint8_t* buf, size_t len, StatusPacket* s) {
     s->uptimeS = get32(buf + 12);
     s->unitUid = get32(buf + 16);
     s->group = get16(buf + 20);
+    s->fwVer = uint16_t(get16(buf + 22) & 0x3fff);
+    s->emergency = uint8_t(get16(buf + 22) >> 14);
     s->fault = buf[11] <= uint8_t(Fault::Overload) ? Fault(buf[11]) : Fault::None;
     return true;
 }

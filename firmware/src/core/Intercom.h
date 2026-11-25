@@ -34,6 +34,10 @@ struct IntercomOptions {
     std::function<int64_t()> utcNow;
     // Restarts the unit ("reboot"); download = into the ROM's USB flashing mode. Empty = not available.
     std::function<void(bool download)> restart;
+    // R3.1
+    bool hasCamera = false;   // the board can take a picture (the web page asks for one only in an emergency)
+    std::string bootNote;     // why the unit started ("power on", "crash", "old firmware restored ..."), for the log
+    bool bootFault = false;   // ...and whether that is a fault (crash, watchdog, brown-out, fall-back)
 };
 
 struct AudioStats {
@@ -49,6 +53,7 @@ enum class CmdSource : uint8_t { Local = 0, Network = 1, Web = 2 };
 struct Peer {
     StatusPacket status;
     uint32_t lastFrame = 0;
+    bool offlineLogged = false;  // "offline" went into the event log: "back online" follows
 };
 
 class Intercom {
@@ -134,6 +139,31 @@ public:
     bool bootTesting() const { return bootT0_ != 0; }
     Codec sendCodec() const { return encoder_ ? encoder_->codec() : Codec::Pcm16; }
     AudioStats audioStats() const;
+    // ---- R3.1 ----
+    // Event log: faults and calls this unit saw: its own, and every other unit's (from their status
+    // packets and the call audio on the network). Newest last, the last 200. Kept in memory only.
+    enum class EventKind : uint8_t { Fault = 0, Call = 1, Info = 2 };
+    struct Event {
+        uint32_t n;
+        int64_t utc;     // 0 = the clock was not set yet (frame tells how long after start)
+        uint32_t frame;
+        EventKind kind;
+        uint16_t room;
+        std::string text;
+    };
+    const std::vector<Event>& events() const { return events_; }
+    // Emergency messages: a signal (and a recorded message, if the board has one) above bells and chimes.
+    enum class Emergency : uint8_t { None = 0, Lockdown = 1, Evacuate = 2, Shelter = 3 };
+    Emergency emergency() const { return emerg_; }
+    bool audioFault() const { return audioFault_; }  // the last speaker->microphone self-check failed
+    uint8_t statusFlags() const;                     // StatusFlags of this unit, as sent in its status packet
+    // The camera is for emergencies only: a picture is given out only while one is on at this unit.
+    bool hasCamera() const { return opt_.hasCamera; }
+    bool cameraAllowed() const { return opt_.hasCamera && emerg_ != Emergency::None; }
+    void noteCameraView();  // writes "camera viewed" into the event log (at most once a minute)
+    // Settings backup: "key=value" lines, without passwords and keys. restoreLine takes one such line.
+    std::string backupText() const;
+    std::string restoreLine(const std::string& line);  // error text or ""
     // Talkers heard since start, for tests: (unit key, frames played).
     const std::vector<std::pair<uint32_t, uint32_t>>& heard() const { return heard_; }
 
@@ -167,6 +197,36 @@ private:
     void saveSchedule();
     std::string schedCommand(const std::vector<std::string>& a);
     void refreshPower();
+    void event(EventKind k, uint16_t room, const char* fmt, ...);
+    void peerEvents(const StatusPacket* old, const StatusPacket& s, bool backOnline);
+    void noteTalk(const AudioHeader& h);
+    void loadSelfCheck();
+    void startSelfTest(bool automatic);
+    void checkSelfCheck(bool busy);
+    void setEmergency(Emergency e, const char* why);
+
+    std::vector<Event> events_;
+    uint32_t eventN_ = 0;
+    struct HeardCall {
+        UnitId from;
+        uint16_t target;
+        uint8_t flags;
+        uint32_t first, last;
+    };
+    std::vector<HeardCall> heardCalls_;  // transmissions on the network right now (for the call log)
+    bool powerKnown_ = false, wasLow_ = false;
+    PowerSource lastSource_ = PowerSource::PoE;
+    int selfMin_ = -1;           // nightly self-check: minute of the day, -1 = off
+    uint32_t selfDay_ = 0;       // yyyymmdd it last ran
+    uint32_t selfRetryAt_ = 0;   // a failed nightly check runs once more at this frame
+    bool testAuto_ = false, selfRetried_ = false, audioFault_ = false;
+    Emergency emerg_ = Emergency::None;
+    uint32_t emergSince_ = 0, emergSoundUntil_ = 0, emergPos_ = 0;
+    int emergTxKind_ = -1;       // -1 = not telling the other units; else the Emergency being sent to all
+    uint32_t emergTxNext_ = 0;
+    int emergTxCount_ = 0;
+    uint32_t camNotedAt_ = 0;
+    bool fwChecked_ = false;     // the running firmware was confirmed (or given up on)
 
     Hal hal_;
     EchoCanceller& aec_;

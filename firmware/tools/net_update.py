@@ -12,6 +12,8 @@ Calls come first: while a unit talks or plays, the transfer waits.
 
 The password comes from --password, the INTERCOM_WEBPASS environment variable, or a prompt.
 One unit at a time on purpose: if an image turns out bad, it stops at the first unit.
+New firmware is on trial for its first minute (a crash puts the old one back); the script waits for the
+unit to confirm it before going on, so each unit takes about a minute longer. --no-wait skips that.
 """
 
 import argparse
@@ -71,7 +73,7 @@ class Unit:
         return json.loads(text), ""
 
 
-def update(unit, image, name):
+def update(unit, image, name, wait=True):
     info, err = unit.version()
     if info is None:
         return "no answer: " + err
@@ -112,10 +114,29 @@ def update(unit, image, name):
     for _ in range(30):
         info, _ = unit.version()
         if info is not None:
-            print("  %s: %s -> %s in %.0f s" % (name, old, info.get("version", "?"), time.time() - t0))
-            return ""
+            break
         time.sleep(1)
-    return "written, but the unit did not come back within 30 s"
+    else:
+        return "written, but the unit did not come back within 30 s"
+    new = info.get("version", "?")
+    if wait and info.get("pending"):
+        # New firmware is on trial for its first minute: a crash or a hang in that time, or no network
+        # link, puts the old firmware back. Wait until the unit says it is confirmed.
+        print("  %s: %s -> %s, on trial for a minute ..." % (name, old, new), flush=True)
+        t1 = time.time()
+        while time.time() - t1 < 150:
+            time.sleep(5)
+            info, _ = unit.version()
+            if info is not None and not info.get("pending"):
+                break
+        if info is None:
+            return "restarted into %s, then stopped answering" % new
+        if info.get("pending"):
+            return "still on trial after 2.5 minutes"
+        if info.get("version") != new:
+            return "went back to %s: the new firmware did not get through its first minute" % info.get("version")
+    print("  %s: %s -> %s in %.0f s" % (name, old, info.get("version", "?"), time.time() - t0))
+    return ""
 
 
 def main():
@@ -125,6 +146,7 @@ def main():
     p.add_argument("--host", help="address[:port] to use instead of 10.42.<floor>.<room> (one room only)")
     p.add_argument("--password", help="web password (or INTERCOM_WEBPASS, or a prompt)")
     p.add_argument("--info", action="store_true", help="only show each unit's firmware version")
+    p.add_argument("--no-wait", action="store_true", help="don't wait out the new firmware's one-minute trial")
     p.add_argument("--keep-going", action="store_true", help="carry on with the next unit after a failure")
     a = p.parse_args()
     rooms = rooms_of(a.rooms)
@@ -149,7 +171,7 @@ def main():
             print("  %s: %s" % (name, ("firmware %s, updates %s" % (info.get("version"), "on" if info.get("allowed") else "off"))
                                 if info else "no answer: " + err))
             continue
-        err = update(unit, image, name)
+        err = update(unit, image, name, not a.no_wait)
         if err:
             print("  %s: FAILED: %s" % (name, err))
             failed.append(room)

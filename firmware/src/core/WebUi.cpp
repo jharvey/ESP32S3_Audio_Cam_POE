@@ -177,6 +177,62 @@ HttpResponse WebUi::handle(const HttpRequest& req) {
         r.body = statusJson();
         return r;
     }
+    if (path == "/api/log") {  // ?since=N: the events after number N
+        uint32_t since = 0;
+        size_t q = req.path.find("since=");
+        if (q != std::string::npos) since = uint32_t(std::strtoul(req.path.c_str() + q + 6, nullptr, 10));
+        const auto& ev = ic_.events();
+        if (!ev.empty() && since > ev.back().n) since = 0;  // the unit restarted since the page last asked
+        std::string out = "{\"events\":[";
+        bool first = true;
+        uint32_t last = ev.empty() ? 0 : since;
+        for (const auto& e : ev) {
+            if (e.n <= since) continue;
+            out += std::string(first ? "" : ",") + "{\"n\":" + std::to_string(e.n) + ",\"utc\":" + std::to_string((long long)e.utc) +
+                   ",\"up_s\":" + std::to_string(e.frame / 50) + ",\"kind\":" + std::to_string(int(e.kind)) + ",\"room\":" +
+                   std::to_string(e.room) + ",\"text\":" + jsonString(e.text) + "}";
+            first = false;
+            last = e.n;
+        }
+        HttpResponse r;
+        r.contentType = "application/json";
+        r.body = out + "],\"next\":" + std::to_string(last) + "}";
+        return r;
+    }
+    if (path == "/api/backup") {
+        if (req.method != "GET") return text(405, "GET only");
+        return text(200, ic_.backupText());
+    }
+    if (path == "/api/restore") {
+        if (req.method != "POST") return text(405, "POST only");
+        if (req.xIntercom != "1") return text(403, "missing X-Intercom header");
+        if (req.body.size() > 16000) return text(400, "file too large for a settings backup");
+        int done = 0;
+        std::string errors;
+        size_t a = 0;
+        while (a < req.body.size()) {
+            size_t e = req.body.find('\n', a);
+            if (e == std::string::npos) e = req.body.size();
+            std::string line = req.body.substr(a, e - a);
+            a = e + 1;
+            if (line.find('=') == std::string::npos || line[0] == '#') continue;
+            std::string err = ic_.restoreLine(line);
+            if (err.empty()) done++;
+            else errors += "\n" + err;
+        }
+        if (!done && errors.empty()) return text(400, "no settings in this file");
+        return text(errors.empty() ? 200 : 400, "restored " + std::to_string(done) + " settings" + (errors.empty() ? "" : "; not restored:" + errors));
+    }
+    if (path == "/api/cam.jpg") {  // the camera is for emergencies only, and every viewing is logged
+        if (req.method != "GET") return text(405, "GET only");
+        if (!ic_.hasCamera()) return text(404, "this unit has no camera");
+        if (!ic_.cameraAllowed()) return text(403, "the camera only works while an emergency is on at this unit");
+        ic_.noteCameraView();
+        HttpResponse r;
+        r.contentType = "image/jpeg";
+        r.camera = true;
+        return r;
+    }
     if (path.compare(0, 7, "/api/fw") == 0) return firmwareRequest(req, path);
     if (path == "/api/cmd") {
         if (req.method != "POST") return text(405, "POST only");
@@ -219,7 +275,8 @@ HttpResponse WebUi::firmwareRequest(const HttpRequest& req, const std::string& p
         HttpResponse r;
         r.contentType = "application/json";
         r.body = std::string("{\"available\":") + (fw_.available() ? "true" : "false") + ",\"allowed\":" +
-                 (ic_.netUpdateAllowed() ? "true" : "false") + ",\"version\":\"" + kFirmwareVersion + "\",\"state\":\"" +
+                 (ic_.netUpdateAllowed() ? "true" : "false") + ",\"pending\":" +
+                 (ic_.firmware() && ic_.firmware()->pending() ? "true" : "false") + ",\"version\":\"" + kFirmwareVersion + "\",\"state\":\"" +
                  kStates[int(fw_.state())] + "\",\"size\":" + std::to_string(fw_.size()) + ",\"received\":" +
                  std::to_string(fw_.received()) + ",\"max_chunk\":" + std::to_string(kFwMaxChunk) + ",\"sha\":\"" + fw_.sha() +
                  "\",\"error\":" + jsonString(fw_.error()) + "}";
@@ -292,16 +349,16 @@ bool base64Decode(const std::string& in, std::vector<uint8_t>* out) {
 
 std::string WebUi::schoolJson() {
     const uint32_t now = ic_.frame();
-    char buf[320], u[8], ip[16];
+    char buf[400], u[8], ip[16];
     auto one = [&](const StatusPacket& st, bool online, double ageS) {
         formatUnit(st.from, u);
         formatIp(st.from, ip);
         snprintf(buf, sizeof(buf),
                  "{\"unit\":\"%s\",\"room\":%u,\"ip\":\"%s\",\"group\":%u,\"link\":\"%s\",\"power\":\"%s\",\"battery\":%u,"
-                 "\"flags\":%u,\"fault\":%u,\"online\":%s,\"age_s\":%.1f}",
+                 "\"flags\":%u,\"fault\":%u,\"online\":%s,\"age_s\":%.1f,\"fw\":\"%s\",\"emergency\":%u}",
                  u, unsigned(st.from.room), ip, unsigned(st.group ? st.group : st.from.room), linkName(st.link),
                  st.power == PowerSource::Battery ? "battery" : "poe", unsigned(st.battery), unsigned(st.flags),
-                 unsigned(st.fault), online ? "true" : "false", ageS);
+                 unsigned(st.fault), online ? "true" : "false", ageS, versionText(st.fwVer).c_str(), unsigned(st.emergency));
         return std::string(buf);
     };
     // this unit too
@@ -311,12 +368,13 @@ std::string WebUi::schoolJson() {
     PowerState pw = ic_.power();
     me.power = pw.source;
     me.battery = pw.hasBattery ? pw.batteryPct : 0;
-    me.flags = uint8_t((ic_.transmitting() ? kStatusTalking : 0) | (ic_.muted() ? kStatusMuted : 0) | (ic_.talkHeld() ? kStatusTalkHeld : 0) |
-                       (ic_.callingOffice() ? kStatusCalling : 0));
+    me.flags = ic_.statusFlags();
+    me.fwVer = packVersion(kFirmwareVersion);
+    me.emergency = uint8_t(ic_.emergency());
     me.fault = ic_.faultCode();
     me.group = ic_.group();
     formatUnit(me.from, u);
-    std::string out = std::string("{\"self\":\"") + u + "\",\"tests_locked\":" + (ic_.testsLocked() ? "true" : "false") +
+    std::string out = std::string("{\"self\":\"") + u + "\",\"fw\":\"" + kFirmwareVersion + "\",\"tests_locked\":" + (ic_.testsLocked() ? "true" : "false") +
                       ",\"units\":[" + one(me, true, 0);
     for (const Peer& s : ic_.known()) {
         double age = double(now - s.lastFrame) * kFrameMs / 1000.0;
@@ -349,6 +407,10 @@ std::string WebUi::statusJson() const {
              a.farActive ? "true" : "false", a.doubleTalk ? "true" : "false", a.converged ? "true" : "false", double(a.nlpGain),
              ic_.micLevel(), ic_.sentLevel(), ic_.speakerLevel(), ic_.talkersPlaying(), unsigned(au.framesPlayed),
              unsigned(au.concealed), unsigned(au.lateDrops));
+    out += buf;
+    static const char* kEm[] = {"", "lockdown", "evacuate", "shelter"};
+    snprintf(buf, sizeof(buf), "\"emergency\":\"%s\",\"audio_fault\":%s,\"has_camera\":%s,\"camera_allowed\":%s,", kEm[int(ic_.emergency())],
+             ic_.audioFault() ? "true" : "false", ic_.hasCamera() ? "true" : "false", ic_.cameraAllowed() ? "true" : "false");
     out += buf;
     out += "\"params\":" + ic_.params().toJson() + ",";
     const CalResult* cal = ic_.lastCal();

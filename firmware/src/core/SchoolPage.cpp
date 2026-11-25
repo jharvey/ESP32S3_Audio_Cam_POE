@@ -52,6 +52,15 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 <div id="plan"></div>
 <div id="rooms"></div>
 <div class="panels">
+<section class="panel"><h2>Emergency</h2>
+ <div class="prow"><button id="elock">Lockdown</button><button id="eevac">Evacuate</button><button id="eshel">Shelter</button><button id="eclear">All clear</button></div>
+ <div id="estate" class="mute">…</div>
+ <div class="mute">Every unit plays the signal (and its recorded message, if it has one) for a minute, evacuate for five. Then it stays
+ quiet with its display and alarm light on until All clear. Talking from this page still gets through.</div></section>
+<section class="panel"><h2>Log: faults and calls</h2>
+ <div class="prow"><select id="lkind"><option value="">Faults and calls</option><option value="0">Faults</option><option value="1">Calls</option>
+ <option value="all">Everything</option></select><span class="mute">Seen by this unit since it started. Newest first.</span></div>
+ <div id="log" style="max-height:320px;overflow:auto"></div></section>
 <section class="panel"><h2>Commands</h2>
  <div class="prow"><select id="ctarget"><option value="all">All units</option><option value="sel">The selected room</option></select>
  <input id="cmd" placeholder="stats" size="24"><button id="csend">Send</button></div>
@@ -70,20 +79,26 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 <section class="panel"><h2>Installer tests</h2>
  <div class="prow"><button id="tclosed">Coupling test: doors closed</button><button id="topen">Coupling test: doors open</button></div>
  <div class="prow"><button id="tcal">Auto-tune the selected room</button></div>
+ <div class="prow">Nightly speaker and microphone check at <input type="time" id="sctime" value="02:30"><button id="scset">Set on all units</button>
+ <button id="scoff">Off</button></div>
  <div class="mute">Coupling test: every unit plays a short sweep in turn (about 1 s each) while the others listen, to find
  rooms that hear each other. Run it once with the classroom doors closed and once with them open; rooms must be quiet.
  Auto-tune: the room's unit plays noise for 2 s to set its echo canceller. Results show under Commands.</div></section>
 </div></main>
 <script>
+const EMERG=["","LOCKDOWN","EVACUATE","SHELTER"];let selfFw="";
 const FAULT=["","E1 no Ethernet (on Wi-Fi)","E2 no network","Lo battery low","dUP duplicate number","oL output shorted"];
 function card(u){
   let cls="ok",st="OK",d=[];
   d.push(u.link==="ethernet"?"Ethernet":u.link==="wifi"?"Wi-Fi":"no link");
   d.push(u.power==="battery"?"battery "+u.battery+"%":"PoE");
   if(u.group&&u.group!==u.room)d.push("group "+u.group);
+  if(u.fw&&selfFw&&u.fw!==selfFw)d.push("firmware "+u.fw);
   const f=u.flags;
   if(!u.online){cls="bad";st="OFFLINE";d=["last heard "+u.age_s.toFixed(0)+" s ago"];}
+  else if(u.emergency){cls="bad";st="EMERGENCY: "+EMERG[u.emergency];}
   else if(f&32){cls="call";st="CALLING THE OFFICE";}
+  else if(f&64){cls="bad";st="SELF-CHECK FAILED";}
   else if(u.fault===4||u.fault===5||u.fault===3||(f&16)){cls="bad";st=(f&16)?"TALK HELD >2 min":FAULT[u.fault];}
   else if(u.fault||(f&8)){cls="warn";st=u.fault?FAULT[u.fault]:"TALK muted";}
   else if(f&1){cls="talk";st="talking";}
@@ -106,11 +121,35 @@ async function tick(){
     const floors={};for(const u of us){const fl=Math.floor(u.room/100);(floors[fl]=floors[fl]||[]).push(u);}
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
-    lastSchool=j;
+    lastSchool=j;selfFw=j.fw||"";
+    {const em=us.filter(u=>u.online&&u.emergency);
+     document.getElementById("estate").textContent=em.length?EMERG[em[0].emergency]+" on "+em.length+" of "+c.on+" units online":"No emergency.";}
     if(window.planUpdate)planUpdate(us);  // floor plan map (/floorplan.js)
   }catch(e){document.getElementById("err").textContent="Can't reach the unit: "+e.message;}
 }
 tick();setInterval(tick,2000);
+
+// ---- Emergency, event log, nightly self-check (R3.1) --------------------------------------------
+async function emerg(kind,ask){if(!confirm(ask))return;const r=await cmd("emergency "+kind+" all");out("> emergency "+kind+"   ("+r+")");tick();}
+document.getElementById("elock").onclick=()=>emerg("lockdown","Start a LOCKDOWN on every unit?");
+document.getElementById("eevac").onclick=()=>emerg("evacuate","Start an EVACUATION on every unit?");
+document.getElementById("eshel").onclick=()=>emerg("shelter","Start a SHELTER signal on every unit?");
+document.getElementById("eclear").onclick=()=>emerg("clear","End the emergency on every unit?");
+let logN=0,logRows=[];
+function esc(s){return s.replace(/[&<>]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[ch]));}
+function drawLog(){const k=document.getElementById("lkind").value;
+  const rows=logRows.filter(e=>k==="all"||(k===""?e.kind<2:e.kind===+k)).slice().reverse();
+  document.getElementById("log").innerHTML=rows.length?"<table>"+rows.map(e=>`<tr><td class="mute" style="white-space:nowrap;padding-right:10px">${
+    e.utc?new Date(e.utc*1000).toLocaleString():"+"+e.up_s+" s"}</td><td>${e.kind===0?"<b>"+esc(e.text)+"</b>":esc(e.text)}</td></tr>`).join("")+"</table>"
+    :'<span class="mute">Nothing yet.</span>';}
+async function pollLog(){
+  try{const r=await fetch(location.origin+"/api/log?since="+logN,{cache:"no-store"});if(!r.ok)return;const j=await r.json();
+    if(j.next<logN)logRows=[];
+    for(const e of j.events)logRows.push(e);logN=j.next;if(logRows.length>200)logRows=logRows.slice(-200);drawLog();}catch(e){}
+}
+document.getElementById("lkind").onchange=drawLog;pollLog();setInterval(pollLog,3000);
+document.getElementById("scset").onclick=async()=>{const t=document.getElementById("sctime").value;if(!t)return;await cmd("selfcheck "+t);sendTo("all","selfcheck "+t);};
+document.getElementById("scoff").onclick=async()=>{await cmd("selfcheck off");sendTo("all","selfcheck off");};
 
 // ---- Talk from this PC's microphone -------------------------------------------------------------
 // The page captures the mic, converts it to 16 kHz 16-bit mono and posts ~100 ms at a time (in order)

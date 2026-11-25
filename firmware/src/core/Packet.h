@@ -7,7 +7,8 @@
 //   'I' 'C' ver type | room u16 | sub u8 | target sub u8 (0xff any) | target room u16 (0xffff all) | 6 rsvd | text
 // Status (24 bytes):
 //   'I' 'C' ver type | room u16 | sub u8 | link u8 | power u8 | battery u8 | flags u8 | fault u8 | uptime_s u32
-//   | unit_id u32 (from the MAC: tells two units with the same room number apart) | group u16 | rsvd u16
+//   | unit_id u32 (from the MAC: tells two units with the same room number apart) | group u16
+//   | u16: bits 0-13 firmware version, bits 14-15 emergency kind (R3.1; 0 from older firmware)
 #pragma once
 #include <cstddef>
 #include <cstdint>
@@ -54,6 +55,7 @@ enum StatusFlags : uint8_t {
     kStatusMuted = 0x08,     // the office muted this unit's TALK ("mute" command)
     kStatusTalkHeld = 0x10,  // TALK held for over 2 minutes: stuck button or something on it
     kStatusCalling = 0x20,   // the room is calling the office (DOWN held 2 s)
+    kStatusAudioFault = 0x40,  // the last speaker->microphone self-check failed (R3.1)
 };
 // Status fault byte: what the unit's display is flashing.
 enum class Fault : uint8_t { None = 0, NoEthernet = 1, NoNetwork = 2, LowBattery = 3, Duplicate = 4, Overload = 5 };
@@ -84,7 +86,12 @@ struct StatusPacket {
     uint32_t unitUid = 0;  // unique per board (MAC); 0 = unknown
     uint16_t group = 0;    // room group (0 = its own room number)
     Fault fault = Fault::None;
+    uint16_t fwVer = 0;     // firmware version, packVersion(); 0 = older firmware that does not send it
+    uint8_t emergency = 0;  // 0 none, 1 lockdown, 2 evacuate, 3 shelter (R3.1)
 };
+// "0.5.0" <-> 14 bits (major 0-15, minor 0-31, patch 0-31), carried in the status packet.
+uint16_t packVersion(const char* text);
+std::string versionText(uint16_t v);  // "" for 0
 
 constexpr uint16_t kTargetAllRooms = 0xffff;
 constexpr uint8_t kTargetAnySub = 0xff;

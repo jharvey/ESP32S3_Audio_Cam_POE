@@ -68,6 +68,15 @@ pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px s
  <div class="meter" style="margin:10px 0"><i id="fwbar"></i></div>
  <div id="fwmsg" class="mute"></div>
 </section>
+<section><h2>Settings backup</h2>
+ <div class="mute">Saves this unit's room number, tuning, timed events and test results to a file, and puts them back (for a replacement unit). Passwords and keys are not in the file: set them over USB.</div>
+ <div class="btns"><button id="bbackup">Save to a file</button><input type="file" id="rfile" accept=".txt"><button id="brestore">Restore from the file</button></div>
+ <div id="bkmsg" class="mute"></div>
+</section>
+<section id="camsec" style="display:none"><h2>Camera (emergency only)</h2>
+ <div class="mute">A picture every 2 s while an emergency is on at this unit. Viewing is written to the event log.</div>
+ <img id="cam" alt="" style="max-width:100%;border-radius:8px;margin-top:8px">
+</section>
 <section class="wide"><h2>Console</h2>
  <div class="mute">Same commands as the USB console (type <b>help</b>). The web password can only be changed over USB.</div>
  <div class="btns"><input type="text" id="cmd" placeholder="stats" style="flex:1;min-width:200px"><button id="bcmd">Send</button></div>
@@ -114,6 +123,8 @@ async function refresh(){
   c+=chip(s.power==='poe'?'PoE power':'battery '+s.battery+'%',s.power==='poe'?'ok':s.battery<25?'bad':'warn');
   if(s.talking)c+=chip('talking','warn');if(s.tone)c+=chip('test tone','warn');if(s.calibrating)c+=chip('auto-tune '+s.cal_progress+'%','warn');
   if(s.in_setup)c+=chip('room setup on panel','warn');
+  if(s.emergency)c+=chip('EMERGENCY: '+s.emergency,'bad');if(s.audio_fault)c+=chip('self-check failed','bad');
+  $('camsec').style.display=s.camera_allowed?'':'none';if(s.camera_allowed&&s.uptime_s%2===0)$('cam').src='/api/cam.jpg?t='+Date.now();
   $('chips').innerHTML=c;
   $('erle').textContent=s.aec.on?s.aec.erle_db.toFixed(1):'off';
   $('aecchips').innerHTML=(s.aec.far?chip('far end playing'):'')+(s.aec.double_talk?chip('double talk','warn'):'')+(s.aec.converged?chip('converged','ok'):'');
@@ -176,6 +187,12 @@ $('bfw').onclick=async()=>{
   }catch(e){say('Stopped: '+e);}
   finally{$('bfw').disabled=false;}
 };
+$('bbackup').onclick=async()=>{const r=await fetch('/api/backup');const t=await r.text();if(!r.ok){$('bkmsg').textContent=t;return;}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'}));a.download='intercom-'+(last?last.unit:'unit')+'.txt';a.click();
+  $('bkmsg').textContent='Saved as '+a.download+'.';};
+$('brestore').onclick=async()=>{const f=$('rfile').files[0];if(!f){$('bkmsg').textContent='Choose a backup file first.';return;}
+  if(!confirm('Put the settings from '+f.name+' on this unit? Its room number can change, and with it the address of this page.'))return;
+  const r=await fetch('/api/restore',{method:'POST',headers:{'X-Intercom':'1'},body:await f.text()});$('bkmsg').textContent=await r.text();};
 fwInit();
 refresh();setInterval(refresh,1000);
 </script></body></html>)PAGE";

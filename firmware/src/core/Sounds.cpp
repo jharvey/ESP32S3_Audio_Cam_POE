@@ -8,7 +8,7 @@
 namespace ic {
 
 namespace {
-const char* const kNames[] = {"chime", "bell", "lunch", "tone"};
+const char* const kNames[] = {"chime", "bell", "lunch", "tone", "lockdown", "evacuate", "shelter", "allclear"};
 constexpr float kTwoPi = 6.28318531f;
 
 // Length of each sound in samples (16 kHz).
@@ -17,6 +17,10 @@ constexpr uint32_t kLen[] = {
     kSampleRate * 2,       // bell: 2 s of a ringing school bell
     kSampleRate * 14 / 10, // lunch: three rising notes and a held fourth
     kSampleRate * 1,       // tone: 1 kHz, 1 s
+    kSampleRate * 3,       // lockdown: slow low two-tone, 440 / 349 Hz, 0.5 s each
+    kSampleRate * 3,       // evacuate: three rising sweeps, 500 -> 1500 Hz, 1 s each
+    kSampleRate * 3,       // shelter: 700 Hz pulses, 0.25 s on / 0.25 s off
+    kSampleRate * 12 / 10, // allclear: two calm rising notes
 };
 
 float note(float f, uint32_t i) { return std::sin(kTwoPi * f * float(i) / kSampleRate); }
@@ -49,6 +53,30 @@ float sample(Sound s, uint32_t i) {
         }
         case Sound::Tone:
             return 0.25f * edge(i, kLen[3]) * note(1000.0f, i);
+        // The emergency signals are louder than the bells and unlike each other, so a room can tell
+        // them apart without looking at the display.
+        case Sound::Lockdown: {
+            const uint32_t half = kSampleRate / 2;
+            const uint32_t k = i % half;
+            const bool low = (i / half) % 2 != 0;
+            return 0.50f * edge(k, half) * (0.8f * note(low ? 349.23f : 440.0f, k) + 0.2f * note(low ? 698.46f : 880.0f, k));
+        }
+        case Sound::Evacuate: {
+            const uint32_t seg = kSampleRate;
+            const uint32_t k = i % seg;
+            const float t = float(k) / kSampleRate;  // frequency 500 + 1000 t Hz, so phase = 2 pi (500 t + 500 t^2)
+            return 0.50f * edge(k, seg) * std::sin(kTwoPi * (500.0f * t + 500.0f * t * t));
+        }
+        case Sound::Shelter: {
+            const uint32_t on = kSampleRate / 4;
+            const uint32_t k = i % (2 * on);
+            return k < on ? 0.50f * edge(k, on) * note(700.0f, k) : 0.0f;
+        }
+        case Sound::AllClear: {
+            const uint32_t half = kLen[7] / 2;
+            const uint32_t k = i % half;
+            return 0.25f * edge(k, half) * note(i < half ? 660.0f : 880.0f, k);
+        }
         default:
             return 0;
     }

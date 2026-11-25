@@ -13,9 +13,13 @@
 //                      this unit transmits it as an office all-call. Needs X-Intercom: 1.
 //   POST /api/cmd      body = one console command, reply = its text. Needs header X-Intercom: 1
 //                      (a browser on another site can't add it, which blocks cross-site requests).
+//   GET  /api/log?since=N   the event log (faults and calls) after event number N, as JSON (R3.1)
+//   GET  /api/backup        this unit's settings as key=value lines, without passwords and keys (R3.1)
+//   POST /api/restore       body = such a file: puts the settings back. Needs X-Intercom: 1.
+//   GET  /api/cam.jpg       a picture from the camera, only while an emergency is on at this unit (R3.1)
 //   Firmware update (R3.0, FwUpdate.h). Off until "netupdate on" is typed on the USB console. All POSTs
 //   need X-Intercom: 1.
-//   GET  /api/fw               state as JSON (available, allowed, state, size, received, error)
+//   GET  /api/fw               state as JSON (available, allowed, pending = on trial, state, size, received, error)
 //   POST /api/fw/begin?size=N[&sha=HEX]   start an image of N bytes (SHA-256 optional)
 //   POST /api/fw/data?off=N    body = base64 of the next piece (up to 8192 bytes). 409 "expected offset M":
 //                              send from M. 503: a call or sound is playing, send the piece again shortly.
@@ -49,6 +53,7 @@ struct HttpResponse {
     bool askLogin = false;  // add "WWW-Authenticate: Basic realm=..." (status 401)
     const char* reason() const;
     std::string realm;      // login prompt text
+    bool camera = false;    // allowed: the platform puts a JPEG from its camera into the body (or answers 503)
 };
 
 class WebUi {

@@ -18,7 +18,9 @@
 #include <atomic>
 #include <functional>
 
+#include <esp_camera.h>
 #include <esp_netif.h>
+#include <esp_ota_ops.h>
 #include <esp_system.h>
 #include <esp_task_wdt.h>
 #include <soc/rtc_cntl_reg.h>
@@ -314,8 +316,31 @@ Preferences gPrefs;
 
 // ---- HAL for the core ----------------------------------------------------------------
 class Board : public ic::INet, public ic::ILinks, public ic::IPower, public ic::IPanel, public ic::IStore, public ic::ILog, public ic::IDiag,
-              public ic::ILamps, public ic::IFirmware {
+              public ic::ILamps, public ic::IFirmware, public ic::IClips {
 public:
+    // Fall-back (R3.1): the bootloader starts a new image "pending"; if it restarts for any reason before
+    // confirm(), the old image comes back. verifyRollbackLater() below keeps Arduino from confirming at start.
+    bool pending() override {
+        esp_ota_img_states_t st;
+        return esp_ota_get_state_partition(esp_ota_get_running_partition(), &st) == ESP_OK && st == ESP_OTA_IMG_PENDING_VERIFY;
+    }
+    void confirm() override { esp_ota_mark_app_valid_cancel_rollback(); }
+    void reject() override { esp_ota_mark_app_invalid_rollback_and_reboot(); }
+    // Recorded emergency messages, loaded from the SD card at start (loadClips).
+    struct Clip {
+        const char* name;
+        int16_t* pcm;
+        size_t n;
+    };
+    Clip clips[3] = {{"lockdown", nullptr, 0}, {"evacuate", nullptr, 0}, {"shelter", nullptr, 0}};
+    const int16_t* clip(const char* name, size_t* samples) override {
+        for (const Clip& c : clips)
+            if (c.n && !strcmp(c.name, name)) {
+                *samples = c.n;
+                return c.pcm;
+            }
+        return nullptr;
+    }
     // Firmware update over the network (R3.0): Arduino's Update writes the spare OTA slot (erasing each
     // 4 KB block as it gets there) and only switches the boot slot in end(), after its own image check.
     // Runs on the audio task: one 4 KB piece is roughly one block erase + write. To time on hardware.
@@ -480,6 +505,55 @@ struct WebJob {
 };
 QueueHandle_t gWebJobs;
 
+// ---- camera (R3.1): emergencies only --------------------------------------------------------
+// Powered and started for the first picture, switched off again when the emergency ends (loop) and
+// before any restart (GPIO46 carries a camera line: see Pins.h). Not yet run on hardware.
+bool gCamOn = false;
+bool cameraOn() {
+    if (gCamOn) return true;
+    gExp.set(pins::exp::CAM_PWR, false);  // low = Q1 on
+    delay(150);
+    camera_config_t c = {};
+    c.pin_pwdn = -1;
+    c.pin_reset = -1;
+    c.pin_xclk = pins::CAM_XCLK;
+    c.pin_sccb_sda = pins::CAM_SIOD;
+    c.pin_sccb_scl = pins::CAM_SIOC;
+    c.pin_d0 = pins::CAM_D0;
+    c.pin_d1 = pins::CAM_D1;
+    c.pin_d2 = pins::CAM_D2;
+    c.pin_d3 = pins::CAM_D3;
+    c.pin_d4 = pins::CAM_D4;
+    c.pin_d5 = pins::CAM_D5;
+    c.pin_d6 = pins::CAM_D6;
+    c.pin_d7 = pins::CAM_D7;
+    c.pin_vsync = pins::CAM_VSYNC;
+    c.pin_href = pins::CAM_HREF;
+    c.pin_pclk = pins::CAM_PCLK;
+    c.xclk_freq_hz = 20000000;
+    c.ledc_timer = LEDC_TIMER_0;
+    c.ledc_channel = LEDC_CHANNEL_0;
+    c.pixel_format = PIXFORMAT_JPEG;
+    c.frame_size = FRAMESIZE_VGA;
+    c.jpeg_quality = 12;
+    c.fb_count = 1;
+    c.fb_location = CAMERA_FB_IN_PSRAM;
+    c.grab_mode = CAMERA_GRAB_LATEST;
+    c.sccb_i2c_port = 1;  // Wire uses port 0
+    if (esp_camera_init(&c) != ESP_OK) {
+        gExp.set(pins::exp::CAM_PWR, true);
+        return false;
+    }
+    gCamOn = true;
+    return true;
+}
+void cameraOff() {
+    if (!gCamOn) return;
+    esp_camera_deinit();
+    gExp.set(pins::exp::CAM_PWR, true);
+    gCamOn = false;
+}
+
 void onHttp() {
     ic::HttpRequest req;
     req.method = gHttp.method() == HTTP_POST ? "POST" : gHttp.method() == HTTP_GET ? "GET" : "OTHER";
@@ -496,6 +570,17 @@ void onHttp() {
     gHttp.sendHeader("Cache-Control", "no-store");
     gHttp.sendHeader("X-Frame-Options", "DENY");
     if (resp.askLogin) gHttp.sendHeader("WWW-Authenticate", ("Basic realm=\"" + resp.realm + "\"").c_str());
+    if (resp.camera) {  // the core allowed a picture (an emergency is on): take it here, off the audio task
+        camera_fb_t* fb = cameraOn() ? esp_camera_fb_get() : nullptr;
+        if (fb) {
+            gHttp.send_P(200, "image/jpeg", reinterpret_cast<const char*>(fb->buf), fb->len);
+            esp_camera_fb_return(fb);
+            return;
+        }
+        resp.status = 503;
+        resp.contentType = "text/plain; charset=utf-8";
+        resp.body = "the camera did not answer";
+    }
     gHttp.send(resp.status, resp.contentType.c_str(), resp.body.c_str());
 }
 
@@ -555,7 +640,32 @@ void sdUpdate() {
     }
 }
 
+// Recorded emergency messages: /msg/lockdown.wav, /msg/evacuate.wav, /msg/shelter.wav on the SD card,
+// each a plain WAV (16 kHz, mono, 16 bit, 44-byte header), up to 30 s. Read into PSRAM once at start, so
+// nothing reads the card while audio runs. Not yet run on hardware.
+void loadClips() {
+    SD_MMC.setPins(pins::SD_CLK, pins::SD_CMD, pins::SD_D0);
+    if (!SD_MMC.begin("/sdcard", true)) return;
+    for (Board::Clip& c : gBoard.clips) {
+        File f = SD_MMC.open((String("/msg/") + c.name + ".wav").c_str());
+        if (!f) continue;
+        uint8_t h[44];
+        bool ok = f.read(h, 44) == 44 && !memcmp(h, "RIFF", 4) && !memcmp(h + 8, "WAVEfmt ", 8) && h[20] == 1 && h[22] == 1 &&
+                  (h[24] | h[25] << 8 | h[26] << 16) == 16000 && h[34] == 16 && !memcmp(h + 36, "data", 4);
+        size_t bytes = ok ? std::min<size_t>(f.size() - 44, 30u * 16000u * 2u) & ~size_t(1) : 0;
+        if (bytes && (c.pcm = static_cast<int16_t*>(ps_malloc(bytes))) != nullptr && f.read(reinterpret_cast<uint8_t*>(c.pcm), bytes) == bytes)
+            c.n = bytes / 2;
+        Serial.printf("SD card: /msg/%s.wav %s\n", c.name, c.n ? "loaded" : "NOT usable (needs 16 kHz, mono, 16-bit WAV)");
+        f.close();
+    }
+    SD_MMC.end();
+}
+
 }  // namespace
+
+// Arduino confirms a new image as soon as it starts unless this says to wait: the core confirms it after
+// a minute of running with a network link (Intercom.cpp, "Fall-back").
+extern "C" bool verifyRollbackLater() { return true; }
 
 void setup() {
     // Lamps, MISC outputs and servo power off before anything else (see Pwm::safeOff): the
@@ -567,6 +677,7 @@ void setup() {
     Serial.begin(115200);
     Serial.printf("intercom firmware %s, reset: %s\n", ic::kFirmwareVersion, resetReason());
     sdUpdate();
+    loadClips();
     gPrefs.begin("intercom", false);
     gExp.begin();
     gPwm.begin();
@@ -591,6 +702,13 @@ void setup() {
     io.maxTaps = 1024;
     uint64_t mac = ESP.getEfuseMac();
     io.unitUid = uint32_t(mac ^ (mac >> 32));  // unique per board: finds two units set to the same room
+    io.hasCamera = true;  // the connector is there; a missing module answers "the camera did not answer"
+    io.bootNote = resetReason();
+    {
+        esp_reset_reason_t rr = esp_reset_reason();
+        io.bootFault = rr == ESP_RST_PANIC || rr == ESP_RST_INT_WDT || rr == ESP_RST_TASK_WDT || rr == ESP_RST_WDT || rr == ESP_RST_BROWNOUT;
+    }
+    if (esp_ota_get_last_invalid_partition()) io.bootNote += "; an update that failed its trial is in the spare slot";
     // Clock for timed events: SNTP in the background (the school's server if "ntp" was set over USB,
     // else public pools). Until it syncs, time() is near 1970 and the office console's "time" is used.
     {
@@ -600,6 +718,7 @@ void setup() {
     io.utcNow = [] { return int64_t(time(nullptr)); };
     io.restart = [](bool download) {
         // download: the ROM stays in its USB flashing mode after this reset (as if BOOT were held)
+        gExp.set(pins::exp::CAM_PWR, true);  // camera off before any restart (Pins.h: GPIO46)
         if (download) REG_WRITE(RTC_CNTL_OPTION1_REG, RTC_CNTL_FORCE_DOWNLOAD_BOOT);
         esp_restart();
     };
@@ -620,7 +739,7 @@ void setup() {
     gEspAec = new board::EspSrAec();
     ic::EchoCanceller& aec = gEspAec->ok() ? static_cast<ic::EchoCanceller&>(*gEspAec) : gNlms;
     Serial.printf("echo canceller: %s\n", gEspAec->ok() ? "ESP-SR" : "NLMS (ESP-SR did not start)");
-    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, aec, io);
+    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, aec, io);
     gIntercom = &intercom;
     intercom.begin();
     static ic::WebUi web(intercom);
@@ -657,6 +776,7 @@ void loop() {
             line.text[n++] = c;
         }
     }
+    if (gCamOn && !gIntercom->cameraAllowed()) cameraOff();  // the emergency ended
     gHttp.handleClient();
     delay(5);
 }

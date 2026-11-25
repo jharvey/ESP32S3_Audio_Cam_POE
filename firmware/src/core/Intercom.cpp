@@ -34,6 +34,26 @@ constexpr uint32_t kGroupTalkHoldFrames = 15;  // speaker stays quiet 300 ms aft
 constexpr uint32_t kFaultCycle = 175;    // faults: room number 3 s, then the code for 0.5 s
 constexpr uint32_t kFaultShow = 25;
 constexpr uint8_t kLowBatteryPct = 15;
+// R3.1
+constexpr size_t kMaxEvents = 200;
+constexpr uint32_t kFwConfirmFrames = 60 * 50;       // new firmware is confirmed after 1 min running with a link
+constexpr uint32_t kFwGiveUpFrames = 5 * 60 * 50;    // ...and dropped after 5 min without one
+constexpr uint32_t kEmergencyMaxFrames = 4 * 3600 * 50;  // an emergency nobody cleared ends by itself after 4 h
+constexpr uint32_t kEmergencySoundFrames = 60 * 50;      // the signal sounds for 1 min (lockdown, shelter) ...
+constexpr uint32_t kEvacuateSoundFrames = 5 * 60 * 50;   // ... or 5 min (evacuate); display and lamp stay on
+constexpr uint32_t kEmergencyRgb = 0xC00000;
+const char* const kEmergencyNames[] = {"clear", "lockdown", "evacuate", "shelter"};
+
+std::string targetText(uint8_t flags, uint16_t target) {
+    if (flags & kAudioReply) return target ? "room " + std::to_string(target) + " (answer)" : "the office console (answer)";
+    if (target == 0) return "everyone";
+    if (flags & kAudioFloor) return "floor " + std::to_string(target);
+    if (flags & kAudioGroupCall) return "group " + std::to_string(target);
+    return "room " + std::to_string(target);
+}
+std::string talkerText(uint8_t flags, uint16_t room) {
+    return (flags & kAudioFromConsole) ? "office console (via room " + std::to_string(room) + ")" : "room " + std::to_string(room);
+}
 const char* kGroupKey = "group";
 const char* kWifiSsidKey = "wifi_ssid";
 const char* kWifiPassKey = "wifi_pass";
@@ -80,6 +100,11 @@ const char* kHelp =
     "                       transmit as if TALK were held, to everyone or a target (USB only; default 5 s)\n"
     "  selftest [result]    check the board and the speaker->mic path (plays a short tone)\n"
     "  version              firmware version\n"
+    "  log [calls|faults] [N]  the event log: faults and calls this unit saw, school-wide (last 30)\n"
+    "  selfcheck [HH:MM|off|now]  nightly speaker->microphone check; a failure shows on the school page\n"
+    "  emergency [lockdown|evacuate|shelter|clear] [all]  emergency signal here; all = on every unit (USB / web)\n"
+    "  backup               this unit's settings as key=value lines (no passwords or keys)\n"
+    "  restore key=value    put one line of a backup back (USB / web)\n"
     "  netkey <key>         set the network command key (USB only; \"netkey off\" refuses all network commands)\n"
     "  webpass <password>   set the web interface password (USB only; \"webpass off\" turns it off)\n"
     "  wifi <ssid> <pass>   Wi-Fi for failover and portable units (USB only; \"wifi off\"; same IP as Ethernet)\n"
@@ -100,6 +125,23 @@ void Intercom::logf(const char* fmt, ...) {
     hal_.log->log(buf);
 }
 
+void Intercom::event(EventKind k, uint16_t room, const char* fmt, ...) {
+    char buf[160];
+    va_list ap;
+    va_start(ap, fmt);
+    vsnprintf(buf, sizeof(buf), fmt, ap);
+    va_end(ap);
+    events_.push_back(Event{++eventN_, utcNow(), frame_, k, room, buf});
+    if (events_.size() > kMaxEvents) events_.erase(events_.begin());
+    if (hal_.log) hal_.log->log((std::string(k == EventKind::Fault ? "FAULT: " : k == EventKind::Call ? "call: " : "event: ") + buf).c_str());
+}
+
+void Intercom::loadSelfCheck() {
+    selfMin_ = -1;
+    unsigned h = 0, m = 0;
+    if (std::sscanf(hal_.store->loadText("selfcheck").c_str(), "%u:%u", &h, &m) == 2 && h < 24 && m < 60) selfMin_ = int(h * 60 + m);
+}
+
 void Intercom::begin() {
     unit_ = hal_.store->loadUnit();
     unit_.sub = 0;  // letters are gone since protocol 2
@@ -109,6 +151,9 @@ void Intercom::begin() {
     couplings_ = CouplingTest::fromString(hal_.store->loadText("couple_map"));
     couplingsOpen_ = CouplingTest::fromString(hal_.store->loadText("couple_open_map"));
     refreshPower();
+    loadSelfCheck();
+    if (!opt_.bootNote.empty())
+        event(opt_.bootFault ? EventKind::Fault : EventKind::Info, unit_.room, "room %u started: %s", unsigned(unit_.room), opt_.bootNote.c_str());
     hal_.links->setWifi(hal_.store->loadText(kWifiSsidKey), hal_.store->loadText(kWifiPassKey));
     lastNonce_ = netauth::loadNonce(*hal_.store);
     params_ = TuneParams();
@@ -475,10 +520,7 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
     if (c == "selftest") {
         if (a.size() > 1 && a[1] == "result") return testResult_.empty() ? "no self-test run yet" : testResult_;
         if (cal_.active() || testPhase_) return "busy (auto-tune or self-test running)";
-        testBoard_ = hal_.diag ? hal_.diag->boardTest() : std::string("ok board checks not available on this platform\n");
-        testPhase_ = 1;
-        testCount_ = 0;
-        testQuiet_ = testLoud_ = 0;
+        startSelfTest(false);
         return "self-test started (~1.5 s, plays a tone); \"selftest result\" shows the result";
     }
     if (c == "netkey") {
@@ -520,6 +562,80 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         std::string ssid = hal_.store->loadText(kWifiSsidKey);
         if (ssid.empty()) return "wifi off (usage: wifi <ssid> <password>; names with spaces are not supported)";
         return "wifi \"" + ssid + "\" " + (hal_.links->wifiUp() ? "connected" : "not connected");
+    }
+    if (c == "log") {  // "log", "log calls", "log faults", "log 50"
+        int want = -1;
+        size_t count = 30;
+        for (size_t i = 1; i < a.size(); i++) {
+            if (a[i] == "calls") want = int(EventKind::Call);
+            else if (a[i] == "faults") want = int(EventKind::Fault);
+            else count = size_t(std::max(1L, std::min(200L, std::strtol(a[i].c_str(), nullptr, 10))));
+        }
+        std::vector<const Event*> pick;
+        for (auto it = events_.rbegin(); it != events_.rend() && pick.size() < count; ++it)
+            if (want < 0 || int(it->kind) == want) pick.push_back(&*it);
+        if (pick.empty()) return "nothing logged since this unit started";
+        static const char* kinds[] = {"FAULT", "call ", "info "};
+        std::string out;
+        for (auto it = pick.rbegin(); it != pick.rend(); ++it) {
+            const Event& e = **it;
+            if (e.utc) {
+                LocalTime lt = sched_.local(e.utc);
+                snprintf(buf, sizeof(buf), "%02d-%02d %02d:%02d:%02d ", lt.month % 100, lt.day % 100, lt.hour % 100, lt.minute % 100, lt.second % 100);
+            } else {
+                snprintf(buf, sizeof(buf), "+%us ", unsigned(e.frame / 50));
+            }
+            out += std::string(buf) + kinds[int(e.kind)] + " " + e.text + "\n";
+        }
+        return out;
+    }
+    if (c == "selfcheck") {  // nightly speaker->microphone check
+        if (a.size() == 2 && a[1] == "now") {
+            if (cal_.active() || testPhase_) return "busy (auto-tune or self-test running)";
+            startSelfTest(true);
+            return "self-check started (~1.5 s, plays a tone)";
+        }
+        if (a.size() == 2) {
+            unsigned h = 0, m = 0;
+            if (a[1] == "off") hal_.store->saveText("selfcheck", "");
+            else if (std::sscanf(a[1].c_str(), "%u:%u", &h, &m) == 2 && h < 24 && m < 60) hal_.store->saveText("selfcheck", a[1]);
+            else return "usage: selfcheck [HH:MM|off|now]";
+            loadSelfCheck();
+        } else if (a.size() > 2) {
+            return "usage: selfcheck [HH:MM|off|now]";
+        }
+        snprintf(buf, sizeof(buf), "nightly self-check at %02d:%02d", (selfMin_ / 60) % 100, selfMin_ % 60);
+        return std::string(selfMin_ < 0 ? "nightly self-check off" : buf) + (audioFault_ ? "; THE LAST CHECK FAILED (see: selftest result)" : "");
+    }
+    if (c == "emergency") {  // lockdown | evacuate | shelter | clear; "all" also tells every other unit
+        if (a.size() == 1) return std::string("emergency: ") + (emerg_ == Emergency::None ? "none" : kEmergencyNames[int(emerg_)]);
+        int k = -1;
+        for (int i = 0; i < 4; i++)
+            if (a[1] == kEmergencyNames[i]) k = i;
+        const bool all = a.size() == 3 && a[2] == "all";
+        if (k < 0 || a.size() > 3 || (a.size() == 3 && !all)) return "usage: emergency [lockdown|evacuate|shelter|clear] [all]";
+        if (all && src == CmdSource::Network) return "\"emergency ... all\" only works from USB or this unit's web page";
+        setEmergency(Emergency(k), src == CmdSource::Local ? "USB" : src == CmdSource::Web ? "web page" : "network");
+        std::string out = k ? std::string("EMERGENCY: ") + kEmergencyNames[k] : std::string("emergency cleared");
+        if (all) {
+            std::string r = sendSigned("all", std::string("emergency ") + kEmergencyNames[k]);
+            if (r.compare(0, 4, "sent") != 0) {
+                emergTxKind_ = -1;
+                return out + " ON THIS UNIT ONLY, the other units were not told: " + r;
+            }
+            emergTxKind_ = k;
+            emergTxCount_ = 1;
+            emergTxNext_ = frame_ + 100;
+            out += ", sent to all units (and repeated)";
+        }
+        return out;
+    }
+    if (c == "backup") return backupText();
+    if (c == "restore") {
+        if (src == CmdSource::Network) return "restore only works from USB or this unit's web page";
+        size_t p = line.find("restore");
+        std::string err = restoreLine(line.substr(p + 7));
+        return err.empty() ? "ok" : err;
     }
     if (c == "netupdate") {  // firmware updates from the web page / net_update.py: switched on over USB only
         if (a.size() > 2 || (a.size() == 2 && a[1] != "on" && a[1] != "off")) return "usage: netupdate [on|off]";
@@ -611,6 +727,10 @@ void Intercom::updateLink() {
     } else {
         logf("link %s -> %s", names[int(link_)], names[int(want)]);
     }
+    if (want == LinkType::None) event(EventKind::Fault, unit_.room, "room %u: network lost", unsigned(unit_.room));
+    else if (link_ == LinkType::None && everLinked_) event(EventKind::Info, unit_.room, "room %u: network back (%s)", unsigned(unit_.room), names[int(want)]);
+    else if (want == LinkType::WiFi && link_ == LinkType::Ethernet) event(EventKind::Fault, unit_.room, "room %u: Ethernet lost, now on Wi-Fi", unsigned(unit_.room));
+    else if (want == LinkType::Ethernet && link_ == LinkType::WiFi) event(EventKind::Info, unit_.room, "room %u: back on Ethernet", unsigned(unit_.room));
     if (want == LinkType::None) linkLostAt_ = frame_;
     else everLinked_ = true;
     link_ = want;
@@ -638,6 +758,32 @@ void Intercom::setUnit(const UnitId& id) {
     formatIp(unit_, ip);
     logf("room set to %s, ip %s", u, ip);
     sendStatus();
+}
+
+void Intercom::startSelfTest(bool automatic) {
+    testBoard_ = hal_.diag ? hal_.diag->boardTest() : std::string("ok board checks not available on this platform\n");
+    testPhase_ = 1;
+    testCount_ = 0;
+    testQuiet_ = testLoud_ = 0;
+    testAuto_ = automatic;
+}
+
+// Nightly self-check (R3.1): at the set time, when the unit is idle. Each room starts at its own second,
+// so a neighbour's tone doesn't fall into this room's quiet measurement.
+void Intercom::checkSelfCheck(bool busy) {
+    busy = busy || soundActive_ || cal_.active() || testPhase_ || setup_.active() || emerg_ != Emergency::None;
+    if (selfRetryAt_ && frame_ >= selfRetryAt_ && !busy) {
+        selfRetryAt_ = 0;
+        startSelfTest(true);
+        return;
+    }
+    if (selfMin_ < 0 || busy) return;
+    int64_t now = utcNow();
+    if (!now) return;
+    LocalTime lt = sched_.local(now);
+    if (lt.hour * 60 + lt.minute != selfMin_ || lt.ymd() == selfDay_ || lt.second < int((unit_.room * 7u) % 50u)) return;
+    selfDay_ = lt.ymd();
+    startSelfTest(true);
 }
 
 // Self-test audio check: 0.5 s quiet, then 1 s of 1 kHz tone; the mic must hear the tone.
@@ -672,6 +818,20 @@ void Intercom::selfTestFrame(const int16_t* mic, int16_t* speaker) {
     testResult_ += allOk ? "SELF-TEST PASSED" : "SELF-TEST FAILED";
     testPhase_ = 0;
     logf("self-test:\n%s", testResult_.c_str());
+    // A failed nightly check runs once more 30 s later before it counts: a noise in the room can spoil one run.
+    const bool retry = !allOk && testAuto_ && !selfRetried_;
+    selfRetried_ = retry;
+    if (retry) {
+        selfRetryAt_ = frame_ + 1500;
+        return;
+    }
+    audioFault_ = !ok;
+    if (!allOk)
+        event(EventKind::Fault, unit_.room, "room %u self-check FAILED: %s", unsigned(unit_.room),
+              ok ? "a board check (see: selftest result)" : "the microphone did not hear the speaker");
+    else if (testAuto_)
+        event(EventKind::Info, unit_.room, "room %u self-check passed", unsigned(unit_.room));
+    sendStatus();
 }
 
 void Intercom::receive() {
@@ -689,6 +849,7 @@ void Intercom::receive() {
             size_t plen;
             if (!decodeAudioData(buf, n, &h, &payload, &plen) || !codecAvailable(h.codec)) continue;
             if (h.from == unit_) continue;                                               // our own multicast echo
+            noteTalk(h);                                                                  // the call log covers every call on the network
             if (sameGroup(h.from) && !(h.flags & kAudioFromConsole)) {                     // same room group: heard acoustically
                 // and while it talks, this speaker goes quiet: the talker's echo canceller only knows its own
                 // speaker, so the room's other speakers would go back out through its microphone as echo.
@@ -726,7 +887,7 @@ void Intercom::receive() {
             if (s.from == unit_) {  // our own multicast echo, or another unit set to our room number
                 if (s.unitUid && opt_.unitUid && s.unitUid != opt_.unitUid) {
                     if (!duplicate() || s.unitUid != dupUid_)
-                        logf("DUPLICATE: unit %08lx also uses room %u", (unsigned long)s.unitUid, unsigned(unit_.room));
+                        event(EventKind::Fault, unit_.room, "DUPLICATE: unit %08lx also uses room %u", (unsigned long)s.unitUid, unsigned(unit_.room));
                     dupUntil_ = frame_ + kDupHoldFrames;
                     dupUid_ = s.unitUid;
                 }
@@ -735,15 +896,17 @@ void Intercom::receive() {
             Peer* p = nullptr;
             for (auto& q : peers_)
                 if (q.status.from == s.from) p = &q;
+            Peer* k = nullptr;
+            for (auto& q : known_)
+                if (q.status.from == s.from) k = &q;
+            peerEvents(p ? &p->status : nullptr, s, k && k->offlineLogged);
             if (!p) {
                 peers_.push_back(Peer());
                 p = &peers_.back();
             }
             p->status = s;
             p->lastFrame = frame_;
-            Peer* k = nullptr;
-            for (auto& q : known_)
-                if (q.status.from == s.from) k = &q;
+            p->offlineLogged = false;
             if (!k && known_.size() < 200) {
                 known_.push_back(Peer());
                 k = &known_.back();
@@ -781,9 +944,64 @@ void Intercom::receive() {
         }
     }
     for (size_t i = 0; i < peers_.size();) {
-        if (frame_ - peers_[i].lastFrame > uint32_t(kPeerTimeoutFrames)) peers_.erase(peers_.begin() + long(i));
-        else i++;
+        if (frame_ - peers_[i].lastFrame > uint32_t(kPeerTimeoutFrames)) {
+            // With our own network down every room falls silent: that is this unit's fault, already logged.
+            if (link_ != LinkType::None) {
+                const uint16_t room = peers_[i].status.from.room;
+                event(EventKind::Fault, room, "room %u offline", unsigned(room));
+                for (auto& q : known_)
+                    if (q.status.from == peers_[i].status.from) q.offlineLogged = true;
+            }
+            peers_.erase(peers_.begin() + long(i));
+        } else {
+            i++;
+        }
     }
+    for (size_t i = 0; i < heardCalls_.size();) {  // a transmission ended (1 s without a packet): one line in the call log
+        const HeardCall& c = heardCalls_[i];
+        if (frame_ - c.last <= 50) {
+            i++;
+            continue;
+        }
+        event(EventKind::Call, c.from.room, "%s to %s, %u s", talkerText(c.flags, c.from.room).c_str(),
+              targetText(c.flags, c.target).c_str(), unsigned((c.last - c.first) / 50 + 1));
+        heardCalls_.erase(heardCalls_.begin() + long(i));
+    }
+}
+
+void Intercom::noteTalk(const AudioHeader& h) {
+    for (auto& c : heardCalls_)
+        if (c.from == h.from && c.flags == h.flags && c.target == h.target) {
+            c.last = frame_;
+            return;
+        }
+    if (heardCalls_.size() < 16) heardCalls_.push_back(HeardCall{h.from, h.target, h.flags, frame_, frame_});
+}
+
+// What changed at another unit since its last status packet goes into the event log.
+void Intercom::peerEvents(const StatusPacket* old, const StatusPacket& s, bool backOnline) {
+    const unsigned r = s.from.room;
+    static const char* faults[] = {"", "E1 no Ethernet (on Wi-Fi)", "E2 no network", "Lo battery low", "dUP duplicate room number",
+                                   "oL an output is shorted"};
+    if (!old) {  // first heard since this unit started says nothing; after an "offline" line it is news
+        if (backOnline) event(EventKind::Info, s.from.room, "room %u back online%s", r, s.uptimeS < 60 ? " (it restarted)" : "");
+        return;
+    }
+    if (s.uptimeS + 5 < old->uptimeS) event(EventKind::Fault, s.from.room, "room %u restarted", r);
+    if (s.fault != old->fault) {
+        if (s.fault != Fault::None) event(EventKind::Fault, s.from.room, "room %u: %s", r, faults[int(s.fault)]);
+        else event(EventKind::Info, s.from.room, "room %u: fault gone", r);
+    }
+    if (s.power != old->power) {
+        if (s.power == PowerSource::Battery) event(EventKind::Fault, s.from.room, "room %u on battery (%u %%)", r, unsigned(s.battery));
+        else event(EventKind::Info, s.from.room, "room %u back on PoE", r);
+    }
+    const uint8_t up = uint8_t(s.flags & ~old->flags);
+    if (up & kStatusCalling) event(EventKind::Call, s.from.room, "room %u is calling the office", r);
+    if (up & kStatusAudioFault) event(EventKind::Fault, s.from.room, "room %u: self-check failed (speaker or microphone)", r);
+    if (up & kStatusTalkHeld) event(EventKind::Fault, s.from.room, "room %u: TALK held over 2 minutes (stuck button?)", r);
+    if (s.emergency != old->emergency && s.emergency)
+        event(EventKind::Fault, s.from.room, "room %u shows EMERGENCY %s", r, kEmergencyNames[s.emergency & 3]);
 }
 
 void Intercom::sendStatus() {
@@ -795,14 +1013,21 @@ void Intercom::sendStatus() {
     s.link = link_;
     s.power = pw.source;
     s.battery = pw.hasBattery ? pw.batteryPct : 0;
-    s.flags = uint8_t((transmitting_ ? kStatusTalking : 0) | (muted() ? kStatusMuted : 0) | (talkHeld() ? kStatusTalkHeld : 0) |
-                      (callingOffice_ ? kStatusCalling : 0));
+    s.flags = statusFlags();
+    s.fwVer = packVersion(kFirmwareVersion);
+    s.emergency = uint8_t(emerg_);
     s.fault = faultCode();
     s.uptimeS = frame_ * kFrameMs / 1000;
     s.unitUid = opt_.unitUid;
     s.group = group_;
     uint8_t buf[32];
     hal_.net->send(buf, encodeStatus(s, buf));
+}
+
+uint8_t Intercom::statusFlags() const {
+    return uint8_t((transmitting_ ? kStatusTalking : 0) | (muted() ? kStatusMuted : 0) | (talkHeld() ? kStatusTalkHeld : 0) |
+                   (callingOffice_ ? kStatusCalling : 0) | (emerg_ != Emergency::None ? kStatusEmergency : 0) |
+                   (audioFault_ ? kStatusAudioFault : 0));
 }
 
 void Intercom::updatePanel() {
@@ -844,6 +1069,10 @@ void Intercom::updatePanel() {
             std::memcpy(text, "CAL", 3);
         } else if (callingOffice_ && !transmitting_ && (frame_ / 50) % 2) {  // calling the office: oFC / number
             std::memcpy(text, "oFC", 3);
+        }
+        if (emerg_ != Emergency::None && (frame_ / 50) % 2 == 0) {  // LoC / EUA / SHE, a second each with the room number
+            static const char kText[4][3] = {{' ', ' ', ' '}, {'L', 'o', 'C'}, {'E', 'U', 'A'}, {char(0x80 | 0x6d), char(0x80 | 0x76), 'E'}};
+            std::memcpy(text, kText[int(emerg_)], 3);
         }
         if (transmitting_) dots |= 0x01;
         if (playing_) dots |= 0x02;
@@ -976,6 +1205,7 @@ void Intercom::checkSchedule() {
     if (minute == lastSchedMinute_) return;
     bool first = lastSchedMinute_ == 0;
     lastSchedMinute_ = minute;
+    if (emerg_ != Emergency::None) return;  // no bells during an emergency
     LocalTime lt = sched_.local(now);
     if (first && lt.second > 20) return;  // just started mid-minute: don't play an event late
     if (sched_.isDayOff(lt)) return;
@@ -1001,6 +1231,9 @@ void Intercom::updateLamps() {
     uint8_t d;
     if (bootT0_ && bootTestStep(t, &d, want, &rgb) >= 0) {
         // power-up light test drives the lamps and the RGB LED
+    } else if (emerg_ != Emergency::None) {  // emergency: the alarm light (J11) flashes fast, the RGB LED is red
+        want[int(Lamp::Other)] = (frame_ / 12) % 2 ? 100 : 0;
+        rgb = kEmergencyRgb;
     } else if (canAnswer() && !transmitting_) {
         bool on = (frame_ / 30) % 2 == 0 && !callAnswered_;
         want[int(Lamp::Other)] = want[int(Lamp::White)] = on ? 100 : 0;
@@ -1074,7 +1307,8 @@ void Intercom::setCallingOffice(bool on, const char* why) {
     if (on == callingOffice_) return;
     callingOffice_ = on;
     callingSince_ = frame_;
-    logf(on ? "calling the office (%s)" : "call to the office ended (%s)", why);
+    if (on) event(EventKind::Call, unit_.room, "room %u is calling the office (%s)", unsigned(unit_.room), why);
+    else logf("call to the office ended (%s)", why);
     sendStatus();
 }
 
@@ -1140,13 +1374,24 @@ bool Intercom::sameGroup(const UnitId& from) const {
 
 void Intercom::refreshPower() {
     power_ = hal_.power->read();
+    const bool low = power_.source == PowerSource::Battery && power_.hasBattery && power_.batteryPct < kLowBatteryPct;
+    if (powerKnown_ && power_.source != lastSource_) {
+        if (power_.source == PowerSource::Battery)
+            event(EventKind::Fault, unit_.room, "room %u on battery (%u %%)", unsigned(unit_.room), unsigned(power_.batteryPct));
+        else event(EventKind::Info, unit_.room, "room %u back on PoE", unsigned(unit_.room));
+    }
+    if (powerKnown_ && low && !wasLow_) event(EventKind::Fault, unit_.room, "room %u battery low (%u %%)", unsigned(unit_.room), unsigned(power_.batteryPct));
+    powerKnown_ = true;
+    lastSource_ = power_.source;
+    wasLow_ = low;
     uint8_t of = hal_.diag ? hal_.diag->outputFaults() : 0;
     if (of != outFaults_) {
         static const char* names[] = {"white lamp (J13)", "IR lamp (J12)", "call light (J11)", "MISC1 (J17)",
                                       "MISC2 (J18)",      "MISC3 (J19)",   "servo power"};
         for (int i = 0; i < 7; i++)
             if ((of & ~outFaults_) & (1u << i))
-                logf("OUTPUT OVERLOAD: %s shorted or overloaded, switched off (check its cable)", names[i]);
+                event(EventKind::Fault, unit_.room, "room %u OUTPUT OVERLOAD: %s shorted or overloaded, switched off (check its cable)",
+                      unsigned(unit_.room), names[i]);
         outFaults_ = of;
     }
 }
@@ -1160,12 +1405,144 @@ AudioStats Intercom::audioStats() const {
     return s;
 }
 
+// ---- emergency messages (R3.1) -------------------------------------------------------------
+// The signal sounds for a while (1 min; evacuate 5 min), then the room is left quiet; the display and the
+// alarm light stay on until "emergency clear". A live voice (the office) always comes before the signal.
+void Intercom::setEmergency(Emergency e, const char* why) {
+    if (e == emerg_) return;
+    if (e == Emergency::None) {
+        event(EventKind::Info, unit_.room, "room %u: emergency cleared (%s)", unsigned(unit_.room), why);
+        startSound(Sound::AllClear);
+    } else {
+        event(EventKind::Fault, unit_.room, "room %u: EMERGENCY %s (%s)", unsigned(unit_.room), kEmergencyNames[int(e)], why);
+        emergSince_ = frame_;
+        emergPos_ = 0;
+        emergSoundUntil_ = frame_ + (e == Emergency::Evacuate ? kEvacuateSoundFrames : kEmergencySoundFrames);
+        pendingSound_ = false;
+        if (soundActive_ && sound_ != Sound::Chime) soundActive_ = false;
+    }
+    emerg_ = e;
+    sendStatus();
+}
+
+void Intercom::noteCameraView() {
+    if (camNotedAt_ && frame_ - camNotedAt_ < 3000) return;
+    camNotedAt_ = frame_ ? frame_ : 1;
+    event(EventKind::Info, unit_.room, "room %u: camera viewed from the web page", unsigned(unit_.room));
+}
+
+// ---- settings backup (R3.1) ----------------------------------------------------------------
+namespace {
+const char* const kBackupKeys[] = {"group", "tune", "sched", "ntp", "boottest", "selfcheck", "couple_map", "couple_open_map"};
+}
+
+std::string Intercom::backupText() const {
+    std::string out = "# intercom settings, room " + std::to_string(unit_.room) + ", firmware " + kFirmwareVersion +
+                      "\n# passwords and keys are not in this file: set them over USB\n";
+    out += "unit=" + std::to_string(unit_.room) + "\n";
+    for (const char* k : kBackupKeys) {
+        std::string v = hal_.store->loadText(k);
+        if (!v.empty() && v.find('\n') == std::string::npos) out += std::string(k) + "=" + v + "\n";
+    }
+    return out;
+}
+
+std::string Intercom::restoreLine(const std::string& lineIn) {
+    size_t b = lineIn.find_first_not_of(" \t\r\n"), e = lineIn.find_last_not_of(" \t\r\n");
+    if (b == std::string::npos) return "";
+    std::string line = lineIn.substr(b, e - b + 1);
+    if (line[0] == '#') return "";
+    size_t eq = line.find('=');
+    if (eq == std::string::npos || eq == 0) return "not a key=value line: " + line.substr(0, 40);
+    const std::string k = line.substr(0, eq), v = line.substr(eq + 1);
+    if (v.size() > 3500 || v.find('\n') != std::string::npos) return k + ": value too long";
+    if (k == "unit") {
+        uint16_t room;
+        uint8_t sub;
+        if (!parseTarget(v, &room, &sub) || room == kTargetAllRooms || sub != kTargetAnySub || room == 0) return "unit: not a room number";
+        UnitId id;
+        id.room = room;
+        setUnit(id);
+        return "";
+    }
+    if (k == "group") {
+        unsigned long g = std::strtoul(v.c_str(), nullptr, 10);
+        if (g > 999) return "group: not a room number";
+        group_ = uint16_t(g == unit_.room ? 0 : g);
+        hal_.store->saveText(kGroupKey, group_ ? std::to_string(group_) : "");
+        sendStatus();
+        return "";
+    }
+    if (k == "tune") {
+        TuneParams p;
+        p.fromString(v);
+        params_ = p;
+        applyParams();  // limits the filter length to what this unit can run
+        hal_.store->saveText(kTuneKey, params_.toString());
+        return "";
+    }
+    if (k == "sched") {
+        Schedule n;
+        if (!n.fromString(v)) return "sched: not a schedule";
+        sched_ = n;
+        saveSchedule();
+        return "";
+    }
+    if (k == "couple_map" || k == "couple_open_map") {
+        auto m = CouplingTest::fromString(v);
+        hal_.store->saveText(k.c_str(), CouplingTest::toString(m));
+        (k == "couple_map" ? couplings_ : couplingsOpen_) = m;
+        return "";
+    }
+    if (k == "selfcheck") {
+        unsigned h = 0, m = 0;
+        if (std::sscanf(v.c_str(), "%u:%u", &h, &m) != 2 || h > 23 || m > 59) return "selfcheck: not a time";
+        hal_.store->saveText("selfcheck", v);
+        loadSelfCheck();
+        return "";
+    }
+    if (k == "ntp" || k == "boottest") {
+        for (char ch : v)
+            if (ch <= ' ' || ch > '~') return k + ": bad character";
+        hal_.store->saveText(k.c_str(), v);
+        return "";
+    }
+    return "unknown setting: " + k.substr(0, 40);
+}
+
 // ---- the frame -------------------------------------------------------------------------
 void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     frame_++;
     if (restartAt_ && frame_ >= restartAt_) {
         restartAt_ = 0;
         opt_.restart(restartDownload_);  // on the board this does not return
+    }
+    // Fall-back (R3.1): firmware from an update is on trial until it has run for a minute with a network
+    // link. A crash or a hang before that makes the bootloader start the old firmware again; 5 minutes
+    // without a link and the unit goes back by itself (it could not be reached to fix it otherwise).
+    if (hal_.fw && !fwChecked_) {
+        if (frame_ >= kFwConfirmFrames && link_ != LinkType::None) {
+            fwChecked_ = true;
+            if (hal_.fw->pending()) event(EventKind::Info, unit_.room, "room %u: new firmware %s confirmed", unsigned(unit_.room), kFirmwareVersion);
+            hal_.fw->confirm();
+        } else if (frame_ >= kFwGiveUpFrames) {
+            fwChecked_ = true;
+            if (hal_.fw->pending()) {
+                logf("new firmware %s: no network in 5 minutes, going back to the old firmware", kFirmwareVersion);
+                hal_.fw->reject();  // on the board this does not return
+            }
+        }
+    }
+    if (emerg_ != Emergency::None && frame_ - emergSince_ > kEmergencyMaxFrames) setEmergency(Emergency::None, "nobody cleared it in 4 hours");
+    // "emergency ... all": the first ten go out 2 s apart, so one lost packet can't leave a room out, then
+    // one every 30 s for units that start later. It stops when this unit's state changes; "clear" after 5 min.
+    if (emergTxKind_ >= 0 && frame_ >= emergTxNext_) {
+        if (int(emerg_) != emergTxKind_ || (emergTxKind_ == 0 && emergTxCount_ >= 20)) {
+            emergTxKind_ = -1;
+        } else {
+            sendSigned("all", std::string("emergency ") + kEmergencyNames[emergTxKind_]);
+            emergTxNext_ = frame_ + (++emergTxCount_ < 10 ? 100u : 1500u);
+        }
     }
     micLevel_ = frameLevel(mic, kFrameSamples);
     uint8_t held = hal_.panel->buttons();
@@ -1268,6 +1645,9 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     }
     if (callingOffice_ && frame_ - callingSince_ >= kCallingTimeoutFrames) setCallingOffice(false, "no answer in 5 min");
     if (talk != transmitting_) {
+        if (!talk && talkSince_)  // this unit's own transmission, for the call log
+            event(EventKind::Call, unit_.room, "%s to %s, %u s", talkerText(webState_ ? kAudioFromConsole : 0, unit_.room).c_str(),
+                  targetText(txFlags_, txTarget_).c_str(), unsigned((frame_ - talkSince_) / 50 + 1));
         transmitting_ = talk;
         talkSince_ = talk ? frame_ : 0;
         if (talk) {  // who this transmission goes to
@@ -1293,7 +1673,8 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     if (callLast_ && !callAnswered_ && frame_ - callLast_ == kAnswerFrames) {  // nobody answered in time
         missedUntil_ = frame_ + kMissedFrames;
         callAnswered_ = true;
-        logf("missed call from %s", callFrom_.room ? std::to_string(callFrom_.room).c_str() : "the office");
+        event(EventKind::Call, unit_.room, "room %u missed a call from %s", unsigned(unit_.room),
+              callFrom_.room ? ("room " + std::to_string(callFrom_.room)).c_str() : "the office");
     }
     if (held && missedUntil_) missedUntil_ = 0;  // any button: the missed call was seen
     if (ringUntil_) {  // "ring": chime again every 2 s until answered or the 10 s are up
@@ -1390,6 +1771,7 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     // Timed events: a waiting chime plays once nobody is talking (up to 60 s late); a call or all-call cuts one.
     if (frame_ % kStatusEveryFrames == 0) checkSchedule();
     const bool busy = n > 0 || transmitting_ || inCall();
+    if (frame_ % kStatusEveryFrames == 0) checkSelfCheck(busy);
     if (soundActive_ && sound_ != Sound::Chime && busy) {
         soundActive_ = false;
         logf("timed event cut short by a call");
@@ -1404,6 +1786,29 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     if (soundActive_) {  // the call chime or a timed sound, mixed in before the echo canceller's reference
         soundActive_ = renderSound(sound_, soundPos_, speaker, kFrameSamples);
         soundPos_ += kFrameSamples;
+    }
+    if (emerg_ != Emergency::None && frame_ < emergSoundUntil_) {
+        if (n > 0 || transmitting_) {
+            emergPos_ = 0;  // a live voice comes first; the signal starts over when it stops
+        } else {
+            static const Sound kSignal[] = {Sound::Chime, Sound::Lockdown, Sound::Evacuate, Sound::Shelter};
+            const Sound s = kSignal[int(emerg_)];
+            size_t cn = 0;
+            const int16_t* clip = hal_.clips ? hal_.clips->clip(kEmergencyNames[int(emerg_)], &cn) : nullptr;
+            if (!clip) cn = 0;
+            // signal, then the recorded message and a second of quiet (if there is a message), and again
+            const uint32_t a = soundSamples(s), total = a + uint32_t(cn) + (cn ? uint32_t(kSampleRate) : 0u);
+            const uint32_t p = emergPos_ % total;
+            if (p < a) {
+                renderSound(s, p, speaker, kFrameSamples);
+            } else {
+                for (uint32_t i = 0; i < uint32_t(kFrameSamples) && p - a + i < cn; i++) {
+                    int v = speaker[i] + clip[p - a + i];
+                    speaker[i] = int16_t(v > 32767 ? 32767 : v < -32767 ? -32767 : v);
+                }
+            }
+            emergPos_ += kFrameSamples;
+        }
     }
     spkLevel_ = frameLevel(speaker, kFrameSamples);
     aec_.playback(speaker);

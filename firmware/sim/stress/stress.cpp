@@ -201,7 +201,7 @@ struct Unit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFirmwa
 // --------------------------------------------------------------------------------- random commands
 static const char* kWords[] = {
     "boottest", "cal", "callofc", "couple", "dayoff", "defaults", "get", "group", "help", "lamp", "load", "mute", "netkey",
-    "ntp", "play", "reboot", "ring", "save", "sched", "selftest", "send", "set", "skip", "stats", "talk", "testpass", "tests",
+    "ntp", "log", "selfcheck", "emergency", "backup", "restore", "play", "reboot", "ring", "save", "sched", "selftest", "send", "set", "skip", "stats", "talk", "testpass", "tests",
     "time", "tone", "tz", "undo", "unit", "version", "webpass", "wifi", "netupdate", "run", "open", "closed", "off", "on", "all", "floor",
     "room", "add", "del", "list", "clear", "bell", "chime", "alarm", "white", "ir", "other", "rgb", "download", "opus", "vol",
     "gain", "taps", "mu", "nlp", "duck", "-", "?", "status", "stop", "map", "show", "now", "mon", "tue", "sat", "daily",
@@ -306,7 +306,7 @@ static void fuzzCommands(Rng& r, long n) {
     static const char* paths[] = {"/", "/school", "/floorplan.js", "/api/status", "/api/school", "/api/cmd", "/api/talk",
                                   "/api/target", "/api/replies", "/api/x", "", "/api/cmd/../..", "//", "/api/talk?x=1",
                                   "/api/fw", "/api/fw/begin?size=70000", "/api/fw/begin?size=", "/api/fw/begin?size=70000&sha=zz",
-                                  "/api/fw/data?off=0", "/api/fw/data?off=", "/api/fw/data", "/api/fw/end", "/api/fw/abort", "/api/fwx"};
+                                  "/api/fw/data?off=0", "/api/fw/data?off=", "/api/fw/data", "/api/fw/end", "/api/fw/abort", "/api/fwx", "/api/log?since=3", "/api/log", "/api/backup", "/api/restore", "/api/cam.jpg"};
     static const char* auths[] = {"", "Basic ", "Basic YWRtaW46", "Basic YWRtaW46YWRtaW4=", "Basic !!!!", "Bearer x", "Basic =",
                                   "Basic YWRtaW46ZnV6ei1wYXNzLTE="};  // admin:fuzz-pass-1, set below
     for (long k = 0; k < n; k++) {

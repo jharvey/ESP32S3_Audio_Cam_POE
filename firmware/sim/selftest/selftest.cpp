@@ -247,9 +247,25 @@ struct Bus {
 };
 
 static int64_t g_clock0 = 0;  // test wall clock: UTC at frame 0 (0 = no clock)
+static bool g_camera = false;       // new FakeUnits have a camera
+static std::string g_bootNote;      // ... and this start reason
 static bool g_bootTest = false;  // power-up light test in new FakeUnits (off: it would light lamps in other tests)
 
-struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFirmware {
+struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFirmware, IClips {
+    // R3.1: fall-back state of the running firmware, a recorded message, a speaker->microphone path
+    bool fwPending = false;
+    int fwConfirmed = 0, fwRejected = 0;
+    bool pending() override { return fwPending; }
+    void confirm() override { fwConfirmed++; fwPending = false; }
+    void reject() override { fwRejected++; }
+    std::vector<int16_t> clipLockdown;
+    const int16_t* clip(const char* name, size_t* n) override {
+        if (clipLockdown.empty() || strcmp(name, "lockdown")) return nullptr;
+        *n = clipLockdown.size();
+        return clipLockdown.data();
+    }
+    bool loop = false;  // the microphone hears the speaker (one frame later, at half the level)
+    int16_t lastSpk[kFrameSamples] = {};
     // the spare firmware slot
     std::vector<uint8_t> fwSlot, fwBooting;  // being written / committed (starts at the next restart)
     size_t fwSize = 0;
@@ -292,7 +308,9 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFi
         opt.utcNow = [this] { return g_clock0 ? g_clock0 + int64_t(ic->frame()) / 50 : int64_t(0); };
         if (!g_bootTest) kv["boottest"] = "off";
         opt.restart = [this](bool d) { restarts++; restartDownload = d; };
-        ic.reset(new Intercom(Hal{this, this, this, this, this, this, this, this, this}, aec, opt));
+        opt.hasCamera = g_camera;
+        opt.bootNote = g_bootNote;
+        ic.reset(new Intercom(Hal{this, this, this, this, this, this, this, this, this, this}, aec, opt));
         ic->begin();
     }
     void send(const uint8_t* d, size_t n) override {
@@ -328,8 +346,10 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFi
     void step() {
         int16_t mic[kFrameSamples], spk[kFrameSamples];
         if (held & 1) voice.render(mic, kFrameSamples);
+        else if (loop) for (int i = 0; i < kFrameSamples; i++) mic[i] = int16_t(lastSpk[i] / 2);
         else memset(mic, 0, sizeof(mic));
         ic->processFrame(mic, spk);
+        memcpy(lastSpk, spk, sizeof(lastSpk));
     }
     uint32_t heardFrom(const UnitId& u) const {
         for (auto& h : ic->heard())
@@ -1728,6 +1748,203 @@ static void testCoupling() {
     CHECK(c.find("doors closed") != std::string::npos && c.find("doors open") != std::string::npos, "\"couple\" shows both: %s", c.c_str());
 }
 
+// R3.1: event log, emergency messages, nightly self-check, settings backup, fall-back, the camera rule.
+static void testR31() {
+    printf("R3.1: event log, emergency, self-check, backup, fall-back, camera rule\n");
+    const int64_t clock0 = g_clock0;
+    g_clock0 = 1795451390;  // Mon 2026-11-23 16:29:50 UTC at frame 0
+    const std::string key = "school-network-key-1";
+    auto has = [](FakeUnit& u, const char* text, int kind = -1) {
+        for (const auto& e : u.ic->events())
+            if (e.text.find(text) != std::string::npos && (kind < 0 || int(e.kind) == kind)) return true;
+        return false;
+    };
+    auto web = [](WebUi& w, const char* method, const std::string& path, const std::string& body = "") {
+        HttpRequest q;
+        q.method = method;
+        q.path = path;
+        q.authorization = basic("admin:s3cret-pass");
+        q.xIntercom = "1";
+        q.body = body;
+        return w.handle(q);
+    };
+    {   // ---- event log and emergency ----
+        Bus bus;
+        g_bootNote = "power on";
+        FakeUnit a(&bus, {101, 0}, 120), b(&bus, {214, 0}, 160);
+        g_bootNote.clear();
+        std::vector<FakeUnit*> all = {&a, &b};
+        auto run = [&](int frames) { for (int k = 0; k < frames; k++) for (auto* u : all) u->step(); };
+        a.ic->command("netkey " + key);
+        b.ic->command("netkey " + key);
+        run(100);
+        CHECK(has(a, "room 101 started: power on", 2), "the start and its reason are in the log");
+        CHECK(a.ic->known().size() == 1 && versionText(a.ic->known()[0].status.fwVer) == kFirmwareVersion,
+              "status packets carry the firmware version (%s)", a.ic->known().empty() ? "?" : versionText(a.ic->known()[0].status.fwVer).c_str());
+        b.held = 1;
+        run(100);
+        b.held = 0;
+        run(80);
+        CHECK(has(a, "room 214 to everyone", 1) && has(b, "room 214 to everyone", 1), "an all-call is in the call log of the talker and of a listener");
+        b.eth = false;
+        run(250);
+        CHECK(has(a, "room 214 offline", 0), "a unit that goes silent is logged as offline");
+        CHECK(has(b, "room 214: network lost", 0) && !has(b, "room 101 offline"), "the unit that lost its network logs that, not every room as offline");
+        b.eth = true;
+        run(100);
+        CHECK(has(a, "room 214 back online", 2), "and as back online");
+        b.pw.source = PowerSource::Battery;
+        b.pw.hasBattery = true;
+        b.pw.batteryPct = 80;
+        run(120);
+        CHECK(has(a, "room 214 on battery (80 %)", 0) && has(b, "room 214 on battery (80 %)", 0), "a unit on battery is logged, there and at the others");
+        b.pw.source = PowerSource::PoE;
+        run(120);
+        std::string l = a.ic->command("log faults");
+        CHECK(l.find("FAULT room 214 offline") != std::string::npos && l.find("to everyone") == std::string::npos &&
+                  a.ic->command("log calls").find("room 214 to everyone") != std::string::npos,
+              "\"log faults\" and \"log calls\" pick their lines");
+        a.ic->command("webpass s3cret-pass");
+        WebUi wa(*a.ic);
+        HttpResponse r = web(wa, "GET", "/api/log?since=0");
+        CHECK(r.status == 200 && r.body.find("room 214 offline") != std::string::npos && r.body.find("\"next\":") != std::string::npos, "the page gets the log as JSON");
+        CHECK(web(wa, "GET", "/api/log?since=99999").body.find("room 214 offline") != std::string::npos, "a page with a too-high number (unit restarted) gets it all again");
+
+        CHECK(a.ic->command("emergency lockdown all", CmdSource::Network).find("USB") != std::string::npos && a.ic->emergency() == Intercom::Emergency::None,
+              "\"emergency ... all\" is refused from the network");
+        b.eth = false;  // 214 is off the network when the emergency starts
+        run(20);
+        b.lampSeen = 0;
+        b.rgbSeen = 0;
+        std::string e = a.ic->command("emergency lockdown all", CmdSource::Web);
+        CHECK(e.find("sent to all units") != std::string::npos && a.ic->emergency() == Intercom::Emergency::Lockdown, "the office starts a lockdown: %s", e.c_str());
+        run(100);
+        CHECK(a.ic->speakerLevel() > 50, "the signal plays (level %u)", unsigned(a.ic->speakerLevel()));
+        b.eth = true;
+        run(300);
+        CHECK(b.ic->emergency() == Intercom::Emergency::Lockdown && b.ic->speakerLevel() > 50, "a unit that was off the network at the start still gets it (repeats)");
+        bool loc = false;
+        for (const auto& s : b.shown) loc = loc || s.compare(0, 3, "LoC") == 0;
+        CHECK(loc && (b.lampSeen & 4) && (b.rgbSeen & 0xC00000), "display LoC, alarm light and red LED");
+        CHECK(a.ic->known()[0].status.emergency == 1 && (a.ic->known()[0].status.flags & kStatusEmergency) && has(a, "room 214 shows EMERGENCY lockdown"),
+              "the status packet and the log show it");
+        uint32_t heard0 = b.heardFrom(a.id);
+        a.held = 1;
+        run(100);
+        a.held = 0;
+        CHECK(b.heardFrom(a.id) > heard0 + 80, "talking still gets through during an emergency");
+        run(3100);
+        CHECK(b.ic->speakerLevel() == 0 && b.ic->emergency() == Intercom::Emergency::Lockdown, "after a minute the signal stops, the emergency stays on");
+        a.ic->command("emergency clear all");
+        run(50);
+        CHECK(a.ic->emergency() == Intercom::Emergency::None && b.ic->emergency() == Intercom::Emergency::None && has(b, "emergency cleared"),
+              "all clear reaches every unit");
+    }
+    {   // ---- a recorded message follows the signal ----
+        Bus bus;
+        FakeUnit c(&bus, {105, 0}, 120);
+        c.clipLockdown.assign(16000, 1000);
+        for (int k = 0; k < 30; k++) c.step();
+        c.ic->command("emergency lockdown");
+        for (int k = 0; k < 149; k++) c.step();
+        bool signal = c.lastSpk[100] != 1000;
+        for (int k = 0; k < 11; k++) c.step();
+        CHECK(signal && c.lastSpk[100] == 1000, "the recorded message plays after the 3 s signal");
+    }
+    {   // ---- self-check ----
+        Bus bus;
+        FakeUnit a(&bus, {101, 0}, 120), b(&bus, {102, 0}, 130), c(&bus, {103, 0}, 140);
+        std::vector<FakeUnit*> all = {&a, &b, &c};
+        auto run = [&](int frames) { for (int k = 0; k < frames; k++) for (auto* u : all) u->step(); };
+        a.loop = c.loop = true;  // 102's microphone hears nothing
+        CHECK(c.ic->command("selfcheck 16:31").find("16:31") != std::string::npos && c.kv["selfcheck"] == "16:31" &&
+                  c.ic->command("selfcheck 25:00").find("usage") != std::string::npos,
+              "selfcheck HH:MM is saved, a bad time refused");
+        run(60);
+        a.ic->command("selfcheck now");
+        b.ic->command("selfcheck now");
+        run(100);
+        CHECK(!a.ic->audioFault() && has(a, "room 101 self-check passed", 2), "a unit that hears its own tone passes");
+        CHECK(!b.ic->audioFault() && !has(b, "FAILED"), "one failed run does not count yet");
+        run(1700);
+        CHECK(b.ic->audioFault() && has(b, "room 102 self-check FAILED: the microphone did not hear the speaker", 0) &&
+                  has(a, "room 102: self-check failed", 0),
+              "the second failure 30 s later counts: logged there and at the other units");
+        CHECK(!has(c, "room 103 self-check passed"), "the nightly check has not run before its time");
+        run(2900);  // 16:31:21 is 91 s after the start
+        CHECK(has(c, "room 103 self-check passed", 2), "the nightly check runs at its time (room 103: second 21)");
+        b.loop = true;
+        b.ic->command("selftest");
+        run(100);
+        CHECK(!b.ic->audioFault(), "a passing test clears the fault");
+    }
+    {   // ---- settings backup ----
+        Bus bus, bus2;
+        FakeUnit a(&bus, {214, 0}, 120), n(&bus2, {7, 0}, 130);
+        a.ic->command("netkey " + key);
+        a.ic->command("webpass s3cret-pass");
+        a.ic->command("sched add 11:30 mon-fri lunch");
+        a.ic->command("selfcheck 02:30");
+        a.ic->command("group 299");
+        a.ic->command("save");
+        std::string bk = a.ic->backupText();
+        CHECK(bk.find("unit=214\n") != std::string::npos && bk.find("\nsched=") != std::string::npos && bk.find("\nselfcheck=02:30\n") != std::string::npos &&
+                  bk.find("\ngroup=299\n") != std::string::npos && bk.find("\ntune=") != std::string::npos,
+              "the backup has the room number, schedule, self-check time, group and tuning");
+        CHECK(bk.find(key) == std::string::npos && bk.find("pass") == bk.find("passwords"), "no key or password in it");
+        n.ic->command("webpass s3cret-pass");
+        WebUi wn(*n.ic);
+        HttpResponse r = web(wn, "POST", "/api/restore", bk);
+        CHECK(r.status == 200 && n.id.room == 214 && n.ic->schedule().entries.size() == 1 && n.ic->group() == 299 && n.kv["selfcheck"] == "02:30" &&
+                  n.kv["tune"] == a.kv["tune"],
+              "restored on a replacement unit: %s", r.body.c_str());
+        CHECK(web(wn, "GET", "/api/backup").body.find("unit=214\n") != std::string::npos, "the page downloads the backup");
+        CHECK(n.ic->command("restore unit=5", CmdSource::Network).find("USB") != std::string::npos && n.id.room == 214, "restore is refused from the network");
+        r = web(wn, "POST", "/api/restore", "webpass=x\nnetkey=y\nunit=abc\n");
+        CHECK(r.status == 400 && r.body.find("unknown setting: webpass") != std::string::npos && r.body.find("unit: not a room number") != std::string::npos &&
+                  n.kv["netkey"].empty() && n.id.room == 214,
+              "passwords, keys and bad values are not taken from a file");
+    }
+    {   // ---- fall-back ----
+        Bus bus, bus2;
+        FakeUnit a(&bus, {101, 0}, 120), b(&bus2, {102, 0}, 130);
+        a.fwPending = b.fwPending = true;
+        b.eth = false;  // the new firmware never gets a network link
+        a.ic->command("webpass s3cret-pass");
+        WebUi wa(*a.ic);
+        for (int k = 0; k < 2990; k++) a.step();
+        bool early = a.fwConfirmed != 0 || web(wa, "GET", "/api/fw").body.find("\"pending\":true") == std::string::npos;
+        for (int k = 0; k < 20; k++) a.step();
+        CHECK(!early && a.fwConfirmed == 1 && !a.fwPending && has(a, "new firmware") &&
+                  web(wa, "GET", "/api/fw").body.find("\"pending\":false") != std::string::npos,
+              "new firmware is on trial, and confirmed after a minute with a network link");
+        for (int k = 0; k < 14990; k++) b.step();
+        bool early2 = b.fwRejected != 0;
+        for (int k = 0; k < 20; k++) b.step();
+        CHECK(!early2 && b.fwRejected == 1 && b.fwConfirmed == 0, "without a link for 5 minutes it goes back to the old firmware");
+    }
+    {   // ---- the camera is for emergencies only ----
+        Bus bus;
+        FakeUnit plain(&bus, {101, 0}, 120);
+        g_camera = true;
+        FakeUnit cam(&bus, {102, 0}, 130);
+        g_camera = false;
+        plain.ic->command("webpass s3cret-pass");
+        cam.ic->command("webpass s3cret-pass");
+        WebUi wp(*plain.ic), wc(*cam.ic);
+        for (int k = 0; k < 30; k++) { plain.step(); cam.step(); }
+        CHECK(web(wp, "GET", "/api/cam.jpg").status == 404, "no camera: 404");
+        HttpResponse r = web(wc, "GET", "/api/cam.jpg");
+        CHECK(r.status == 403 && !r.camera && !has(cam, "camera viewed"), "no picture outside an emergency");
+        cam.ic->command("emergency evacuate");
+        r = web(wc, "GET", "/api/cam.jpg");
+        CHECK(r.status == 200 && r.camera && has(cam, "camera viewed"), "a picture during one, and the viewing is logged");
+        cam.ic->command("emergency clear");
+        CHECK(web(wc, "GET", "/api/cam.jpg").status == 403, "and none again after all clear");
+    }
+    g_clock0 = clock0;
+}
+
 int main() {
     testBootLightTest();
     testTuning();
@@ -1735,6 +1952,7 @@ int main() {
     testConsole();
     testWeb();
     testFirmwareUpdate();
+    testR31();
     testPanelDriver();
     testNetAuth();
     testBringUp();

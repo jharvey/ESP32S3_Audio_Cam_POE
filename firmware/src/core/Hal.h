@@ -107,6 +107,20 @@ public:
     // commit: check the written image and start it at the next restart. Otherwise drop it.
     virtual bool finish(bool commit) = 0;
     virtual std::string error() { return ""; }                // why the last call failed
+    // Fall-back (R3.1). A firmware that came from an update is "pending" until confirm(): if the unit
+    // crashes or hangs before that, the bootloader starts the old firmware again. reject() goes back now.
+    virtual bool pending() { return false; }
+    virtual void confirm() {}
+    virtual void reject() {}
+};
+
+// Recorded emergency messages (R3.1): 16 kHz mono clips the board loaded at start (SD card /msg/<name>.wav).
+// Optional: without a clip only the built-in signal plays.
+class IClips {
+public:
+    virtual ~IClips() = default;
+    // name: "lockdown", "evacuate" or "shelter". Returns the samples, or nullptr when there is no such clip.
+    virtual const int16_t* clip(const char* name, size_t* samples) = 0;
 };
 
 struct Hal {
@@ -119,6 +133,7 @@ struct Hal {
     IDiag* diag = nullptr;  // optional
     ILamps* lamps = nullptr;  // optional
     IFirmware* fw = nullptr;  // optional: no network updates without it
+    IClips* clips = nullptr;  // optional: recorded emergency messages
 };
 
 }  // namespace ic
