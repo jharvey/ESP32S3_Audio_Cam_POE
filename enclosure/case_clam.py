@@ -20,8 +20,9 @@ GAP = 2.5        # board edge to the inside of the cover wall (room for the back
 WALL = 2.8
 FLOOR = 2.4      # back plate thickness
 FACE = 2.0       # front panel thickness
-BACK_H = 7.0     # room behind the board: wall screw heads and the cable passing to the bay
-FRONT_H = 15.0   # room in front of the board: the RJ45 J9 (about 13.5 mm) is the tallest part
+BACK_H = 3.0     # room behind the board: use countersunk wall screws; the cable goes through the hole in the bay
+FRONT_H = 14.5   # room in front of the board: the RJ45 J9 is the tallest part (11.55 mm overall; how much of it
+                 # stands above the board, and the PoE module's height, are NOT CHECKED against the drawings)
 BAY = 45.0       # room below the board for the RJ45 plug and the cable's bend (0 = no bay)
 LIP_T, LIP_H = 1.6, 4.0   # lip on the back plate that the cover fits around
 FIT = 0.2        # play between lip and cover wall
@@ -34,7 +35,7 @@ BOX_PITCH = 83.3 # screw spacing of a US single-gang wall box
 HOOK_W = 12.0    # the two hooks at the top
 HOOK_X = (25.0, 75.0)
 LOCK_X = 35.0    # the security screw (from below), clear of the RJ45 plug; use a tamper-proof M3 (pin Torx)
-SNAP_X = (20.0, 80.0)     # two snap tongues at the bottom: the cover clicks shut without the screw
+SNAP_X = (20.0, 60.0)     # two snap tongues at the bottom: the cover clicks shut without the screw
 SNAP_W, SNAP_T, SNAP_H = 10.0, 1.2, 10.5
 SNAP_Z = 9.0     # height of the snap ridge above the back plate
 SNAP_R = 0.7     # ridge radius; it sits 0.5 mm into a groove in the cover wall
@@ -120,9 +121,8 @@ for x, y, dx, dy in ((20, 20, 2, 0), (80, 20, 2, 0), (20, yb, 0, 2), (80, yb, 0,
     back = back.cut(slot(x, y, WALL_SCREW_D, dx, dy))
 for y in (H / 2 - BOX_PITCH / 2, H / 2 + BOX_PITCH / 2):
     back = back.cut(slot(W / 2, y, 4.0, 0, 1.5))
-# cable opening, inside the wall box area; the cable runs behind the board down to the bay
-back = back.cut(slab(58, 35, 78, 65, Z_BACK - 1, Z_FLOOR + 1).edges("|Z").fillet(3.0))
-if BAY >= 30:  # and a hole in the bay, right behind the plug, for a cable that goes straight into the wall
+# the cable comes through a hole in the bay, right behind the plug, and goes straight into the wall
+if BAY >= 30:
     back = back.cut(slab(40, H + 6, 62, H + 32, Z_BACK - 1, Z_FLOOR + 1).edges("|Z").fillet(4.0))
 
 # ---- front cover -----------------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ cover = cover.cut(slab(KNOCK_X[0], YB_IN - 0.1, KNOCK_X[1], YB - 0.6, Z_FLOOR - 
 d = box_of("DISP1", -2.0)
 cover = cover.cut(slab(d[0], d[1], d[2], d[3], Z_FACE - 1, Z_TOP + 1))
 # a box from the face down to the display, so you see the digits and not the inside of the case
-DISP_TOP = 8.0   # height of the display above the board: A GUESS, check the part
+DISP_TOP = 3.85  # height of the display above the board (SLS0563, from the parts list)
 cover = cover.union(slab(d[0] - 1.2, d[1] - 1.2, d[2] + 1.2, d[3] + 1.2, DISP_TOP + 0.3, Z_FACE).cut(slab(d[0], d[1], d[2], d[3], DISP_TOP, Z_FACE + 1)))
 # TALK (PB1) and OFFICE (PB7): a guide under the face, bored for the caps
 btn = [TALK_AT, OFFICE_AT]
@@ -238,7 +238,7 @@ board = slab(0, 0, W, H, -PCB_T, 0)
 for hx, hy in B["holes"]: board = board.cut(cyl(hx, hy, 3.2, -PCB_T - 1, 1))
 board = board.union(slab(j9[0] + 1, j9[1] + 1, j9[2] - 1, j9[3] - 1, 0, 13.5))
 board = board.union(slab(u14[0], u14[1], u14[2], u14[3], 0, 12.0))
-dd = box_of("DISP1"); board = board.union(slab(dd[0], dd[1], dd[2], dd[3], 0, 8.0))
+dd = box_of("DISP1"); board = board.union(slab(dd[0], dd[1], dd[2], dd[3], 0, DISP_TOP))
 for bx, by in btn: board = board.union(slab(bx - 2.5, by - 2.5, bx + 2.5, by + 2.5, 0, SW_TOP))
 if BAY >= 30:  # the RJ45 plug with its boot
     board = board.union(slab(j9[0] + 4, j9[3] - 1, j9[2] - 4, j9[3] + 24, 1.5, 12.0))
@@ -284,7 +284,8 @@ def card_face():  # the card's printed front (make_card.py draws it) laid on the
     return a
 def black_paint():  # flat black, whatever the light
     a = actor("paint", black); a.GetProperty().LightingOff(); return a
-front = lambda: [actor("clam_back", grey), actor("board_standin", green), actor("clam_cover", beige), actor("clam_buttons", red), actor("use_card", white), card_face(), black_paint()]
+BOARD_COLOR = (0.08, 0.08, 0.09)   # black solder mask; green is (0.20, 0.50, 0.25)
+front = lambda: [actor("clam_back", grey), actor("board_standin", BOARD_COLOR), actor("clam_cover", beige), actor("clam_buttons", red), actor("use_card", white), card_face(), black_paint()]
 shot("preview_front.png", front(), (60, -120, 240))
 shot("preview_face.png", front(), (0, -30, 300))
 shot("preview_step2.png", [actor("clam_back", grey), actor("board_standin", green)], (90, -200, 200), (0, 0, 1))
