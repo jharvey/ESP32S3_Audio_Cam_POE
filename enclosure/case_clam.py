@@ -20,14 +20,17 @@ GAP = 2.5        # board edge to the inside of the cover wall (room for the back
 WALL = 2.8
 FLOOR = 2.4      # back plate thickness
 FACE = 2.0       # front panel thickness
-BACK_H = 3.3     # room behind the board: the RJ45 J9 reaches 2.70 mm below the board (HCTL drawing, 11.55 +/- 0.2
-                 # overall). Use countersunk wall screws; the cable goes through the hole in the bay.
-FRONT_H = 14.4   # room in front of the board. The PoE module U14 sets it: 13.35 +/- 0.5 mm tall (SDAPO DP9900M drawing,
-                 # page 7 of its datasheet; the board's 3D model agrees). The RJ45 stands 8.85 mm above the board.
+BATTERY = True   # an 18650 in its holder BT1 on the back of the board (False: a thinner case without it)
+BT_H = 20.5      # holder with a cell in it, above the board. The holder alone is 14.96 mm (its 3D model); where the top
+                 # of the cell ends up is AN ESTIMATE, measure one
+POE_H = 13.85    # PoE module U14, on the back of the board: 13.35 +/- 0.5 mm (SDAPO DP9900M drawing, page 7)
+BACK_H = (BT_H if BATTERY else POE_H) + 0.55    # room behind the board
+FRONT_H = 8.85 + 0.55   # room in front of the board: the RJ45 J9 stands 8.85 mm above it (HCTL drawing), the tallest part
+                 # there. The upright 3-pin headers J5-J8 (8.5 mm) and the transformer T1 (6.55 mm) are lower.
 BAY = 45.0       # room below the board for the RJ45 plug and the cable's bend (0 = no bay)
 LIP_T, LIP_H = 1.6, 4.0   # lip on the back plate that the cover fits around
 FIT = 0.2        # play between lip and cover wall
-POST_D = 7.0     # posts under the board
+POST_D = 8.0     # posts under the board
 PILOT_D = 2.6    # M3 self-tapping screw (4.0 for a brass heat-set insert)
 SCREW_D = 3.4    # M3 clearance
 HEAD_D = 6.5     # screw head recess
@@ -50,7 +53,6 @@ SW_TOP = 3.5     # top of the push button above the board: A GUESS, check the pa
 SW_TRAVEL = 0.25 # how far the switch moves to click: A GUESS, check the part
 STOP_EXTRA = 0.15  # the cap's two legs land on the board this much after the click, so a hard press goes into the FR4
 LEG_X0, LEG_HALF_W = 2.95, 0.9   # legs stand left and right of the switch, between its two pads on each side
-BODY_Z0 = 9.5    # the cap is solid above this height (the display next to it is about 8 mm tall: A GUESS)
 LABEL_H, LABEL_DEPTH = 3.6, 0.6   # engraved text height and depth
 CORNER_R = 7.0   # the case's four corners
 FACE_R = 2.5     # rounding of the front edge
@@ -90,6 +92,8 @@ Z_FLOOR = -PCB_T - BACK_H                       # front face of the back plate
 Z_BACK = Z_FLOOR - FLOOR                        # against the wall
 Z_FACE = FRONT_H                                # inside face of the front
 Z_TOP = Z_FACE + FACE
+GUIDE_H = min(6.0, Z_FACE - SW_TOP - 0.9)       # depth of the button guides: they stay above the other switches
+BODY_Z0 = max(Z_FACE - 5.0, 4.7)                # the cap is solid above this height, clear of the 4.16 mm display
 j9 = box_of("J9", 1.0); u14 = box_of("U14")
 
 # ---- back plate ------------------------------------------------------------------------------------------
@@ -118,7 +122,7 @@ def slot(x, y, d, dx, dy):
     s = cyl(x - dx, y - dy, d, Z_BACK - 1, Z_FLOOR + 1).union(cyl(x + dx, y + dy, d, Z_BACK - 1, Z_FLOOR + 1))
     return s.union(slab(x - dx - (d / 2 if dy else 0), y - dy - (d / 2 if dx else 0), x + dx + (d / 2 if dy else 0), y + dy + (d / 2 if dx else 0), Z_BACK - 1, Z_FLOOR + 1))
 yb = YB_IN - 20
-for x, y, dx, dy in ((20, 20, 2, 0), (80, 20, 2, 0), (20, yb, 0, 2), (80, yb, 0, 2)):
+for x, y, dx, dy in ((45, 20, 2, 0), (80, 20, 2, 0), (20, yb, 0, 2), (80, yb, 0, 2)):
     back = back.cut(slot(x, y, WALL_SCREW_D, dx, dy))
 for y in (H / 2 - BOX_PITCH / 2, H / 2 + BOX_PITCH / 2):
     back = back.cut(slot(W / 2, y, 4.0, 0, 1.5))
@@ -147,9 +151,9 @@ btn = [TALK_AT, OFFICE_AT]
 def rrect(w, h, r, z0, z1, cx=0.0, cy=0.0):  # rounded rectangle block, centre at KiCad (cx, cy)
     return cq.Workplane("XY").box(w, h, z1 - z0, centered=(True, True, False)).edges("|Z").fillet(r).translate((cx, Y(cy), z0))
 FW, FH = BTN_W + 2 * BTN_FLANGE, BTN_H + 2 * BTN_FLANGE
-for bx, by in btn: cover = cover.union(rrect(FW + 2.8, FH + 2.8, BTN_R + 2.2, Z_FACE - 6, Z_FACE, bx, by + CAP_DY))
+for bx, by in btn: cover = cover.union(rrect(FW + 2.8, FH + 2.8, BTN_R + 2.2, Z_FACE - GUIDE_H, Z_FACE, bx, by + CAP_DY))
 for bx, by in btn:
-    cover = cover.cut(rrect(FW + 0.4, FH + 0.4, BTN_R + 1.0, Z_FACE - 7, Z_FACE - 0.01, bx, by + CAP_DY))
+    cover = cover.cut(rrect(FW + 0.4, FH + 0.4, BTN_R + 1.0, Z_FACE - GUIDE_H - 1, Z_FACE - 0.01, bx, by + CAP_DY))
     cover = cover.cut(rrect(BTN_W + 0.4, BTN_H + 0.4, BTN_R + 0.2, Z_FACE - 1, Z_TOP + 1, bx, by + CAP_DY))
 # engraved labels under the buttons
 def label(txt, x, y, halign):
@@ -173,13 +177,13 @@ for i in range(-4, 5):
     s = slab(sx - SPK_D / 2, sy + i * 4.0 - 1.0, sx + SPK_D / 2, sy + i * 4.0 + 1.0, Z_FACE - 1, Z_TOP + 1)
     grille = s if grille is None else grille.union(s)
 cover = cover.cut(grille.intersect(cyl(sx, sy, SPK_D, Z_FACE - 2, Z_TOP + 2)))
-# vents: in the face over the PoE module, and in the bottom wall below it
-for i in range(4):
-    vy = u14[1] + 2 + i * 5.0
-    cover = cover.cut(slab(u14[0] + 2, vy, u14[2] - 2, vy + 2.0, Z_FACE - 1, Z_TOP + 1))
-for i in range(5):
-    vx = u14[0] + 1 + i * 4.0
-    cover = cover.cut(slab(vx, YB_IN - 1, vx + 2.0, YB + 1, 2, Z_FACE - 3))
+# vents for the PoE module, which is on the back of the board: slots in the bottom wall behind the board to let
+# air in, slots in the top wall to let the warm air out. The face has none.
+if BACK_H > 9:
+    for i in range(5):
+        vx = u14[0] + 1 + i * 4.0
+        cover = cover.cut(slab(vx, YB_IN - 1, vx + 2.0, YB + 1, Z_FLOOR + 5, -PCB_T - 3))
+        cover = cover.cut(slab(41 + i * 4.0, YT - 1, 43 + i * 4.0, YT_IN + 1, Z_FLOOR + 5, -PCB_T - 3))
 if BAY < 30:  # no bay: the cable leaves through the bottom wall
     cover = cover.cut(slab(j9[0], YB_IN - 1, j9[2], YB + 1, -1, 14.5))
 # side openings: USB-C (right, wide enough for the plug's body), microSD and audio jack (left)
@@ -226,9 +230,10 @@ cap = rrect(BTN_W, BTN_H, BTN_R, Z_FACE - 0.3, Z_TOP + BTN_PROUD, 0, CAP_DY).fac
 cap = cap.union(rrect(FW, FH, BTN_R + 0.8, BODY_Z0, Z_FACE - 0.3, 0, CAP_DY))       # body, guided in the cover
 cap = cap.union(cyl(0, 0, 4.0, SW_TOP, BODY_Z0))                                    # stem, rests on the switch
 R = 4.5
-legs = slab(-R, -LEG_HALF_W, R, LEG_HALF_W, SW_TOP + 1.5, BODY_Z0)                  # bridge over the switch
+zb = min(SW_TOP + 1.5, BODY_Z0 - 0.01)
+legs = slab(-R, -LEG_HALF_W, R, LEG_HALF_W, zb, BODY_Z0)                  # bridge over the switch
 for s in (-1, 1):                                                                   # two legs down to just above the board
-    legs = legs.union(slab(min(s * LEG_X0, s * R), -LEG_HALF_W, max(s * LEG_X0, s * R), LEG_HALF_W, SW_TRAVEL + STOP_EXTRA, SW_TOP + 1.5))
+    legs = legs.union(slab(min(s * LEG_X0, s * R), -LEG_HALF_W, max(s * LEG_X0, s * R), LEG_HALF_W, SW_TRAVEL + STOP_EXTRA, zb))
 cap = cap.union(legs)
 caps = None
 for bx, by in btn:
@@ -238,7 +243,9 @@ for bx, by in btn:
 board = slab(0, 0, W, H, -PCB_T, 0)
 for hx, hy in B["holes"]: board = board.cut(cyl(hx, hy, 3.2, -PCB_T - 1, 1))
 board = board.union(slab(j9[0] + 1, j9[1] + 1, j9[2] - 1, j9[3] - 1, -PCB_T - 2.7, 8.85))
-board = board.union(slab(u14[0], u14[1], u14[2], u14[3], 0, 13.85))
+board = board.union(slab(u14[0], u14[1], u14[2], u14[3], -PCB_T - POE_H, -PCB_T))
+if BATTERY:
+    bt = box_of("BT1"); board = board.union(slab(bt[0], bt[1], bt[2], bt[3], -PCB_T - BT_H, -PCB_T))
 dd = box_of("DISP1"); board = board.union(slab(dd[0], dd[1], dd[2], dd[3], 0, DISP_TOP))
 for bx, by in btn: board = board.union(slab(bx - 2.5, by - 2.5, bx + 2.5, by + 2.5, 0, SW_TOP))
 if BAY >= 30:  # the RJ45 plug with its boot
