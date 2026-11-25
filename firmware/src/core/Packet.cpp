@@ -154,7 +154,7 @@ size_t encodeText(const TextPacket& t, uint8_t* out) {
 bool decodeText(const uint8_t* buf, size_t len, TextPacket* t) {
     bool ok;
     PacketType type = peekType(buf, len, &ok);
-    if (!ok || (type != PacketType::Command && type != PacketType::Reply)) return false;
+    if (!ok || len > kMaxPacketBytes || (type != PacketType::Command && type != PacketType::Reply)) return false;
     t->type = type;
     t->from.room = get16(buf + 4);
     t->from.sub = buf[6];

@@ -35,6 +35,11 @@ add_executable(ic-selftest selftest/selftest.cpp ${FW}/src/board/Tm1637.cpp)
 target_include_directories(ic-selftest PRIVATE ${FW}/src/board)
 target_link_libraries(ic-selftest PRIVATE ic_core ic_simcommon)
 
+# Chaos and fuzz tests (build with -fsanitize=address,undefined to get the most from them).
+add_executable(ic-stress stress/stress.cpp)
+target_link_libraries(ic-stress PRIVATE ic_core ic_simcommon)
+target_compile_options(ic-stress PRIVATE -O2 -Wall)
+
 add_executable(ic-netsim netsim/netsim.cpp)
 target_link_libraries(ic-netsim PRIVATE ic_core)
 target_compile_options(ic-netsim PRIVATE -O2)
