@@ -39334,12 +39334,6 @@
 		(uuid "90810c95-e143-4156-8167-d72074d38656")
 	)
 	(junction
-		(at 373.38 160.02)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "913ec34c-5b33-44cd-852b-b26d9d2853f7")
-	)
-	(junction
 		(at 444.5 356.87)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -39392,12 +39386,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "9c3461ba-b809-4ad3-a0a4-0fd1c155a877")
-	)
-	(junction
-		(at 281.94 193.04)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "9c4f8a7b-b336-4ad4-93ec-3e3f5baea55a")
 	)
 	(junction
 		(at 132.08 57.15)
@@ -39494,12 +39482,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "aadddb39-8c7e-4a77-9454-0a5d57b3cb99")
-	)
-	(junction
-		(at 373.38 129.54)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ab2909f0-cd6a-42e3-ad6f-11e468650386")
 	)
 	(junction
 		(at 396.24 341.63)
@@ -40447,16 +40429,6 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 254) (xy 250.19 254)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "123279a2-5326-46f7-a5a0-3ce5445bb64d")
-	)
-	(wire
-		(pts
 			(xy 412.75 224.79) (xy 412.75 245.11)
 		)
 		(stroke
@@ -40477,7 +40449,7 @@
 	)
 	(wire
 		(pts
-			(xy 224.79 248.92) (xy 229.87 248.92)
+			(xy 260.35 247.65) (xy 265.43 247.65)
 		)
 		(stroke
 			(width 0)
@@ -40517,16 +40489,6 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 266.7) (xy 250.19 266.7)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1427fa8b-2989-4728-9990-e137ab4d061d")
-	)
-	(wire
-		(pts
 			(xy 205.74 382.27) (xy 205.74 379.73)
 		)
 		(stroke
@@ -40537,7 +40499,7 @@
 	)
 	(wire
 		(pts
-			(xy 224.79 241.3) (xy 227.33 241.3)
+			(xy 260.35 240.03) (xy 262.89 240.03)
 		)
 		(stroke
 			(width 0)
@@ -40727,7 +40689,7 @@
 	)
 	(wire
 		(pts
-			(xy 270.51 248.92) (xy 275.59 248.92)
+			(xy 260.35 276.86) (xy 265.43 276.86)
 		)
 		(stroke
 			(width 0)
@@ -41207,7 +41169,7 @@
 	)
 	(wire
 		(pts
-			(xy 224.79 261.62) (xy 229.87 261.62)
+			(xy 260.35 290.83) (xy 265.43 290.83)
 		)
 		(stroke
 			(width 0)
@@ -41304,6 +41266,16 @@
 			(type default)
 		)
 		(uuid "2d1eee18-668f-4f4e-9fc5-5f730aa77135")
+	)
+	(wire
+		(pts
+			(xy 227.33 259.08) (xy 242.57 259.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2d596265-fbf8-4f5a-953e-9558a0c22635")
 	)
 	(wire
 		(pts
@@ -41727,7 +41699,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 279.4) (xy 250.19 279.4)
+			(xy 294.64 283.21) (xy 297.18 283.21)
 		)
 		(stroke
 			(width 0)
@@ -41917,7 +41889,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 287.02) (xy 252.73 287.02)
+			(xy 294.64 290.83) (xy 299.72 290.83)
 		)
 		(stroke
 			(width 0)
@@ -41954,6 +41926,16 @@
 			(type default)
 		)
 		(uuid "42d23413-93b0-48b8-9289-4893b5da05fe")
+	)
+	(wire
+		(pts
+			(xy 226.06 246.38) (xy 240.03 246.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "42d7437b-2347-40b9-b4ea-001f52a3128e")
 	)
 	(wire
 		(pts
@@ -42027,7 +42009,7 @@
 	)
 	(wire
 		(pts
-			(xy 270.51 241.3) (xy 273.05 241.3)
+			(xy 260.35 269.24) (xy 262.89 269.24)
 		)
 		(stroke
 			(width 0)
@@ -42287,7 +42269,7 @@
 	)
 	(wire
 		(pts
-			(xy 224.79 254) (xy 227.33 254)
+			(xy 260.35 283.21) (xy 262.89 283.21)
 		)
 		(stroke
 			(width 0)
@@ -42434,16 +42416,6 @@
 			(type default)
 		)
 		(uuid "4fcd37bb-4453-427d-8b68-a095fe40cb53")
-	)
-	(wire
-		(pts
-			(xy 224.79 274.32) (xy 229.87 274.32)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "50650c71-08b8-400c-beb8-71e9ef264a7c")
 	)
 	(wire
 		(pts
@@ -42857,7 +42829,7 @@
 	)
 	(wire
 		(pts
-			(xy 224.79 279.4) (xy 227.33 279.4)
+			(xy 294.64 269.24) (xy 297.18 269.24)
 		)
 		(stroke
 			(width 0)
@@ -42914,16 +42886,6 @@
 			(type default)
 		)
 		(uuid "6454f206-d422-4728-8de2-3865b1756b6b")
-	)
-	(wire
-		(pts
-			(xy 247.65 274.32) (xy 252.73 274.32)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "64787e48-c414-45dc-b8ba-e27797d21814")
 	)
 	(wire
 		(pts
@@ -43017,7 +42979,7 @@
 	)
 	(wire
 		(pts
-			(xy 203.2 246.38) (xy 208.28 246.38)
+			(xy 203.2 246.38) (xy 218.44 246.38)
 		)
 		(stroke
 			(width 0)
@@ -43527,16 +43489,6 @@
 	)
 	(wire
 		(pts
-			(xy 224.79 266.7) (xy 227.33 266.7)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "745b1a96-872c-4bb3-baf8-31ae8d0e2559")
-	)
-	(wire
-		(pts
 			(xy 196.85 48.26) (xy 226.06 48.26)
 		)
 		(stroke
@@ -43907,7 +43859,7 @@
 	)
 	(wire
 		(pts
-			(xy 203.2 259.08) (xy 208.28 259.08)
+			(xy 203.2 259.08) (xy 219.71 259.08)
 		)
 		(stroke
 			(width 0)
@@ -43957,7 +43909,7 @@
 	)
 	(wire
 		(pts
-			(xy 270.51 266.7) (xy 273.05 266.7)
+			(xy 294.64 255.27) (xy 297.18 255.27)
 		)
 		(stroke
 			(width 0)
@@ -44197,7 +44149,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 241.3) (xy 250.19 241.3)
+			(xy 260.35 255.27) (xy 262.89 255.27)
 		)
 		(stroke
 			(width 0)
@@ -44457,7 +44409,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 248.92) (xy 252.73 248.92)
+			(xy 260.35 262.89) (xy 265.43 262.89)
 		)
 		(stroke
 			(width 0)
@@ -45297,16 +45249,6 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 261.62) (xy 252.73 261.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "aaf6a236-ae98-4dab-9977-63d991d34f6c")
-	)
-	(wire
-		(pts
 			(xy 414.02 146.05) (xy 414.02 147.32)
 		)
 		(stroke
@@ -45547,7 +45489,7 @@
 	)
 	(wire
 		(pts
-			(xy 270.51 254) (xy 273.05 254)
+			(xy 294.64 240.03) (xy 297.18 240.03)
 		)
 		(stroke
 			(width 0)
@@ -45917,7 +45859,7 @@
 	)
 	(wire
 		(pts
-			(xy 270.51 261.62) (xy 275.59 261.62)
+			(xy 294.64 247.65) (xy 299.72 247.65)
 		)
 		(stroke
 			(width 0)
@@ -46387,7 +46329,7 @@
 	)
 	(wire
 		(pts
-			(xy 270.51 274.32) (xy 275.59 274.32)
+			(xy 294.64 262.89) (xy 299.72 262.89)
 		)
 		(stroke
 			(width 0)
@@ -46907,7 +46849,7 @@
 	)
 	(wire
 		(pts
-			(xy 224.79 287.02) (xy 229.87 287.02)
+			(xy 294.64 276.86) (xy 299.72 276.86)
 		)
 		(stroke
 			(width 0)
@@ -49115,16 +49057,6 @@
 		)
 		(uuid "102399c1-7ee4-4716-b2f1-93679f2e8081")
 	)
-	(label "BTN.TALK9"
-		(at 252.73 274.32 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "1111e101-779f-4f85-bbd3-497e09356654")
-	)
 	(label "ETH.RST_EXP"
 		(at 287.02 58.42 0)
 		(effects
@@ -49194,6 +49126,16 @@
 			(justify left bottom)
 		)
 		(uuid "1c145319-2e11-4562-aa10-53a020bf4cb8")
+	)
+	(label "CHIP_BOOT"
+		(at 548.64 240.03 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1c5bf7be-8494-4e7f-a049-788601398e01")
 	)
 	(label "PMU.Vd2"
 		(at 214.63 387.35 180)
@@ -49915,16 +49857,6 @@
 		)
 		(uuid "4f384934-021a-478a-94ca-04d65baea4b2")
 	)
-	(label "I2C.SDA"
-		(at 281.94 193.04 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "5b2cbe02-71af-4776-a9a5-857bbfc2b43a")
-	)
 	(label "PMU.Vsys"
 		(at 214.63 377.19 180)
 		(effects
@@ -49964,6 +49896,16 @@
 			(justify left bottom)
 		)
 		(uuid "51ad5abd-1e41-45ab-94b1-83b99d44819d")
+	)
+	(label "LED.DIN"
+		(at 400.05 281.94 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "54914480-9177-4205-8b4f-710f6c810731")
 	)
 	(label "W_TD_OUT_P"
 		(at 436.88 63.5 180)
@@ -50074,6 +50016,16 @@
 			(justify left bottom)
 		)
 		(uuid "59deb904-2f8b-40b4-9778-df56475beb6c")
+	)
+	(label "I2C.SDA"
+		(at 281.94 193.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5b2cbe02-71af-4776-a9a5-857bbfc2b43a")
 	)
 	(label "W_RD_N"
 		(at 378.46 27.94 0)
@@ -50276,7 +50228,7 @@
 		(uuid "6977aa44-d01f-4641-b6d7-cfca36ba0620")
 	)
 	(label "BTN.TALK12"
-		(at 252.73 287.02 0)
+		(at 299.72 290.83 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -50487,7 +50439,7 @@
 		(uuid "7bf1c9d0-d968-40bd-8c56-3f94618356ce")
 	)
 	(label "BTN.TALK11"
-		(at 229.87 287.02 0)
+		(at 299.72 276.86 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -50507,7 +50459,7 @@
 		(uuid "7d2dc85e-59a9-4b5e-8d05-9080a8c0a6fe")
 	)
 	(label "BTN.DOWN"
-		(at 229.87 261.62 0)
+		(at 265.43 290.83 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -50516,7 +50468,7 @@
 		)
 		(uuid "7e186247-a9a5-4884-90fc-0602054aa71d")
 	)
-	(label "W_TXCM"
+	(label "W_RXCM"
 		(at 388.62 93.98 0)
 		(effects
 			(font
@@ -50545,6 +50497,16 @@
 			(justify left bottom)
 		)
 		(uuid "7fd21fe6-20da-45ca-98a3-41d14d155ea9")
+	)
+	(label "CHIP_BOOT"
+		(at 392.43 281.94 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "801e0dd5-a4e4-44f9-9ab3-ccced43cf108")
 	)
 	(label "CAM.D1"
 		(at 179.07 78.74 0)
@@ -50666,6 +50628,16 @@
 		)
 		(uuid "894352ce-6c64-4b0b-905a-4f444b5723e4")
 	)
+	(label "BTN.TALK1_SW"
+		(at 226.06 246.38 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8a2aeae5-3574-409b-99f0-d76b399cd181")
+	)
 	(label "PMU.Vsys"
 		(at 298.45 389.89 180)
 		(effects
@@ -50697,7 +50669,7 @@
 		(uuid "8c6d7745-76ae-4100-b95f-eef00c631886")
 	)
 	(label "BTN.TALK10"
-		(at 275.59 274.32 0)
+		(at 299.72 262.89 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -50907,6 +50879,16 @@
 		)
 		(uuid "9af53a00-a644-4f63-af17-e34c92e8d9a0")
 	)
+	(label "BTN.OFFICE_SW"
+		(at 227.33 259.08 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9d7d9bd3-ea6f-4c70-9409-d55aeb5c41a1")
+	)
 	(label "I2S.SCK"
 		(at 514.35 186.69 180)
 		(effects
@@ -50967,16 +50949,6 @@
 		)
 		(uuid "a290ace9-07a8-47e7-90d8-e9485b25cc38")
 	)
-	(label "BTN.TALK8"
-		(at 229.87 274.32 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "a34eff99-f0b5-4154-9666-6726944413ba")
-	)
 	(label "EXP.INT"
 		(at 162.56 251.46 180)
 		(effects
@@ -51018,7 +50990,7 @@
 		(uuid "a87f82e0-7048-401a-b46a-08b4568afb62")
 	)
 	(label "BTN.UP"
-		(at 275.59 248.92 0)
+		(at 265.43 276.86 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -51367,16 +51339,6 @@
 		)
 		(uuid "c1a59785-fae4-49c6-b4f6-caea6551ada8")
 	)
-	(label "BTN.SETUP"
-		(at 252.73 261.62 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "c2ce1aa8-ddc7-43ae-aeba-be119fffde53")
-	)
 	(label "SD.MOSI"
 		(at 182.88 149.86 0)
 		(effects
@@ -51428,7 +51390,7 @@
 		(uuid "c82cdf73-d560-4af8-ac5a-e8543860bc50")
 	)
 	(label "BTN.OFFICE_SW"
-		(at 275.59 261.62 0)
+		(at 299.72 247.65 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -51468,7 +51430,7 @@
 		(uuid "cbd0adc1-8531-4021-8300-3e7cbb59ef90")
 	)
 	(label "BTN.TALK1_SW"
-		(at 229.87 248.92 0)
+		(at 265.43 247.65 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -51727,7 +51689,7 @@
 		)
 		(uuid "e364d75c-9a5b-4a91-8006-e9eca532ff62")
 	)
-	(label "W_RXCM"
+	(label "W_TXCM"
 		(at 388.62 109.22 0)
 		(effects
 			(font
@@ -51998,7 +51960,7 @@
 		(uuid "f3d2baa0-b6f1-4488-a3ff-801587f52058")
 	)
 	(label "BTN.MODE"
-		(at 252.73 248.92 0)
+		(at 265.43 262.89 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -52086,85 +52048,6 @@
 			(justify right bottom)
 		)
 		(uuid "fe8b9fca-d0ae-412c-870b-f51d27dd3037")
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 373.38 160.02 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "00012309-929c-48e6-910a-2e6a6f0dafc2")
-		(property "Reference" "TP51"
-			(at 375.412 165.862 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 370.84 162.0521 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Plated_Hole_D2.0mm"
-			(at 368.3 160.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 368.3 160.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 373.38 160.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6d8867a2-2323-472f-ae10-a531173d731e")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP51")
-					(unit 1)
-				)
-			)
-		)
 	)
 	(symbol
 		(lib_id "power:Earth")
@@ -52943,85 +52826,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 373.38 129.54 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "011e9f38-f426-4270-bfac-3680bc4646fe")
-		(property "Reference" "TP50"
-			(at 371.348 123.698 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 375.92 127.5079 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Plated_Hole_D2.0mm"
-			(at 378.46 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 378.46 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 373.38 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a16b7fcf-1b0d-410e-b302-925427225357")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP50")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Capacitors:0603,100nF")
 		(at 222.25 129.54 180)
 		(unit 1)
@@ -53113,7 +52917,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 227.33 279.4 0)
+		(at 297.18 269.24 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -53124,7 +52928,7 @@
 		(fields_autoplaced yes)
 		(uuid "030d493c-0599-4db5-a410-a0fa286b9c0b")
 		(property "Reference" "#PWR0377"
-			(at 233.68 279.4 0)
+			(at 303.53 269.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -53135,7 +52939,7 @@
 			)
 		)
 		(property "Value" "COM"
-			(at 231.14 279.4 0)
+			(at 300.99 269.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -53146,7 +52950,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 227.33 279.4 0)
+			(at 297.18 269.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -53157,7 +52961,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 227.33 279.4 0)
+			(at 297.18 269.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -53168,7 +52972,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 227.33 279.4 0)
+			(at 297.18 269.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -58384,7 +58188,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
-		(at 219.71 256.54 0)
+		(at 255.27 285.75 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -58394,7 +58198,7 @@
 		(dnp no)
 		(uuid "168a4f1d-e0a3-4812-8ac9-01d5b88767dc")
 		(property "Reference" "PB5"
-			(at 213.36 257.3 0)
+			(at 248.92 286.51 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -58404,7 +58208,7 @@
 			)
 		)
 		(property "Value" "Tactile Button, 160gf"
-			(at 219.71 248.92 0)
+			(at 255.27 278.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -58415,7 +58219,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
-			(at 219.71 266.7 0)
+			(at 255.27 295.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -58427,7 +58231,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
-			(at 217.42 256.41 0)
+			(at 252.98 285.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -58439,7 +58243,7 @@
 			)
 		)
 		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
-			(at 219.71 256.54 0)
+			(at 255.27 285.75 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -58450,7 +58254,7 @@
 			)
 		)
 		(property "LCSC" "C318884"
-			(at 219.71 256.54 0)
+			(at 255.27 285.75 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -66562,7 +66366,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
-		(at 265.43 269.24 0)
+		(at 289.56 257.81 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -66572,7 +66376,7 @@
 		(dnp no)
 		(uuid "3f643601-42f2-42cb-93f2-bf633a81678c")
 		(property "Reference" "PB10"
-			(at 259.08 270 0)
+			(at 283.21 258.57 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -66582,7 +66386,7 @@
 			)
 		)
 		(property "Value" "Tactile Button, 160gf"
-			(at 265.43 261.62 0)
+			(at 289.56 250.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -66593,7 +66397,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
-			(at 265.43 279.4 0)
+			(at 289.56 267.97 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -66605,7 +66409,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
-			(at 263.14 269.11 0)
+			(at 287.27 257.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -66617,7 +66421,7 @@
 			)
 		)
 		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
-			(at 265.43 269.24 0)
+			(at 289.56 257.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -66628,7 +66432,7 @@
 			)
 		)
 		(property "LCSC" "C318884"
-			(at 265.43 269.24 0)
+			(at 289.56 257.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -69640,7 +69444,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
-		(at 265.43 256.54 0)
+		(at 289.56 242.57 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -69650,7 +69454,7 @@
 		(dnp no)
 		(uuid "4eb31116-9e39-4006-af6b-4c1fd5685071")
 		(property "Reference" "PB7"
-			(at 259.08 257.3 0)
+			(at 283.21 243.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -69660,7 +69464,7 @@
 			)
 		)
 		(property "Value" "Tactile Button, 160gf"
-			(at 265.43 248.92 0)
+			(at 289.56 234.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -69671,7 +69475,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
-			(at 265.43 266.7 0)
+			(at 289.56 252.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -69683,7 +69487,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
-			(at 263.14 256.41 0)
+			(at 287.27 242.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -69695,7 +69499,7 @@
 			)
 		)
 		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
-			(at 265.43 256.54 0)
+			(at 289.56 242.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -69706,7 +69510,7 @@
 			)
 		)
 		(property "LCSC" "C318884"
-			(at 265.43 256.54 0)
+			(at 289.56 242.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -70262,7 +70066,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
-		(at 219.71 243.84 0)
+		(at 255.27 242.57 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -70272,7 +70076,7 @@
 		(dnp no)
 		(uuid "51022808-d07b-4f28-a9a1-5ead26ab2a11")
 		(property "Reference" "PB1"
-			(at 213.36 244.6 0)
+			(at 248.92 243.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -70282,7 +70086,7 @@
 			)
 		)
 		(property "Value" "Tactile Button, 160gf"
-			(at 219.71 236.22 0)
+			(at 255.27 234.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -70293,7 +70097,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
-			(at 219.71 254 0)
+			(at 255.27 252.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -70305,7 +70109,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
-			(at 217.42 243.71 0)
+			(at 252.98 242.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -70317,7 +70121,7 @@
 			)
 		)
 		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
-			(at 219.71 243.84 0)
+			(at 255.27 242.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -70328,7 +70132,7 @@
 			)
 		)
 		(property "LCSC" "C318884"
-			(at 219.71 243.84 0)
+			(at 255.27 242.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -71774,7 +71578,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 250.19 241.3 0)
+		(at 262.89 255.27 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -71785,7 +71589,7 @@
 		(fields_autoplaced yes)
 		(uuid "5a161dee-69f6-40d8-af8c-f0141de33128")
 		(property "Reference" "#PWR0369"
-			(at 256.54 241.3 0)
+			(at 269.24 255.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -71796,7 +71600,7 @@
 			)
 		)
 		(property "Value" "COM"
-			(at 254 241.3 0)
+			(at 266.7 255.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -71807,7 +71611,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 250.19 241.3 0)
+			(at 262.89 255.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -71818,7 +71622,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 250.19 241.3 0)
+			(at 262.89 255.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -71829,7 +71633,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 250.19 241.3 0)
+			(at 262.89 255.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -72268,7 +72072,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
-		(at 242.57 243.84 0)
+		(at 255.27 257.81 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -72278,7 +72082,7 @@
 		(dnp no)
 		(uuid "5b4b9ea7-579f-4a41-b713-a124356f9952")
 		(property "Reference" "PB2"
-			(at 236.22 244.6 0)
+			(at 248.92 258.57 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -72288,7 +72092,7 @@
 			)
 		)
 		(property "Value" "Tactile Button, 160gf"
-			(at 242.57 236.22 0)
+			(at 255.27 250.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -72299,7 +72103,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
-			(at 242.57 254 0)
+			(at 255.27 267.97 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -72311,7 +72115,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
-			(at 240.28 243.71 0)
+			(at 252.98 257.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -72323,7 +72127,7 @@
 			)
 		)
 		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
-			(at 242.57 243.84 0)
+			(at 255.27 257.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -72334,7 +72138,7 @@
 			)
 		)
 		(property "LCSC" "C318884"
-			(at 242.57 243.84 0)
+			(at 255.27 257.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -73877,85 +73681,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 378.46 160.02 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "635610bf-af0c-46b5-811b-5d59013c3cbe")
-		(property "Reference" "TP53"
-			(at 380.492 165.862 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 375.92 162.0521 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Plated_Hole_D2.0mm"
-			(at 373.38 160.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 373.38 160.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 378.46 160.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "62debf98-8e6f-48b3-9b55-5bd5ef9c839f")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP53")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:Earth")
 		(at 196.85 405.13 270)
 		(unit 1)
@@ -74108,6 +73833,83 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR062")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 548.64 232.41 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "6449cc52-ba5d-4a0b-8a61-8e6300f303fb")
+		(property "Reference" "#PWR0379"
+			(at 552.45 232.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 543.05 232.41 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 548.64 232.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 548.64 232.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 548.64 232.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5dd94680-71a4-4484-b91b-f0adb43cb967")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0379")
 					(unit 1)
 				)
 			)
@@ -74526,85 +74328,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR0120")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:Earth")
-		(at 250.19 266.7 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "65c3bb37-edf8-4f69-ae5e-37f996be2193")
-		(property "Reference" "#PWR0375"
-			(at 256.54 266.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 254 266.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 250.19 266.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 250.19 266.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 250.19 266.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "93987361-8271-4a8d-9c10-060a78806761")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0375")
 					(unit 1)
 				)
 			)
@@ -75863,85 +75586,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "TP136")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 378.46 129.54 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(uuid "6ae0490f-c1ee-493d-882a-45a91564bcc0")
-		(property "Reference" "TP52"
-			(at 376.428 123.698 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 381 127.5079 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Plated_Hole_D2.0mm"
-			(at 383.54 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 383.54 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 378.46 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "61557e73-2ab6-434b-8f18-005ce191f2d9")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "TP52")
 					(unit 1)
 				)
 			)
@@ -78853,7 +78497,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -81229,7 +80873,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 227.33 241.3 0)
+		(at 262.89 240.03 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -81240,7 +80884,7 @@
 		(fields_autoplaced yes)
 		(uuid "86d5e9ca-d3f3-409c-bdc3-d871dd30b990")
 		(property "Reference" "#PWR0368"
-			(at 233.68 241.3 0)
+			(at 269.24 240.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -81251,7 +80895,7 @@
 			)
 		)
 		(property "Value" "COM"
-			(at 231.14 241.3 0)
+			(at 266.7 240.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -81262,7 +80906,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 227.33 241.3 0)
+			(at 262.89 240.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -81273,7 +80917,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 227.33 241.3 0)
+			(at 262.89 240.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -81284,7 +80928,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 227.33 241.3 0)
+			(at 262.89 240.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -82045,7 +81689,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 227.33 254 0)
+		(at 262.89 283.21 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -82056,7 +81700,7 @@
 		(fields_autoplaced yes)
 		(uuid "8c1d43a0-bd04-467b-a88c-cc1e8d7d76ce")
 		(property "Reference" "#PWR0371"
-			(at 233.68 254 0)
+			(at 269.24 283.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -82067,7 +81711,7 @@
 			)
 		)
 		(property "Value" "COM"
-			(at 231.14 254 0)
+			(at 266.7 283.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -82078,7 +81722,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 227.33 254 0)
+			(at 262.89 283.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -82089,7 +81733,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 227.33 254 0)
+			(at 262.89 283.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -82100,7 +81744,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 227.33 254 0)
+			(at 262.89 283.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -82813,6 +82457,96 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "C63")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
+		(at 222.25 246.38 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "90787884-ed50-471e-9175-3d67bb40daf3")
+		(property "Reference" "R111"
+			(at 227.838 247.65 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1kΩ"
+			(at 222.25 246.38 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 222.25 248.16 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010030_UNI-ROYAL-Uniroyal-Elec-0402WGF1004TCE_C26083.pdf"
+			(at 222.25 246.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 222.25 246.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C11702"
+			(at 222.25 246.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "63e78ed1-22bf-438d-9e5b-4d7e422af292")
+		)
+		(pin "2"
+			(uuid "08bfb15b-32a4-4a3f-8ae7-f4d963bca646")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R111")
 					(unit 1)
 				)
 			)
@@ -84254,7 +83988,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 250.19 279.4 0)
+		(at 297.18 283.21 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -84265,7 +83999,7 @@
 		(fields_autoplaced yes)
 		(uuid "9585104c-d40f-4374-9bc3-ee8f0c0fee4a")
 		(property "Reference" "#PWR0378"
-			(at 256.54 279.4 0)
+			(at 303.53 283.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -84276,7 +84010,7 @@
 			)
 		)
 		(property "Value" "COM"
-			(at 254 279.4 0)
+			(at 300.99 283.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -84287,7 +84021,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 250.19 279.4 0)
+			(at 297.18 283.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -84298,7 +84032,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 250.19 279.4 0)
+			(at 297.18 283.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -84309,7 +84043,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 250.19 279.4 0)
+			(at 297.18 283.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -84596,6 +84330,96 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR0358")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0402,1kΩ")
+		(at 223.52 259.08 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "977b4720-a4fa-4d1e-a09a-9eb9e7a0bfb8")
+		(property "Reference" "R112"
+			(at 228.854 260.35 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1kΩ"
+			(at 223.52 259.08 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 223.52 260.86 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010030_UNI-ROYAL-Uniroyal-Elec-0402WGF1004TCE_C26083.pdf"
+			(at 223.52 259.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 223.52 259.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C11702"
+			(at 223.52 259.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "cd18dd90-030b-4e8c-8609-9ef3a2422020")
+		)
+		(pin "2"
+			(uuid "f20b4de7-3a57-4cda-bc41-3fbec4b04b6c")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R112")
 					(unit 1)
 				)
 			)
@@ -89867,7 +89691,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 273.05 241.3 0)
+		(at 262.89 269.24 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -89878,7 +89702,7 @@
 		(fields_autoplaced yes)
 		(uuid "b2fdcf74-ff17-4cce-8805-afbad2770c83")
 		(property "Reference" "#PWR0370"
-			(at 279.4 241.3 0)
+			(at 269.24 269.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -89889,7 +89713,7 @@
 			)
 		)
 		(property "Value" "COM"
-			(at 276.86 241.3 0)
+			(at 266.7 269.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -89900,7 +89724,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 273.05 241.3 0)
+			(at 262.89 269.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -89911,7 +89735,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 273.05 241.3 0)
+			(at 262.89 269.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -89922,7 +89746,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 273.05 241.3 0)
+			(at 262.89 269.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -90197,7 +90021,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
-		(at 242.57 281.94 0)
+		(at 289.56 285.75 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -90207,7 +90031,7 @@
 		(dnp no)
 		(uuid "b57fb29f-8a58-4c75-8f29-c127cf84225d")
 		(property "Reference" "PB12"
-			(at 236.22 282.7 0)
+			(at 283.21 286.51 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -90217,7 +90041,7 @@
 			)
 		)
 		(property "Value" "Tactile Button, 160gf"
-			(at 242.57 274.32 0)
+			(at 289.56 278.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -90228,7 +90052,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
-			(at 242.57 292.1 0)
+			(at 289.56 295.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -90240,7 +90064,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
-			(at 240.28 281.81 0)
+			(at 287.27 285.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -90252,7 +90076,7 @@
 			)
 		)
 		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
-			(at 242.57 281.94 0)
+			(at 289.56 285.75 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -90263,7 +90087,7 @@
 			)
 		)
 		(property "LCSC" "C318884"
-			(at 242.57 281.94 0)
+			(at 289.56 285.75 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -90451,7 +90275,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
-		(at 219.71 281.94 0)
+		(at 289.56 271.78 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -90461,7 +90285,7 @@
 		(dnp no)
 		(uuid "b6690e23-6a68-4a56-a8e9-dccd00541abf")
 		(property "Reference" "PB11"
-			(at 213.36 282.7 0)
+			(at 283.21 272.54 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -90471,7 +90295,7 @@
 			)
 		)
 		(property "Value" "Tactile Button, 160gf"
-			(at 219.71 274.32 0)
+			(at 289.56 264.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -90482,7 +90306,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
-			(at 219.71 292.1 0)
+			(at 289.56 281.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -90494,7 +90318,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
-			(at 217.42 281.81 0)
+			(at 287.27 271.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -90506,7 +90330,7 @@
 			)
 		)
 		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
-			(at 219.71 281.94 0)
+			(at 289.56 271.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -90517,7 +90341,7 @@
 			)
 		)
 		(property "LCSC" "C318884"
-			(at 219.71 281.94 0)
+			(at 289.56 271.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -93781,7 +93605,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Connectors_Buttons:Tactile Button, 160gf")
-		(at 265.43 243.84 0)
+		(at 255.27 271.78 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -93791,7 +93615,7 @@
 		(dnp no)
 		(uuid "c3361e12-0154-4a1c-9aa1-0b3a8360007f")
 		(property "Reference" "PB4"
-			(at 259.08 244.6 0)
+			(at 248.92 272.54 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -93801,7 +93625,7 @@
 			)
 		)
 		(property "Value" "Tactile Button, 160gf"
-			(at 265.43 236.22 0)
+			(at 255.27 264.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -93812,7 +93636,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:SW-SMD_4P-L5.1-W5.1-P3.70-LS6.5-TL-2"
-			(at 265.43 254 0)
+			(at 255.27 281.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -93824,7 +93648,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_XKB-Connection-TS-1187A-B-A-B_C318884.pdf"
-			(at 263.14 243.71 0)
+			(at 252.98 271.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -93836,7 +93660,7 @@
 			)
 		)
 		(property "Description" "None Without 50mA 5.1mm 100000 Times 160gf 12V 5.1mm 1.5mm Round Button Standing paste SPST SMD Tactile Switches ROHS"
-			(at 265.43 243.84 0)
+			(at 255.27 271.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -93847,7 +93671,7 @@
 			)
 		)
 		(property "LCSC" "C318884"
-			(at 265.43 243.84 0)
+			(at 255.27 271.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -96851,7 +96675,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 273.05 254 0)
+		(at 297.18 240.03 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -96862,7 +96686,7 @@
 		(fields_autoplaced yes)
 		(uuid "d0b93fb8-830d-477f-bb2b-9265bef282a5")
 		(property "Reference" "#PWR0373"
-			(at 279.4 254 0)
+			(at 303.53 240.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -96873,7 +96697,7 @@
 			)
 		)
 		(property "Value" "COM"
-			(at 276.86 254 0)
+			(at 300.99 240.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -96884,7 +96708,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 273.05 254 0)
+			(at 297.18 240.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -96895,7 +96719,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 273.05 254 0)
+			(at 297.18 240.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -96906,7 +96730,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 273.05 254 0)
+			(at 297.18 240.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -97349,7 +97173,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 273.05 266.7 0)
+		(at 297.18 255.27 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -97360,7 +97184,7 @@
 		(fields_autoplaced yes)
 		(uuid "d22fe88d-574d-4099-8acc-c01ffec8d936")
 		(property "Reference" "#PWR0376"
-			(at 279.4 266.7 0)
+			(at 303.53 255.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -97371,7 +97195,7 @@
 			)
 		)
 		(property "Value" "COM"
-			(at 276.86 266.7 0)
+			(at 300.99 255.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -97382,7 +97206,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 273.05 266.7 0)
+			(at 297.18 255.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -97393,7 +97217,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 273.05 266.7 0)
+			(at 297.18 255.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -97404,7 +97228,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 273.05 266.7 0)
+			(at 297.18 255.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -101814,85 +101638,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:Earth")
-		(at 250.19 254 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "e557b09f-c0e3-4030-981c-d2f971a27777")
-		(property "Reference" "#PWR0372"
-			(at 256.54 254 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 254 254 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 250.19 254 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 250.19 254 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 250.19 254 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "ff3bd9f0-b584-40d8-968a-469fc301ed24")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0372")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLCPCB-Capacitors:0402,2.2uF")
 		(at 200.66 410.21 90)
 		(unit 1)
@@ -103804,6 +103549,96 @@
 		)
 	)
 	(symbol
+		(lib_id "JLCPCB-Resistors:0402,10kΩ")
+		(at 548.64 236.22 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ef81d69d-957e-4282-aab6-1a9cca765933")
+		(property "Reference" "R109"
+			(at 550.16 241.05 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10kΩ"
+			(at 548.64 236.22 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 550.42 236.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0402WGF1002TCE_C25744.pdf"
+			(at 548.64 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 10kΩ 0402 Chip Resistor - Surface Mount ROHS"
+			(at 548.64 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25744"
+			(at 548.64 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "69bc7358-4be3-4afa-ac6c-57b7e7050c13")
+		)
+		(pin "2"
+			(uuid "5cdd530a-13c5-48cf-a77f-855ced3a4919")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R109")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:Earth")
 		(at 68.58 388.62 0)
 		(unit 1)
@@ -104872,85 +104707,6 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 227.33 266.7 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "f52d3cb0-4ecc-4732-8e4f-449ccb8dda5f")
-		(property "Reference" "#PWR0374"
-			(at 233.68 266.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "COM"
-			(at 231.14 266.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 227.33 266.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 227.33 266.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 227.33 266.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "7572e959-7543-45a6-b907-4d34a3dcd4f8")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0374")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:Earth")
 		(at 397.51 184.15 180)
 		(unit 1)
 		(body_style 1)
@@ -105271,6 +105027,272 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR054")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLCPCB-Resistors:0402,33Ω")
+		(at 396.24 281.94 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f722cc59-dc9b-4e46-b9b0-9b6beee3097d")
+		(property "Reference" "R110"
+			(at 401.07 280.67 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "33Ω"
+			(at 396.24 281.94 90)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 0.8 0.8)
+				)
+			)
+		)
+		(property "Footprint" "JLCPCB:R_0402"
+			(at 396.24 283.72 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2205311900_UNI-ROYAL-Uniroyal-Elec-0402WGF330JTCE_C25105.pdf"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 33Ω 0402 Chip Resistor - Surface Mount ROHS"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25105"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Stock" "2559360"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Price" "0.004USD"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Process" "SMT"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Minimum Qty" "20"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Attrition Qty" "10"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Class" "Basic Component"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Category" "Resistors,Chip Resistor - Surface Mount"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL(Uniroyal Elec)"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Part" "0402WGF330JTCE"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Resistance" "33Ω"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power(Watts)" "62.5mW"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Type" "Thick Film Resistors"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Overload Voltage (Max)" "50V"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Operating Temperature Range" "-55°C~+155°C"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature Coefficient" "±100ppm/°C"
+			(at 396.24 281.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "f44dfef3-9c94-4887-a169-5aebaa6ffd13")
+		)
+		(pin "1"
+			(uuid "572859a9-484d-493d-8535-63d725d62eb5")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "R110")
 					(unit 1)
 				)
 			)
@@ -107370,693 +107392,6 @@
 				)
 			)
 		)
-	)
-	(symbol
-		(lib_id "JLCPCB-Resistors:0402,10kΩ")
-		(at 548.64 236.22 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "ef81d69d-957e-4282-aab6-1a9cca765933")
-		(property "Reference" "R109"
-			(at 550.16 241.05 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10kΩ"
-			(at 548.64 236.22 90)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 0.8 0.8)
-				)
-			)
-		)
-		(property "Footprint" "JLCPCB:R_0402"
-			(at 550.42 236.22 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0402WGF1002TCE_C25744.pdf"
-			(at 548.64 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 10kΩ 0402 Chip Resistor - Surface Mount ROHS"
-			(at 548.64 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C25744"
-			(at 548.64 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "69bc7358-4be3-4afa-ac6c-57b7e7050c13")
-		)
-		(pin "2"
-			(uuid "5cdd530a-13c5-48cf-a77f-855ced3a4919")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "R109")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 548.64 232.41 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "6449cc52-ba5d-4a0b-8a61-8e6300f303fb")
-		(property "Reference" "#PWR0379"
-			(at 552.45 232.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 543.05 232.41 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 548.64 232.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 548.64 232.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 548.64 232.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5dd94680-71a4-4484-b91b-f0adb43cb967")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "#PWR0379")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(label "CHIP_BOOT"
-		(at 548.64 240.03 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "1c5bf7be-8494-4e7f-a049-788601398e01")
-	)
-	(symbol
-		(lib_id "JLCPCB-Resistors:0402,33Ω")
-		(at 396.24 281.94 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f722cc59-dc9b-4e46-b9b0-9b6beee3097d")
-		(property "Reference" "R110"
-			(at 401.07 280.67 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "33Ω"
-			(at 396.24 281.94 90)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 0.8 0.8)
-				)
-			)
-		)
-		(property "Footprint" "JLCPCB:R_0402"
-			(at 396.24 283.72 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2205311900_UNI-ROYAL-Uniroyal-Elec-0402WGF330JTCE_C25105.pdf"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 33Ω 0402 Chip Resistor - Surface Mount ROHS"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C25105"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Stock" "2559360"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Price" "0.004USD"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Process" "SMT"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Minimum Qty" "20"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Attrition Qty" "10"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Class" "Basic Component"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Category" "Resistors,Chip Resistor - Surface Mount"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "UNI-ROYAL(Uniroyal Elec)"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Part" "0402WGF330JTCE"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Resistance" "33Ω"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Power(Watts)" "62.5mW"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Type" "Thick Film Resistors"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Overload Voltage (Max)" "50V"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Operating Temperature Range" "-55°C~+155°C"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Tolerance" "±1%"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Temperature Coefficient" "±100ppm/°C"
-			(at 396.24 281.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "f44dfef3-9c94-4887-a169-5aebaa6ffd13")
-		)
-		(pin "1"
-			(uuid "572859a9-484d-493d-8535-63d725d62eb5")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "R110")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(label "CHIP_BOOT"
-		(at 392.43 281.94 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "801e0dd5-a4e4-44f9-9ab3-ccced43cf108")
-	)
-	(label "LED.DIN"
-		(at 400.05 281.94 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "54914480-9177-4205-8b4f-710f6c810731")
-	)
-	(symbol
-		(lib_id "JLCPCB-Resistors:0402,1kΩ")
-		(at 256.54 295.91 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "90787884-ed50-471e-9175-3d67bb40daf3")
-		(property "Reference" "R111"
-			(at 259.08 295.91 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1kΩ"
-			(at 256.54 295.91 90)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 0.8 0.8)
-				)
-			)
-		)
-		(property "Footprint" "JLCPCB:R_0402"
-			(at 254.76 295.91 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010030_UNI-ROYAL-Uniroyal-Elec-0402WGF1004TCE_C26083.pdf"
-			(at 256.54 295.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
-			(at 256.54 295.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C11702"
-			(at 256.54 295.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "63e78ed1-22bf-438d-9e5b-4d7e422af292")
-		)
-		(pin "2"
-			(uuid "08bfb15b-32a4-4a3f-8ae7-f4d963bca646")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "R111")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(label "BTN.TALK1"
-		(at 256.54 292.10 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "f6bb60c9-3b60-4f88-bd70-49b750a31266")
-	)
-	(label "BTN.TALK1_SW"
-		(at 256.54 299.72 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "8a2aeae5-3574-409b-99f0-d76b399cd181")
-	)
-	(symbol
-		(lib_id "JLCPCB-Resistors:0402,1kΩ")
-		(at 256.54 306.07 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "977b4720-a4fa-4d1e-a09a-9eb9e7a0bfb8")
-		(property "Reference" "R112"
-			(at 259.08 306.07 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1kΩ"
-			(at 256.54 306.07 90)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 0.8 0.8)
-				)
-			)
-		)
-		(property "Footprint" "JLCPCB:R_0402"
-			(at 254.76 306.07 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010030_UNI-ROYAL-Uniroyal-Elec-0402WGF1004TCE_C26083.pdf"
-			(at 256.54 306.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 1kΩ 0402 Chip Resistor - Surface Mount ROHS"
-			(at 256.54 306.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C11702"
-			(at 256.54 306.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "cd18dd90-030b-4e8c-8609-9ef3a2422020")
-		)
-		(pin "2"
-			(uuid "f20b4de7-3a57-4cda-bc41-3fbec4b04b6c")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "R112")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(label "BTN.OFFICE"
-		(at 256.54 302.26 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "4f7b7bd3-4904-4607-ae70-6112da6f1bfc")
-	)
-	(label "BTN.OFFICE_SW"
-		(at 256.54 309.88 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "9d7d9bd3-ea6f-4c70-9409-d55aeb5c41a1")
 	)
 	(sheet_instances
 		(path "/"
