@@ -408,7 +408,9 @@ static bool chaosRun(uint32_t seed, int seconds, bool verbose) {
         if (u.ic->groupTalking()) return "group talking";
         if (u.ic->link() != LinkType::Ethernet) return "not on Ethernet";
         if (!u.silent()) return "speaker not silent";
-        if (!u.rx.empty()) return "packets waiting";
+        // packets sent this frame by a unit later in the list (its once-a-second status) are not a backlog
+        for (auto& it : u.rx)
+            if (it.due < net.now) return "packets waiting";
         return nullptr;
     };
     const int kRestLimit = 15 * 60 * 50;  // 15 minutes
@@ -426,6 +428,23 @@ static bool chaosRun(uint32_t seed, int seconds, bool verbose) {
             if (const char* b = busy(*u)) why[b]++;
         std::string s;
         for (auto& w : why) s += w.first + " x" + std::to_string(w.second) + "; ";
+        std::map<std::string, int> what;  // what is still arriving, and from whom
+        size_t deepest = 0;
+        for (auto& u : units) {
+            deepest = std::max(deepest, u->rx.size());
+            for (auto& it : u->rx) {
+                char b[64];
+                if (it.data.size() >= 8)
+                    snprintf(b, sizeof(b), "type %u from %u flags %02x", unsigned(it.data[3]), unsigned(it.data[4] | (it.data[5] << 8)), unsigned(it.data[7]));
+                else
+                    snprintf(b, sizeof(b), "%zu bytes", it.data.size());
+                what[b]++;
+            }
+        }
+        s += "deepest queue " + std::to_string(deepest) + "; ";
+        int shown = 0;
+        for (auto& w : what)
+            if (shown++ < 8) s += w.first + " x" + std::to_string(w.second) + "; ";
         fail("seed %u: not at rest 15 min after the chaos stopped: %s", seed, s.c_str());
     }
 
