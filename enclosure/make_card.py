@@ -26,21 +26,24 @@ def card():
 im, d = card()
 d.text((60, 40), "INTERCOM", font=font(74, True), fill=BLACK)
 d.text((W - 60, 62), "Display codes on the back", font=font(36), fill=GREY, anchor="ra")
+RED = (198, 40, 40)
 rows = (("TALK", BTN, "Hold and speak to the whole school.", "Let go when you have finished."),
-        ("OFFICE", BTN, "Press to call the office. oFC shows", "until the office answers."),
-        ("CAL", BLACK, "The office is calling. Hold OFFICE", "and speak. Only the office hears you."))
+        ("OFFICE", BTN, "Press to call the office. If you need", "help, press it again: HLP shows."),
+        ("CAL", BLACK, "The office is calling. Hold OFFICE", "and speak. Only the office hears you."),
+        ("BOTH", BTN, "Hold TALK and OFFICE for 1 second:", "a silent call for help. No sound here."),
+        ("RED", RED, "Emergency: lift the lid and press.", "The whole school goes to lockdown."))
 for i, (name, col, a, b) in enumerate(rows):
-    y = 190 + i * 210
-    chip(d, 60, y, 290, 130, name, col, (255, 255, 255) if col == BTN else (127, 184, 255), font(62, True, mono=(col == BLACK)))
-    d.text((400, y + 2), a, font=font(54), fill=BLACK); d.text((400, y + 70), b, font=font(54), fill=BLACK)
+    y = 172 + i * 128
+    chip(d, 60, y, 250, 102, name, col, (127, 184, 255) if col == BLACK else (255, 255, 255), font(54, True, mono=(col == BLACK)))
+    d.text((350, y + 26), a, font=font(45, col == RED), fill=BLACK, anchor="lm"); d.text((350, y + 78), b, font=font(45, col == RED), fill=BLACK, anchor="lm")
 im.save(os.path.join(out, "use_card_front.png"))
 
 # ---- back: what the display shows
 im, d = card()
 d.text((60, 40), "Display codes", font=font(64, True), fill=BLACK)
-codes = (("214", "Working (room number)"), ("CAL", "Office is calling: hold OFFICE"), ("oFC", "Calling the office: wait"),
-         ("LoC", "Lockdown"), ("EUA", "Evacuate"), ("SHE", "Shelter in place"),
-         ("E1", "Network problem: tell office"), ("E2", "No network: tell office"), ("oL", "Cable shorted: tell office"),
+codes = (("214", "Working (room number)"), ("CAL", "Office is calling: hold OFFICE"), ("oFC", "Calling the office: wait"), ("HLP", "Help call: the office is told"),
+         ("LoC", "Lockdown"), ("EUA", "Evacuate"),
+         ("SHE", "Shelter in place"), ("E1", "Network problem: tell office"), ("E2", "No network: tell office"), ("oL", "Cable shorted: tell office"),
          ("dUP", "Two units, one number"), ("---", "No room number: tell office"))
 for i, (c, t) in enumerate(codes):
     col, row = divmod(i, 6)
