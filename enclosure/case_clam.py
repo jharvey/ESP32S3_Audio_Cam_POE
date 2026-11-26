@@ -75,8 +75,9 @@ NECK_X = (17.7, 26.8)  # the lid is narrower at the hinge, clear of the left mic
 EAR = 2.3        # each ear reaches this far into its post
 POST_W = 2.5
 DISH_AT, DISH_R, DISH_DEEP = (15.5, 21.5), 9.0, 1.2   # a finger dish in the face under the lid's lower left corner
-# Camera shutter: a 9 g servo (SG90 size) stands beside the board in a pod on the left side of the case, its shaft
-# towards the room. A paddle on the shaft turns just behind the face:
+# Camera shutter: a 9 g servo (SG90 size) stands beside the board on the left, its shaft towards the room. The whole
+# left side of the case is moved out to make room for it, so that side stays one straight wall; the board, the face
+# and everything on it stay where they were, which leaves them a little off centre. A paddle on the shaft turns just behind the face:
 #   closed   the disc covers the camera lens
 #   open     a quarter turn down: lens free, paddle still inside the case (silent help call)
 #   flag     half a turn: the disc sticks out of a slot in the side of the case, so everyone sees the camera is on (lockdown)
@@ -88,9 +89,9 @@ SERVO_TOP = 30.0       # bottom of the body to the tip of the shaft
 PIVOT = (-6.9, 60.0)   # shaft axis (KiCad x, y): beside the board, below the audio jack's opening
 PAD_D, PAD_T, ARM_W = 15.0, 1.2, 6.0   # the disc over the lens, paddle thickness, arm width
 SHUT_GAP = 2.0         # room between the lens and the face that the paddle turns in
-POD_X0 = -15.0         # inside of the pod's outer wall
-POD_Y = (48.5, 91.5)   # pod, inside (KiCad y)
-SLOT_Y0 = 60.5         # the slot in the pod's side wall runs from here to the pod's lower end
+POD_X0 = -15.5         # inside of the case's left wall (it was -GAP before the servo)
+POD_Y = (48.5, 91.5)   # where the servo and the paddle are (KiCad y)
+SLOT_Y0 = 60.5         # the slot in the left wall runs from here to POD_Y[1]
 MIC_D = 1.5      # microphone ports
 CAM_D = 12.0     # camera lens opening
 SPK_D = 36.0     # speaker grille (the speaker hangs in the cover; its place is a guess for now)
@@ -120,7 +121,7 @@ def cyl_y(x, z, d, y0, y1):  # a cylinder along y, from KiCad y0 to y1
 def rrect(w, h, r, z0, z1, cx=0.0, cy=0.0):  # rounded rectangle block, centre at KiCad (cx, cy)
     return cq.Workplane("XY").box(w, h, z1 - z0, centered=(True, True, False)).edges("|Z").fillet(r).translate((cx, Y(cy), z0))
 
-XL_IN, XR_IN = -GAP, W + GAP                    # inside of the cover walls
+XL_IN, XR_IN = POD_X0, W + GAP                  # inside of the cover walls (the left one stands off for the servo)
 YT_IN, YB_IN = -GAP, H + max(BAY, GAP)
 XL, XR, YT, YB = XL_IN - WALL, XR_IN + WALL, YT_IN - WALL, YB_IN + WALL   # outside
 Z_FLOOR = -PCB_T - BACK_H                       # front face of the back plate
@@ -168,13 +169,11 @@ for y in (H / 2 - BOX_PITCH / 2, H / 2 + BOX_PITCH / 2):
 if BAY >= 30:
     back = back.cut(slab(40, H + 6, 62, H + 32, Z_BACK - 1, Z_FLOOR + 1).edges("|Z").fillet(4.0))
 
-# ---- camera shutter: the back plate under the pod, a pocket and two posts for the servo ----
+# ---- camera shutter: a pocket in the back plate and two posts for the servo ----
 k_ = B["keepouts"]["camera heatsink"]; CAM_AT = ((k_[0] + k_[2]) / 2, (k_[1] + k_[3]) / 2)
 SV_Z0 = (FRONT_H - 0.4) - SERVO_TOP              # bottom of the servo: the shaft's tip ends at the paddle's front face
 SV_Y0 = PIVOT[1] - SERVO_SHAFT_IN                # the servo's upper end; its body runs down from there
 SV_X0, SV_X1 = PIVOT[0] - SERVO_W / 2, PIVOT[0] + SERVO_W / 2
-back = back.union(slab(POD_X0 - WALL, POD_Y[0] - WALL, XL + 0.5, POD_Y[1] + WALL, Z_BACK, Z_FLOOR).edges("|Z and <X").fillet(4.0))
-back = back.cut(slab(XL_IN, POD_Y[0], XL_IN + FIT + LIP_T + 0.1, POD_Y[1], Z_FLOOR, Z_FLOOR + LIP_H + 1))   # no lip where the pod opens into the case
 if SV_Z0 < Z_FLOOR: back = back.cut(slab(SV_X0 - 0.3, SV_Y0 - 0.3, SV_X1 + 0.3, SV_Y0 + SERVO_L + 0.3, SV_Z0 - 0.2, Z_FLOOR + 1))
 for ey in (SV_Y0 - SERVO_EAR / 2, SV_Y0 + SERVO_L + SERVO_EAR / 2):   # a post under each ear, for the servo's own two screws
     back = back.union(slab(SV_X0, ey - 2.2, SV_X1, ey + 2.2, Z_FLOOR, SV_Z0 + SERVO_EAR_Z)).cut(cyl(PIVOT[0], ey, 1.7, SV_Z0 + SERVO_EAR_Z - 8, SV_Z0 + SERVO_EAR_Z + 1))
@@ -277,13 +276,10 @@ if USB_OPEN and part("J1"):
 if SD_OPEN and part("CARD1"):
     b1 = box_of("CARD1", 0.5); cover = cover.cut(slab(XL - 1, b1[1], XL_IN + 1, b1[3], -0.5, 3.0))
 if part("CN1"):
-    b1 = box_of("CN1", 0.5); cover = cover.cut(slab(XL - 1, b1[1], XL_IN + 1, b1[3], -0.5, 6.5))
+    # the audio jack now sits 15 mm inside the left wall, so the opening is big enough for the plug's body to go in
+    b1 = box_of("CN1", 1.0); cover = cover.cut(slab(XL - 1, b1[1], XL_IN + 1, b1[3], -2.5, 6.9).edges("|X").fillet(2.0))
 
-# ---- camera shutter: the pod on the left side, open to the inside of the case, with the slot the flag comes out of ----
-pod = slab(POD_X0 - WALL, POD_Y[0] - WALL, XL + 0.5, POD_Y[1] + WALL, Z_FLOOR, Z_TOP).edges("|Z and <X").fillet(4.0)
-try: pod = pod.faces(">Z").edges("not >X").fillet(FACE_R)
-except Exception: pass
-cover = cover.union(pod).cut(slab(POD_X0, POD_Y[0], XL_IN + 0.1, POD_Y[1], Z_FLOOR - 1, Z_FACE))
+# ---- camera shutter: the slot in the left wall that the flag comes out of ----
 cover = cover.cut(slab(POD_X0 - WALL - 1, SLOT_Y0, POD_X0 + 0.1, POD_Y[1], Z_FACE - SHUT_GAP, Z_FACE))
 # finger dish under the lid
 cover = cover.cut(cq.Workplane("XY").sphere(DISH_R).translate((DISH_AT[0], Y(DISH_AT[1]), Z_TOP + DISH_R - DISH_DEEP)))
