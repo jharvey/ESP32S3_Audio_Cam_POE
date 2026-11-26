@@ -60,22 +60,22 @@ FACE_R = 2.5     # rounding of the front edge
 CARD_W, CARD_H = 80.0, 42.0   # the use card (paper or laminated, up to 0.8 mm thick), in the area below the board
 CARD_TOP = 103.5 # its top edge, below the jack's bump (KiCad y); it slides down into its holder from above
 CARD_RAIL, CARD_LIP, CARD_SLOT = 2.4, 2.0, 0.9   # rail width, how far the rail grips over the card, room for the card
-# The red LOCKDOWN button: a round red cap over PB11 (wired to U22 P11). PB11 IS ASSUMED MOVED 5 mm LEFT on the board,
-# to x 18.5 (it is at 23.5 today), which gives room for a bigger cap and lid beside the display,
+# The red LOCKDOWN button: a round red cap over PB11 (wired to U22 P11), which was moved to x 9.5, y 14.0 on the board
+# (U22 has to move out of its way). The lid has a notch at the left microphone port, so it never covers the port.
 # inside a raised rim, under a clear flip-up lid. The lid is laser cut from 2 mm clear acrylic (out_clam/lid.dxf):
 # it hangs on two ears in the hinge posts, falls shut by its own weight and opens to about 135 degrees.
-RED_D, RED_FL = 12.0, 13.6   # red cap and its flange behind the face
+RED_D, RED_FL = 14.0, 15.6   # red cap and its flange behind the face
 RED_PROUD = 2.0  # the red cap stands this far out of the face
 RIM_H = 2.5      # the rim round it is higher, so a flat hand or a shoulder does not press it; the lid rests on the rim
 RIM_W = 1.75
 LID_T = 2.0      # acrylic sheet
-LID_X = (8.0, 29.5)    # lid body, left and right edge (it stops short of the display window)
-LID_Y1 = 23.0    # lid's bottom edge; a finger goes under it (RIM_H of room) to flip it up
+LID_X = (-4.2, 23.2)   # lid body, left and right edge (it stops short of the display window)
+LID_Y1 = 24.5    # lid's bottom edge; a finger goes under it (RIM_H of room) to flip it up
 HINGE_Y = 3.2    # hinge axis (KiCad y), above the cap
-NECK_X = (17.3, 26.3)  # the lid is narrower at the hinge, clear of the left microphone port
+NECK_X = (-1.5, 20.5)   # the lid is narrower at the hinge, clear of the left microphone port
 EAR = 2.3        # each ear reaches this far into its post
 POST_W = 2.5
-DISH_AT, DISH_R, DISH_DEEP = (12.0, 21.5), 9.0, 1.2   # a finger dish in the face under the lid's lower left corner
+DISH_AT, DISH_R, DISH_DEEP = (0.0, 23.0), 9.0, 1.2   # a finger dish in the face under the lid's lower left corner
 # Camera shutter: a 9 g servo (SG90 size) stands beside the board on the left, its shaft towards the room. The whole
 # left side of the case is moved out to make room for it, so that side stays one straight wall; the board, the face
 # and everything on it stay where they were, which leaves them a little off centre. A paddle on the shaft turns just behind the face:
@@ -235,6 +235,8 @@ lid2d = (cq.Workplane("XY").rect(LID_X[1] - LID_X[0], LID_Y1 - (HINGE_Y + 3.0)).
          .translate(((LID_X[0] + LID_X[1]) / 2, Y((LID_Y1 + HINGE_Y + 3.0) / 2), 0)))
 lid2d = lid2d.union(slab(NECK_X[0], HINGE_Y - 1.5, NECK_X[1], HINGE_Y + 3.5, 0, LID_T))
 lid2d = lid2d.union(slab(NECK_X[0] - EAR, HINGE_Y - 1.5, NECK_X[1] + EAR, HINGE_Y + 1.5, 0, LID_T))
+micx, micy = part("U16")["x"], part("U16")["y"]
+lid2d = lid2d.cut(slab(micx - 2.4, HINGE_Y - 3, micx + 2.4, micy + 3.0, -1, LID_T + 1).edges("|Z").fillet(1.0))   # the notch at the microphone port
 lid = lid2d.translate((0, 0, Z_RIM))
 lid_open = lid.rotate((0, Y(HINGE_Y), Z_AX), (1, Y(HINGE_Y), Z_AX), -135)
 # engraved labels under the buttons
@@ -242,7 +244,7 @@ def label(txt, x, y, halign):
     return cq.Workplane("XY").text(txt, LABEL_H, LABEL_DEPTH + 0.5, halign=halign, valign="center", kind="bold").translate((x, Y(y), Z_TOP - LABEL_DEPTH))
 gap = BTN_W / 2 + 1.8                           # labels sit outside their buttons, clear of the speaker grille
 def small(txt, x, y): return cq.Workplane("XY").text(txt, 3.0, LABEL_DEPTH + 0.5, halign="center", valign="center", kind="bold").translate((x, Y(y), Z_TOP - LABEL_DEPTH))
-engraved = [small("LOCK", 1.0, ry - 1.2), small("DOWN", 1.0, ry + 3.2),   # left of the lid, not under it
+engraved = [small("LOCK", -10.5, ry - 2.2), small("DOWN", -10.5, ry + 2.2),   # left of the lid, not under it
             label("TALK", TALK_AT[0] - gap, TALK_AT[1] + CAP_DY, "right"), label("OFFICE", OFFICE_AT[0] + gap, OFFICE_AT[1] + CAP_DY, "left")]
 for e_ in engraved: cover = cover.cut(e_)
 # microphones: a tube from the face down to just above each mic (gasket goes between), with a small port
