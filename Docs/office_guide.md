@@ -51,7 +51,7 @@ Any unit can show this page, so it still works if the office unit is the one tha
 
 **Four-part screen:** once a floor plan is loaded, the page is split in four: one part per floor (three floors), and a
 fourth part with **Hold to talk to ALL rooms**, the rooms waiting for the office, the emergency buttons and **Setup**.
-Setup (the rooms list, features, timed events, commands, installer tests and the log) opens below the four parts when
+Setup (devices, highlight areas and backup, the rooms list, features, timed events, commands, installer tests and the log) opens below the four parts when
 the unit's web password is typed, and **Lock setup** closes it again. On a narrow screen the parts stack.
 
 **Where the dots sit:** each intercom's dot is put just inside its room's door, the door nearest the middle of the building. Use **Move dots** where the real spot differs. Intercoms that share a room (give them that room's number as their `group`, for example the gym's four with `group 208`) go to doors far apart, and the room gets an **Entire ...** button in its middle: hold it to talk to all of them; hold one dot to talk to that intercom alone.
@@ -120,3 +120,20 @@ pages, and the unit's page is plain `http://` on the intercom network, so set th
   network key, so set `netkey` on it (USB) first; it also needs the clock.
 - **Emergency mode (R3):** an alarm button opens the camera covers, starts the video to the NVR and flashes the
   alarm light in every room.
+
+## Emergency: how to start it and how to clear it
+
+- **Start, from the office:** on the school page press **Lockdown**, **Evacuate** or **Shelter**. Every unit shows `LoC`, `EUA` or `SHE`, flashes its alarm light and plays the signal (one minute; evacuate five minutes). Talking from the page or the office unit still gets through.
+- **Start, from any intercom:** hold **TALK and OFFICE together for 3 seconds**. Every unit goes to lockdown. This works only when the feature **Lockdown from any intercom** is ticked in Setup (it is off at first). While the two buttons are held nothing is sent to the school and the office is not called.
+- **Clear:** press **All clear** on the school page, or hold **TALK and OFFICE together for 3 seconds on the office unit or its stand-in**. A room's intercom cannot clear an emergency.
+- An emergency nobody clears ends by itself after 4 hours.
+
+## Setup: devices, highlight areas and backup
+
+Open Setup with the web password. The first panel is **Devices, highlight areas and backup**.
+
+- **A new device:** set its number on the device itself (hold SETUP for 3 seconds; UP and DOWN change the blinking digit; MODE goes to the next digit and saves on the last). It then appears in the Device list marked **NEW**. Pick it, press **Put it on the plan** and click the spot on the wall where it hangs.
+- **A highlight area:** for a device that watches a hall or another place without a room number, press **Draw its highlight area**, click the corners of what its camera sees, then **Finish**. The area is drawn faintly, lights up when that device calls or talks, and a click anywhere inside it picks the device. **Remove its area** takes it away.
+- **An existing device:** pick it, press **Read its settings**, change a line (`unit=` is its number, `group=` the room it shares with other devices) and press **Send the changed lines**. Only the changed lines are sent, signed with the network key. Passwords and keys are never read or sent this way: those are set over USB.
+- **Backup:** **Save a backup file** asks every device for its settings and saves one file with the plan, the dots, the areas and all device settings. The file holds the floor plan, so keep it private.
+- **Restore:** **Restore from a backup file** puts the plan, dots and areas back in this browser (for a new office PC). Device settings are not sent by themselves. For a replaced or reset device, set its number on the device, pick it on the line below and press **Send it its saved settings**.

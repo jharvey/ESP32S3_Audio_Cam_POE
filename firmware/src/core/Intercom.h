@@ -173,7 +173,8 @@ public:
         kFeatDnd = 0x08,       // do not disturb for a set time (exams); the office and emergencies still get through
         kFeatQuiet = 0x10,     // quieter between two times of day
         kFeatSilent = 0x20,    // OFFICE held 5 s = silent help call: no sound here, the office hears the room
-        kFeatFailover = 0x40,  // the stand-in office unit takes over while the office unit is offline
+        kFeatFailover = 0x40,
+        kFeatLockdown = 0x80,  // TALK and OFFICE held together 3 s = lockdown on every unit; the same hold on an office unit clears it  // the stand-in office unit takes over while the office unit is offline
     };
     bool feature(Feature f) const { return (features_ & f) != 0; }
     uint8_t features() const { return features_; }
@@ -334,6 +335,8 @@ private:
     bool testsOk_ = false;        // running a command inside "tests <password> ..." (password checked)
     uint32_t missedUntil_ = 0;    // missed-call blink runs until this frame (or until a button is pressed)
     uint32_t ringUntil_ = 0;      // "ring": chime every 2 s until this frame or until TALK answers
+    uint32_t bothSince_ = 0;      // TALK and OFFICE held together since this frame
+    bool bothLatch_ = false;      // ... and until both are let go, neither button does its own job
     bool officeDown_ = false;     // OFFICE was held last frame (a press = one call)
     uint32_t allCallUntil_ = 0;   // an office all-call is playing: room calls wait
     uint8_t lamp_[int(Lamp::Count)] = {0, 0, 0};

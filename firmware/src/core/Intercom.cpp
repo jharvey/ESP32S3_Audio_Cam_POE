@@ -45,12 +45,13 @@ constexpr uint32_t kEvacuateSoundFrames = 5 * 60 * 50;   // ... or 5 min (evacua
 constexpr uint32_t kEmergencyRgb = 0xC00000;
 const char* const kEmergencyNames[] = {"clear", "lockdown", "evacuate", "shelter"};
 // R3.2
-const char* const kFeatureNames[] = {"reason", "queue", "zones", "dnd", "quiet", "silent", "failover"};
+const char* const kFeatureNames[] = {"reason", "queue", "zones", "dnd", "quiet", "silent", "failover", "lockdown"};
 constexpr uint32_t kUrgentHoldFrames = 75;            // OFFICE held 1.5 s = "help needed"
+constexpr uint32_t kLockdownHoldFrames = 150;        // TALK and OFFICE held together 3 s = lockdown everywhere
 constexpr uint32_t kSilentHoldFrames = 250;           // OFFICE held 5 s = silent help call
 constexpr uint32_t kSilentTxFrames = 2 * 60 * 50;     // the office hears the room for 2 minutes
 constexpr uint32_t kSilentFrames = 30 * 60 * 50;      // the silent call stays up for 30 minutes unless cleared
-const char* const kFeatureUsage = "usage: feature [reason|queue|zones|dnd|quiet|silent|failover|all on|off]";
+const char* const kFeatureUsage = "usage: feature [reason|queue|zones|dnd|quiet|silent|failover|lockdown|all on|off]";
 const char* const kZoneUsage = "usage: zone | zone N NAME ROOMS (N 1-8, e.g. zone 1 east 101-112,201) | zone N off";
 const char* const kQuietUsage = "usage: quiet | quiet HH:MM HH:MM DB (e.g. quiet 18:00 07:00 -12; DB -30 to 0) | quiet off";
 
@@ -111,7 +112,7 @@ const char* kHelp =
     "                       transmit as if TALK were held, to everyone or a target (USB only; default 5 s)\n"
     "  selftest [result]    check the board and the speaker->mic path (plays a short tone)\n"
     "  version              firmware version\n"
-    "  feature [NAME|all on|off]  optional features: reason queue zones dnd quiet silent failover (all off at first)\n"
+    "  feature [NAME|all on|off]  optional features: reason queue zones dnd quiet silent failover lockdown (all off)\n"
     "  office [ROOM [STAND-IN]]   the office unit, and the unit that takes over while it is offline (failover)\n"
     "  zone [N NAME ROOMS|N off]  zones for paging: zone 1 east 101-112,201 (zones)\n"
     "  dnd [minutes|off]    do not disturb: only the office and emergencies get through, no bells (dnd)\n"
@@ -120,7 +121,7 @@ const char* kHelp =
     "  selfcheck [HH:MM|off|now]  nightly speaker->microphone check; a failure shows on the school page\n"
     "  emergency [lockdown|evacuate|shelter|clear] [all]  emergency signal here; all = on every unit (USB / web)\n"
     "  backup               this unit's settings as key=value lines (no passwords or keys)\n"
-    "  restore key=value    put one line of a backup back (USB / web)\n"
+    "  restore key=value    put one line of a backup back\n"
     "  netkey <key>         set the network command key (USB only; \"netkey off\" refuses all network commands)\n"
     "  webpass <password>   set the web interface password (USB only; \"webpass off\" turns it off)\n"
     "  wifi <ssid> <pass>   Wi-Fi for failover and portable units (USB only; \"wifi off\"; same IP as Ethernet)\n"
@@ -154,7 +155,7 @@ void Intercom::event(EventKind k, uint16_t room, const char* fmt, ...) {
 
 // Feature switches, the office unit and its stand-in, quiet hours and zones, from flash.
 void Intercom::loadFeatures() {
-    features_ = uint8_t(std::strtoul(hal_.store->loadText("features").c_str(), nullptr, 10) & 0x7f);
+    features_ = uint8_t(std::strtoul(hal_.store->loadText("features").c_str(), nullptr, 10) & 0xff);
     unsigned o = 0, b = 0;
     std::sscanf(hal_.store->loadText("office").c_str(), "%u %u", &o, &b);
     office_ = uint16_t(o <= 999 ? o : 0);
@@ -714,10 +715,10 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
     if (c == "feature") {
         if (a.size() == 3 && (a[2] == "on" || a[2] == "off")) {
             int k = -1;
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 8; i++)
                 if (a[1] == kFeatureNames[i]) k = i;
             if (k < 0 && a[1] != "all") return kFeatureUsage;
-            const uint8_t bits = k < 0 ? uint8_t(0x7f) : uint8_t(1u << k);
+            const uint8_t bits = k < 0 ? uint8_t(0xff) : uint8_t(1u << k);
             features_ = a[2] == "on" ? uint8_t(features_ | bits) : uint8_t(features_ & ~bits);
             hal_.store->saveText("features", features_ ? std::to_string(features_) : "");
             if (!feature(kFeatDnd)) dndUntil_ = 0;
@@ -728,7 +729,7 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
             return kFeatureUsage;
         }
         std::string out = "features:";
-        for (int i = 0; i < 7; i++) out += std::string(" ") + kFeatureNames[i] + ((features_ >> i) & 1 ? "=on" : "=off");
+        for (int i = 0; i < 8; i++) out += std::string(" ") + kFeatureNames[i] + ((features_ >> i) & 1 ? "=on" : "=off");
         return out;
     }
     if (c == "office") {  // "office 105 104": the office unit and its stand-in
@@ -878,7 +879,6 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
     }
     if (c == "backup") return backupText();
     if (c == "restore") {
-        if (src == CmdSource::Network) return "restore only works from USB or this unit's web page";
         size_t p = line.find("restore");
         std::string err = restoreLine(line.substr(p + 7));
         return err.empty() ? "ok" : err;
@@ -1932,7 +1932,27 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     bool talk = (((held & talkBit) || talkFrames_) && !setup_.active() && !muted()) || web || silentTx;
     // OFFICE (front): held while a call or ring waits = answer it (as TALK); otherwise a press calls the
     // office (again = cancel). After a missed call it calls the office back.
-    const bool office = (held & (1u << kBtnOffice)) && !setup_.active();
+    // TALK and OFFICE held together 3 s (feature "lockdown"): lockdown on every unit. Only an office unit (the
+    // office unit or its stand-in) ends an emergency this way; the office page's All clear does too.
+    const uint8_t bothBits = talkBit | (1u << kBtnOffice);
+    if (feature(kFeatLockdown) && (held & bothBits) == bothBits && !setup_.active()) {
+        bothLatch_ = true;
+        if (!bothSince_) bothSince_ = frame_ ? frame_ : 1;
+        if (frame_ - bothSince_ == kLockdownHoldFrames) {
+            if (emerg_ == Emergency::None) {
+                setEmergency(Emergency::Lockdown, "TALK and OFFICE held");
+                logf("%s", command("emergency lockdown all").c_str());
+            } else if (office_ && (unit_.room == office_ || unit_.room == office2_)) {
+                setEmergency(Emergency::None, "TALK and OFFICE held on an office unit");
+                logf("%s", command("emergency clear all").c_str());
+            }
+        }
+    } else {
+        bothSince_ = 0;
+        if (!(held & bothBits)) bothLatch_ = false;
+    }
+    if (bothLatch_) talk = web || silentTx;
+    const bool office = (held & (1u << kBtnOffice)) && !setup_.active() && !bothLatch_;
     if (office && canAnswer()) {
         if (!muted()) talk = true;
     } else if (office && !officeDown_) {

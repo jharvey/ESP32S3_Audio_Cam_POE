@@ -1905,7 +1905,9 @@ static void testR31() {
                   n.kv["tune"] == a.kv["tune"],
               "restored on a replacement unit: %s", r.body.c_str());
         CHECK(web(wn, "GET", "/api/backup").body.find("unit=214\n") != std::string::npos, "the page downloads the backup");
-        CHECK(n.ic->command("restore unit=5", CmdSource::Network).find("USB") != std::string::npos && n.id.room == 214, "restore is refused from the network");
+        CHECK(n.ic->command("restore selfcheck=03:15", CmdSource::Network) == "ok" && n.kv["selfcheck"] == "03:15" &&
+                  n.ic->command("restore netkey=y", CmdSource::Network).find("unknown setting") != std::string::npos && n.id.room == 214,
+              "a signed network command restores a setting too (the office page's setup), never a key");
         r = web(wn, "POST", "/api/restore", "webpass=x\nnetkey=y\nunit=abc\n");
         CHECK(r.status == 400 && r.body.find("unknown setting: webpass") != std::string::npos && r.body.find("unit: not a room number") != std::string::npos &&
                   n.kv["netkey"].empty() && n.id.room == 214,
@@ -1988,7 +1990,7 @@ static void testR32() {
         u->ic->command("feature all on");
         u->ic->command("office 105 104");
     }
-    CHECK(r1.kv["features"] == "127" && r1.ic->command("feature").find("silent=on") != std::string::npos &&
+    CHECK(r1.kv["features"] == "255" && r1.ic->command("feature").find("silent=on") != std::string::npos &&
               r1.ic->command("feature bogus on").find("usage") != std::string::npos,
           "feature all on is saved; an unknown name is refused");
     CHECK(r1.ic->command("feature queue off", CmdSource::Web).find("queue=off") != std::string::npos &&
@@ -2018,7 +2020,7 @@ static void testR32() {
     sq.path = "/api/school";
     sq.authorization = basic("admin:s3cret-pass");
     std::string sj = wo.handle(sq).body;
-    CHECK(sj.find("\"queue\":[{\"room\":101,\"urgent\":true") != std::string::npos && sj.find("\"features\":127") != std::string::npos &&
+    CHECK(sj.find("\"queue\":[{\"room\":101,\"urgent\":true") != std::string::npos && sj.find("\"features\":255") != std::string::npos &&
               sj.find("\"office\":105,\"standin\":104,\"acting\":105") != std::string::npos,
           "the school page gets the queue, the switches and the office");
     ofc.held = 1;
@@ -2142,6 +2144,44 @@ static void testR32() {
     CHECK(bk.find("\nfeatures=") != std::string::npos && bk.find("\noffice=105 104\n") != std::string::npos &&
               bk.find("\nzones=1=east:101-103,214;\n") != std::string::npos && bk.find("\nquiet=22:00 07:00 -12\n") != std::string::npos,
           "the settings backup carries the switches, office, zones and quiet hours");
+    // ---- lockdown from a room: TALK and OFFICE held together 3 s (feature "lockdown") ----
+    for (auto* u : all) {
+        u->eth = true;  // the office unit was taken off the network above
+        u->ic->command("feature lockdown on");
+        u->ic->command("emergency clear");
+        u->ic->command("netkey school-network-key-1");
+        u->held = 0;
+    }
+    run(100);
+    const auto L = Intercom::Emergency::Lockdown, N = Intercom::Emergency::None;
+    const unsigned heardR1 = r2.heardFrom(r1.id);
+    r1.held = 1 | kOffice;
+    run(140);
+    CHECK(r1.ic->emergency() == N && r2.heardFrom(r1.id) == heardR1, "TALK and OFFICE together: nothing before 3 s, and no all-call");
+    run(20);
+    r1.held = 0;
+    run(300);
+    CHECK(r1.ic->emergency() == L && r2.ic->emergency() == L && ofc.ic->emergency() == L && prin.ic->emergency() == L,
+          "held 3 s in a room: lockdown on every unit (%d %d %d %d, %s)", int(r1.ic->emergency()), int(r2.ic->emergency()), int(ofc.ic->emergency()),
+          int(prin.ic->emergency()), r1.ic->command("feature").c_str());
+    r2.held = 1 | kOffice;
+    run(170);
+    r2.held = 0;
+    run(100);
+    CHECK(r2.ic->emergency() == L && ofc.ic->emergency() == L, "a room cannot clear it");
+    prin.held = 1 | kOffice;
+    run(170);
+    prin.held = 0;
+    run(300);
+    CHECK(r1.ic->emergency() == N && r2.ic->emergency() == N && ofc.ic->emergency() == N && prin.ic->emergency() == N,
+          "the same hold on an office unit (here the stand-in) clears it everywhere");
+    r1.ic->command("feature lockdown off");
+    r1.held = 1 | kOffice;
+    run(170);
+    r1.held = 0;
+    run(100);
+    CHECK(r1.ic->emergency() == N && ofc.ic->emergency() == N, "with the feature off the two buttons do not start a lockdown");
+    for (auto* u : all) u->ic->command("callofc off");
     g_clock0 = clock0;
 }
 

@@ -69,13 +69,28 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
 <section class="panel"><h2>Emergency</h2>
  <div class="prow"><button id="elock">Lockdown</button><button id="eevac">Evacuate</button><button id="eshel">Shelter</button><button id="eclear">All clear</button></div>
  <div id="estate" class="mute">…</div>
+ <div class="mute"><b>To start:</b> press Lockdown, Evacuate or Shelter here. With the feature "Lockdown from any intercom" on, anyone can also
+ hold TALK and OFFICE together for 3 seconds on any intercom: every unit goes to lockdown (LoC). <b>To clear:</b> press All clear here, or hold
+ TALK and OFFICE together for 3 seconds on the office unit or its stand-in. A room's intercom cannot clear it.</div>
  <div class="mute">Every unit plays the signal (and its recorded message, if it has one) for a minute, evacuate for five. Then it stays
  quiet with its display and alarm light on until All clear. Talking from this page still gets through.</div></section>
 <div class="setupbar"><b>Setup</b><input type="password" id="setuppw" placeholder="web password" autocomplete="off"><button id="setupbtn">Open setup</button>
- <span class="mute" id="setupnote">Rooms list, features, timed events, commands, installer tests and the log.</span></div>
+ <span class="mute" id="setupnote">Devices, areas and backup, features, timed events, commands, installer tests and the log.</span></div>
 </div></div>
 <div id="rooms"></div>
 <div class="panels">
+<section class="panel"><h2>Devices, highlight areas and backup</h2>
+ <div class="prow">Device <select id="dsel"></select><span class="mute" id="dinfo"></span></div>
+ <div class="prow"><button id="dplace">Put it on the plan</button><button id="darea">Draw its highlight area</button><button id="dareadel">Remove its area</button></div>
+ <div class="mute"><b>A new device:</b> set its number on the device itself (hold SETUP for 3 seconds, UP and DOWN change the digit, MODE goes on and
+ saves). It then appears in this list marked NEW. Put it on the plan; if it watches a hall or another place without a room number, draw its area:
+ the area lights up when that device calls, and a click inside it picks the device.</div>
+ <div class="prow"><button id="dread">Read its settings</button><button id="dapply">Send the changed lines</button><span class="mute" id="dnote"></span></div>
+ <textarea id="dtext" rows="7" spellcheck="false" style="width:100%;box-sizing:border-box;font:13px ui-monospace,Consolas,monospace"
+  placeholder="The device's settings appear here, one per line: unit= is its number, group= the room it shares with other devices."></textarea>
+ <div class="prow"><b>Backup</b><button id="bksave">Save a backup file</button><button id="bkload">Restore from a backup file…</button></div>
+ <div class="prow">After a restore, for a replaced or reset device: <select id="bkunit"></select><button id="bkunitgo">Send it its saved settings</button></div>
+ <div class="mute" id="bknote">The file holds the plan, the dots, the areas and every device's settings. No passwords or keys.</div></section>
 <section class="panel"><h2>Features</h2>
  <div class="prow" id="feats"></div>
  <div class="mute">Each feature is off until ticked. A tick sets it on this unit and sends it to all units.</div>
@@ -154,7 +169,7 @@ async function tick(){
     const floors={};for(const u of us){const fl=Math.floor(u.room/100);(floors[fl]=floors[fl]||[]).push(u);}
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
-    lastSchool=j;selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);drawZones((j.features&4)?j.zones||[]:[]);
+    lastSchool=j;drawDevs(us);selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);drawZones((j.features&4)?j.zones||[]:[]);
     document.getElementById("ofcnow").textContent=j.office?"Now: office "+j.office+(j.standin?", stand-in "+j.standin:"")+", acting "+j.acting:"No office unit set.";
     {const em=us.filter(u=>u.online&&u.emergency);
      document.getElementById("estate").textContent=em.length?EMERG[em[0].emergency]+" on "+em.length+" of "+c.on+" units online":"No emergency.";}
@@ -166,7 +181,8 @@ tick();setInterval(tick,2000);
 // ---- Features (R3.2): switches, office and stand-in, quiet hours, zones, the waiting queue ----------
 const FEATS=[["reason","Help needed: OFFICE held 1.5 s (a short press is a question)"],["queue","Call queue: rooms wait in order, help first"],
   ["zones","Zones: page a set of rooms"],["dnd","Do not disturb for a room"],["quiet","Quiet hours"],
-  ["silent","Silent help call: OFFICE held 5 s, the office hears the room"],["failover","Stand-in office unit"]];
+  ["silent","Silent help call: OFFICE held 5 s, the office hears the room"],["failover","Stand-in office unit"],
+  ["lockdown","Lockdown from any intercom: TALK and OFFICE held together 3 s (only an office unit or this page clears it)"]];
 let featBits=-1,zoneSig="";
 function drawFeats(bits){if(bits===featBits)return;featBits=bits;
   document.getElementById("feats").innerHTML=FEATS.map((f,i)=>`<label style="display:block"><input type="checkbox" data-f="${f[0]}" ${bits&(1<<i)?"checked":""}> ${f[1]}</label>`).join("");}
@@ -257,7 +273,7 @@ window.onPlanRing=async info=>{if(!planSel(info))return;
 // Setup (rooms list and the panels below) opens with the unit's web password, checked by the unit, and is closed
 // again by the same button or by loading the page anew.
 function setupShown(){const on=document.body.classList.contains("setup");document.getElementById("setupbtn").textContent=on?"Lock setup":"Open setup";
-  document.getElementById("setupnote").textContent=on?"Setup is open below.":"Rooms list, features, timed events, commands, installer tests and the log.";}
+  document.getElementById("setupnote").textContent=on?"Setup is open below.":"Devices, areas and backup, features, timed events, commands, installer tests and the log.";}
 document.getElementById("setupbtn").onclick=async()=>{
   if(document.body.classList.contains("setup")){document.body.classList.remove("setup");setupShown();return;}
   const box=document.getElementById("setuppw"),pw=box.value;box.value="";
@@ -319,11 +335,11 @@ window.addEventListener("blur",stopTalk);
 async function cmd(text){  // runs a console command on this unit (e.g. "send all stats")
   const r=await fetch(location.origin+"/api/cmd",{method:"POST",headers:{"X-Intercom":"1","Content-Type":"text/plain"},body:text});
   return r.ok?await r.text():"error "+r.status;}
-let replyN=0;
+let replyN=0,replyTap=null;
 function out(line){const o=document.getElementById("cout");o.textContent+=line+"\n";o.scrollTop=o.scrollHeight;}
 async function pollReplies(){
   try{const r=await fetch(location.origin+"/api/replies?since="+replyN,{cache:"no-store"});const j=await r.json();
-    for(const l of j.lines)out(l.from+": "+l.text);replyN=j.next;}catch(e){}}
+    for(const l of j.lines){out(l.from+": "+l.text);if(replyTap)replyTap(l)}replyN=j.next;}catch(e){}}
 setInterval(pollReplies,1000);
 async function sendTo(target,text){const r=await cmd("send "+target+" "+text);out("> "+target+" "+text+"   ("+r+")");return r;}
 document.getElementById("csend").addEventListener("click",async()=>{
@@ -331,6 +347,55 @@ document.getElementById("csend").addEventListener("click",async()=>{
   let t="all";if(document.getElementById("ctarget").value==="sel"){if(!selRoom){out("click a room first");return;}t=String(selRoom.room);}
   await sendTo(t,c);document.getElementById("cmd").value="";});
 document.getElementById("cmd").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("csend").click();});
+// ---- Setup: devices, highlight areas, settings, backup ----------------------------------------------
+const gid=id=>document.getElementById(id);let devSig="",devRead="",bkData=null;
+function drawDevs(us){const P=window.planApi,sig=us.map(u=>u.unit+(P&&!P.placed(u)?"*":"")+(P&&P.hasArea(u.unit)?"a":"")+(u.online?"":"-")+u.group).join(",");
+  if(sig===devSig)return;devSig=sig;const s=gid("dsel"),v=s.value;
+  s.innerHTML=us.map(u=>`<option value="${u.unit}">${u.unit}${u.group!==u.room?" (room "+u.group+")":""}${P&&!P.placed(u)?" · NEW: not on the plan":""}${P&&P.hasArea(u.unit)?" · has an area":""}${u.online?"":" · offline"}</option>`).join("");
+  if(v)s.value=v;devInfo();}
+window.onPlanSetup=()=>{devSig="";drawDevs(lastSchool.units);};
+function devU(){return lastSchool.units.find(u=>String(u.unit)===gid("dsel").value);}
+function devInfo(){const u=devU();gid("dinfo").textContent=u?"address "+u.ip+" · firmware "+(u.fw||"?")+" · "+u.link+" · "+(u.online?"online":"offline"):"";}
+const devSelf=u=>String(lastSchool.self)===String(u.unit);
+function gather(ms){return new Promise(res=>{const got={};replyTap=l=>{got[l.from]=(got[l.from]?got[l.from]+"\n":"")+l.text;};setTimeout(()=>{replyTap=null;res(got);},ms);});}
+async function devBackup(u){if(devSelf(u))return cmd("backup");const g=gather(2500);await sendTo(u.unit,"backup");return (await g)[u.unit]||"";}
+const setLines=t=>String(t||"").split(/\r?\n/).map(l=>l.trim()).filter(l=>l&&l[0]!=="#"&&l.indexOf("=")>0);
+async function devSend(u,lines){let n=0,long=0;
+  for(const l of lines){if(l.length>560){long++;continue;}
+    if(devSelf(u))out("> restore "+l.slice(0,60)+"   ("+await cmd("restore "+l)+")");else await sendTo(u.unit,"restore "+l);
+    n++;await new Promise(r=>setTimeout(r,250));}
+  return n+(n===1?" line":" lines")+" sent to "+u.unit+(long?"; "+long+" too long for the network: use that unit's own page":"")+".";}
+gid("dsel").onchange=()=>{devInfo();gid("dtext").value="";devRead="";gid("dnote").textContent="";};
+const toPlan=()=>window.scrollTo({top:0,behavior:"smooth"});  // the plan is the top of the page
+gid("dplace").onclick=()=>{const u=devU();if(u&&window.planApi){window.planApi.place(u.unit);toPlan();}};
+gid("darea").onclick=()=>{const u=devU();if(u&&window.planApi){window.planApi.drawArea(u.unit);toPlan();}};
+gid("dareadel").onclick=()=>{const u=devU();if(u&&window.planApi){window.planApi.delArea(u.unit);devSig="";drawDevs(lastSchool.units);}};
+gid("dread").onclick=async()=>{const u=devU();if(!u)return;gid("dnote").textContent="Reading…";let t=await devBackup(u);if(t&&t.slice(-1)!==String.fromCharCode(10))t+=String.fromCharCode(10);devRead=t;gid("dtext").value=t;
+  gid("dnote").textContent=t?"Change a line, then send the changed lines.":"No answer from "+u.unit+".";};
+gid("dapply").onclick=async()=>{const u=devU();if(!u)return;if(!devRead){gid("dnote").textContent="Read its settings first.";return;}
+  const old=new Set(setLines(devRead)),ch=setLines(gid("dtext").value).filter(l=>!old.has(l));
+  if(!ch.length){gid("dnote").textContent="Nothing changed.";return;}
+  gid("dnote").textContent="Sending…";gid("dnote").textContent=await devSend(u,ch);devRead=gid("dtext").value;};
+gid("bksave").onclick=async()=>{const n=gid("bknote");n.textContent="Asking every device for its settings…";
+  const got={};replyTap=l=>{got[l.from]=(got[l.from]?got[l.from]+"\n":"")+l.text;};  // one device after another: all at once would overrun the reply list
+  for(const u of lastSchool.units){if(!u.online||devSelf(u))continue;await cmd("send "+u.unit+" backup");await new Promise(r=>setTimeout(r,120));}
+  await new Promise(r=>setTimeout(r,2500));replyTap=null;got[String(lastSchool.self)]=await cmd("backup");
+  const d=Object.assign({kind:"intercom-backup",v:1,saved:new Date().toISOString(),units:got},window.planApi?window.planApi.data():{});
+  const name="intercom-backup-"+d.saved.slice(0,10)+".json",a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:"application/json"}));a.download=name;a.click();
+  const miss=lastSchool.units.filter(u=>!got[u.unit]).map(u=>u.unit);
+  n.textContent="Saved "+name+": the plan, the dots, the areas and the settings of "+Object.keys(got).length+" devices."+(miss.length?" No answer from: "+miss.join(", ")+".":"")+" No passwords or keys are in it.";};
+window.setupRestoreText=t=>{const n=gid("bknote");let d=null;try{d=JSON.parse(t);}catch(e){}
+  if(!d||d.kind!=="intercom-backup"){n.textContent="That is not an intercom backup file.";return;}
+  const day=String(d.saved).slice(0,10);if(!confirm("Replace the plan, dots and areas in this browser with the backup of "+day+"?"))return;
+  if(window.planApi)window.planApi.restore(d);bkData=d;devSig="";
+  gid("bkunit").innerHTML=Object.keys(d.units||{}).sort((a,b)=>a-b).map(k=>"<option>"+esc(k)+"</option>").join("");
+  n.textContent="Plan, dots and areas restored from the backup of "+day+". Device settings are not sent by themselves: pick a device on the line above and send it its saved settings.";};
+gid("bkload").onclick=()=>{const f=Object.assign(document.createElement("input"),{type:"file",accept:".json"});
+  f.onchange=()=>{if(!f.files[0])return;const rd=new FileReader();rd.onload=()=>window.setupRestoreText(rd.result);rd.readAsText(f.files[0]);};f.click();};
+gid("bkunitgo").onclick=async()=>{const k=gid("bkunit").value,n=gid("bknote");if(!bkData||!k){n.textContent="Restore from a backup file first.";return;}
+  const u=lastSchool.units.find(x=>String(x.unit)===k);if(!u||!u.online){n.textContent="Device "+k+" is not online. Set its number on the device first.";return;}
+  if(!confirm("Send the saved settings to device "+k+"?"))return;n.textContent="Sending…";n.textContent=await devSend(u,setLines(bkData.units[k]));};
 async function loadSched(){document.getElementById("sched").textContent=await cmd("sched");}
 // ---- Installer tests: need the tests password if one is set on the unit (USB: testpass) -----------
 let lastSchool={units:[]},testPw=null;

@@ -14,7 +14,7 @@ namespace ic {
 const char* floorPlanJs() {
     return R"JS((function(){
 "use strict";
-const KP="icPlan2",KU="icPlace1",KF="icPlanFloor";
+const KP="icPlan2",KU="icPlace1",KF="icPlanFloor",KA="icArea1";
 const st=document.createElement("style");
 st.textContent=`#plan{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 16px}
 #plan .bar{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}#plan .bar b{font-size:15px}
@@ -23,7 +23,7 @@ st.textContent=`#plan{background:var(--card);border:1px solid var(--line);border
 #plan .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 6px}#plan .hint{font-size:13px;color:var(--mute);margin:4px 0}
 #plan svg{width:100%;height:auto;max-height:72vh;display:block;background:var(--bg);border-radius:6px;cursor:crosshair}
 #plan .wall{fill:none;stroke:var(--mute);stroke-linecap:round}#plan .lbl{fill:var(--mute)}
-#plan .dot{stroke:var(--card);cursor:pointer}#plan .num{fill:#fff;font-weight:700;pointer-events:none}
+#plan .dot{stroke:var(--card);cursor:pointer}#plan .area{fill:var(--call);fill-opacity:.1;stroke:var(--call);stroke-opacity:.55;cursor:pointer}#plan .area.on{fill-opacity:.36}#plan .num{fill:#fff;font-weight:700;pointer-events:none}
 #plan .ok{fill:var(--ok)}#plan .warn{fill:var(--warn)}#plan .bad{fill:var(--bad)}#plan .call{fill:var(--call)}#plan .talk{fill:#d4a800}
 #plan .chip{font-size:13px;padding:2px 8px}
 #plan .dot.call{animation:pcall 1s steps(2,jump-none) infinite}@keyframes pcall{to{fill:#fff}}
@@ -36,6 +36,9 @@ const box=document.getElementById("plan");if(!box)return;
 function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
 let plan=load(KP,null),place=load(KU,{}),floor=load(KF,0),units=[],sel=null,msg="",moving=false;
+// Highlight areas (Setup): what a device watches, e.g. a hall monitor's stretch of corridor. Drawn faintly, strongly while the
+// device calls, talks or is picked; a click inside one picks its device.
+let areas=load(KA,{}),drawing=null;
 
 // ---- DXF -> floors ---------------------------------------------------------------------------------
 function parseDxf(txt){
@@ -257,6 +260,11 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
     document.getElementById("pcap"+fi).innerHTML=`${esc(F.name)} · ${fc[fi].n}${fc[fi].worst!=="ok"?` <span style="color:var(--${fc[fi].worst==="talk"?"talk":fc[fi].worst})">●</span>`:""}`;
     const spots={};for(const u of units){const p=where(u);if(!p||p.f!==fi)continue;const k=p.x+","+p.y;(spots[k]=spots[k]||[]).push(u)}
     let dots="";
+    for(const k in areas){const A=areas[k];if(A.f!==fi)continue;const u=units.find(x=>String(x.unit)===k),c=u?cls(u):"";
+      const on=u&&(c==="call"||c==="talk"||hotUs.includes(u)||(u.online&&u.emergency));
+      dots+=`<polygon class="area${on?" on":""}" data-a="${esc(k)}" points="${A.p.map(q=>q.join(",")).join(" ")}" stroke-width="${r*0.2}" stroke-dasharray="${r*0.9} ${r*0.7}"><title>Area of ${esc(k)}</title></polygon>`}
+    if(drawing&&drawing.f===fi)dots+=`<polyline points="${drawing.p.map(q=>q.join(",")).join(" ")}" fill="none" stroke="var(--call)" stroke-width="${r*0.3}"/>`+
+      drawing.p.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="${r*0.45}" fill="var(--call)"/>`).join("");
     for(const k in spots){const us=spots[k],p=where(us[0]);us.forEach((u,i)=>{const x=p.x+(i-(us.length-1)/2)*r*2.3,y=p.y+(p.d?0:r*1.6);
       const mark=sel===String(u.unit)?` style="stroke:var(--call);stroke-width:${r*0.45}"`:"";  // a unit that is not a room of the plan (a hall monitor) is drawn square
       dots+=`<g data-u="${u.unit}">`+(home(u)?`<circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${mark}><title>${esc(u.unit)}</title></circle>`:
@@ -277,6 +285,7 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
   const chips=un.map(u=>`<button class="chip ${sel===String(u.unit)?"sel":""}" data-u="${u.unit}">${esc(u.unit)}</button>`).join("");
   const act=window.onPlanHold?"Click an intercom's dot or its room to pick it, hold it to talk to it, double-click it to ring it.":"Click a room to pick it.";
   document.getElementById("phint").innerHTML=
+    drawing?`<div class="hint"><b>Area of ${esc(drawing.u)}:</b> click its corners on the plan, one after another (${drawing.p.length} so far). <button id="pafin">Finish</button> <button id="pacan">Cancel</button></div>`:
     sel?`<div class="hint"><b>Unit ${esc(sel)}:</b> click the map where it is. <button id="pcancel">Cancel</button>${place[sel]?` <button id="preset">Back to its room</button>`:""}</div>`:
     moving?`<div class="hint">Click a dot, then click where it goes.</div>`:
     un.length?`<div class="hint">${act} Not on the plan yet: ${chips} pick one, then click the map.</div>`:`<div class="hint">${act}</div>`;
@@ -284,6 +293,8 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
   if(msg)document.getElementById("phint").innerHTML+=`<div class="hint">${esc(msg)}</div>`;
   const b=id=>document.getElementById(id);
   if(b("pcancel"))b("pcancel").onclick=()=>{sel=null;part()};
+  if(b("pacan"))b("pacan").onclick=()=>{drawing=null;part()};
+  if(b("pafin"))b("pafin").onclick=()=>{if(drawing.p.length>2){areas[drawing.u]={f:drawing.f,p:drawing.p};save(KA,areas)}drawing=null;part();if(window.onPlanSetup)window.onPlanSetup()};
   if(b("preset"))b("preset").onclick=()=>{delete place[sel];save(KU,place);spotCache={};sel=null;part()};
   box.querySelectorAll("button.chip").forEach(t=>t.onclick=()=>{sel=t.dataset.u;part()});
 }
@@ -308,6 +319,8 @@ function hook(){
     if(ga){pick=mates(+ga.dataset.all,true);return +ga.dataset.all}
     const g=ev.target.closest&&ev.target.closest("g[data-u]");
     if(g){const u=units.find(x=>String(x.unit)===g.dataset.u);if(u){const p=where(u);pick=[u];return roomAt(fi,p.x,p.y)||u.room}}  // a dot: that intercom
+    const pa=ev.target.closest&&ev.target.closest("polygon[data-a]");  // inside an area drawn for a device (a hall): that device
+    if(pa){const u=units.find(x=>String(x.unit)===pa.dataset.a);if(u){pick=[u];return u.room}}
     const q=at(ev),n=roomAt(fi,q.x,q.y);if(n&&unitsIn(fi,n).length)return n;
     let best=null,bd=fsz(plan.floors[fi])*0.06;  // no intercom of its own there (a closet, a corridor): the nearest one, if close
     for(const u of units){const p=where(u);if(!p||p.f!==fi)continue;const d=Math.hypot(p.x-q.x,p.y-q.y);if(d<bd){bd=d;best=u}}
@@ -315,7 +328,7 @@ function hook(){
     return n};
   const endHold=()=>{clearTimeout(holdT);if(holding){const h=holding;holding=null;if(window.onPlanHoldEnd)window.onPlanHoldEnd(h)}};
   svg.addEventListener("pointerdown",ev=>{
-    if(sel||moving)return;const n=roomFrom(ev);if(!n)return;
+    if(sel||moving||drawing)return;const n=roomFrom(ev);if(!n)return;
     ev.preventDefault();try{svg.setPointerCapture(ev.pointerId)}catch(e){}down={n,t:Date.now()};hot=n;hotF=fi;hotUs=info(n).units;part();
     if(window.onPlanHold)holdT=setTimeout(()=>{if(down&&down.n===n){holding=info(n);down=null;window.onPlanHold(holding)}},350)});
   svg.addEventListener("pointerup",ev=>{
@@ -323,14 +336,15 @@ function hook(){
     if(last&&last.n===n&&Date.now()-last.t<450&&window.onPlanRing){last=null;window.onPlanRing(info(n));return}
     last={n,t:Date.now()};if(window.onPlanPick)window.onPlanPick(info(n))});
   for(const e of ["pointercancel","lostpointercapture"])svg.addEventListener(e,()=>{down=null;endHold()});
-  svg.addEventListener("click",ev=>{  // placing or moving a dot
+  svg.addEventListener("click",ev=>{  // drawing an area; placing or moving a dot
+    if(drawing){const q=at(ev);if(drawing.f<0)drawing.f=fi;if(drawing.f===fi)drawing.p.push([Math.round(q.x),Math.round(q.y)]);part();return}
     if(!sel&&!moving)return;
     const g=ev.target.closest&&ev.target.closest("g[data-u]");
     if(g&&!sel){sel=g.dataset.u;part();return}
     if(!sel)return;
     const q=at(ev),F=plan.floors[fi];  // dots sit a little below their spot: store the spot
     place[sel]={f:fi,x:Math.round(q.x),y:Math.round(q.y-Math.max(F.x1-F.x0,F.y1-F.y0)*0.011*1.6)};
-    save(KU,place);spotCache={};sel=null;part()});
+    save(KU,place);spotCache={};sel=null;part();if(window.onPlanSetup)window.onPlanSetup()});
   });
 }
 function render(){full()}
@@ -381,6 +395,13 @@ function loadText(txt){
 }
 window.planUpdate=us=>{units=us||[];spotCache={};part()};
 window.planHot=n=>{hot=n||0;hotUs=[];if(hot&&plan&&plan.rooms[hot])hotF=plan.rooms[hot].f;part()};  // the page can highlight a room (e.g. while ringing it)
+// For Setup on the school page: place a device, draw or remove its area, and everything a backup file holds.
+window.planApi={placed:u=>!!where(u),hasArea:n=>!!areas[n],
+  place:n=>{sel=String(n);moving=false;drawing=null;part()},
+  drawArea:n=>{drawing={u:String(n),f:-1,p:[]};sel=null;moving=false;part()},
+  delArea:n=>{delete areas[n];save(KA,areas);part()},
+  data:()=>({plan,place,areas}),
+  restore:d=>{if(d.plan){plan=d.plan;save(KP,plan)}place=d.place||{};areas=d.areas||{};save(KU,place);save(KA,areas);for(const k in regCache)delete regCache[k];spotCache={};full()}};
 window.planLoadText=loadText;  // also used by the scripted check
 window.planRoomAt=(fi,x,y)=>roomAt(fi,x,y);  // scripted check
 window.planSpots=n=>plan&&plan.rooms[n]?{label:plan.rooms[n],floor:plan.floors[plan.rooms[n].f],spots:doorSpots(plan.rooms[n].f)[n]||[]}:null;  // scripted check
