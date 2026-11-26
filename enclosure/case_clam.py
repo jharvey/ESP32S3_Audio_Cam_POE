@@ -93,6 +93,12 @@ SHUT_GAP = 2.0         # room between the lens and the face that the paddle turn
 POD_X0 = -15.5         # inside of the case's left wall (it was -GAP before the servo)
 POD_Y = (40.5, 80.5)   # where the servo and the paddle are (KiCad y)
 SLOT_Y0 = 47.0         # the slot in the left wall runs from here to POD_Y[1]
+CARD_DX = 6.0    # the card holder sits this far right of the board's middle, to leave the lower left of the face for the speaker
+# Box speaker (35 x 25 mm, 4 ohm 3 W, 1.25 mm plug; LCSC C49247004 or the like): in the lower left of the case, beside
+# the Ethernet plug, firing through its own grille. It is as far from the two microphones as the case allows, and the
+# speaker's own sealed box keeps its sound out of the inside of the case: both help the echo canceller.
+SPK2_W, SPK2_H, SPK2_T = 25.0, 35.0, 6.8   # across, tall, thick (6.2 to 6.8 mm, by maker)
+SPK2_AT = (-1.9, 124.0)                    # its middle (KiCad x, y)
 MIC_D = 1.5      # microphone ports
 CAM_D = 12.0     # camera lens opening
 SPK_D = 36.0     # speaker grille (the speaker hangs in the cover; its place is a guess for now)
@@ -304,7 +310,7 @@ servo = servo.union(cyl(PIVOT[0], PIVOT[1], 11.8, SV_Z0 + SERVO_BODY_H, SV_Z0 + 
 
 # ---- use card holder on the face: two side rails and a bottom rail that grip the card's edges. The card slides
 # down from the top; a gap in the bottom rail lets a finger push it back up to read its other side. -------------
-cx0, cx1 = W / 2 - CARD_W / 2 - 0.3, W / 2 + CARD_W / 2 + 0.3
+cx0, cx1 = W / 2 + CARD_DX - CARD_W / 2 - 0.3, W / 2 + CARD_DX + CARD_W / 2 + 0.3
 cy0, cy1 = CARD_TOP, CARD_TOP + CARD_H + 0.3
 zt = Z_LOW + CARD_SLOT + 0.9
 holder = slab(cx0 - CARD_RAIL, cy0, cx0, cy1 + CARD_RAIL, Z_LOW - 0.2, zt)
@@ -314,9 +320,24 @@ holder = holder.union(slab(cx0, cy0, cx0 + CARD_LIP, cy1, Z_LOW + CARD_SLOT, zt)
 holder = holder.union(slab(cx1 - CARD_LIP, cy0, cx1, cy1, Z_LOW + CARD_SLOT, zt))
 holder = holder.union(slab(cx0, cy1 - CARD_LIP, cx1, cy1, Z_LOW + CARD_SLOT, zt))
 holder = holder.edges("|Z").fillet(0.9)
-holder = holder.cut(cyl(W / 2, cy1 + CARD_RAIL, 18.0, Z_LOW, zt + 1))   # finger gap in the bottom rail
+holder = holder.cut(cyl(W / 2 + CARD_DX, cy1 + CARD_RAIL, 18.0, Z_LOW, zt + 1))   # finger gap in the bottom rail
 cover = cover.union(holder)
 use_card = slab(cx0 + 0.3, cy1 - 0.3 - CARD_H, cx1 - 0.3, cy1 - 0.3, Z_LOW + 0.1, Z_LOW + 0.6)   # the card itself, for the pictures only
+
+# ---- box speaker in the lower left: a frame behind the face that it presses into (foam tape or a gasket between
+# speaker and face seals it), and a grille of slots in front of it ----
+sx0, sx1 = SPK2_AT[0] - SPK2_W / 2 - 0.2, SPK2_AT[0] + SPK2_W / 2 + 0.2
+sy0, sy1 = SPK2_AT[1] - SPK2_H / 2 - 0.2, SPK2_AT[1] + SPK2_H / 2 + 0.2
+Z_IN = Z_FACE + JACK_BUMP                       # inside of the raised lower face
+frame = slab(max(sx0 - 1.2, XL_IN), sy0 - 1.2, sx1 + 1.2, sy1 + 1.2, Z_IN - 5.0, Z_IN + 0.1).cut(slab(sx0, sy0, sx1, sy1, Z_IN - 6, Z_IN + 1))
+frame = frame.cut(slab(sx1 - 1, sy0 + 3, sx1 + 2, sy0 + 9, Z_IN - 6, Z_IN - 1.5))   # a gap for the speaker's wires
+cover = cover.union(frame)
+g2 = None
+for i in range(-3, 4):
+    s_ = slab(SPK2_AT[0] - 9.5, SPK2_AT[1] + i * 4.0 - 1.0, SPK2_AT[0] + 9.5, SPK2_AT[1] + i * 4.0 + 1.0, Z_IN - 1, Z_LOW + 1).edges("|Z").fillet(0.9)
+    g2 = s_ if g2 is None else g2.union(s_)
+cover = cover.cut(g2)
+speaker2 = slab(sx0 + 0.2, sy0 + 0.2, sx1 - 0.2, sy1 - 0.2, Z_IN - SPK2_T, Z_IN)
 
 # ---- looks: an engraved ring round the speaker and round the status light, a bevel on the camera opening ------
 def ring(x, y, d_out, width):
@@ -366,7 +387,7 @@ if BAY >= 30:  # the RJ45 plug with its boot
 out = os.path.join(here, "out_clam"); os.makedirs(out, exist_ok=True)
 for name, s in (("clam_back", back), ("clam_cover", cover), ("clam_button", cap), ("clam_buttons", caps), ("board_standin", board), ("use_card", use_card), ("paint", paint),
                 ("clam_red_button", red), ("red_at", red_at), ("lid", lid), ("lid_open", lid_open),
-                ("shutter_paddle", paddle), ("pad_closed", pad_closed), ("pad_open", pad_open), ("pad_flag", pad_flag), ("servo_standin", servo)):
+                ("speaker_standin", speaker2), ("shutter_paddle", paddle), ("pad_closed", pad_closed), ("pad_open", pad_open), ("pad_flag", pad_flag), ("servo_standin", servo)):
     if name not in ("clam_buttons", "use_card", "paint", "red_at", "lid_open", "pad_closed", "pad_open", "pad_flag"): cq.exporters.export(s, os.path.join(out, name + ".step"))
     cq.exporters.export(s, os.path.join(out, name + ".stl"), tolerance=0.05)
 cq.exporters.export(lid2d.faces("<Z"), os.path.join(out, "lid.dxf"))   # the lid's outline, for the laser cutter (mm)
@@ -374,7 +395,7 @@ bb = back.union(cover).val().BoundingBox()
 print("outside: %.1f x %.1f x %.1f mm" % (bb.xlen, bb.ylen, bb.zlen))
 for name, a, b in (("cover/board", cover, board), ("cover/back", cover, back), ("back/board", back, board), ("caps/cover", caps, cover), ("caps/board", caps, board),
                    ("red/cover", red_at, cover), ("red/board", red_at, board), ("lid/cover", lid, cover), ("lid open/cover", lid_open, cover), ("lid/red", lid, red_at),
-                   ("servo/cover", servo, cover), ("servo/back", servo, back), ("servo/board", servo, board),
+                   ("speaker/cover", speaker2, cover), ("speaker/back", speaker2, back), ("speaker/board", speaker2, board), ("servo/cover", servo, cover), ("servo/back", servo, back), ("servo/board", servo, board),
                    ("paddle closed/cover", pad_closed, cover), ("paddle open/cover", pad_open, cover), ("paddle flag/cover", pad_flag, cover),
                    ("paddle closed/board", pad_closed, board), ("paddle open/board", pad_open, board), ("paddle/servo", pad_closed, servo)):
     v = a.intersect(b).val().Volume() if a.intersect(b).vals() else 0.0
@@ -444,7 +465,7 @@ for tag in ("closed", "open", "flag"):
             (20, Y(62), 0), (-150, -40, 110), (0, 0, 1))
 # the whole case with a see-through front, to look at the inside and the outside together
 def seen(pad="pad_closed"):
-    return [actor("clam_back", grey), actor("board_standin", BOARD_COLOR), actor("servo_standin", blue), actor(pad, orange), actor("clam_buttons", dark),
+    return [actor("clam_back", grey), actor("board_standin", BOARD_COLOR), actor("servo_standin", blue), actor("speaker_standin", (0.15, 0.15, 0.17)), actor(pad, orange), actor("clam_buttons", dark),
             actor("red_at", red_c), actor("use_card", white), glass("clam_cover"), clear("lid")]
 shot("preview_glass_face.png", seen(), (0, -30, 300))
 shot("preview_glass_front.png", seen(), (60, -120, 240))
