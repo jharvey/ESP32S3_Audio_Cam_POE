@@ -13,7 +13,7 @@ def font(size, bold=False, mono=False):
             try: return ImageFont.truetype(d + n, size)
             except OSError: pass
     return ImageFont.load_default()
-RED, BLACK, GREY = (200, 50, 40), (17, 17, 17), (90, 90, 90)
+BTN, BLACK, GREY = (77, 79, 87), (17, 17, 17), (90, 90, 90)
 def chip(d, x, y, w, h, text, fill, fg, f):
     d.rounded_rectangle((x, y, x + w, y + h), radius=h // 5, fill=fill)
     tw = d.textlength(text, font=f); d.text((x + (w - tw) / 2, y + h / 2), text, font=f, fill=fg, anchor="lm")
@@ -26,12 +26,12 @@ def card():
 im, d = card()
 d.text((60, 40), "INTERCOM", font=font(74, True), fill=BLACK)
 d.text((W - 60, 62), "Display codes on the back", font=font(36), fill=GREY, anchor="ra")
-rows = (("TALK", RED, "Hold and speak to the whole school.", "Let go when you have finished."),
-        ("OFFICE", RED, "Press to call the office. oFC shows", "until the office answers."),
+rows = (("TALK", BTN, "Hold and speak to the whole school.", "Let go when you have finished."),
+        ("OFFICE", BTN, "Press to call the office. oFC shows", "until the office answers."),
         ("CAL", BLACK, "The office is calling. Hold OFFICE", "and speak. Only the office hears you."))
 for i, (name, col, a, b) in enumerate(rows):
     y = 190 + i * 210
-    chip(d, 60, y, 290, 130, name, col, (255, 255, 255) if col == RED else (127, 184, 255), font(62, True, mono=(col == BLACK)))
+    chip(d, 60, y, 290, 130, name, col, (255, 255, 255) if col == BTN else (127, 184, 255), font(62, True, mono=(col == BLACK)))
     d.text((400, y + 2), a, font=font(54), fill=BLACK); d.text((400, y + 70), b, font=font(54), fill=BLACK)
 im.save(os.path.join(out, "use_card_front.png"))
 
