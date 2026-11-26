@@ -230,6 +230,9 @@ window.onPlanPick=info=>{planSel(info);};
 window.onPlanHold=async info=>{if(talking||!planSel(info))return;planHolding=true;
   document.getElementById("tkind").value="room";updTarget();await startTalk();if(!planHolding)stopTalk();};
 window.onPlanHoldEnd=()=>{planHolding=false;stopTalk();};
+// the plan's "whole building" button: talk to everyone while it is held
+window.onPlanAll=async on=>{if(!on){planHolding=false;stopTalk();return;}if(talking)return;planHolding=true;
+  document.getElementById("tkind").value="all";updTarget();await startTalk();if(!planHolding)stopTalk();};
 window.onPlanRing=async info=>{if(!planSel(info))return;
   for(const u of info.units){const r=await cmd("send "+u.room+" ring "+lastSchool.self);out("> "+u.room+" ring   ("+r+")");}
   setState("Ringing room "+info.room+" for 10 s: the teacher answers with TALK, heard on this office unit.","st");};
