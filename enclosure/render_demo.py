@@ -17,6 +17,8 @@ def actor(name, color, flat=False):
     if flat: a.GetProperty().LightingOff()
     else: a.GetProperty().SetAmbient(0.25); a.GetProperty().SetDiffuse(0.8)
     return a
+def lid():
+    a = actor("lid", (0.75, 0.88, 0.95)); a.GetProperty().SetOpacity(0.38); return a
 cb = reader("use_card").GetOutput().GetBounds()      # the card, as the case script places it
 vb = reader("clam_cover").GetOutput().GetBounds()
 def card(side):
@@ -31,7 +33,7 @@ x0, x1, y0, y1 = vb[0] - M, vb[1] + M, vb[2] - M, vb[3] + M
 W, H = int((x1 - x0) * PX), int((y1 - y0) * PX)
 for side in ("front", "back"):
     ren = vtk.vtkRenderer(); ren.SetBackground(27 / 255, 31 / 255, 36 / 255)
-    for a in (actor("clam_back", grey), actor("board_standin", board), actor("clam_cover", beige), actor("clam_buttons", dark), actor("paint", black, True), card(side)): ren.AddActor(a)
+    for a in (actor("clam_back", grey), actor("board_standin", board), actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", (0.80, 0.25, 0.20)), actor("paint", black, True), card(side), lid()): ren.AddActor(a)
     w = vtk.vtkRenderWindow(); w.SetOffScreenRendering(1); w.SetSize(W, H); w.AddRenderer(ren)
     c = ren.GetActiveCamera(); c.ParallelProjectionOn(); cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
     c.SetFocalPoint(cx, cy, 0); c.SetPosition(cx, cy, 400); c.SetViewUp(0, 1, 0); c.SetParallelScale((y1 - y0) / 2); c.SetClippingRange(1, 800)
@@ -42,6 +44,6 @@ for side in ("front", "back"):
     f = vtk.vtkWindowToImageFilter(); f.SetInput(w); f.Update()
     p = vtk.vtkPNGWriter(); p.SetFileName(os.path.join(out, "demo_%s.png" % side)); p.SetInputConnection(f.GetOutputPort()); p.Write()
 B = json.load(open(os.path.join(here, "board_features.json")))
-json.dump({"view": [x0, x1, y0, y1], "size": [W, H], "card": cb[:4], "parts": {k: v for k, v in B["parts"].items() if k in ("DISP1", "PB1", "PB5", "D9", "U1", "J10")}},
+json.dump({"view": [x0, x1, y0, y1], "size": [W, H], "card": cb[:4], "parts": {k: v for k, v in B["parts"].items() if k in ("DISP1", "PB1", "PB5", "PB11", "D9", "U1", "J10")}},
           open(os.path.join(out, "demo_view.json"), "w"))
 print(open(os.path.join(out, "demo_view.json")).read()[:1500])

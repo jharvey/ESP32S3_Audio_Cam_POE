@@ -2,7 +2,7 @@
 #   1. The back plate is flat and is screwed to the wall (or to a single-gang wall box).
 #   2. The board is screwed to four posts on the back plate and the Ethernet cable is plugged in.
 #   3. The front cover hangs on two hooks at the top, swings shut and is held by one screw from below.
-# No 18650 holder in this version. Two loose button caps sit in the cover over TALK and OFFICE.
+# Two loose button caps sit in the cover over TALK and OFFICE, and a red LOCKDOWN cap under a clear flip-up lid.
 #   python enclosure/case_clam.py     -> enclosure/out_clam/*.step, *.stl, preview_*.png
 # Positions come from board_features.json (run board_features.py after the layout changes).
 #
@@ -60,6 +60,20 @@ FACE_R = 2.5     # rounding of the front edge
 CARD_W, CARD_H = 80.0, 42.0   # the use card (paper or laminated, up to 0.8 mm thick), in the area below the board
 CARD_TOP = 103.5 # its top edge, below the jack's bump (KiCad y); it slides down into its holder from above
 CARD_RAIL, CARD_LIP, CARD_SLOT = 2.4, 2.0, 0.9   # rail width, how far the rail grips over the card, room for the card
+# The red LOCKDOWN button: a round red cap over PB11 (left of the display, already on the board, wired to U22 P11),
+# inside a raised rim, under a clear flip-up lid. The lid is laser cut from 2 mm clear acrylic (out_clam/lid.dxf):
+# it hangs on two ears in the hinge posts, falls shut by its own weight and opens to about 135 degrees.
+RED_D, RED_FL = 10.0, 11.6   # red cap and its flange behind the face
+RED_PROUD = 2.0  # the red cap stands this far out of the face
+RIM_H = 2.5      # the rim round it is higher, so a flat hand or a shoulder does not press it; the lid rests on the rim
+RIM_W = 1.75
+LID_T = 2.0      # acrylic sheet
+LID_X = (11.5, 30.5)   # lid body, left and right edge (it stops short of the display window)
+LID_Y1 = 23.0    # lid's bottom edge; a finger goes under it (RIM_H of room) to flip it up
+HINGE_Y = 5.0    # hinge axis (KiCad y), above the cap
+NECK_X = (17.7, 26.8)  # the lid is narrower at the hinge, clear of the left microphone port
+EAR = 2.3        # each ear reaches this far into its post
+POST_W = 2.5
 MIC_D = 1.5      # microphone ports
 CAM_D = 12.0     # camera lens opening
 SPK_D = 36.0     # speaker grille (the speaker hangs in the cover; its place is a guess for now)
@@ -73,6 +87,7 @@ def part(r): return B["parts"].get(r)
 # the firmware (or the board) has to make that switch the OFFICE button.
 TALK_AT = (part("PB1")["x"], part("PB1")["y"])
 OFFICE_AT = (61.45, TALK_AT[1])
+RED_AT = (part("PB11")["x"], part("PB11")["y"])
 SD_OPEN = False   # microSD is reached only with the cover off
 def box_of(r, grow=0.0):
     x0, y0, x1, y1 = part(r)["box"]
@@ -169,11 +184,38 @@ for bx, by in btn: cover = cover.union(rrect(FW + 2.8, FH + 2.8, BTN_R + 2.2, Z_
 for bx, by in btn:
     cover = cover.cut(rrect(FW + 0.4, FH + 0.4, BTN_R + 1.0, Z_FACE - GUIDE_H - 1, Z_FACE - 0.01, bx, by + CAP_DY))
     cover = cover.cut(rrect(BTN_W + 0.4, BTN_H + 0.4, BTN_R + 0.2, Z_FACE - 1, Z_TOP + 1, bx, by + CAP_DY))
+# red LOCKDOWN button: guide under the face, rim on it, hinge posts for the clear lid
+rx, ry = RED_AT
+Z_RIM = Z_TOP + RIM_H
+Z_AX = Z_RIM + LID_T / 2                         # hinge axis: the middle of the lid's thickness when it is shut
+cover = cover.union(cyl(rx, ry, RED_FL + 3.0, Z_FACE - GUIDE_H, Z_FACE))
+cover = cover.union(cyl(rx, ry, RED_D + 0.5 + 2 * RIM_W, Z_TOP - 0.2, Z_RIM))
+cover = cover.cut(cyl(rx, ry, RED_FL + 0.4, Z_FACE - GUIDE_H - 1, Z_FACE - 0.01)).cut(cyl(rx, ry, RED_D + 0.5, Z_FACE - 1, Z_RIM + 1))
+posts = None
+for x0_, x1_ in ((NECK_X[0] - 0.2 - POST_W, NECK_X[0] - 0.2), (NECK_X[1] + 0.2, NECK_X[1] + 0.2 + POST_W)):
+    # the post reaches 4 mm above the axis and 2.6 mm over it: the lid's shoulders land on that corner at about 135 degrees
+    p_ = slab(x0_, HINGE_Y - 4.0, x1_, HINGE_Y + 2.4, Z_TOP - 0.2, Z_AX + 2.6)
+    posts = p_ if posts is None else posts.union(p_)
+posts = posts.edges("|X").fillet(0.6)
+# the ear turns in a round hole; a slot towards the top of the case lets the lid slide in while it lies flat. Once it
+# hangs, its own weight keeps it in, and a lid that is flipped up cannot leave through the slot.
+posts = posts.cut(cyl_x(HINGE_Y, Z_AX, 3.9, NECK_X[0] - EAR - 0.3, NECK_X[1] + EAR + 0.3))
+posts = posts.cut(slab(NECK_X[0] - EAR - 0.3, HINGE_Y - 5.0, NECK_X[1] + EAR + 0.3, HINGE_Y, Z_AX - LID_T / 2 - 0.15, Z_AX + LID_T / 2 + 0.15))
+cover = cover.union(posts)
+# the lid, shut (for the pictures and the fit check) and as a flat outline for the laser
+lid2d = (cq.Workplane("XY").rect(LID_X[1] - LID_X[0], LID_Y1 - (HINGE_Y + 3.0)).extrude(LID_T).edges("|Z").fillet(1.5)
+         .translate(((LID_X[0] + LID_X[1]) / 2, Y((LID_Y1 + HINGE_Y + 3.0) / 2), 0)))
+lid2d = lid2d.union(slab(NECK_X[0], HINGE_Y - 1.5, NECK_X[1], HINGE_Y + 3.5, 0, LID_T))
+lid2d = lid2d.union(slab(NECK_X[0] - EAR, HINGE_Y - 1.5, NECK_X[1] + EAR, HINGE_Y + 1.5, 0, LID_T))
+lid = lid2d.translate((0, 0, Z_RIM))
+lid_open = lid.rotate((0, Y(HINGE_Y), Z_AX), (1, Y(HINGE_Y), Z_AX), -135)
 # engraved labels under the buttons
 def label(txt, x, y, halign):
     return cq.Workplane("XY").text(txt, LABEL_H, LABEL_DEPTH + 0.5, halign=halign, valign="center", kind="bold").translate((x, Y(y), Z_TOP - LABEL_DEPTH))
 gap = BTN_W / 2 + 1.8                           # labels sit outside their buttons, clear of the speaker grille
-engraved = [label("TALK", TALK_AT[0] - gap, TALK_AT[1] + CAP_DY, "right"), label("OFFICE", OFFICE_AT[0] + gap, OFFICE_AT[1] + CAP_DY, "left")]
+def small(txt, x, y): return cq.Workplane("XY").text(txt, 3.0, LABEL_DEPTH + 0.5, halign="center", valign="center", kind="bold").translate((x, Y(y), Z_TOP - LABEL_DEPTH))
+engraved = [small("LOCK", 4.6, ry - 1.2), small("DOWN", 4.6, ry + 3.2),   # left of the lid, not under it
+            label("TALK", TALK_AT[0] - gap, TALK_AT[1] + CAP_DY, "right"), label("OFFICE", OFFICE_AT[0] + gap, OFFICE_AT[1] + CAP_DY, "left")]
 for e_ in engraved: cover = cover.cut(e_)
 # microphones: a tube from the face down to just above each mic (gasket goes between), with a small port
 for r in ("U16", "U17"):
@@ -249,6 +291,10 @@ legs = slab(-R, -LEG_HALF_W, R, LEG_HALF_W, zb, BODY_Z0)                  # brid
 for s in (-1, 1):                                                                   # two legs down to just above the board
     legs = legs.union(slab(min(s * LEG_X0, s * R), -LEG_HALF_W, max(s * LEG_X0, s * R), LEG_HALF_W, SW_TRAVEL + STOP_EXTRA, zb))
 cap = cap.union(legs)
+# the red cap (print one, in red): round, with the same stem and legs
+red = cyl(0, 0, RED_D, Z_FACE - 0.3, Z_TOP + RED_PROUD).faces(">Z").edges().fillet(0.8)
+red = red.union(cyl(0, 0, RED_FL, BODY_Z0, Z_FACE - 0.3)).union(cyl(0, 0, 4.0, SW_TOP, BODY_Z0)).union(legs)
+red_at = red.translate((rx, Y(ry), 0))
 caps = None
 for bx, by in btn:
     c = cap.translate((bx, Y(by), 0)); caps = c if caps is None else caps.union(c)
@@ -262,22 +308,27 @@ board = board.union(slab(u14[0], u14[1], u14[2], u14[3], -PCB_T - POE_H, -PCB_T)
 if BATTERY:
     bt = box_of("BT1"); board = board.union(slab(bt[0], bt[1], bt[2], bt[3], -PCB_T - BT_H, -PCB_T))
 dd = box_of("DISP1"); board = board.union(slab(dd[0], dd[1], dd[2], dd[3], 0, DISP_TOP))
-for bx, by in btn: board = board.union(slab(bx - 2.5, by - 2.5, bx + 2.5, by + 2.5, 0, SW_TOP))
+for bx, by in btn + [RED_AT]: board = board.union(slab(bx - 2.5, by - 2.5, bx + 2.5, by + 2.5, 0, SW_TOP))
 if BAY >= 30:  # the RJ45 plug with its boot
     board = board.union(slab(j9[0] + 4, j9[3] - 1, j9[2] - 4, j9[3] + 24, *((-PCB_T - 8.4, -PCB_T - 0.4) if J9_BACK else (0.5, 8.4))))
 
 out = os.path.join(here, "out_clam"); os.makedirs(out, exist_ok=True)
-for name, s in (("clam_back", back), ("clam_cover", cover), ("clam_button", cap), ("clam_buttons", caps), ("board_standin", board), ("use_card", use_card), ("paint", paint)):
-    if name not in ("clam_buttons", "use_card", "paint"): cq.exporters.export(s, os.path.join(out, name + ".step"))
+for name, s in (("clam_back", back), ("clam_cover", cover), ("clam_button", cap), ("clam_buttons", caps), ("board_standin", board), ("use_card", use_card), ("paint", paint),
+                ("clam_red_button", red), ("red_at", red_at), ("lid", lid), ("lid_open", lid_open)):
+    if name not in ("clam_buttons", "use_card", "paint", "red_at", "lid_open"): cq.exporters.export(s, os.path.join(out, name + ".step"))
     cq.exporters.export(s, os.path.join(out, name + ".stl"), tolerance=0.05)
+cq.exporters.export(lid2d.faces("<Z"), os.path.join(out, "lid.dxf"))   # the lid's outline, for the laser cutter (mm)
 bb = back.union(cover).val().BoundingBox()
 print("outside: %.1f x %.1f x %.1f mm" % (bb.xlen, bb.ylen, bb.zlen))
-for name, a, b in (("cover/board", cover, board), ("cover/back", cover, back), ("back/board", back, board), ("caps/cover", caps, cover), ("caps/board", caps, board)):
+for name, a, b in (("cover/board", cover, board), ("cover/back", cover, back), ("back/board", back, board), ("caps/cover", caps, cover), ("caps/board", caps, board),
+                   ("red/cover", red_at, cover), ("red/board", red_at, board), ("lid/cover", lid, cover), ("lid open/cover", lid_open, cover), ("lid/red", lid, red_at)):
     v = a.intersect(b).val().Volume() if a.intersect(b).vals() else 0.0
     print("overlap %-12s %.2f mm3" % (name, v))
 
 # ---- preview pictures ------------------------------------------------------------------------------------
 import vtk
+def clear(name, dz=0.0):  # the acrylic lid
+    a = actor(name, (0.75, 0.88, 0.95), dz); a.GetProperty().SetOpacity(0.38); return a
 def actor(name, color, dz=0.0):
     r = vtk.vtkSTLReader(); r.SetFileName(os.path.join(out, name + ".stl"))
     n = vtk.vtkPolyDataNormals(); n.SetInputConnection(r.GetOutputPort()); n.SetFeatureAngle(40)
@@ -292,9 +343,9 @@ def shot(fname, actors, pos, up=(0, 1, 0)):
     ren.ResetCamera(); c.Zoom(1.2); w.Render()
     f = vtk.vtkWindowToImageFilter(); f.SetInput(w); f.Update()
     p = vtk.vtkPNGWriter(); p.SetFileName(os.path.join(out, fname)); p.SetInputConnection(f.GetOutputPort()); p.Write()
-grey, blue, green, red = (0.82, 0.82, 0.80), (0.55, 0.66, 0.80), (0.20, 0.50, 0.25), (0.80, 0.25, 0.20)
+grey, blue, green, red_c = (0.82, 0.82, 0.80), (0.55, 0.66, 0.80), (0.20, 0.50, 0.25), (0.80, 0.25, 0.20)
 beige, white = (0.87, 0.80, 0.66), (0.97, 0.97, 0.95)
-black = (0.05, 0.05, 0.05)
+black, dark = (0.05, 0.05, 0.05), (0.30, 0.31, 0.34)
 def card_face():  # the card's printed front (make_card.py draws it) laid on the card
     png = os.path.join(here, "card", "use_card_front.png")
     if not os.path.exists(png): return actor("use_card", white)
@@ -308,12 +359,12 @@ def card_face():  # the card's printed front (make_card.py draws it) laid on the
 def black_paint():  # flat black, whatever the light
     a = actor("paint", black); a.GetProperty().LightingOff(); return a
 BOARD_COLOR = (0.08, 0.08, 0.09)   # black solder mask; green is (0.20, 0.50, 0.25)
-front = lambda: [actor("clam_back", grey), actor("board_standin", BOARD_COLOR), actor("clam_cover", beige), actor("clam_buttons", red), actor("use_card", white), card_face(), black_paint()]
+front = lambda: [clear("lid"), actor("clam_back", grey), actor("board_standin", BOARD_COLOR), actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", red_c), actor("use_card", white), card_face(), black_paint()]
 shot("preview_front.png", front(), (60, -120, 240))
 shot("preview_face.png", front(), (0, -30, 300))
 shot("preview_step2.png", [actor("clam_back", grey), actor("board_standin", green)], (90, -200, 200), (0, 0, 1))
-shot("preview_exploded.png", [actor("clam_back", grey), actor("board_standin", green, 30), actor("clam_buttons", red, 70), actor("clam_cover", blue, 80)], (190, -260, 170), (0, 0, 1))
-shot("preview_inside.png", [actor("clam_cover", blue), actor("clam_buttons", red)], (-60, -160, -220))
+shot("preview_exploded.png", [actor("clam_back", grey), actor("board_standin", green, 30), actor("clam_buttons", dark, 70), actor("red_at", red_c, 70), clear("lid", 95), actor("clam_cover", blue, 80)], (190, -260, 170), (0, 0, 1))
+shot("preview_inside.png", [actor("clam_cover", blue), actor("clam_buttons", dark), actor("red_at", red_c)], (-60, -160, -220))
 def shot_at(fname, actors, focal, pos, up=(0, 0, 1)):
     ren = vtk.vtkRenderer(); ren.SetBackground(1, 1, 1)
     for a in actors: ren.AddActor(a)
@@ -322,7 +373,9 @@ def shot_at(fname, actors, focal, pos, up=(0, 0, 1)):
     ren.ResetCameraClippingRange(); w.Render()
     f = vtk.vtkWindowToImageFilter(); f.SetInput(w); f.Update()
     p = vtk.vtkPNGWriter(); p.SetFileName(os.path.join(out, fname)); p.SetInputConnection(f.GetOutputPort()); p.Write()
-shot_at("preview_buttons.png", [actor("board_standin", green), actor("clam_buttons", red)], (28, -26, 6), (10, -60, 22))
-shot_at("preview_labels.png", [actor("clam_back", grey), actor("clam_cover", blue), actor("clam_buttons", red)], (50, -30, Z_TOP), (0, -40, 150), (0, 1, 0))
+shot_at("preview_buttons.png", [actor("board_standin", green), actor("clam_buttons", dark), actor("red_at", red_c)], (28, -26, 6), (10, -60, 22))
+shot_at("preview_labels.png", [actor("clam_back", grey), actor("clam_cover", blue), actor("clam_buttons", dark), actor("red_at", red_c)], (50, -30, Z_TOP), (0, -40, 150), (0, 1, 0))
 shot_at("preview_card.png", [actor("clam_cover", beige), actor("use_card", white)], (50, -122, Z_LOW), (30, -70, 90), (0, 1, 0))
+shot_at("preview_red.png", [actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear("lid")], (rx + 4, Y(ry + 2), Z_TOP), (-45, -60, 70), (0, 1, 0))
+shot_at("preview_red_open.png", [actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear("lid_open")], (rx + 4, Y(ry + 2), Z_TOP), (-45, -60, 70), (0, 1, 0))
 shot("preview_bottom.png", [actor("clam_back", grey), actor("clam_cover", blue)], (40, -260, 60), (0, 0, 1))
