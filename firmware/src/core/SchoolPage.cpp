@@ -293,7 +293,9 @@ async function startTalk(){
 }
 function send(){
   if(busy||!have)return;
-  const all=new Int16Array(have);let o=0;for(const c of chunks){all.set(c,o);o+=c.length;}chunks=[];have=0;
+  let all=new Int16Array(have);let o=0;for(const c of chunks){all.set(c,o);o+=c.length;}chunks=[];have=0;
+  // the unit takes 6000 samples (0.375 s) a post: after a slow post send that much and keep the rest, at most the newest 0.75 s
+  if(all.length>6000){let rest=all.slice(6000);if(rest.length>12000)rest=rest.slice(rest.length-12000);chunks=[rest];have=rest.length;all=all.slice(0,6000);}
   const b=new Uint8Array(all.buffer);let s="";for(let i=0;i<b.length;i+=8192)s+=String.fromCharCode.apply(null,b.subarray(i,i+8192));
   busy=true;
   fetch(location.origin+"/api/talk?to="+encodeURIComponent(to),{method:"POST",headers:{"X-Intercom":"1","Content-Type":"text/plain"},body:btoa(s)})

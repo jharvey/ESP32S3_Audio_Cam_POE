@@ -137,6 +137,7 @@ HttpResponse WebUi::handle(const HttpRequest& req) {
         if (q != std::string::npos) {
             std::string v = req.path.substr(q + 3);
             v = v.substr(0, v.find('&'));
+            for (size_t e; (e = v.find("%3A")) != std::string::npos || (e = v.find("%3a")) != std::string::npos;) v.replace(e, 3, ":");  // browsers send the colon encoded
             size_t c = v.find(':');
             std::string kind = v.substr(0, c);
             unsigned long n = c == std::string::npos ? 0 : std::strtoul(v.c_str() + c + 1, nullptr, 10);
