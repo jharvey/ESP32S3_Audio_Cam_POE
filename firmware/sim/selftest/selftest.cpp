@@ -2182,6 +2182,40 @@ static void testR32() {
     run(100);
     CHECK(r1.ic->emergency() == N && ofc.ic->emergency() == N, "with the feature off the two buttons do not start a lockdown");
     for (auto* u : all) u->ic->command("callofc off");
+
+    // ---- a plain call to the office rings both ends for 10 s, then gives up; a call for help stays ----
+    for (auto* u : all) {
+        u->ic->command("emergency clear");
+        u->held = 0;
+    }
+    run(700);
+    r2.held = kOffice;
+    run(5);
+    r2.held = 0;
+    run(7);  // inside the first warble (0.35 s)
+    CHECK(r2.ic->callingOffice() && r2.ic->speakerLevel() > 0, "214 presses OFFICE: its own unit rings (%d)", int(r2.ic->speakerLevel()));
+    CHECK(ofc.ic->officeAlert() == 214 && prin.ic->officeAlert() == 214 && r1.ic->officeAlert() == 0 && ofc.ic->speakerLevel() > 0 &&
+              r1.ic->speakerLevel() == 0,
+          "the office unit and its stand-in ring for room 214; another room does not");
+    {
+        int on = 0, off = 0;
+        for (int k = 0; k < 60; k++) {
+            run(1);
+            (ofc.ic->lampLevel(Lamp::White) ? on : off)++;
+        }
+        CHECK(on > 15 && off > 15 && showed(ofc, "214"), "the office unit flashes its light and shows 214 (%d on, %d off)", on, off);
+    }
+    run(460);
+    CHECK(!r2.ic->callingOffice() && ofc.ic->officeAlert() == 0 && prin.ic->officeAlert() == 0 && ofc.ic->lampLevel(Lamp::White) == 0 &&
+              has(r2, "called the office: no answer"),
+          "nobody answered in 10 s: the room and the office units are back to normal");
+    r2.held = kOffice;
+    run(90);
+    r2.held = 0;
+    run(600);
+    CHECK(r2.ic->callingOffice() && r2.ic->urgent() && ofc.ic->officeAlert() == 0, "a call for help (OFFICE held) stays up after the ringing stops");
+    r2.ic->command("callofc off");
+    run(20);
     g_clock0 = clock0;
 }
 

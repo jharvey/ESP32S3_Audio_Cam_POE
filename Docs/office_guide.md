@@ -121,6 +121,12 @@ pages, and the unit's page is plain `http://` on the intercom network, so set th
 - **Emergency mode (R3):** an alarm button opens the camera covers, starts the video to the NVR and flashes the
   alarm light in every room.
 
+## A room calls the office
+
+- **A short press of OFFICE:** the room's intercom rings (two short warbles every 2 seconds) and shows `oFC`. The office unit, its stand-in and any unit that shares the office's room (`group`) ring too, blink the calling room's number and flash their lights. The school page highlights the room and rings on the PC if the browser allows sound.
+- **Nobody answers in 10 seconds:** the ringing stops and every device goes back to normal. The log keeps "called the office: no answer".
+- **OFFICE held 1.5 seconds (feature "Help needed"):** the room shows `HLP`. This call rings for 10 seconds too, but stays in the waiting list for 5 minutes or until the office answers.
+
 ## Emergency: how to start it and how to clear it
 
 - **Start, from the office:** on the school page press **Lockdown**, **Evacuate** or **Shelter**. Every unit shows `LoC`, `EUA` or `SHE`, flashes its alarm light and plays the signal (one minute; evacuate five minutes). Talking from the page or the office unit still gets through.

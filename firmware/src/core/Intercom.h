@@ -127,6 +127,7 @@ public:
     bool testsLocked() const { return !hal_.store->loadText("testpass").empty(); }  // installer tests need a password
     bool missedCall() const { return frame_ < missedUntil_; }  // a call went unanswered: slow blink until a button
     bool callingOffice() const { return callingOffice_; }
+    uint16_t officeAlert() const { return ofcAlertUntil_ ? ofcAlertRoom_ : 0; }  // an office unit: the room it is ringing for
     bool chiming() const { return soundActive_ && sound_ == Sound::Chime; }
     // Timed events (R2.1).
     int64_t utcNow() const;  // 0 = no clock yet
@@ -335,6 +336,9 @@ private:
     bool testsOk_ = false;        // running a command inside "tests <password> ..." (password checked)
     uint32_t missedUntil_ = 0;    // missed-call blink runs until this frame (or until a button is pressed)
     uint32_t ringUntil_ = 0;      // "ring": chime every 2 s until this frame or until TALK answers
+    uint32_t ofcRingUntil_ = 0, ofcRingNext_ = 0;    // calling the office: this unit rings every 2 s for 10 s
+    uint32_t ofcAlertUntil_ = 0, ofcAlertNext_ = 0;  // an office unit: a room is calling (ring, its number blinks, lights flash)
+    uint16_t ofcAlertRoom_ = 0;
     uint32_t bothSince_ = 0;      // TALK and OFFICE held together since this frame
     bool bothLatch_ = false;      // ... and until both are let go, neither button does its own job
     bool officeDown_ = false;     // OFFICE was held last frame (a press = one call)

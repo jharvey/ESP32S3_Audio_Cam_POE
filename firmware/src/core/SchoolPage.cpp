@@ -169,7 +169,7 @@ async function tick(){
     const floors={};for(const u of us){const fl=Math.floor(u.room/100);(floors[fl]=floors[fl]||[]).push(u);}
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
-    lastSchool=j;drawDevs(us);selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);drawZones((j.features&4)?j.zones||[]:[]);
+    lastSchool=j;drawDevs(us);selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);callWatch(us);drawZones((j.features&4)?j.zones||[]:[]);
     document.getElementById("ofcnow").textContent=j.office?"Now: office "+j.office+(j.standin?", stand-in "+j.standin:"")+", acting "+j.acting:"No office unit set.";
     {const em=us.filter(u=>u.online&&u.emergency);
      document.getElementById("estate").textContent=em.length?EMERG[em[0].emergency]+" on "+em.length+" of "+c.on+" units online":"No emergency.";}
@@ -190,6 +190,18 @@ async function both(c){const r=await cmd(c);out("> "+c+"   ("+r+")");return send
 document.getElementById("feats").addEventListener("change",async e=>{const f=e.target.dataset.f;if(!f)return;
   if(f==="silent"&&e.target.checked&&!confirm("A silent help call opens the room's microphone to the office for 2 minutes with no sound in the room. Switch it on for all units?")){e.target.checked=false;return;}
   await both("feature "+f+(e.target.checked?" on":" off"));featBits=-1;});
+// A room starts calling the office: its room is highlighted on the plan and this PC rings (two short warbles every
+// 2 s, 10 s at most, if the browser allows sound). When the call ends the highlight goes away again.
+let callSeen={},callHot=null,rctx=null,ringT=0;
+function ringTone(){try{rctx=rctx||new AudioContext();if(rctx.state!=="running")rctx.resume();const t=rctx.currentTime;
+  for(let b=0;b<2;b++)for(let k=0;k<7;k++){const o=rctx.createOscillator(),g=rctx.createGain();o.frequency.value=k%2?1320:1050;g.gain.value=0.12;
+    o.connect(g);g.connect(rctx.destination);o.start(t+b*0.5+k*0.05);o.stop(t+b*0.5+k*0.05+0.05);}}catch(e){}}
+function callWatch(us){const now=Date.now();let ring=false;
+  for(const u of us){const on=u.online&&(u.flags&32);
+    if(!on){if(callSeen[u.unit]){delete callSeen[u.unit];if(callHot===u.unit){callHot=null;if(window.planHot)window.planHot(0);}}continue;}
+    if(!callSeen[u.unit]){callSeen[u.unit]=now;callHot=u.unit;if(window.planHot)window.planHot(u.group||u.room);}
+    if(now-callSeen[u.unit]<10000)ring=true;}
+  if(ring&&now-ringT>1900){ringT=now;ringTone();}}
 function drawQueue(q){
   document.getElementById("queue").innerHTML=q.length?'<div class="floor">Waiting for the office</div><div class="grid">'+q.map((w,i)=>
     `<div class="room ${w.silent||w.urgent?"bad":"call"}"><b>${i+1}. Room ${w.room}</b><div class="st">${w.silent?"SILENT HELP CALL":w.urgent?"HELP NEEDED":"question"}</div><div class="d">waiting ${w.wait_s} s</div></div>`).join("")+"</div>":"";}

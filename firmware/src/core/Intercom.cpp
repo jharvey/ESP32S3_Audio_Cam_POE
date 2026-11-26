@@ -25,7 +25,8 @@ constexpr uint32_t kCloseFrames = 100;      // the office's word after the room'
 constexpr uint32_t kAnswerFrames = 500;     // TALK answers the caller during a call and 10 s after
 constexpr uint32_t kAllCallHoldFrames = 25; // an office all-call keeps room calls out until 0.5 s after it
 constexpr uint32_t kCallHoldFrames = 100;   // DOWN held 2 s = call the office (again = cancel)
-constexpr uint32_t kCallingTimeoutFrames = 15000;  // a call to the office gives up after 5 min
+constexpr uint32_t kCallingTimeoutFrames = 15000;  // a call for help to the office gives up after 5 min
+constexpr uint32_t kOfficeRingFrames = 500;        // a plain call to the office rings both ends for 10 s, then gives up
 constexpr uint32_t kMissedFrames = 15000;   // an unanswered call keeps a slow blink for 5 min (any button stops it)
 constexpr uint32_t kCallRgb = 0x0030C0;     // RGB LED colour for calls: blue, like "calling" on the school page
 constexpr uint32_t kPendingSoundFrames = 3000;     // a timed chime waits up to 60 s for a call to end
@@ -1155,7 +1156,15 @@ void Intercom::receive() {
                 const bool wants = (s.flags & kStatusCalling) || (s.flags2 & kStatus2Silent);
                 size_t w = 0;
                 while (w < waiting_.size() && waiting_[w].room != s.from.room) w++;
-                if (wants && w == waiting_.size() && waiting_.size() < 64) waiting_.push_back(Waiting{s.from.room, false, false, frame_});
+                if (wants && w == waiting_.size() && waiting_.size() < 64) {
+                    waiting_.push_back(Waiting{s.from.room, false, false, frame_});
+                    // The office's units (the office unit, its stand-in, and units sharing the office's room) call for attention.
+                    if (office_ && (unit_.room == office_ || unit_.room == office2_ || group() == office_)) {
+                        ofcAlertRoom_ = s.from.room;
+                        ofcAlertUntil_ = frame_ + kOfficeRingFrames;
+                        ofcAlertNext_ = frame_;
+                    }
+                }
                 if (w < waiting_.size()) {
                     if (!wants) {
                         waiting_.erase(waiting_.begin() + long(w));
@@ -1360,6 +1369,13 @@ void Intercom::updatePanel() {
             text[2] = char('0' + q % 10);
             dots |= 0x04;
         }
+        if (ofcAlertUntil_ && !transmitting_ && !canAnswer()) {  // an office unit: the calling room's number, blinking fast
+            const unsigned q = ofcAlertRoom_ % 1000;
+            const bool on = (frame_ / 15) % 2 == 0;
+            text[0] = on && q >= 100 ? char('0' + q / 100) : ' ';
+            text[1] = on && q >= 10 ? char('0' + (q / 10) % 10) : ' ';
+            text[2] = on ? char('0' + q % 10) : ' ';
+        }
         if (emerg_ != Emergency::None && (frame_ / 50) % 2 == 0) {  // LoC / EUA / SHE, a second each with the room number
             static const char kText[4][3] = {{' ', ' ', ' '}, {'L', 'o', 'C'}, {'E', 'U', 'A'}, {char(0x80 | 0x6d), char(0x80 | 0x76), 'E'}};
             std::memcpy(text, kText[int(emerg_)], 3);
@@ -1525,6 +1541,10 @@ void Intercom::updateLamps() {
     } else if (emerg_ != Emergency::None) {  // emergency: the alarm light (J11) flashes fast, the RGB LED is red
         want[int(Lamp::Other)] = (frame_ / 12) % 2 ? 100 : 0;
         rgb = kEmergencyRgb;
+    } else if (ofcAlertUntil_ && !transmitting_ && !canAnswer()) {  // an office unit: a room is calling, fast flash
+        bool on = (frame_ / 15) % 2 == 0;
+        want[int(Lamp::Other)] = want[int(Lamp::White)] = on ? 100 : 0;
+        rgb = on ? kCallRgb : 0;
     } else if (canAnswer() && !transmitting_) {
         bool on = (frame_ / 30) % 2 == 0 && !callAnswered_;
         want[int(Lamp::Other)] = want[int(Lamp::White)] = on ? 100 : 0;
@@ -1598,6 +1618,8 @@ void Intercom::setCallingOffice(bool on, const char* why) {
     if (on == callingOffice_) return;
     callingOffice_ = on;
     callingSince_ = frame_;
+    ofcRingUntil_ = on ? frame_ + kOfficeRingFrames : 0;
+    ofcRingNext_ = frame_;
     if (!on) urgent_ = false;
     if (on && urgent_) event(EventKind::Fault, unit_.room, "room %u: HELP NEEDED (%s)", unsigned(unit_.room), why);
     else if (on) event(EventKind::Call, unit_.room, "room %u is calling the office (%s)", unsigned(unit_.room), why);
@@ -1981,7 +2003,11 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     } else {
         downSince_ = 0;
     }
-    if (callingOffice_ && frame_ - callingSince_ >= kCallingTimeoutFrames) setCallingOffice(false, "no answer in 5 min");
+    // A plain call rings for 10 s and then gives up, so the room goes back to normal. A call for help waits 5 min.
+    if (callingOffice_ && frame_ - callingSince_ >= (urgent_ ? kCallingTimeoutFrames : kOfficeRingFrames)) {
+        if (!urgent_) event(EventKind::Call, unit_.room, "room %u called the office: no answer", unsigned(unit_.room));
+        setCallingOffice(false, urgent_ ? "no answer in 5 min" : "no answer in 10 s");
+    }
     if (talk != transmitting_) {
         if (!talk && talkSince_)  // this unit's own transmission, for the call log
             event(EventKind::Call, unit_.room, "%s to %s, %u s", talkerText(webState_ ? kAudioFromConsole : 0, unit_.room).c_str(),
@@ -2030,6 +2056,24 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
               callFrom_.room ? ("room " + std::to_string(callFrom_.room)).c_str() : "the office");
     }
     if (held && missedUntil_) missedUntil_ = 0;  // any button: the missed call was seen
+    if (ofcRingUntil_) {  // calling the office: this unit rings every 2 s while it waits
+        if (!callingOffice_ || frame_ >= ofcRingUntil_) {
+            ofcRingUntil_ = 0;
+        } else if (frame_ >= ofcRingNext_ && !soundActive_ && !transmitting_) {
+            startSound(Sound::Ring);
+            ofcRingNext_ = frame_ + 100;
+        }
+    }
+    if (ofcAlertUntil_) {  // an office unit: a room is calling, ring every 2 s for 10 s or until it stops waiting
+        bool still = false;
+        for (const auto& w : waiting_) still = still || w.room == ofcAlertRoom_;
+        if (!still || frame_ >= ofcAlertUntil_) {
+            ofcAlertUntil_ = 0;
+        } else if (frame_ >= ofcAlertNext_ && !soundActive_ && !transmitting_ && !inCall()) {
+            startSound(Sound::Ring);
+            ofcAlertNext_ = frame_ + 100;
+        }
+    }
     if (ringUntil_) {  // "ring": chime again every 2 s until answered or the 10 s are up
         if (callAnswered_ || frame_ >= ringUntil_) ringUntil_ = 0;
         else if ((ringUntil_ - frame_) % 100 == 0 && !soundActive_) startSound(Sound::Chime);
