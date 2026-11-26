@@ -443,4 +443,12 @@ for tag in ("closed", "open", "flag"):
             (8, Y(62), 0), (-30, -25, 190), (0, 1, 0))
     shot_at("preview_shutter_side_%s.png" % tag, [actor("clam_back", grey), actor("clam_cover", beige), actor("pad_" + tag, orange), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear("lid")],
             (20, Y(62), 0), (-150, -40, 110), (0, 0, 1))
+# the whole case with a see-through front, to look at the inside and the outside together
+def seen(pad="pad_closed"):
+    return [actor("clam_back", grey), actor("board_standin", BOARD_COLOR), actor("servo_standin", blue), actor(pad, orange), actor("clam_buttons", dark),
+            actor("red_at", red_c), actor("use_card", white), glass("clam_cover"), clear("lid")]
+shot("preview_glass_face.png", seen(), (0, -30, 300))
+shot("preview_glass_front.png", seen(), (60, -120, 240))
+shot("preview_glass_left.png", seen("pad_flag"), (-230, -40, 150), (0, 0, 1))
+shot("preview_glass_right.png", seen(), (230, -60, 150), (0, 0, 1))
 shot("preview_bottom.png", [actor("clam_back", grey), actor("clam_cover", blue)], (40, -260, 60), (0, 0, 1))
