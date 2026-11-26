@@ -33,7 +33,7 @@ x0, x1, y0, y1 = vb[0] - M, vb[1] + M, vb[2] - M, vb[3] + M
 W, H = int((x1 - x0) * PX), int((y1 - y0) * PX)
 for side in ("front", "back"):
     ren = vtk.vtkRenderer(); ren.SetBackground(27 / 255, 31 / 255, 36 / 255)
-    for a in (actor("clam_back", grey), actor("board_standin", board), actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", (0.80, 0.25, 0.20)), actor("paint", black, True), card(side), lid()): ren.AddActor(a)
+    for a in (actor("clam_back", grey), actor("board_standin", board), actor("clam_cover", beige), actor("pad_closed", (0.95, 0.55, 0.10)), actor("clam_buttons", dark), actor("red_at", (0.80, 0.25, 0.20)), actor("paint", black, True), card(side), lid()): ren.AddActor(a)
     w = vtk.vtkRenderWindow(); w.SetOffScreenRendering(1); w.SetSize(W, H); w.AddRenderer(ren)
     c = ren.GetActiveCamera(); c.ParallelProjectionOn(); cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
     c.SetFocalPoint(cx, cy, 0); c.SetPosition(cx, cy, 400); c.SetViewUp(0, 1, 0); c.SetParallelScale((y1 - y0) / 2); c.SetClippingRange(1, 800)

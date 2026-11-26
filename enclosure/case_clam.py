@@ -74,6 +74,23 @@ HINGE_Y = 5.0    # hinge axis (KiCad y), above the cap
 NECK_X = (17.7, 26.8)  # the lid is narrower at the hinge, clear of the left microphone port
 EAR = 2.3        # each ear reaches this far into its post
 POST_W = 2.5
+DISH_AT, DISH_R, DISH_DEEP = (15.5, 21.5), 9.0, 1.2   # a finger dish in the face under the lid's lower left corner
+# Camera shutter: a 9 g servo (SG90 size) stands beside the board in a pod on the left side of the case, its shaft
+# towards the room. A paddle on the shaft turns just behind the face:
+#   closed   the disc covers the camera lens
+#   open     a quarter turn down: lens free, paddle still inside the case (silent help call)
+#   flag     half a turn: the disc sticks out of a slot in the side of the case, so everyone sees the camera is on (lockdown)
+# ALL SERVO SIZES ARE THE USUAL SG90 ONES, NOT MEASURED: check yours. The camera's lens must end SHUT_GAP below the face.
+SERVO_W, SERVO_L, SERVO_BODY_H = 12.2, 22.7, 22.7   # body: across, along, tall (shaft end up)
+SERVO_EAR, SERVO_EAR_Z, SERVO_EAR_T = 4.7, 15.9, 2.5  # each ear sticks out this far; its underside is this high above the bottom
+SERVO_SHAFT_IN = 5.9   # shaft axis from the nearer end of the body
+SERVO_TOP = 30.0       # bottom of the body to the tip of the shaft
+PIVOT = (-6.9, 60.0)   # shaft axis (KiCad x, y): beside the board, below the audio jack's opening
+PAD_D, PAD_T, ARM_W = 15.0, 1.2, 6.0   # the disc over the lens, paddle thickness, arm width
+SHUT_GAP = 2.0         # room between the lens and the face that the paddle turns in
+POD_X0 = -15.0         # inside of the pod's outer wall
+POD_Y = (48.5, 91.5)   # pod, inside (KiCad y)
+SLOT_Y0 = 60.5         # the slot in the pod's side wall runs from here to the pod's lower end
 MIC_D = 1.5      # microphone ports
 CAM_D = 12.0     # camera lens opening
 SPK_D = 36.0     # speaker grille (the speaker hangs in the cover; its place is a guess for now)
@@ -150,6 +167,17 @@ for y in (H / 2 - BOX_PITCH / 2, H / 2 + BOX_PITCH / 2):
 # the cable comes through a hole in the bay, right behind the plug, and goes straight into the wall
 if BAY >= 30:
     back = back.cut(slab(40, H + 6, 62, H + 32, Z_BACK - 1, Z_FLOOR + 1).edges("|Z").fillet(4.0))
+
+# ---- camera shutter: the back plate under the pod, a pocket and two posts for the servo ----
+k_ = B["keepouts"]["camera heatsink"]; CAM_AT = ((k_[0] + k_[2]) / 2, (k_[1] + k_[3]) / 2)
+SV_Z0 = (FRONT_H - 0.4) - SERVO_TOP              # bottom of the servo: the shaft's tip ends at the paddle's front face
+SV_Y0 = PIVOT[1] - SERVO_SHAFT_IN                # the servo's upper end; its body runs down from there
+SV_X0, SV_X1 = PIVOT[0] - SERVO_W / 2, PIVOT[0] + SERVO_W / 2
+back = back.union(slab(POD_X0 - WALL, POD_Y[0] - WALL, XL + 0.5, POD_Y[1] + WALL, Z_BACK, Z_FLOOR).edges("|Z and <X").fillet(4.0))
+back = back.cut(slab(XL_IN, POD_Y[0], XL_IN + FIT + LIP_T + 0.1, POD_Y[1], Z_FLOOR, Z_FLOOR + LIP_H + 1))   # no lip where the pod opens into the case
+if SV_Z0 < Z_FLOOR: back = back.cut(slab(SV_X0 - 0.3, SV_Y0 - 0.3, SV_X1 + 0.3, SV_Y0 + SERVO_L + 0.3, SV_Z0 - 0.2, Z_FLOOR + 1))
+for ey in (SV_Y0 - SERVO_EAR / 2, SV_Y0 + SERVO_L + SERVO_EAR / 2):   # a post under each ear, for the servo's own two screws
+    back = back.union(slab(SV_X0, ey - 2.2, SV_X1, ey + 2.2, Z_FLOOR, SV_Z0 + SERVO_EAR_Z)).cut(cyl(PIVOT[0], ey, 1.7, SV_Z0 + SERVO_EAR_Z - 8, SV_Z0 + SERVO_EAR_Z + 1))
 
 # ---- front cover -----------------------------------------------------------------------------------------
 cover = slab(XL, YT, XR, YB, Z_FLOOR, Z_TOP).edges("|Z").fillet(CORNER_R).faces(">Z").edges().fillet(FACE_R)
@@ -251,6 +279,30 @@ if SD_OPEN and part("CARD1"):
 if part("CN1"):
     b1 = box_of("CN1", 0.5); cover = cover.cut(slab(XL - 1, b1[1], XL_IN + 1, b1[3], -0.5, 6.5))
 
+# ---- camera shutter: the pod on the left side, open to the inside of the case, with the slot the flag comes out of ----
+pod = slab(POD_X0 - WALL, POD_Y[0] - WALL, XL + 0.5, POD_Y[1] + WALL, Z_FLOOR, Z_TOP).edges("|Z and <X").fillet(4.0)
+try: pod = pod.faces(">Z").edges("not >X").fillet(FACE_R)
+except Exception: pass
+cover = cover.union(pod).cut(slab(POD_X0, POD_Y[0], XL_IN + 0.1, POD_Y[1], Z_FLOOR - 1, Z_FACE))
+cover = cover.cut(slab(POD_X0 - WALL - 1, SLOT_Y0, POD_X0 + 0.1, POD_Y[1], Z_FACE - SHUT_GAP, Z_FACE))
+# finger dish under the lid
+cover = cover.cut(cq.Workplane("XY").sphere(DISH_R).translate((DISH_AT[0], Y(DISH_AT[1]), Z_TOP + DISH_R - DISH_DEEP)))
+# the paddle (print one): hub on the servo's shaft, arm, disc
+import math
+ARM_L = math.hypot(CAM_AT[0] - PIVOT[0], CAM_AT[1] - PIVOT[1])
+PZ1 = Z_FACE - 0.4; PZ0 = PZ1 - PAD_T
+paddle = cq.Workplane("XY").circle(PAD_D / 2).extrude(PAD_T).translate((ARM_L, 0, PZ0))
+paddle = paddle.union(cq.Workplane("XY").box(ARM_L, ARM_W, PAD_T, centered=(False, True, False)).translate((0, 0, PZ0)))
+paddle = paddle.union(cq.Workplane("XY").circle(4.5).extrude(PZ1 - (SV_Z0 + SERVO_TOP - 3.1)).translate((0, 0, SV_Z0 + SERVO_TOP - 3.1)))
+paddle = paddle.cut(cq.Workplane("XY").circle(2.4).extrude(5.0).translate((0, 0, SV_Z0 + SERVO_TOP - 3.5)))   # socket for the shaft's spline (fit it to yours)
+A0 = math.degrees(math.atan2(Y(CAM_AT[1]) - Y(PIVOT[1]), CAM_AT[0] - PIVOT[0]))
+def paddle_at(turn):   # 0 = closed, 90 = open, 180 = flag out; it turns downwards, away from the audio jack
+    return paddle.rotate((0, 0, 0), (0, 0, 1), A0 - turn).translate((PIVOT[0], Y(PIVOT[1]), 0))
+pad_closed, pad_open, pad_flag = paddle_at(0), paddle_at(90), paddle_at(180)
+servo = slab(SV_X0, SV_Y0, SV_X1, SV_Y0 + SERVO_L, SV_Z0, SV_Z0 + SERVO_BODY_H)
+servo = servo.union(slab(SV_X0, SV_Y0 - SERVO_EAR, SV_X1, SV_Y0 + SERVO_L + SERVO_EAR, SV_Z0 + SERVO_EAR_Z, SV_Z0 + SERVO_EAR_Z + SERVO_EAR_T))
+servo = servo.union(cyl(PIVOT[0], PIVOT[1], 11.8, SV_Z0 + SERVO_BODY_H, SV_Z0 + SERVO_BODY_H + 4.0)).union(cyl(PIVOT[0], PIVOT[1], 4.6, SV_Z0, SV_Z0 + SERVO_TOP))
+
 # ---- use card holder on the face: two side rails and a bottom rail that grip the card's edges. The card slides
 # down from the top; a gap in the bottom rail lets a finger push it back up to read its other side. -------------
 cx0, cx1 = W / 2 - CARD_W / 2 - 0.3, W / 2 + CARD_W / 2 + 0.3
@@ -314,14 +366,18 @@ if BAY >= 30:  # the RJ45 plug with its boot
 
 out = os.path.join(here, "out_clam"); os.makedirs(out, exist_ok=True)
 for name, s in (("clam_back", back), ("clam_cover", cover), ("clam_button", cap), ("clam_buttons", caps), ("board_standin", board), ("use_card", use_card), ("paint", paint),
-                ("clam_red_button", red), ("red_at", red_at), ("lid", lid), ("lid_open", lid_open)):
-    if name not in ("clam_buttons", "use_card", "paint", "red_at", "lid_open"): cq.exporters.export(s, os.path.join(out, name + ".step"))
+                ("clam_red_button", red), ("red_at", red_at), ("lid", lid), ("lid_open", lid_open),
+                ("shutter_paddle", paddle), ("pad_closed", pad_closed), ("pad_open", pad_open), ("pad_flag", pad_flag), ("servo_standin", servo)):
+    if name not in ("clam_buttons", "use_card", "paint", "red_at", "lid_open", "pad_closed", "pad_open", "pad_flag"): cq.exporters.export(s, os.path.join(out, name + ".step"))
     cq.exporters.export(s, os.path.join(out, name + ".stl"), tolerance=0.05)
 cq.exporters.export(lid2d.faces("<Z"), os.path.join(out, "lid.dxf"))   # the lid's outline, for the laser cutter (mm)
 bb = back.union(cover).val().BoundingBox()
 print("outside: %.1f x %.1f x %.1f mm" % (bb.xlen, bb.ylen, bb.zlen))
 for name, a, b in (("cover/board", cover, board), ("cover/back", cover, back), ("back/board", back, board), ("caps/cover", caps, cover), ("caps/board", caps, board),
-                   ("red/cover", red_at, cover), ("red/board", red_at, board), ("lid/cover", lid, cover), ("lid open/cover", lid_open, cover), ("lid/red", lid, red_at)):
+                   ("red/cover", red_at, cover), ("red/board", red_at, board), ("lid/cover", lid, cover), ("lid open/cover", lid_open, cover), ("lid/red", lid, red_at),
+                   ("servo/cover", servo, cover), ("servo/back", servo, back), ("servo/board", servo, board),
+                   ("paddle closed/cover", pad_closed, cover), ("paddle open/cover", pad_open, cover), ("paddle flag/cover", pad_flag, cover),
+                   ("paddle closed/board", pad_closed, board), ("paddle open/board", pad_open, board), ("paddle/servo", pad_closed, servo)):
     v = a.intersect(b).val().Volume() if a.intersect(b).vals() else 0.0
     print("overlap %-12s %.2f mm3" % (name, v))
 
@@ -378,4 +434,13 @@ shot_at("preview_labels.png", [actor("clam_back", grey), actor("clam_cover", blu
 shot_at("preview_card.png", [actor("clam_cover", beige), actor("use_card", white)], (50, -122, Z_LOW), (30, -70, 90), (0, 1, 0))
 shot_at("preview_red.png", [actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear("lid")], (rx + 4, Y(ry + 2), Z_TOP), (-45, -60, 70), (0, 1, 0))
 shot_at("preview_red_open.png", [actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear("lid_open")], (rx + 4, Y(ry + 2), Z_TOP), (-45, -60, 70), (0, 1, 0))
+# the shutter: the cover seen through, with the paddle closed, open and out as a flag
+def glass(name):
+    a = actor(name, beige); a.GetProperty().SetOpacity(0.35); return a
+orange = (0.95, 0.55, 0.10)
+for tag in ("closed", "open", "flag"):
+    shot_at("preview_shutter_%s.png" % tag, [actor("clam_back", grey), actor("board_standin", BOARD_COLOR), actor("servo_standin", blue), actor("pad_" + tag, orange), glass("clam_cover"), actor("clam_buttons", dark), actor("red_at", red_c)],
+            (8, Y(62), 0), (-30, -25, 190), (0, 1, 0))
+    shot_at("preview_shutter_side_%s.png" % tag, [actor("clam_back", grey), actor("clam_cover", beige), actor("pad_" + tag, orange), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear("lid")],
+            (20, Y(62), 0), (-150, -40, 110), (0, 0, 1))
 shot("preview_bottom.png", [actor("clam_back", grey), actor("clam_cover", blue)], (40, -260, 60), (0, 0, 1))
