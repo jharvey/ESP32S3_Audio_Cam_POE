@@ -112,8 +112,8 @@ function build(dxf){
     if(x1-x0<1){x0-=1;x1+=1}if(y1-y0<1){y0-=1;y1+=1}
     const hund=hundOf(lay);
     floors.push({name:"Floor "+hund,x0,y0,x1,y1,d,doors:(doors[lay]||[]).map(q=>[R(q[0]),R(-q[1])])});
-    for(const r of byLay[lay]){const old=rooms[r.n];  // t: the room's name, the label without its numbers ("GYM")
-      if(!old||Math.floor(r.n/100)===hund)rooms[r.n]={f:fi,x:R(r.t.x),y:R(-r.t.y),t:r.t.s.replace(/\d+/g," ").replace(/[^A-Za-z .'-]/g," ").replace(/\s+/g," ").trim().slice(0,24)}}
+    for(const r of byLay[lay]){const old=rooms[r.n];  // t: the room's name, the label without its room number ("GYM", "4TH")
+      if(!old||Math.floor(r.n/100)===hund)rooms[r.n]={f:fi,x:R(r.t.x),y:R(-r.t.y),t:r.t.s.replace(/(^|\D)\d{3}(?!\d)/g,"$1 ").replace(/[^A-Za-z0-9 .'\/-]/g," ").replace(/\s+/g," ").trim().slice(0,24)}}
   });
   return{floors,rooms,when:new Date().toISOString().slice(0,10)};
 }
