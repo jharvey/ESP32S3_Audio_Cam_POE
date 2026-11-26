@@ -53,8 +53,9 @@ Any unit can show this page, so it still works if the office unit is the one tha
 numbers in its labels (like `ART 101`) becomes a floor, and all floors are shown side by side with every unit as a
 coloured dot on its room (same colours as above); a floor's title gets a red or blue dot when something on that floor
 needs attention or is calling. **Hold to talk to the whole building** on the plan talks to every room while it is held.
-Click a room to pick it: its own **Hold to talk to room N** and **Ring room N** buttons appear next to it. Holding the
-room itself on the plan also talks to it, and a double-click rings it.
+Click an intercom's dot, or its room, to pick that intercom: its own **Hold to talk to intercom N** and **Ring intercom N**
+buttons appear next to it. A click in a closet, storage room or corridor with no intercom of its own picks the nearest
+intercom, if one is close. Holding the spot on the plan also talks to it, and a double-click rings it.
 Units whose number isn't a room on the drawing (the gym units 299, 298, ...) are listed above the map: click one,
 then click where it hangs (one per corner of the gym). **Move dots** rearranges them. The drawing and the positions
 are kept in this browser only (they are not stored on the unit and are not part of the firmware), so load the DXF

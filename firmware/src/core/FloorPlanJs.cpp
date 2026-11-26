@@ -183,7 +183,7 @@ function highlight(fi,n){  // the room's area as a translucent image over the pl
 }
 function unitsIn(fi,n){return units.filter(u=>{const p=where(u);return p&&p.f===fi&&(u.room===n||roomAt(fi,p.x,p.y)===n)})}
 
-let hot=0,hotF=0,actHtml=null;  // room shown highlighted (picked, talking or ringing), its floor; the action row shown
+let hot=0,hotF=0,hotUs=[],actHtml=null;  // room shown highlighted (picked, talking or ringing), its floor; the action row shown
 const fsz=F=>Math.max(F.x1-F.x0,F.y1-F.y0);
 function full(){
   actHtml=null;
@@ -218,12 +218,13 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
     document.getElementById("pdots"+fi).innerHTML=dots;
     const hl=document.getElementById("phl"+fi),href=hot&&hotF===fi?highlight(fi,hot):"";if(hl.getAttribute("href")!==href)hl.setAttribute("href",href)});
   // the picked room's own buttons (drawn only when they change, so a held button is never replaced)
-  const a=hot&&window.onPlanHold&&!sel&&!moving?`<button id="ptalk" class="big">Hold to talk to room ${hot}</button><button id="pring">Ring room ${hot}</button>`:"";
-  if(a!==actHtml){actHtml=a;const e=document.getElementById("pact");e.innerHTML=a;const n=hot,f=hotF,inf=()=>({room:n,units:unitsIn(f,n)});
+  const who=hotUs.length?"intercom "+hotUs.map(u=>esc(u.unit)).join(", "):"room "+hot;
+  const a=hot&&window.onPlanHold&&!sel&&!moving?`<button id="ptalk" class="big">Hold to talk to ${who}</button><button id="pring">Ring ${who}</button>`:"";
+  if(a!==actHtml){actHtml=a;const e=document.getElementById("pact");e.innerHTML=a;const n=hot,f=hotF,us=hotUs,inf=()=>({room:n,units:us.length?us:unitsIn(f,n)});
     holdButton(document.getElementById("ptalk"),()=>window.onPlanHold(inf()),()=>{if(window.onPlanHoldEnd)window.onPlanHoldEnd(inf())});
     const pr=document.getElementById("pring");if(pr)pr.onclick=()=>{if(window.onPlanRing)window.onPlanRing(inf())}}
   const chips=un.map(u=>`<button class="chip ${sel===String(u.unit)?"sel":""}" data-u="${u.unit}">${esc(u.unit)}</button>`).join("");
-  const act=window.onPlanHold?"Click a room to pick it, hold it to talk to it, double-click it to ring it.":"Click a room to pick it.";
+  const act=window.onPlanHold?"Click an intercom's dot or its room to pick it, hold it to talk to it, double-click it to ring it.":"Click a room to pick it.";
   document.getElementById("phint").innerHTML=
     sel?`<div class="hint"><b>Unit ${esc(sel)}:</b> click the map where it is. <button id="pcancel">Cancel</button>${place[sel]?` <button id="preset">Back to its room</button>`:""}</div>`:
     moving?`<div class="hint">Click a dot, then click where it goes.</div>`:
@@ -250,14 +251,19 @@ function hook(){
   // Gestures (not while placing or moving dots): click = pick the room; hold = talk to it while held;
   // two quick clicks = ring it. The school page supplies onPlanPick / onPlanHold / onPlanHoldEnd / onPlanRing.
   let down=null,holdT=0,holding=null,last=null;
-  const info=n=>({room:n,units:unitsIn(fi,n)});
-  const roomFrom=ev=>{const g=ev.target.closest&&ev.target.closest("g[data-u]");
-    if(g){const u=units.find(x=>String(x.unit)===g.dataset.u);if(u){const p=where(u);return roomAt(fi,p.x,p.y)||u.room}}
-    const q=at(ev);return roomAt(fi,q.x,q.y)};
+  let pick=[];  // the intercom(s) the last press was on
+  const info=n=>({room:n,units:pick.length?pick:unitsIn(fi,n)});
+  const roomFrom=ev=>{pick=[];const g=ev.target.closest&&ev.target.closest("g[data-u]");
+    if(g){const u=units.find(x=>String(x.unit)===g.dataset.u);if(u){const p=where(u);pick=[u];return roomAt(fi,p.x,p.y)||u.room}}  // a dot: that intercom
+    const q=at(ev),n=roomAt(fi,q.x,q.y);if(n&&unitsIn(fi,n).length)return n;
+    let best=null,bd=fsz(plan.floors[fi])*0.06;  // no intercom of its own there (a closet, a corridor): the nearest one, if close
+    for(const u of units){const p=where(u);if(!p||p.f!==fi)continue;const d=Math.hypot(p.x-q.x,p.y-q.y);if(d<bd){bd=d;best=u}}
+    if(best){const p=where(best);pick=[best];return roomAt(fi,p.x,p.y)||best.room}
+    return n};
   const endHold=()=>{clearTimeout(holdT);if(holding){const h=holding;holding=null;if(window.onPlanHoldEnd)window.onPlanHoldEnd(h)}};
   svg.addEventListener("pointerdown",ev=>{
     if(sel||moving)return;const n=roomFrom(ev);if(!n)return;
-    ev.preventDefault();try{svg.setPointerCapture(ev.pointerId)}catch(e){}down={n,t:Date.now()};hot=n;hotF=fi;part();
+    ev.preventDefault();try{svg.setPointerCapture(ev.pointerId)}catch(e){}down={n,t:Date.now()};hot=n;hotF=fi;hotUs=info(n).units;part();
     if(window.onPlanHold)holdT=setTimeout(()=>{if(down&&down.n===n){holding=info(n);down=null;window.onPlanHold(holding)}},350)});
   svg.addEventListener("pointerup",ev=>{
     if(holding){endHold();return}clearTimeout(holdT);if(!down)return;const n=down.n;down=null;
@@ -321,7 +327,7 @@ function loadText(txt){
   full();
 }
 window.planUpdate=us=>{units=us||[];part()};
-window.planHot=n=>{hot=n||0;if(hot&&plan&&plan.rooms[hot])hotF=plan.rooms[hot].f;part()};  // the page can highlight a room (e.g. while ringing it)
+window.planHot=n=>{hot=n||0;hotUs=[];if(hot&&plan&&plan.rooms[hot])hotF=plan.rooms[hot].f;part()};  // the page can highlight a room (e.g. while ringing it)
 window.planLoadText=loadText;  // also used by the scripted check
 window.planRoomAt=(fi,x,y)=>roomAt(fi,x,y);  // scripted check
 full();
