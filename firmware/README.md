@@ -336,7 +336,7 @@ command (`send all feature dnd on`). `feature` lists them; `feature all on|off` 
 | `zones` | Up to 8 named sets of rooms to page. | `zone 1 east 101-112,201`, `zone 1 off`, `talk 5 zone 1` |
 | `dnd` | Do not disturb for 1 to 240 minutes (exams): calls from rooms and timed bells are not played; the office and emergencies still are. Display `dnd`. | `dnd 45`, `dnd off` |
 | `quiet` | Quieter between two times of day (over midnight too). Calls, chimes and bells are turned down; emergency signals never are. | `quiet 18:00 07:00 -12`, `quiet off` |
-| `silent` | OFFICE held 5 s: a silent help call. Nothing sounds or shows in the room except the small "sending" dot; its microphone goes to the office unit for 2 minutes; no call is played in that room meanwhile. Ends on OFFICE, when the office clears it (`callofc off`), or after 30 minutes. This is a live microphone: decide on it as school policy before switching it on. | `callofc silent` |
+| `silent` | TALK and OFFICE held together 1 s: a silent help call. Nothing sounds or shows in the room except the small "sending" dot; its microphone goes to the office unit for 2 minutes; no call is played in that room meanwhile. Ends on OFFICE, when the office clears it (`callofc off`), or after 30 minutes. This is a live microphone: decide on it as school policy before switching it on. | `callofc silent` |
 | `failover` | While the office unit is offline, the stand-in acts as the office: it gets the queue and the silent calls. | `office 105 104` |
 
 `office ROOM [STAND-IN]` names the office unit and its stand-in on every unit (send it to all). Zones,

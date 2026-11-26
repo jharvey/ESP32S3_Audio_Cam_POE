@@ -12,7 +12,7 @@ and speak: only the office hears you. Missed it? `CAL` alternates with the room 
 every 2 s: press **OFFICE** to call the office back (any button clears it).
 
 **Call the office:** press **OFFICE**. The display alternates **`oFC`** and the room number until the office calls
-back; press OFFICE again to cancel.
+back; press OFFICE again if you need help (`HLP`).
 
 | Display | Means | Do |
 |---|---|---|

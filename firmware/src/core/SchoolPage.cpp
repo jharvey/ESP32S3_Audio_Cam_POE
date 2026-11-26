@@ -10,6 +10,16 @@ const char* schoolPage() {
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>School intercom</title>
 <style>
+#alarm{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(10,12,16,.72)}
+#alarm .al{width:min(760px,94vw);border-radius:14px;padding:26px 30px;color:#fff;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+#alarm .red{background:#b71c1c}#alarm .amber{background:#9a3412}
+#alarm h1{font-size:44px;margin:0 0 6px;letter-spacing:1px}#alarm .big{font-size:26px;font-weight:700;margin:0 0 12px}
+#alarm p,#alarm li{font-size:19px;line-height:1.4}#alarm ol{margin:8px 0 16px 22px;padding:0}
+#alarm .alrow{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:12px}
+#alarm button{font-size:20px;font-weight:700;padding:14px 20px;border-radius:10px;border:2px solid #fff;background:#fff;color:#1d2330;cursor:pointer}
+#alarm button.hot{background:#ffd54a}#alarm .fa button{font-size:16px;padding:9px 14px;background:transparent;color:#fff;font-weight:600}
+#alarm input{font-size:16px;padding:9px;border-radius:8px;border:0;width:170px}#alarm #alnote{font-size:16px}
+#albar{position:fixed;left:0;right:0;top:0;z-index:59;display:none;background:#b71c1c;color:#fff;font-weight:700;font-size:18px;padding:9px 16px;cursor:pointer;text-align:center}
 :root{--bg:#f4f5f7;--card:#fff;--ink:#1d2330;--mute:#667085;--line:#dde1e7;--ok:#16803c;--okbg:#e7f6ec;--warn:#b45309;--warnbg:#fff4dc;
 --bad:#c62828;--badbg:#fde8e8;--call:#1d4ed8;--callbg:#e0eaff;--talk:#7a5b00;--talkbg:#fff7cc}
 @media (prefers-color-scheme:dark){:root{--bg:#13161c;--card:#1c2029;--ink:#e6e9ef;--mute:#98a2b3;--line:#2c3240;--ok:#4ade80;--okbg:#14301f;
@@ -59,6 +69,7 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
 </style></head><body>
 <header><h1>School intercom</h1><span id="sum"></span><span class="mute" id="via"></span>
 <span class="mute" style="margin-left:auto"><a href="/">this unit's page</a></span></header>
+<div id="alarm"></div><div id="albar"></div>
 <main><div id="err"></div>
 <div id="quad"><div id="plan"></div>
 <div id="extras"><div class="talkbar"><select id="tkind" title="Who hears you"><option value="all">Everyone</option>
@@ -69,9 +80,8 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
 <section class="panel"><h2>Emergency</h2>
  <div class="prow"><button id="elock">Lockdown</button><button id="eevac">Evacuate</button><button id="eshel">Shelter</button><button id="eclear">All clear</button></div>
  <div id="estate" class="mute">…</div>
- <div class="mute"><b>To start:</b> press Lockdown, Evacuate or Shelter here. With the feature "Lockdown from any intercom" on, anyone can also
- hold TALK and OFFICE together for 3 seconds on any intercom: every unit goes to lockdown (LoC). <b>To clear:</b> press All clear here, or hold
- TALK and OFFICE together for 3 seconds on the office unit or its stand-in. A room's intercom cannot clear it.</div>
+ <div class="mute"><b>To start:</b> press Lockdown, Evacuate or Shelter here, or lift the clear lid on any intercom and press its red
+ button: every unit goes to lockdown (LoC) at once. <b>To clear:</b> press All clear here and type the web password. No intercom can clear it.</div>
  <div class="mute">Every unit plays the signal (and its recorded message, if it has one) for a minute, evacuate for five. Then it stays
  quiet with its display and alarm light on until All clear. Talking from this page still gets through.</div></section>
 <div class="setupbar"><b>Setup</b><input type="password" id="setuppw" placeholder="web password" autocomplete="off"><button id="setupbtn">Open setup</button>
@@ -169,7 +179,7 @@ async function tick(){
     const floors={};for(const u of us){const fl=Math.floor(u.room/100);(floors[fl]=floors[fl]||[]).push(u);}
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
-    lastSchool=j;drawDevs(us);selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);callWatch(us);drawZones((j.features&4)?j.zones||[]:[]);
+    lastSchool=j;drawDevs(us);selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);callWatch(us);drawAlarm(us,j.queue||[]);drawZones((j.features&4)?j.zones||[]:[]);
     document.getElementById("ofcnow").textContent=j.office?"Now: office "+j.office+(j.standin?", stand-in "+j.standin:"")+", acting "+j.acting:"No office unit set.";
     {const em=us.filter(u=>u.online&&u.emergency);
      document.getElementById("estate").textContent=em.length?EMERG[em[0].emergency]+" on "+em.length+" of "+c.on+" units online":"No emergency.";}
@@ -179,10 +189,10 @@ async function tick(){
 tick();setInterval(tick,2000);
 
 // ---- Features (R3.2): switches, office and stand-in, quiet hours, zones, the waiting queue ----------
-const FEATS=[["reason","Help needed: OFFICE held 1.5 s (a short press is a question)"],["queue","Call queue: rooms wait in order, help first"],
+const FEATS=[["reason","Help needed: OFFICE pressed again while it rings, or held 1.5 s (one press is a question)"],["queue","Call queue: rooms wait in order, help first"],
   ["zones","Zones: page a set of rooms"],["dnd","Do not disturb for a room"],["quiet","Quiet hours"],
-  ["silent","Silent help call: OFFICE held 5 s, the office hears the room"],["failover","Stand-in office unit"],
-  ["lockdown","Lockdown from any intercom: TALK and OFFICE held together 3 s (only an office unit or this page clears it)"]];
+  ["silent","Silent help call: TALK and OFFICE held together 1 s, the office hears the room"],["failover","Stand-in office unit"],
+  ["lockdown","Red button: lockdown on every unit at once (only this page clears it)"]];
 let featBits=-1,zoneSig="";
 function drawFeats(bits){if(bits===featBits)return;featBits=bits;
   document.getElementById("feats").innerHTML=FEATS.map((f,i)=>`<label style="display:block"><input type="checkbox" data-f="${f[0]}" ${bits&(1<<i)?"checked":""}> ${f[1]}</label>`).join("");}
@@ -202,6 +212,45 @@ function callWatch(us){const now=Date.now();let ring=false;
     if(!callSeen[u.unit]){callSeen[u.unit]=now;callHot=u.unit;if(window.planHot)window.planHot(u.group||u.room);}
     if(now-callSeen[u.unit]<10000)ring=true;}
   if(ring&&now-ringT>1900){ringT=now;ringTone();}}
+// ---- Alarm panels: the operator is told what happened and what to do, with one big button for each thing ----
+// A lockdown (the red button on an intercom, or this page) fills the screen in red until All clear. A call for help
+// (HELP NEEDED or a silent help call) fills it in orange until someone closes that call. "Show the plan" folds the
+// panel into a bar at the top, so the plan can be used; a new alarm opens it again.
+let alSig="",alMin=false,alT=0,alRoom=0;
+function alHold(b,pick){b.addEventListener("pointerdown",async e=>{e.preventDefault();b.setPointerCapture(e.pointerId);b.classList.add("hot");pick();updTarget();await startTalk();});
+  const up=()=>{b.classList.remove("hot");stopTalk();};b.addEventListener("pointerup",up);b.addEventListener("pointercancel",up);}
+async function allClear(pw,note){
+  if(!pw){note("Type the web password.");return;}
+  try{const r=await fetch(location.origin+"/api/status",{cache:"no-store",headers:{Authorization:"Basic "+btoa("admin:"+pw)}});
+    if(!r.ok){note(r.status===429?"Too many wrong passwords: wait 30 seconds.":"Wrong password.");return;}
+  }catch(e){note("Could not check the password.");return;}
+  const r=await cmd("emergency clear all");out("> emergency clear   ("+r+")");tick();}
+function drawAlarm(us,q){
+  const box=gid("alarm"),bar=gid("albar"),em=us.filter(u=>u.online&&u.emergency),hq=q.filter(w=>w.urgent||w.silent);let h="",sig="",bt="";
+  if(em.length){const by=us.filter(u=>u.online&&(u.flags2&4)).map(u=>u.room),k=EMERG[em[0].emergency];
+    sig="E"+em[0].emergency+":"+by.join();bt=k+" is on. Click here to show the alarm.";
+    if(sig!==alSig)alT=Date.now();
+    h=`<div class="al red"><h1>${k}</h1><p class="big">${by.length?"Red button pressed in room "+by.join(", "):"Started from the office"}, ${new Date(alT).toLocaleTimeString()}</p>
+<p>Every intercom is already showing and sounding the alarm. You do not have to start anything.</p>
+<ol><li>Call 911.</li><li>Tell the school what to do: hold the button below and speak.</li><li>Follow the school's emergency plan.</li></ol>
+<div class="alrow"><button id="altalk">Hold to talk to everyone</button><button id="almin">Show the plan</button></div>
+<div class="alrow fa"><input type="password" id="alpw" placeholder="web password" autocomplete="off"><button id="alclr">False alarm: all clear</button><span id="alnote"></span></div></div>`;
+  }else if(hq.length){const w=hq[0];alRoom=w.room;sig="H"+w.room+(w.silent?"s":"u")+hq.length;bt=(w.silent?"SILENT HELP CALL":"HELP NEEDED")+" in room "+w.room+". Click here.";
+    h=`<div class="al amber"><h1>${w.silent?"SILENT HELP CALL":"HELP NEEDED"}</h1><p class="big">Room ${w.room} <span id="alwait"></span></p>
+<p>${w.silent?"Someone in this room asked for help without making a sound. The office unit plays what the room's microphone hears for 2 minutes. Nothing you say is heard in that room.":"Someone in this room pressed for help. Hold the button and ask what is wrong. If there is danger, or no answer, start the lockdown."}</p>
+<div class="alrow">${w.silent?"":'<button id="alroom">Hold to talk to room '+w.room+"</button>"}<button id="allock">Lockdown now</button></div>
+<div class="alrow fa"><button id="aldone">Help is on the way: close this call</button><button id="almin">Show the plan</button><span>${hq.length>1?(hq.length-1)+" more waiting":""}</span></div></div>`;}
+  if(sig!==alSig){alSig=sig;alMin=false;box.innerHTML=h;const on=(id,f)=>{const e=gid(id);if(e)e.onclick=f;};
+    on("almin",()=>{alMin=true;drawAlarm(us,q);});
+    on("alclr",()=>allClear(gid("alpw").value,t=>{gid("alnote").textContent=t;}));
+    on("allock",async()=>{if(!confirm("Start a LOCKDOWN on every unit?"))return;const r=await cmd("emergency lockdown all");out("> emergency lockdown   ("+r+")");tick();});
+    on("aldone",async()=>{await sendTo(String(alRoom),"callofc off");tick();});
+    if(gid("alpw"))gid("alpw").addEventListener("keydown",e=>{e.stopPropagation();if(e.key==="Enter")gid("alclr").click();});
+    if(gid("altalk"))alHold(gid("altalk"),()=>{gid("tkind").value="all";});
+    if(gid("alroom"))alHold(gid("alroom"),()=>{selRoom={room:alRoom,group:0};planOne=true;planMany=false;gid("tkind").value="room";});}
+  if(gid("alwait")&&hq.length)gid("alwait").textContent="waiting "+hq[0].wait_s+" s";
+  box.style.display=h&&!alMin?"flex":"none";bar.style.display=h&&alMin?"block":"none";bar.textContent=bt;bar.onclick=()=>{alMin=false;box.style.display="flex";bar.style.display="none";};
+  if(h&&!alMin&&Date.now()-ringT>1900){ringT=Date.now();ringTone();}}
 function drawQueue(q){
   document.getElementById("queue").innerHTML=q.length?'<div class="floor">Waiting for the office</div><div class="grid">'+q.map((w,i)=>
     `<div class="room ${w.silent||w.urgent?"bad":"call"}"><b>${i+1}. Room ${w.room}</b><div class="st">${w.silent?"SILENT HELP CALL":w.urgent?"HELP NEEDED":"question"}</div><div class="d">waiting ${w.wait_s} s</div></div>`).join("")+"</div>":"";}
@@ -224,7 +273,7 @@ async function emerg(kind,ask){if(!confirm(ask))return;const r=await cmd("emerge
 document.getElementById("elock").onclick=()=>emerg("lockdown","Start a LOCKDOWN on every unit?");
 document.getElementById("eevac").onclick=()=>emerg("evacuate","Start an EVACUATION on every unit?");
 document.getElementById("eshel").onclick=()=>emerg("shelter","Start a SHELTER signal on every unit?");
-document.getElementById("eclear").onclick=()=>emerg("clear","End the emergency on every unit?");
+document.getElementById("eclear").onclick=()=>{const p=prompt("Web password, to end the emergency on every unit");if(p!==null)allClear(p,t=>alert(t));};
 let logN=0,logRows=[];
 function esc(s){return s.replace(/[&<>]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[ch]));}
 function drawLog(){const k=document.getElementById("lkind").value;

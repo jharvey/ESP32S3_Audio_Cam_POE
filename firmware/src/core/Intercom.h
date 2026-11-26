@@ -168,18 +168,18 @@ public:
     // ---- R3.2: optional features. Each is off until "feature NAME on" (USB, web page, or a signed
     // network command, so the office can set all units at once).
     enum Feature : uint8_t {
-        kFeatReason = 0x01,    // OFFICE held 1.5 s = "help needed"; a short press is a question
+        kFeatReason = 0x01,    // OFFICE pressed again while it rings, or held 1.5 s = "help needed"; one press is a question
         kFeatQueue = 0x02,     // calls to the office wait in order; the office unit's TALK answers the first
         kFeatZones = 0x04,     // page a named set of rooms
         kFeatDnd = 0x08,       // do not disturb for a set time (exams); the office and emergencies still get through
         kFeatQuiet = 0x10,     // quieter between two times of day
-        kFeatSilent = 0x20,    // OFFICE held 5 s = silent help call: no sound here, the office hears the room
+        kFeatSilent = 0x20,    // TALK and OFFICE held together 1 s = silent help call: no sound here, the office hears the room
         kFeatFailover = 0x40,
-        kFeatLockdown = 0x80,  // TALK and OFFICE held together 3 s = lockdown on every unit; the same hold on an office unit clears it  // the stand-in office unit takes over while the office unit is offline
+        kFeatLockdown = 0x80,  // the red button = lockdown on every unit at once; only the office page clears it
     };
     bool feature(Feature f) const { return (features_ & f) != 0; }
     uint8_t features() const { return features_; }
-    uint8_t statusFlags2() const { return uint8_t((dnd() ? kStatus2Dnd : 0) | (silentHelp() ? kStatus2Silent : 0)); }
+    uint8_t statusFlags2() const { return uint8_t((dnd() ? kStatus2Dnd : 0) | (silentHelp() ? kStatus2Silent : 0) | (emergMine_ ? kStatus2Red : 0)); }
     uint16_t officeRoom() const { return office_; }
     uint16_t officeStandIn() const { return office2_; }
     uint16_t actingOffice() const;  // the office unit, or its stand-in while the office unit is offline; 0 = none set
@@ -339,6 +339,11 @@ private:
     uint32_t ofcRingUntil_ = 0, ofcRingNext_ = 0;    // calling the office: this unit rings every 2 s for 10 s
     uint32_t ofcAlertUntil_ = 0, ofcAlertNext_ = 0;  // an office unit: a room is calling (ring, its number blinks, lights flash)
     uint16_t ofcAlertRoom_ = 0;
+    uint32_t helpAlertNext_ = 0;  // an office unit: when an unanswered call for help rings again
+    bool redDown_ = false;        // the red button was down on the last frame
+    bool emergMine_ = false;      // this unit's red button started the emergency
+    bool officeActed_ = true;     // this OFFICE press has done its job (it waits a moment, in case TALK joins it)
+    uint32_t talkBtnSince_ = 0;   // TALK down since this frame (it waits a moment too, in case OFFICE joins it)
     uint32_t bothSince_ = 0;      // TALK and OFFICE held together since this frame
     bool bothLatch_ = false;      // ... and until both are let go, neither button does its own job
     bool officeDown_ = false;     // OFFICE was held last frame (a press = one call)

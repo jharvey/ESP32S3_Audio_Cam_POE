@@ -3,7 +3,8 @@
 // Board 75d75fb: every button switches its own U22 input to ground (TCA9555 internal pull-ups), so
 // several buttons can be pressed at once (the TM1637 key scan they used before saw only one).
 //   P00 PB1 TALK   P01 PB2 MODE   P02 PB4 UP   P03 PB5 DOWN   P04 PB6 hidden SETUP (under the cover)
-//   P05 PB7  P06 PB8  P07 PB9  P10 PB10  P11 PB11  P12 PB12: more TALK buttons, any one talks
+//   P05 PB7 OFFICE   P11 PB11 the red LOCKDOWN button (under the clear lid)
+//   P06 PB8  P07 PB9  P10 PB10  P12 PB12: more TALK buttons, any one talks
 //   P13-P17 free.  (PB3 is the AXP2101 power button, not on U22.)
 #pragma once
 #include <cstdint>
@@ -28,7 +29,7 @@ constexpr PinMap kPanelPins[] = {
     {6, ic::kBtnTalk},   // PB8
     {7, ic::kBtnTalk},   // PB9
     {8, ic::kBtnTalk},   // PB10
-    {9, ic::kBtnTalk},   // PB11
+    {9, ic::kBtnRed},    // PB11 (front: red LOCKDOWN button)
     {10, ic::kBtnTalk},  // PB12
 };
 

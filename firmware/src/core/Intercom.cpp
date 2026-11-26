@@ -48,8 +48,9 @@ const char* const kEmergencyNames[] = {"clear", "lockdown", "evacuate", "shelter
 // R3.2
 const char* const kFeatureNames[] = {"reason", "queue", "zones", "dnd", "quiet", "silent", "failover", "lockdown"};
 constexpr uint32_t kUrgentHoldFrames = 75;            // OFFICE held 1.5 s = "help needed"
-constexpr uint32_t kLockdownHoldFrames = 150;        // TALK and OFFICE held together 3 s = lockdown everywhere
-constexpr uint32_t kSilentHoldFrames = 250;           // OFFICE held 5 s = silent help call
+constexpr uint32_t kSilentBothFrames = 50;            // TALK and OFFICE held together 1 s = silent help call
+constexpr uint32_t kPressDelayFrames = 8;             // TALK and OFFICE wait 0.16 s before they act, so pressing both does neither
+constexpr uint32_t kHelpAgainFrames = 1500;           // an office unit rings again every 30 s for an unanswered call for help
 constexpr uint32_t kSilentTxFrames = 2 * 60 * 50;     // the office hears the room for 2 minutes
 constexpr uint32_t kSilentFrames = 30 * 60 * 50;      // the silent call stays up for 30 minutes unless cleared
 const char* const kFeatureUsage = "usage: feature [reason|queue|zones|dnd|quiet|silent|failover|lockdown|all on|off]";
@@ -156,7 +157,9 @@ void Intercom::event(EventKind k, uint16_t room, const char* fmt, ...) {
 
 // Feature switches, the office unit and its stand-in, quiet hours and zones, from flash.
 void Intercom::loadFeatures() {
-    features_ = uint8_t(std::strtoul(hal_.store->loadText("features").c_str(), nullptr, 10) & 0xff);
+    // Nothing saved yet: help needed, the silent help call and the red lockdown button work out of the box.
+    const std::string feat = hal_.store->loadText("features");
+    features_ = feat.empty() ? uint8_t(kFeatReason | kFeatSilent | kFeatLockdown) : uint8_t(std::strtoul(feat.c_str(), nullptr, 10) & 0xff);
     unsigned o = 0, b = 0;
     std::sscanf(hal_.store->loadText("office").c_str(), "%u %u", &o, &b);
     office_ = uint16_t(o <= 999 ? o : 0);
@@ -1163,6 +1166,7 @@ void Intercom::receive() {
                         ofcAlertRoom_ = s.from.room;
                         ofcAlertUntil_ = frame_ + kOfficeRingFrames;
                         ofcAlertNext_ = frame_;
+                        helpAlertNext_ = frame_ + kHelpAgainFrames;
                     }
                 }
                 if (w < waiting_.size()) {
@@ -1382,6 +1386,7 @@ void Intercom::updatePanel() {
         }
         if (transmitting_) dots |= 0x01;
         if (playing_) dots |= 0x02;
+        if (silentHelp()) dots = 0x04;  // the only sign in the room that the silent call went out: the third dot
         // The room number stays the main thing shown. A duplicate number alternates with "dUP" every
         // second; other faults flash their code for 0.5 s every 3.5 s.
         const char* f = fault();
@@ -1727,6 +1732,7 @@ void Intercom::setEmergency(Emergency e, const char* why) {
     if (e == emerg_) return;
     if (e == Emergency::None) {
         event(EventKind::Info, unit_.room, "room %u: emergency cleared (%s)", unsigned(unit_.room), why);
+        emergMine_ = false;
         startSound(Sound::AllClear);
     } else {
         event(EventKind::Fault, unit_.room, "room %u: EMERGENCY %s (%s)", unsigned(unit_.room), kEmergencyNames[int(e)], why);
@@ -1951,50 +1957,69 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     const bool web = webState_ == 2;
     // Silent help call: this room's microphone goes to the acting office unit, as an answer only it plays.
     const bool silentTx = silentTxUntil_ && frame_ < silentTxUntil_ && actingOffice() != 0 && actingOffice() != unit_.room;
-    bool talk = (((held & talkBit) || talkFrames_) && !setup_.active() && !muted()) || web || silentTx;
-    // OFFICE (front): held while a call or ring waits = answer it (as TALK); otherwise a press calls the
-    // office (again = cancel). After a missed call it calls the office back.
-    // TALK and OFFICE held together 3 s (feature "lockdown"): lockdown on every unit. Only an office unit (the
-    // office unit or its stand-in) ends an emergency this way; the office page's All clear does too.
+    if (!(held & talkBit)) talkBtnSince_ = 0;
+    else if (!talkBtnSince_) talkBtnSince_ = frame_ ? frame_ : 1;
+    const bool talkBtn = talkBtnSince_ && frame_ - talkBtnSince_ >= kPressDelayFrames;
+    bool talk = ((talkBtn || talkFrames_) && !setup_.active() && !muted()) || web || silentTx;
+    // OFFICE (front): held while a call or ring waits = answer it (as TALK). Otherwise one press calls the office (it
+    // rings 10 s); a second press while it rings, or holding it 1.5 s, makes it a call for help, which stays.
+    // TALK and OFFICE held together 1 s (feature "silent"): silent help call. Until both are let go neither button
+    // does its own job, and each waits 0.16 s before it acts, so the two fingers need not land together.
     const uint8_t bothBits = talkBit | (1u << kBtnOffice);
-    if (feature(kFeatLockdown) && (held & bothBits) == bothBits && !setup_.active()) {
+    if ((held & bothBits) == bothBits && !setup_.active()) {
         bothLatch_ = true;
         if (!bothSince_) bothSince_ = frame_ ? frame_ : 1;
-        if (frame_ - bothSince_ == kLockdownHoldFrames) {
-            if (emerg_ == Emergency::None) {
-                setEmergency(Emergency::Lockdown, "TALK and OFFICE held");
-                logf("%s", command("emergency lockdown all").c_str());
-            } else if (office_ && (unit_.room == office_ || unit_.room == office2_)) {
-                setEmergency(Emergency::None, "TALK and OFFICE held on an office unit");
-                logf("%s", command("emergency clear all").c_str());
-            }
-        }
+        if (frame_ - bothSince_ == kSilentBothFrames && feature(kFeatSilent) && !silentHelp()) setSilent(true, "TALK and OFFICE held");
     } else {
         bothSince_ = 0;
         if (!(held & bothBits)) bothLatch_ = false;
     }
     if (bothLatch_) talk = web || silentTx;
-    const bool office = (held & (1u << kBtnOffice)) && !setup_.active() && !bothLatch_;
+    // The red button (feature "lockdown"): lockdown on every unit at once. Only the office page ends it.
+    const bool redBtn = (held & (1u << kBtnRed)) && !setup_.active();
+    if (redBtn && !redDown_ && feature(kFeatLockdown) && emerg_ == Emergency::None) {
+        emergMine_ = true;
+        setEmergency(Emergency::Lockdown, "red button");
+        logf("%s", command("emergency lockdown all").c_str());
+    }
+    redDown_ = redBtn;
+    const bool ofcRaw = (held & (1u << kBtnOffice)) && !setup_.active();
+    const bool office = ofcRaw && !bothLatch_;
+    if (bothLatch_) {  // both buttons: the OFFICE press that was waiting is dropped
+        officeSince_ = 0;
+        officeActed_ = true;
+    }
     if (office && canAnswer()) {
         if (!muted()) talk = true;
-    } else if (office && !officeDown_) {
-        if (silentHelp()) setSilent(false, "OFFICE pressed");
-        else setCallingOffice(!callingOffice_, "OFFICE");
-        officeSince_ = frame_;
-    } else if (office && officeSince_ && frame_ - officeSince_ == kUrgentHoldFrames && feature(kFeatReason)) {
-        // held 1.5 s: "help needed" (a short press is a question)
-        const bool was = callingOffice_;
-        urgent_ = true;
-        if (was) {
-            event(EventKind::Fault, unit_.room, "room %u: HELP NEEDED (OFFICE held)", unsigned(unit_.room));
-            sendStatus();
-        } else {
-            setCallingOffice(true, "OFFICE held");
+        officeActed_ = true;
+    } else {
+        if (office && !officeDown_) {
+            officeSince_ = frame_ ? frame_ : 1;
+            officeActed_ = false;
         }
-    } else if (office && officeSince_ && frame_ - officeSince_ == kSilentHoldFrames && feature(kFeatSilent)) {
-        setSilent(true, "OFFICE held 5 s");
+        if (officeSince_ && !officeActed_ && (office ? frame_ - officeSince_ >= kPressDelayFrames : !ofcRaw)) {
+            officeActed_ = true;
+            if (silentHelp()) {
+                setSilent(false, "OFFICE pressed");
+            } else if (!callingOffice_) {
+                setCallingOffice(true, "OFFICE");
+            } else if (!urgent_ && feature(kFeatReason)) {  // pressed again while it rings: help needed
+                urgent_ = true;
+                event(EventKind::Fault, unit_.room, "room %u: HELP NEEDED (OFFICE pressed again)", unsigned(unit_.room));
+                sendStatus();
+            }
+        } else if (office && officeSince_ && frame_ - officeSince_ == kUrgentHoldFrames && feature(kFeatReason) && !urgent_) {
+            // held 1.5 s: "help needed" (one press is a question)
+            urgent_ = true;
+            if (callingOffice_) {
+                event(EventKind::Fault, unit_.room, "room %u: HELP NEEDED (OFFICE held)", unsigned(unit_.room));
+                sendStatus();
+            } else {
+                setCallingOffice(true, "OFFICE held");
+            }
+        }
     }
-    if (!office) officeSince_ = 0;
+    if (!ofcRaw) officeSince_ = 0;
     officeDown_ = office;
     // DOWN held 2 s (outside setup) = call the office too (under the cover); again = cancel. Gives up after 5 min.
     if (held == (1u << kBtnDown) && !setup_.active()) {
@@ -2015,7 +2040,7 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         transmitting_ = talk;
         talkSince_ = talk ? frame_ : 0;
         if (talk) {  // who this transmission goes to
-            if (silentTx && !web && !(held & talkBit)) {
+            if (silentTx && !web && (bothLatch_ || !(held & talkBit))) {
                 txTarget_ = actingOffice();
                 txFlags_ = kAudioReply;
             } else if (web) {  // web console: the target picked on the school page
@@ -2062,6 +2087,17 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         } else if (frame_ >= ofcRingNext_ && !soundActive_ && !transmitting_) {
             startSound(Sound::Ring);
             ofcRingNext_ = frame_ + 100;
+        }
+    }
+    // An office unit: a call for help that nobody has answered rings again every 30 s.
+    if (!ofcAlertUntil_ && frame_ >= helpAlertNext_ && office_ && (unit_.room == office_ || unit_.room == office2_ || group() == office_)) {
+        for (const auto& w : waiting_) {
+            if (!w.urgent && !w.silent) continue;
+            ofcAlertRoom_ = w.room;
+            ofcAlertUntil_ = frame_ + kOfficeRingFrames;
+            ofcAlertNext_ = frame_;
+            helpAlertNext_ = frame_ + kHelpAgainFrames;
+            break;
         }
     }
     if (ofcAlertUntil_) {  // an office unit: a room is calling, ring every 2 s for 10 s or until it stops waiting

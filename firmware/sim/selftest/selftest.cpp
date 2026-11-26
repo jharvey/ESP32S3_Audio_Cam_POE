@@ -1484,7 +1484,7 @@ static void testRoomCalls() {
     CHECK(r214.ic->callAnswered() && office.replies > repliesBefore + 40, "ring answered with TALK: the office hears 214 (%d frames)",
           office.replies - repliesBefore);
     run(520);
-    // OFFICE (front button): a press calls the office, another cancels; held while rung, it answers.
+    // OFFICE (front button): a press calls the office, another makes it a call for help; held while rung, it answers.
     r214.held = 1u << kBtnOffice;
     run(3);
     r214.held = 0;
@@ -1494,7 +1494,9 @@ static void testRoomCalls() {
     run(3);
     r214.held = 0;
     run(10);
-    CHECK(!r214.ic->callingOffice(), "OFFICE pressed again: the call to the office is cancelled");
+    CHECK(r214.ic->callingOffice() && r214.ic->urgent(), "OFFICE pressed again while it rings: help needed");
+    r214.ic->command("callofc off");
+    run(10);
     r214.ic->command("ring", CmdSource::Network);
     run(20);
     repliesBefore = office.replies;
@@ -1976,10 +1978,12 @@ static void testR32() {
     run(60);
 
     // ---- the switches ----
+    CHECK(ofc.ic->features() == 0xa1, "a new unit has help needed, the silent help call and the red button switched on (%u)", unsigned(ofc.ic->features()));
+    for (auto* u : all) u->ic->command("feature all off");
     CHECK(ofc.ic->features() == 0 && r1.ic->command("dnd 10").find("feature is off") != std::string::npos &&
               r1.ic->command("callofc help").find("feature is off") != std::string::npos &&
               r1.ic->command("callofc silent").find("feature is off") != std::string::npos,
-          "every feature is off at first, and its command says so");
+          "with every feature off, each command says so");
     r1.held = kOffice;
     run(300);
     r1.held = 0;
@@ -2096,11 +2100,19 @@ static void testR32() {
 
     // ---- silent help call ----
     uint32_t ho = ofc.heardFrom(r2.id), hpr = prin.heardFrom(r2.id);
-    r2.held = kOffice;
-    run(260);
+    const unsigned allBefore = r1.heardFrom(r2.id);
+    r2.held = kOffice;  // the two fingers do not land together: OFFICE first, TALK 0.1 s later
+    run(5);
+    r2.held = 1 | kOffice;
+    run(40);
+    CHECK(!r2.ic->silentHelp() && !r2.ic->callingOffice() && r2.ic->speakerLevel() == 0, "TALK and OFFICE together: nothing in the first second, no ring");
+    run(20);
+    r2.held = 1;        // and they do not leave together either
+    run(5);
     r2.held = 0;
     run(100);
-    CHECK(r2.ic->silentHelp() && !r2.ic->callingOffice() && has(ofc, "room 214: SILENT HELP CALL", 0), "OFFICE held 5 s is a silent help call, logged at the office");
+    CHECK(r2.ic->silentHelp() && !r2.ic->callingOffice() && has(ofc, "room 214: SILENT HELP CALL", 0) && r1.heardFrom(r2.id) == allBefore,
+          "TALK and OFFICE held 1 s is a silent help call, logged at the office; no all-call went out");
     q = ofc.ic->callQueue();
     CHECK(q.size() == 1 && q[0].room == 214 && q[0].silent, "it is first in the office queue");
     CHECK(ofc.heardFrom(r2.id) > ho + 80 && prin.heardFrom(r2.id) == hpr, "the office unit hears the room, the other units do not (%u frames)",
@@ -2144,43 +2156,44 @@ static void testR32() {
     CHECK(bk.find("\nfeatures=") != std::string::npos && bk.find("\noffice=105 104\n") != std::string::npos &&
               bk.find("\nzones=1=east:101-103,214;\n") != std::string::npos && bk.find("\nquiet=22:00 07:00 -12\n") != std::string::npos,
           "the settings backup carries the switches, office, zones and quiet hours");
-    // ---- lockdown from a room: TALK and OFFICE held together 3 s (feature "lockdown") ----
+    // ---- lockdown from a room: the red button (feature "lockdown") ----
     for (auto* u : all) {
         u->eth = true;  // the office unit was taken off the network above
         u->ic->command("feature lockdown on");
         u->ic->command("emergency clear");
+        u->ic->command("callofc off");
         u->ic->command("netkey school-network-key-1");
         u->held = 0;
     }
     run(100);
     const auto L = Intercom::Emergency::Lockdown, N = Intercom::Emergency::None;
-    const unsigned heardR1 = r2.heardFrom(r1.id);
-    r1.held = 1 | kOffice;
-    run(140);
-    CHECK(r1.ic->emergency() == N && r2.heardFrom(r1.id) == heardR1, "TALK and OFFICE together: nothing before 3 s, and no all-call");
+    const uint8_t kRed = uint8_t(1u << kBtnRed);
+    r1.held = kRed;
+    run(3);
+    CHECK(r1.ic->emergency() == L && (r1.ic->statusFlags2() & kStatus2Red), "the red button: lockdown in that room at once");
+    r1.held = 0;
+    run(300);
+    CHECK(r2.ic->emergency() == L && ofc.ic->emergency() == L && prin.ic->emergency() == L && !(r2.ic->statusFlags2() & kStatus2Red),
+          "and on every unit (%d %d %d); only the room that pressed says so", int(r2.ic->emergency()), int(ofc.ic->emergency()), int(prin.ic->emergency()));
+    r2.held = kRed;
+    run(20);
+    r2.held = 0;
+    prin.held = kRed;
+    run(20);
+    prin.held = 0;
+    run(150);
+    CHECK(r2.ic->emergency() == L && ofc.ic->emergency() == L && prin.ic->emergency() == L, "no intercom can clear it, not even an office unit");
+    ofc.ic->command("emergency clear all", CmdSource::Web);
+    run(300);
+    CHECK(r1.ic->emergency() == N && r2.ic->emergency() == N && ofc.ic->emergency() == N && prin.ic->emergency() == N && !(r1.ic->statusFlags2() & kStatus2Red),
+          "All clear on the office page ends it everywhere");
+    r1.ic->command("feature lockdown off");
+    r1.held = kRed;
     run(20);
     r1.held = 0;
-    run(300);
-    CHECK(r1.ic->emergency() == L && r2.ic->emergency() == L && ofc.ic->emergency() == L && prin.ic->emergency() == L,
-          "held 3 s in a room: lockdown on every unit (%d %d %d %d, %s)", int(r1.ic->emergency()), int(r2.ic->emergency()), int(ofc.ic->emergency()),
-          int(prin.ic->emergency()), r1.ic->command("feature").c_str());
-    r2.held = 1 | kOffice;
-    run(170);
-    r2.held = 0;
     run(100);
-    CHECK(r2.ic->emergency() == L && ofc.ic->emergency() == L, "a room cannot clear it");
-    prin.held = 1 | kOffice;
-    run(170);
-    prin.held = 0;
-    run(300);
-    CHECK(r1.ic->emergency() == N && r2.ic->emergency() == N && ofc.ic->emergency() == N && prin.ic->emergency() == N,
-          "the same hold on an office unit (here the stand-in) clears it everywhere");
-    r1.ic->command("feature lockdown off");
-    r1.held = 1 | kOffice;
-    run(170);
-    r1.held = 0;
-    run(100);
-    CHECK(r1.ic->emergency() == N && ofc.ic->emergency() == N, "with the feature off the two buttons do not start a lockdown");
+    CHECK(r1.ic->emergency() == N && ofc.ic->emergency() == N, "with the feature off the red button does nothing");
+    r1.ic->command("feature lockdown on");
     for (auto* u : all) u->ic->command("callofc off");
 
     // ---- a plain call to the office rings both ends for 10 s, then gives up; a call for help stays ----
@@ -2214,6 +2227,8 @@ static void testR32() {
     r2.held = 0;
     run(600);
     CHECK(r2.ic->callingOffice() && r2.ic->urgent() && ofc.ic->officeAlert() == 0, "a call for help (OFFICE held) stays up after the ringing stops");
+    run(900);
+    CHECK(ofc.ic->officeAlert() == 214 && prin.ic->officeAlert() == 214, "nobody answered it: the office units ring again after 30 s");
     r2.ic->command("callofc off");
     run(20);
     g_clock0 = clock0;

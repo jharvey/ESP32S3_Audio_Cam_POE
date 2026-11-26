@@ -63,6 +63,7 @@ enum StatusFlags : uint8_t {
 enum StatusFlags2 : uint8_t {
     kStatus2Dnd = 0x01,     // do not disturb: only the office gets through
     kStatus2Silent = 0x02,  // silent help call
+    kStatus2Red = 0x04,     // this unit's red button started the emergency
 };
 // Status fault byte: what the unit's display is flashing.
 enum class Fault : uint8_t { None = 0, NoEthernet = 1, NoNetwork = 2, LowBattery = 3, Duplicate = 4, Overload = 5 };

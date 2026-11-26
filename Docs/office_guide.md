@@ -125,13 +125,16 @@ pages, and the unit's page is plain `http://` on the intercom network, so set th
 
 - **A short press of OFFICE:** the room's intercom rings (two short warbles every 2 seconds) and shows `oFC`. The office unit, its stand-in and any unit that shares the office's room (`group`) ring too, blink the calling room's number and flash their lights. The school page highlights the room and rings on the PC if the browser allows sound.
 - **Nobody answers in 10 seconds:** the ringing stops and every device goes back to normal. The log keeps "called the office: no answer".
-- **OFFICE held 1.5 seconds (feature "Help needed"):** the room shows `HLP`. This call rings for 10 seconds too, but stays in the waiting list for 5 minutes or until the office answers.
+- **OFFICE pressed again while it rings, or held 1.5 seconds (feature "Help needed", on at first):** the room shows `HLP`. This call does not give up after 10 seconds: it stays in the waiting list for 5 minutes or until the office answers, and the office units ring again every 30 seconds.
+- **TALK and OFFICE held together for 1 second (feature "Silent help call", on at first):** a silent help call. Nothing sounds in the room; the third dot on its display is the only sign. The office unit plays what the room's microphone hears for 2 minutes. Pressing OFFICE alone in the room cancels it. The two fingers need not land together: each button waits a moment before it acts.
+- **On the school page** a call for help fills the screen: which room, **Hold to talk to room N** (not for a silent call), **Lockdown now** and **Help is on the way: close this call**. **Show the plan** folds it into a bar at the top.
 
 ## Emergency: how to start it and how to clear it
 
+- **Start, from any intercom:** lift the clear lid and press the **red button**. Every unit goes to lockdown at once: no holding, no counting. (Feature "Red button", on at first.)
 - **Start, from the office:** on the school page press **Lockdown**, **Evacuate** or **Shelter**. Every unit shows `LoC`, `EUA` or `SHE`, flashes its alarm light and plays the signal (one minute; evacuate five minutes). Talking from the page or the office unit still gets through.
-- **Start, from any intercom:** hold **TALK and OFFICE together for 3 seconds**. Every unit goes to lockdown. This works only when the feature **Lockdown from any intercom** is ticked in Setup (it is off at first). While the two buttons are held nothing is sent to the school and the office is not called.
-- **Clear:** press **All clear** on the school page, or hold **TALK and OFFICE together for 3 seconds on the office unit or its stand-in**. A room's intercom cannot clear an emergency.
+- **What the office sees:** the school page fills with a red panel: which room's red button was pressed and when, and what to do (call 911, speak to the school, follow the school's plan). The operator does not have to start or decide anything.
+- **Clear:** on the school page only, with the web password: **False alarm: all clear** on the red panel, or **All clear** in the Emergency box. No intercom can clear an emergency, not even the office unit.
 - An emergency nobody clears ends by itself after 4 hours.
 
 ## Setup: devices, highlight areas and backup
