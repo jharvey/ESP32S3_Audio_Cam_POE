@@ -242,7 +242,7 @@ document.getElementById("tkind").addEventListener("change",updTarget);
 // double-click = ring it (it chimes and blinks for 10 s; the teacher answers with TALK, heard on this unit).
 function planSel(info){const u=info.units[0];
   if(!u){setState("No unit in room "+info.room+" yet.","st");return false;}
-  const c=document.querySelector('.room[data-room="'+u.room+'"]');if(c&&!c.classList.contains("sel"))c.click();planOne=!!info.one;planMany=info.units.length>1;updTarget();return true;}
+  const c=document.querySelector('.room[data-room="'+u.room+'"]');if(c&&!c.classList.contains("sel"))c.click();planOne=!!info.one;planMany=info.units.length>1&&info.units.every(x=>x.group===u.group);updTarget();return true;}
 let planHolding=false;
 window.onPlanPick=info=>{planSel(info);};
 window.onPlanHold=async info=>{if(talking||!planSel(info))return;planHolding=true;

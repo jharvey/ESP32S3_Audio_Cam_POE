@@ -26,6 +26,7 @@ st.textContent=`#plan{background:var(--card);border:1px solid var(--line);border
 #plan .dot{stroke:var(--card);cursor:pointer}#plan .num{fill:#fff;font-weight:700;pointer-events:none}
 #plan .ok{fill:var(--ok)}#plan .warn{fill:var(--warn)}#plan .bad{fill:var(--bad)}#plan .call{fill:var(--call)}#plan .talk{fill:#d4a800}
 #plan .chip{font-size:13px;padding:2px 8px}
+#plan .dot.call{animation:pcall 1s steps(2,jump-none) infinite}@keyframes pcall{to{fill:#fff}}
 #plan .floors{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:10px;margin-top:6px}
 #plan .fl{margin:0}#plan .fl figcaption{font-size:13px;font-weight:600;margin:0 0 3px}#plan .fl svg{max-height:60vh}
 #plan button.big{font:600 15px system-ui,sans-serif;padding:9px 18px;border:2px solid var(--bad);color:var(--bad);border-radius:8px;user-select:none;touch-action:none}
@@ -123,6 +124,7 @@ function cls(u){const f=u.flags;if(!u.online)return"bad";if(f&32)return"call";if
 const rank={bad:4,call:3,warn:2,talk:1,ok:0};
 // The room a unit belongs to on the plan: its own number, or else its group's (the gym's units share the gym).
 function home(u){return !plan?0:plan.rooms[u.room]?u.room:u.group&&plan.rooms[u.group]?u.group:0}
+function lab(u){const h=home(u);return h&&h!==u.room?h:u.unit}  // the number on a dot: a unit that shares a room (the gym's) shows that room's
 function mates(n,all){return units.filter(u=>(all||!place[u.unit])&&home(u)===n).sort((a,b)=>String(a.unit).localeCompare(String(b.unit),undefined,{numeric:true}))}
 let spotCache={};
 function spotsFor(n,k){  // k places by room n's doors: one = the door nearest the middle of the building; more = doors far apart
@@ -257,7 +259,7 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
     let dots="";
     for(const k in spots){const us=spots[k],p=where(us[0]);us.forEach((u,i)=>{const x=p.x+(i-(us.length-1)/2)*r*2.3,y=p.y+(p.d?0:r*1.6);
       dots+=`<g data-u="${u.unit}"><circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${sel===String(u.unit)?` style="stroke:var(--call);stroke-width:${r*0.45}"`:""}><title>${esc(u.unit)}</title></circle>`+
-        `<text class="num" x="${x}" y="${y+r*0.36}" font-size="${r*0.95}" text-anchor="middle">${esc(u.unit)}</text></g>`})}
+        `<text class="num" x="${x}" y="${y+r*0.36}" font-size="${r*0.95}" text-anchor="middle">${esc(lab(u))}</text></g>`})}
     for(const n in plan.rooms){if(plan.rooms[n].f!==fi||mates(+n,true).length<2)continue;  // dots placed by hand count too
       const c=centre(fi,+n),t="Entire "+(plan.rooms[n].t||"room "+n).toLowerCase(),w=r*(t.length*0.95+2.5),h=r*3.2;
       dots+=`<g data-all="${n}" style="cursor:pointer"><rect x="${c.x-w/2}" y="${c.y-h/2}" width="${w}" height="${h}" rx="${r*0.8}" fill="var(--card)" stroke="var(--bad)" stroke-width="${r*0.22}"/>`+
@@ -265,7 +267,7 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
     document.getElementById("pdots"+fi).innerHTML=dots;
     const hl=document.getElementById("phl"+fi),href=hot&&hotF===fi?highlight(fi,hot):"";if(hl.getAttribute("href")!==href)hl.setAttribute("href",href)});
   // the picked room's own buttons (drawn only when they change, so a held button is never replaced)
-  const who=hotUs.length>1?"all of "+esc((plan.rooms[hot]&&plan.rooms[hot].t||"room "+hot).toLowerCase())+" ("+hotUs.length+" intercoms)":hotUs.length?"intercom "+esc(hotUs[0].unit):"room "+hot;
+  const who=hotUs.length>1?"all of "+esc((plan.rooms[hot]&&plan.rooms[hot].t||"room "+hot).toLowerCase())+" ("+hotUs.length+" intercoms)":hotUs.length?"intercom "+esc(lab(hotUs[0])):"room "+hot;
   const a=hot&&window.onPlanHold&&!sel&&!moving?`<button id="ptalk" class="big">Hold to talk to ${who}</button><button id="pring">Ring ${who}</button>`:"";
   if(a!==actHtml){actHtml=a;const e=document.getElementById("pact");e.innerHTML=a;const n=hot,f=hotF,us=hotUs,inf=()=>({room:n,units:us.length?us:unitsIn(f,n),one:us.length===1});
     holdButton(document.getElementById("ptalk"),()=>window.onPlanHold(inf()),()=>{if(window.onPlanHoldEnd)window.onPlanHoldEnd(inf())});
