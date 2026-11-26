@@ -25,7 +25,22 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 .room{cursor:pointer}.room.sel{outline:3px solid var(--call);outline-offset:1px}
 .panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px;margin-top:6px}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
-.panel h2{margin:0 0 8px;font-size:15px}.prow{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:6px 0}
+.panel h2{margin:0 0 8px;font-size:15px}
+#extras{display:flex;flex-direction:column;gap:10px;margin:0 0 16px}#extras .talkbar,#extras .panel{margin:0}
+.setupbar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.setupbar input{font:inherit;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:150px}
+.setupbar button{font:600 14px system-ui,sans-serif;padding:7px 14px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+body:not(.setup) .panels{display:none}body.hasplan:not(.setup) #rooms{display:none}body.setup #setuppw{display:none}
+@media(min-width:900px){
+body.hasplan main{max-width:none}
+body.hasplan #quad{display:grid;gap:10px;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"f1 f2" "f3 x1" "f3 x2";height:calc(100vh - 92px);min-height:600px;margin-bottom:16px}
+body.hasplan #plan,body.hasplan #plan .floors{display:contents}
+body.hasplan #plan .fl{display:flex;flex-direction:column;min-height:0;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+body.hasplan #plan .fl:nth-child(1){grid-area:f1}body.hasplan #plan .fl:nth-child(2){grid-area:f2}body.hasplan #plan .fl:nth-child(3){grid-area:f3}
+body.hasplan #plan .fl figcaption{font-size:15px}body.hasplan #plan .fl svg{flex:1;min-height:0;height:100%;max-height:none}
+body.hasplan #plan .pside{grid-area:x1;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
+}.prow{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:6px 0}
 .panel input,.panel select{font:inherit;padding:5px 7px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 .panel button{font:inherit;padding:5px 11px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
 .panel pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px;margin:6px 0 0;font-size:12.5px;max-height:220px;overflow:auto}
@@ -45,19 +60,22 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 <header><h1>School intercom</h1><span id="sum"></span><span class="mute" id="via"></span>
 <span class="mute" style="margin-left:auto"><a href="/">this unit's page</a></span></header>
 <main><div id="err"></div>
-<div class="talkbar"><select id="tkind" title="Who hears you"><option value="all">Everyone</option>
+<div id="quad"><div id="plan"></div>
+<div id="extras"><div class="talkbar"><select id="tkind" title="Who hears you"><option value="all">Everyone</option>
 <option value="room">The selected room</option><option value="floor">The selected room's floor</option></select>
 <button id="talk" title="Hold the button (or the space bar) and speak">Hold to talk to everyone</button>
 <div class="meterbox"><div id="tmeter"></div></div><span id="tstate" class="mute">Uses this PC's microphone. Rooms answer on the office unit.</span></div>
 <div id="queue"></div>
-<div id="plan"></div>
-<div id="rooms"></div>
-<div class="panels">
 <section class="panel"><h2>Emergency</h2>
  <div class="prow"><button id="elock">Lockdown</button><button id="eevac">Evacuate</button><button id="eshel">Shelter</button><button id="eclear">All clear</button></div>
  <div id="estate" class="mute">…</div>
  <div class="mute">Every unit plays the signal (and its recorded message, if it has one) for a minute, evacuate for five. Then it stays
  quiet with its display and alarm light on until All clear. Talking from this page still gets through.</div></section>
+<div class="setupbar"><b>Setup</b><input type="password" id="setuppw" placeholder="web password" autocomplete="off"><button id="setupbtn">Open setup</button>
+ <span class="mute" id="setupnote">Rooms list, features, timed events, commands, installer tests and the log.</span></div>
+</div></div>
+<div id="rooms"></div>
+<div class="panels">
 <section class="panel"><h2>Features</h2>
  <div class="prow" id="feats"></div>
  <div class="mute">Each feature is off until ticked. A tick sets it on this unit and sends it to all units.</div>
@@ -236,6 +254,19 @@ window.onPlanAll=async on=>{if(!on){planHolding=false;stopTalk();return;}if(talk
 window.onPlanRing=async info=>{if(!planSel(info))return;
   for(const u of info.units){const r=await cmd("send "+u.room+" ring "+lastSchool.self);out("> "+u.room+" ring   ("+r+")");}
   setState("Ringing room "+info.room+" for 10 s: the teacher answers with TALK, heard on this office unit.","st");};
+// Setup (rooms list and the panels below) opens with the unit's web password, checked by the unit, and is closed
+// again by the same button or by loading the page anew.
+function setupShown(){const on=document.body.classList.contains("setup");document.getElementById("setupbtn").textContent=on?"Lock setup":"Open setup";
+  document.getElementById("setupnote").textContent=on?"Setup is open below.":"Rooms list, features, timed events, commands, installer tests and the log.";}
+document.getElementById("setupbtn").onclick=async()=>{
+  if(document.body.classList.contains("setup")){document.body.classList.remove("setup");setupShown();return;}
+  const box=document.getElementById("setuppw"),pw=box.value;box.value="";
+  if(!pw){document.getElementById("setupnote").textContent="Type the web password first.";box.focus();return;}
+  try{const r=await fetch(location.origin+"/api/status",{cache:"no-store",headers:{Authorization:"Basic "+btoa("admin:"+pw)}});
+    if(r.ok){document.body.classList.add("setup");setupShown();document.querySelector(".panels").scrollIntoView({behavior:"smooth"});}
+    else document.getElementById("setupnote").textContent=r.status===429?"Too many wrong passwords: wait 30 seconds.":"Wrong password.";
+  }catch(e){document.getElementById("setupnote").textContent="Could not check the password.";}};
+document.getElementById("setuppw").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("setupbtn").click();});
 function setState(t,cls){const e=document.getElementById("tstate");e.textContent=t;e.className=cls||"mute";}
 async function startTalk(){
   if(talking)return;

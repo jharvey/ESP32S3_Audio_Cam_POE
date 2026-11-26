@@ -49,6 +49,11 @@ updated every 2 seconds:
 
 Any unit can show this page, so it still works if the office unit is the one that failed.
 
+**Four-part screen:** once a floor plan is loaded, the page is split in four: one part per floor (three floors), and a
+fourth part with **Hold to talk to ALL rooms**, the rooms waiting for the office, the emergency buttons and **Setup**.
+Setup (the rooms list, features, timed events, commands, installer tests and the log) opens below the four parts when
+the unit's web password is typed, and **Lock setup** closes it again. On a narrow screen the parts stack.
+
 **Floor plan:** press **Load a DXF floor plan…** and pick the school's DXF drawing. Each layer that has room
 numbers in its labels (like `ART 101`) becomes a floor, and all floors are shown side by side with every unit as a
 coloured dot on its room (same colours as above); a floor's title gets a red or blue dot when something on that floor

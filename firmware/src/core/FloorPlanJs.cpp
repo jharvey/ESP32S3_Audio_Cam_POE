@@ -186,13 +186,13 @@ function unitsIn(fi,n){return units.filter(u=>{const p=where(u);return p&&p.f===
 let hot=0,hotF=0,hotUs=[],actHtml=null;  // room shown highlighted (picked, talking or ringing), its floor; the action row shown
 const fsz=F=>Math.max(F.x1-F.x0,F.y1-F.y0);
 function full(){
-  actHtml=null;
+  actHtml=null;document.body.classList.toggle("hasplan",!!plan);
   if(!plan){box.innerHTML=`<div class="bar"><b>Floor plan</b><button id="pload">Load a DXF floor plan…</button><button id="pdemo">Show a demo plan</button>
     <span class="hint">Shows every unit on its room. The file stays in this browser only: it is not sent to the unit.</span>${msg?`<span class="hint">${esc(msg)}</span>`:""}</div>`;
     hook();return}
-  box.innerHTML=`<div class="bar"><b>Floor plan</b>${window.onPlanAll?`<button id="pall" class="big">Hold to talk to the whole building</button>`:""}<span id="pact"></span>
+  box.innerHTML=`<div class="pside"><div class="bar"><b>Talk</b>${window.onPlanAll?`<button id="pall" class="big">Hold to talk to ALL rooms</button>`:""}<span id="pact"></span>
     <span style="margin-left:auto"></span><button id="pmove">Move dots</button><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
-    <div id="phint"></div><div class="floors">`+plan.floors.map((F,i)=>{const w=F.x1-F.x0,h=F.y1-F.y0,m=fsz(F)*0.03,g=regionsFor(i);
+    <div id="phint"></div></div><div class="floors">`+plan.floors.map((F,i)=>{const w=F.x1-F.x0,h=F.y1-F.y0,m=fsz(F)*0.03,g=regionsFor(i);
       return `<figure class="fl"><figcaption id="pcap${i}"></figcaption>
       <svg id="psvg${i}" data-f="${i}" viewBox="${F.x0-m} ${F.y0-m} ${w+2*m} ${h+2*m}" preserveAspectRatio="xMidYMid meet" style="touch-action:none">
       <image id="phl${i}" x="${F.x0-g.s}" y="${F.y0-g.s}" width="${g.cw*g.s}" height="${g.ch*g.s}" preserveAspectRatio="none"/>
