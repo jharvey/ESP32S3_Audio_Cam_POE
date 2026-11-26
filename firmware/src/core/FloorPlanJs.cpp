@@ -2,9 +2,11 @@
 // browser; the script draws each floor (layers that carry room-number labels) and puts every unit on its
 // room, coloured by its status, refreshed with the room grid. The DXF and the unit positions stay in that
 // browser's local storage only: they are never sent to the unit (and so never end up in the firmware or
-// its repository). Units whose number isn't a room on the plan (gym units 299, 298 ...) are placed by
-// clicking: pick the unit, then click the map ("Move dots" rearranges them). Click a room to pick it; with
-// the school page's hooks, hold a room to talk to it and double-click it to ring it.
+// its repository). A unit's dot is put just inside its room's door, the door nearest the middle of the
+// building (intercoms hang by the door). Units that share a room (their number or their group is that room:
+// the gym's four) go to doors far apart, and the room gets an "Entire ..." button in its middle for all of
+// them. Other units are placed by clicking: pick the unit, then click the map ("Move dots" rearranges them).
+// Click a room to pick it; with the school page's hooks, hold a room to talk to it and double-click it to ring it.
 #include "WebUi.h"
 
 namespace ic {
@@ -12,7 +14,7 @@ namespace ic {
 const char* floorPlanJs() {
     return R"JS((function(){
 "use strict";
-const KP="icPlan1",KU="icPlace1",KF="icPlanFloor";
+const KP="icPlan2",KU="icPlace1",KF="icPlanFloor";
 const st=document.createElement("style");
 st.textContent=`#plan{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 16px}
 #plan .bar{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}#plan .bar b{font-size:15px}
@@ -54,8 +56,9 @@ function g1(e,c,d){for(const p of e.g)if(p[0]===c)return p[1];return d}
 function num(e,c,d){const v=g1(e,c,null);return v===null?d:+v}
 function cleanText(s){return s.replace(/\\P/g," ").replace(/\\[A-Za-z][^;\\]*;/g,"").replace(/[{}]/g,"").replace(/\s+/g," ").trim()}
 function build(dxf){
-  const lines={},texts=[];  // lines[layer] = [[x,y],...] polylines
-  const add=(lay,pts)=>{if(pts.length>1)(lines[lay]=lines[lay]||[]).push(pts)};
+  const lines={},texts=[],doors={};  // lines[layer] = [[x,y],...] polylines; doors[layer] = [[x,y],...] door middles
+  let door=null;  // the points of the door block being drawn
+  const add=(lay,pts)=>{if(pts.length>1){(lines[lay]=lines[lay]||[]).push(pts);if(door)for(const q of pts)door.push(q)}};
   function walk(list,xf,over,depth){
     let poly=null;
     for(const e of list){
@@ -74,7 +77,11 @@ function build(dxf){
       case "INSERT":{const b=dxf.blocks[g1(e,2,"")];if(!b||depth>6)break;
         if(!/door/i.test(b.name))break;  // keep it basic: walls and doors only (no cars, sinks, furniture)
         const ix=num(e,10,0),iy=num(e,20,0),sx=num(e,41,1),sy=num(e,42,1),ro=num(e,50,0)*Math.PI/180,co=Math.cos(ro),si=Math.sin(ro);
-        walk(b.ents,(x,y)=>{const u=(x-b.x)*sx,v=(y-b.y)*sy;return xf(ix+u*co-v*si,iy+u*si+v*co)},lay,depth+1);break}
+        const top=!door;if(top)door=[];
+        walk(b.ents,(x,y)=>{const u=(x-b.x)*sx,v=(y-b.y)*sy;return xf(ix+u*co-v*si,iy+u*si+v*co)},lay,depth+1);
+        if(top){if(door.length){let ax=1e18,bx=-1e18,ay=1e18,by=-1e18;for(const q of door){ax=Math.min(ax,q[0]);bx=Math.max(bx,q[0]);ay=Math.min(ay,q[1]);by=Math.max(by,q[1])}
+          (doors[lay]=doors[lay]||[]).push([(ax+bx)/2,(ay+by)/2])}door=null}
+        break}
       case "TEXT":case "MTEXT":if(depth===0){let s="";for(const p of e.g)if(p[0]===3)s+=p[1];s+=g1(e,1,"");
         const q=P(num(e,10,0),num(e,20,0));texts.push({lay,s:cleanText(s),x:q[0],y:q[1]})}break;
       }
@@ -103,9 +110,9 @@ function build(dxf){
     let x0=Math.max(mn(xs),mn(lx)-e),x1=Math.min(mx(xs),mx(lx)+e),y0=Math.max(mn(ys),mn(ly)-e),y1=Math.min(mx(ys),mx(ly)+e);
     if(x1-x0<1){x0-=1;x1+=1}if(y1-y0<1){y0-=1;y1+=1}
     const hund=hundOf(lay);
-    floors.push({name:"Floor "+hund,x0,y0,x1,y1,d});
-    for(const r of byLay[lay]){const old=rooms[r.n];
-      if(!old||Math.floor(r.n/100)===hund)rooms[r.n]={f:fi,x:R(r.t.x),y:R(-r.t.y)}}
+    floors.push({name:"Floor "+hund,x0,y0,x1,y1,d,doors:(doors[lay]||[]).map(q=>[R(q[0]),R(-q[1])])});
+    for(const r of byLay[lay]){const old=rooms[r.n];  // t: the room's name, the label without its numbers ("GYM")
+      if(!old||Math.floor(r.n/100)===hund)rooms[r.n]={f:fi,x:R(r.t.x),y:R(-r.t.y),t:r.t.s.replace(/\d+/g," ").replace(/[^A-Za-z .'-]/g," ").replace(/\s+/g," ").trim().slice(0,24)}}
   });
   return{floors,rooms,when:new Date().toISOString().slice(0,10)};
 }
@@ -114,7 +121,25 @@ function build(dxf){
 function cls(u){const f=u.flags;if(!u.online)return"bad";if(f&32)return"call";if(u.fault===3||u.fault===4||u.fault===5||(f&16))return"bad";
   if(u.fault||(f&8))return"warn";if(f&1)return"talk";return"ok"}
 const rank={bad:4,call:3,warn:2,talk:1,ok:0};
-function where(u){return place[u.unit]||(plan&&plan.rooms[u.room])||null}
+// The room a unit belongs to on the plan: its own number, or else its group's (the gym's units share the gym).
+function home(u){return !plan?0:plan.rooms[u.room]?u.room:u.group&&plan.rooms[u.group]?u.group:0}
+function mates(n){return units.filter(u=>!place[u.unit]&&home(u)===n).sort((a,b)=>String(a.unit).localeCompare(String(b.unit),undefined,{numeric:true}))}
+let spotCache={};
+function spotsFor(n,k){  // k places by room n's doors: one = the door nearest the middle of the building; more = doors far apart
+  const key=n+":"+k;if(spotCache[key]!==undefined)return spotCache[key];
+  const L=plan.rooms[n],all=(doorSpots(L.f)[n]||[]);let out=null;
+  if(k===1&&all.length)out=[all[0]];
+  else if(k>1&&all.length>=k){const c=centre(L.f,n),d=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+    out=[all.reduce((m,q)=>d(q,c)>d(m,c)?q:m)];
+    while(out.length<k){let best=null,bd=-1;for(const q of all){if(out.includes(q))continue;const m=Math.min(...out.map(o=>d(o,q)));if(m>bd){bd=m;best=q}}out.push(best)}
+    out.sort((a,b)=>a.y-b.y||a.x-b.x)}
+  return spotCache[key]=out;
+}
+function where(u){
+  if(place[u.unit])return place[u.unit];const n=home(u);if(!n)return null;
+  const ms=mates(n),sp=spotsFor(n,ms.length),i=ms.indexOf(u);
+  return sp&&i>=0?{f:plan.rooms[n].f,x:sp[i].x,y:sp[i].y,d:1}:plan.rooms[n];
+}
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 
 // ---- room areas: the walls drawn thick enough to close the door gaps, flood-filled from each room's
@@ -175,6 +200,23 @@ function regionsFor(fi){
 }
 function roomAt(fi,x,y){const g=regionsFor(fi),i=Math.round((y-g.F.y0)/g.s+1)*g.cw+Math.round((x-g.F.x0)/g.s+1);
   const k=g.own[i];return k>=0&&k!==undefined?g.list[k].n:0}
+// For every door of a floor: the rooms it opens into, and a spot just inside each (a step in from the door).
+function doorSpots(fi){
+  const g=regionsFor(fi);if(g.spots)return g.spots;const F=g.F,M=fsz(F),sp={},cx=(F.x0+F.x1)/2,cy=(F.y0+F.y1)/2;
+  for(const d of F.doors||[]){const by={};
+    for(const rr of [0.03,0.045])for(let a=0;a<16;a++){const dx=Math.cos(a*Math.PI/8),dy=Math.sin(a*Math.PI/8),n=roomAt(fi,d[0]+dx*rr*M,d[1]+dy*rr*M);
+      if(!n)continue;const b=by[n]=by[n]||{x:0,y:0,c:0};b.x+=dx;b.y+=dy;b.c++}
+    for(const n in by){const b=by[n],l=Math.hypot(b.x,b.y);if(b.c<3||l<0.3*b.c)continue;
+      const x=d[0]+b.x/l*0.035*M,y=d[1]+b.y/l*0.035*M;if(roomAt(fi,x,y)!==+n)continue;
+      (sp[n]=sp[n]||[]).push({x:Math.round(x),y:Math.round(y),c:Math.hypot(x-cx,y-cy)})}}
+  for(const n in sp)sp[n].sort((a,b)=>a.c-b.c);
+  return g.spots=sp;
+}
+function centre(fi,n){  // the middle of a room's area
+  const g=regionsFor(fi);g.cen=g.cen||{};if(g.cen[n])return g.cen[n];const L=g.list.find(l=>l.n===n);let sx=0,sy=0,c=0;
+  if(L)for(let i=0;i<g.own.length;i++)if(g.own[i]===L.k){sx+=i%g.cw;sy+=(i/g.cw)|0;c++}
+  return g.cen[n]=c?{x:(sx/c-1)*g.s+g.F.x0,y:(sy/c-1)*g.s+g.F.y0}:{x:plan.rooms[n].x,y:plan.rooms[n].y};
+}
 function highlight(fi,n){  // the room's area as a translucent image over the plan
   const g=regionsFor(fi);if(g.img[n])return g.img[n];const L=g.list.find(l=>l.n===n);if(!L)return"";
   const cv=document.createElement("canvas");cv.width=g.cw;cv.height=g.ch;const c=cv.getContext("2d"),im=c.createImageData(g.cw,g.ch);
@@ -183,8 +225,8 @@ function highlight(fi,n){  // the room's area as a translucent image over the pl
 }
 function unitsIn(fi,n){return units.filter(u=>{const p=where(u);return p&&p.f===fi&&(u.room===n||roomAt(fi,p.x,p.y)===n)})}
 
-let hot=0,hotF=0,hotUs=[],actHtml=null;  // room shown highlighted (picked, talking or ringing), its floor; the action row shown
-const fsz=F=>Math.max(F.x1-F.x0,F.y1-F.y0);
+let hot=0,hotF=0,hotUs=[],actHtml=null;
+const fsz=F=>Math.max(F.x1-F.x0,F.y1-F.y0);  // room shown highlighted (picked, talking or ringing), its floor; the action row shown
 function full(){
   actHtml=null;document.body.classList.toggle("hasplan",!!plan);
   if(!plan){box.innerHTML=`<div class="bar"><b>Floor plan</b><button id="pload">Load a DXF floor plan…</button><button id="pdemo">Show a demo plan</button>
@@ -212,15 +254,19 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
     document.getElementById("pcap"+fi).innerHTML=`${esc(F.name)} · ${fc[fi].n}${fc[fi].worst!=="ok"?` <span style="color:var(--${fc[fi].worst==="talk"?"talk":fc[fi].worst})">●</span>`:""}`;
     const spots={};for(const u of units){const p=where(u);if(!p||p.f!==fi)continue;const k=p.x+","+p.y;(spots[k]=spots[k]||[]).push(u)}
     let dots="";
-    for(const k in spots){const us=spots[k],p=where(us[0]);us.forEach((u,i)=>{const x=p.x+(i-(us.length-1)/2)*r*2.3,y=p.y+r*1.6;
+    for(const k in spots){const us=spots[k],p=where(us[0]);us.forEach((u,i)=>{const x=p.x+(i-(us.length-1)/2)*r*2.3,y=p.y+(p.d?0:r*1.6);
       dots+=`<g data-u="${u.unit}"><circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${sel===String(u.unit)?` style="stroke:var(--call);stroke-width:${r*0.45}"`:""}><title>${esc(u.unit)}</title></circle>`+
         `<text class="num" x="${x}" y="${y+r*0.36}" font-size="${r*0.95}" text-anchor="middle">${esc(u.unit)}</text></g>`})}
+    for(const n in plan.rooms){if(plan.rooms[n].f!==fi||mates(+n).length<2||!spotsFor(+n,mates(+n).length))continue;
+      const c=centre(fi,+n),t="Entire "+(plan.rooms[n].t||"room "+n).toLowerCase(),w=r*(t.length*0.95+2.5),h=r*3.2;
+      dots+=`<g data-all="${n}" style="cursor:pointer"><rect x="${c.x-w/2}" y="${c.y-h/2}" width="${w}" height="${h}" rx="${r*0.8}" fill="var(--card)" stroke="var(--bad)" stroke-width="${r*0.22}"/>`+
+        `<text x="${c.x}" y="${c.y+r*0.55}" font-size="${r*1.55}" font-weight="700" fill="var(--bad)" text-anchor="middle" style="pointer-events:none">${esc(t)}</text></g>`}
     document.getElementById("pdots"+fi).innerHTML=dots;
     const hl=document.getElementById("phl"+fi),href=hot&&hotF===fi?highlight(fi,hot):"";if(hl.getAttribute("href")!==href)hl.setAttribute("href",href)});
   // the picked room's own buttons (drawn only when they change, so a held button is never replaced)
-  const who=hotUs.length?"intercom "+hotUs.map(u=>esc(u.unit)).join(", "):"room "+hot;
+  const who=hotUs.length>1?"all of "+esc((plan.rooms[hot]&&plan.rooms[hot].t||"room "+hot).toLowerCase())+" ("+hotUs.length+" intercoms)":hotUs.length?"intercom "+esc(hotUs[0].unit):"room "+hot;
   const a=hot&&window.onPlanHold&&!sel&&!moving?`<button id="ptalk" class="big">Hold to talk to ${who}</button><button id="pring">Ring ${who}</button>`:"";
-  if(a!==actHtml){actHtml=a;const e=document.getElementById("pact");e.innerHTML=a;const n=hot,f=hotF,us=hotUs,inf=()=>({room:n,units:us.length?us:unitsIn(f,n)});
+  if(a!==actHtml){actHtml=a;const e=document.getElementById("pact");e.innerHTML=a;const n=hot,f=hotF,us=hotUs,inf=()=>({room:n,units:us.length?us:unitsIn(f,n),one:us.length===1});
     holdButton(document.getElementById("ptalk"),()=>window.onPlanHold(inf()),()=>{if(window.onPlanHoldEnd)window.onPlanHoldEnd(inf())});
     const pr=document.getElementById("pring");if(pr)pr.onclick=()=>{if(window.onPlanRing)window.onPlanRing(inf())}}
   const chips=un.map(u=>`<button class="chip ${sel===String(u.unit)?"sel":""}" data-u="${u.unit}">${esc(u.unit)}</button>`).join("");
@@ -233,7 +279,7 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
   if(msg)document.getElementById("phint").innerHTML+=`<div class="hint">${esc(msg)}</div>`;
   const b=id=>document.getElementById(id);
   if(b("pcancel"))b("pcancel").onclick=()=>{sel=null;part()};
-  if(b("preset"))b("preset").onclick=()=>{delete place[sel];save(KU,place);sel=null;part()};
+  if(b("preset"))b("preset").onclick=()=>{delete place[sel];save(KU,place);spotCache={};sel=null;part()};
   box.querySelectorAll("button.chip").forEach(t=>t.onclick=()=>{sel=t.dataset.u;part()});
 }
 function hook(){
@@ -252,8 +298,10 @@ function hook(){
   // two quick clicks = ring it. The school page supplies onPlanPick / onPlanHold / onPlanHoldEnd / onPlanRing.
   let down=null,holdT=0,holding=null,last=null;
   let pick=[];  // the intercom(s) the last press was on
-  const info=n=>({room:n,units:pick.length?pick:unitsIn(fi,n)});
-  const roomFrom=ev=>{pick=[];const g=ev.target.closest&&ev.target.closest("g[data-u]");
+  const info=n=>{const us=pick.length?pick:unitsIn(fi,n);return {room:n,units:us,one:us.length===1}};
+  const roomFrom=ev=>{pick=[];const ga=ev.target.closest&&ev.target.closest("g[data-all]");
+    if(ga){pick=mates(+ga.dataset.all);return +ga.dataset.all}
+    const g=ev.target.closest&&ev.target.closest("g[data-u]");
     if(g){const u=units.find(x=>String(x.unit)===g.dataset.u);if(u){const p=where(u);pick=[u];return roomAt(fi,p.x,p.y)||u.room}}  // a dot: that intercom
     const q=at(ev),n=roomAt(fi,q.x,q.y);if(n&&unitsIn(fi,n).length)return n;
     let best=null,bd=fsz(plan.floors[fi])*0.06;  // no intercom of its own there (a closet, a corridor): the nearest one, if close
@@ -277,7 +325,7 @@ function hook(){
     if(!sel)return;
     const q=at(ev),F=plan.floors[fi];  // dots sit a little below their spot: store the spot
     place[sel]={f:fi,x:Math.round(q.x),y:Math.round(q.y-Math.max(F.x1-F.x0,F.y1-F.y0)*0.011*1.6)};
-    save(KU,place);sel=null;part()});
+    save(KU,place);spotCache={};sel=null;part()});
   });
 }
 function render(){full()}
@@ -321,12 +369,12 @@ window.planTest={demo:showDemo,
   dbl(n){const c=tapAt(n,700);if(!c)return;fire("pointerdown",c);
     setTimeout(()=>fire("pointerup",c),80);setTimeout(()=>fire("pointerdown",c),220);setTimeout(()=>fire("pointerup",c),300)}};
 function loadText(txt){
-  try{const p=build(parseDxf(txt));plan=p;floor=0;save(KF,0);for(const k in regCache)delete regCache[k];
+  try{const p=build(parseDxf(txt));plan=p;floor=0;save(KF,0);for(const k in regCache)delete regCache[k];spotCache={};
     msg=save(KP,p)?"":"Loaded, but too big to keep in this browser: load it again next time.";
   }catch(e){msg="Couldn't read that DXF: "+e.message}
   full();
 }
-window.planUpdate=us=>{units=us||[];part()};
+window.planUpdate=us=>{units=us||[];spotCache={};part()};
 window.planHot=n=>{hot=n||0;hotUs=[];if(hot&&plan&&plan.rooms[hot])hotF=plan.rooms[hot].f;part()};  // the page can highlight a room (e.g. while ringing it)
 window.planLoadText=loadText;  // also used by the scripted check
 window.planRoomAt=(fi,x,y)=>roomAt(fi,x,y);  // scripted check

@@ -219,13 +219,13 @@ document.getElementById("scoff").onclick=async()=>{await cmd("selfcheck off");se
 // localhost: see the office guide for the office PC setting.
 let ctx=null,stream=null,src=null,proc=null,talking=false,chunks=[],have=0,busy=false,pos=0;
 // Who hears you: everyone, the room picked by clicking its card (all units of its group, e.g. the gym), or its floor.
-let selRoom=null,to="all",toText="everyone";
+let selRoom=null,to="all",toText="everyone",planOne=false,planMany=false;
 function updTarget(){
   const k=document.getElementById("tkind").value;
   if(k.startsWith("zone:")){to=k;toText="zone "+k.slice(5);}
   else if(k!=="all"&&!selRoom){to="all";toText="everyone (click a room first)";}
-  else if(k==="room"){to=selRoom.group&&selRoom.group!==selRoom.room?"group:"+selRoom.group:"room:"+selRoom.room;
-    toText=selRoom.group&&selRoom.group!==selRoom.room?"room group "+selRoom.group:"room "+selRoom.room;}
+  else if(k==="room"){const grp=selRoom.group&&!planOne&&(selRoom.group!==selRoom.room||planMany);  // the plan can pick one intercom of a group, or all of it
+    to=grp?"group:"+selRoom.group:"room:"+selRoom.room;toText=grp?"room group "+selRoom.group:"room "+selRoom.room;}
   else if(k==="floor"){const f=Math.floor(selRoom.room/100);to="floor:"+f;toText="floor "+f;}
   else{to="all";toText="everyone";}
   document.getElementById("talk").textContent=(to==="all"?"Hold to talk to ":"Hold to call ")+toText.replace(" (click a room first)","");
@@ -233,7 +233,7 @@ function updTarget(){
 }
 document.getElementById("rooms").addEventListener("click",e=>{
   const c=e.target.closest(".room");if(!c||talking)return;
-  selRoom={room:+c.dataset.room,group:+c.dataset.group};
+  selRoom={room:+c.dataset.room,group:+c.dataset.group};planOne=planMany=false;
   if(document.getElementById("tkind").value==="all")document.getElementById("tkind").value="room";
   document.querySelectorAll(".room.sel").forEach(x=>x.classList.remove("sel"));c.classList.add("sel");updTarget();});
 document.getElementById("tkind").addEventListener("change",updTarget);
@@ -242,7 +242,7 @@ document.getElementById("tkind").addEventListener("change",updTarget);
 // double-click = ring it (it chimes and blinks for 10 s; the teacher answers with TALK, heard on this unit).
 function planSel(info){const u=info.units[0];
   if(!u){setState("No unit in room "+info.room+" yet.","st");return false;}
-  const c=document.querySelector('.room[data-room="'+u.room+'"]');if(c&&!c.classList.contains("sel"))c.click();return true;}
+  const c=document.querySelector('.room[data-room="'+u.room+'"]');if(c&&!c.classList.contains("sel"))c.click();planOne=!!info.one;planMany=info.units.length>1;updTarget();return true;}
 let planHolding=false;
 window.onPlanPick=info=>{planSel(info);};
 window.onPlanHold=async info=>{if(talking||!planSel(info))return;planHolding=true;

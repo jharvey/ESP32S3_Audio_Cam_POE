@@ -54,6 +54,8 @@ fourth part with **Hold to talk to ALL rooms**, the rooms waiting for the office
 Setup (the rooms list, features, timed events, commands, installer tests and the log) opens below the four parts when
 the unit's web password is typed, and **Lock setup** closes it again. On a narrow screen the parts stack.
 
+**Where the dots sit:** each intercom's dot is put just inside its room's door, the door nearest the middle of the building. Use **Move dots** where the real spot differs. Intercoms that share a room (give them that room's number as their `group`, for example the gym's four with `group 208`) go to doors far apart, and the room gets an **Entire ...** button in its middle: hold it to talk to all of them; hold one dot to talk to that intercom alone.
+
 **Floor plan:** press **Load a DXF floor plan…** and pick the school's DXF drawing. Each layer that has room
 numbers in its labels (like `ART 101`) becomes a floor, and all floors are shown side by side with every unit as a
 coloured dot on its room (same colours as above); a floor's title gets a red or blue dot when something on that floor
