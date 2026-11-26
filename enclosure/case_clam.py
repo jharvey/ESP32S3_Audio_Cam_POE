@@ -48,7 +48,7 @@ KNOCK_X = (46.0, 54.0)    # thin spot in the bottom wall to break out for a cabl
 BTN_W, BTN_H = 14.0, 9.5   # button cap: a rounded rectangle, 0.375 in tall
 BTN_R = 2.0      # its corner radius
 BTN_FLANGE = 1.0 # rim behind the face that keeps the cap in
-CAP_DY = 2.5     # the cap sits this much lower than its switch, to stay clear of the display window
+CAP_DY = 0.0     # the switches now sit under the caps (the row was moved 2.5 mm down on the board, clear of the display)
 BTN_PROUD = 1.5  # how far the cap stands out of the face
 SW_TOP = 1.5     # top of the push button above the board (its 3D model; the switch's drawing is not checked)
 SW_TRAVEL = 0.25 # how far the switch moves to click: A GUESS, check the part
@@ -72,7 +72,7 @@ def part(r): return B["parts"].get(r)
 # TALK on the left is PB1 (wired as TALK). OFFICE on the right is over PB5, which is wired as DOWN today:
 # the firmware (or the board) has to make that switch the OFFICE button.
 TALK_AT = (part("PB1")["x"], part("PB1")["y"])
-OFFICE_AT = (61.45, 25.49)
+OFFICE_AT = (61.45, TALK_AT[1])
 SD_OPEN = False   # microSD is reached only with the cover off
 def box_of(r, grow=0.0):
     x0, y0, x1, y1 = part(r)["box"]
