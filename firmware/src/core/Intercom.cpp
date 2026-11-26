@@ -21,6 +21,7 @@ constexpr uint32_t kUpHoldFrames = 250;  // or UP alone held 5 s (one-key panels
 constexpr uint32_t kResultFrames = 250;  // show the auto-tune result for 5 s
 // Room calls (R2.0).
 constexpr uint32_t kCallFrames = 50;        // a call is "on" while its packets keep coming (1 s gap ends it)
+constexpr uint32_t kCloseFrames = 100;      // the office's word after the room's answer ends the conversation, 2 s after it stops
 constexpr uint32_t kAnswerFrames = 500;     // TALK answers the caller during a call and 10 s after
 constexpr uint32_t kAllCallHoldFrames = 25; // an office all-call keeps room calls out until 0.5 s after it
 constexpr uint32_t kCallHoldFrames = 100;   // DOWN held 2 s = call the office (again = cancel)
@@ -1119,10 +1120,12 @@ void Intercom::receive() {
                         // announcement doesn't ask for an answer, so no attention blink or missed call).
                         callAnswered_ = (h.flags & (kAudioFloor | kAudioGroupCall | kAudioZone)) != 0;
                         missedUntil_ = 0;
+                        replied_ = closing_ = false;
                     }
                 }
                 callFrom_ = h.from;
                 callLast_ = frame_;
+                if (fromOffice && replied_) closing_ = true;  // the office has the room's answer and spoke last
                 if (fromOffice) setCallingOffice(false, "the office answered");
             }
             if (Talker* t = talkerFor(h.from)) {
@@ -1992,6 +1995,13 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     if (talk && txFlags_ == kAudioReply && !silentTx) {  // keep the conversation open while answering
         callLast_ = frame_;
         callAnswered_ = true;
+        replied_ = true;
+        closing_ = false;
+    }
+    if (closing_ && callLast_ && frame_ - callLast_ >= kCloseFrames) {  // back to normal: TALK is an all-call again
+        callLast_ = 0;
+        replied_ = closing_ = false;
+        logf("conversation with the office ended");
     }
     if (callLast_ && !callAnswered_ && frame_ - callLast_ == kAnswerFrames) {  // nobody answered in time
         missedUntil_ = frame_ + kMissedFrames;

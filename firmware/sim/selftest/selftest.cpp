@@ -1429,6 +1429,12 @@ static void testRoomCalls() {
     CHECK(r214.ic->callAnswered() && r214.ic->rgb() != 0 && r214.ic->lampLevel(Lamp::White) == 0 &&
               r214.ic->lampLevel(Lamp::Other) == 0,
           "answered: white lamp and J11 off, the RGB LED stays on (steady) during the call");
+    CHECK(r214.ic->canAnswer(), "no word back from the office yet: 214 can still speak to it");
+    officeTarget = 214, officeFlags = 0, officeTalk = 50;  // the office acknowledges
+    run(60);
+    CHECK(r214.ic->canAnswer() && !r214.ic->chiming(), "the office's word back is part of the same conversation (no new chime)");
+    run(100);
+    CHECK(!r214.ic->canAnswer(), "the office spoke after 214's answer: the conversation ends 2 s after it stops");
     run(520);  // more than 10 s after the call
     CHECK(!r214.ic->canAnswer(), "the answer window closes 10 s after the call");
     r214.held = 1;

@@ -328,6 +328,8 @@ private:
     uint8_t txFlags_ = kAudioAllCall;
     UnitId callFrom_;             // last unit that called this room
     uint32_t callLast_ = 0;       // frame of its last packet; 0 = no call yet
+    bool replied_ = false;        // this room has spoken an answer in this conversation
+    bool closing_ = false;        // the office spoke after that answer: the conversation ends when it stops
     bool callAnswered_ = true;    // TALK answered it (until then the call LEDs blink to get attention)
     bool testsOk_ = false;        // running a command inside "tests <password> ..." (password checked)
     uint32_t missedUntil_ = 0;    // missed-call blink runs until this frame (or until a button is pressed)
