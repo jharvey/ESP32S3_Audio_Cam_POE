@@ -60,21 +60,22 @@ FACE_R = 2.5     # rounding of the front edge
 CARD_W, CARD_H = 80.0, 42.0   # the use card (paper or laminated, up to 0.8 mm thick), in the area below the board
 CARD_TOP = 103.5 # its top edge, below the jack's bump (KiCad y); it slides down into its holder from above
 CARD_RAIL, CARD_LIP, CARD_SLOT = 2.4, 2.0, 0.9   # rail width, how far the rail grips over the card, room for the card
-# The red LOCKDOWN button: a round red cap over PB11 (left of the display, already on the board, wired to U22 P11),
+# The red LOCKDOWN button: a round red cap over PB11 (wired to U22 P11). PB11 IS ASSUMED MOVED 5 mm LEFT on the board,
+# to x 18.5 (it is at 23.5 today), which gives room for a bigger cap and lid beside the display,
 # inside a raised rim, under a clear flip-up lid. The lid is laser cut from 2 mm clear acrylic (out_clam/lid.dxf):
 # it hangs on two ears in the hinge posts, falls shut by its own weight and opens to about 135 degrees.
-RED_D, RED_FL = 10.0, 11.6   # red cap and its flange behind the face
+RED_D, RED_FL = 12.0, 13.6   # red cap and its flange behind the face
 RED_PROUD = 2.0  # the red cap stands this far out of the face
 RIM_H = 2.5      # the rim round it is higher, so a flat hand or a shoulder does not press it; the lid rests on the rim
 RIM_W = 1.75
 LID_T = 2.0      # acrylic sheet
-LID_X = (11.5, 30.5)   # lid body, left and right edge (it stops short of the display window)
+LID_X = (8.0, 29.5)    # lid body, left and right edge (it stops short of the display window)
 LID_Y1 = 23.0    # lid's bottom edge; a finger goes under it (RIM_H of room) to flip it up
-HINGE_Y = 5.0    # hinge axis (KiCad y), above the cap
-NECK_X = (17.7, 26.8)  # the lid is narrower at the hinge, clear of the left microphone port
+HINGE_Y = 3.2    # hinge axis (KiCad y), above the cap
+NECK_X = (17.3, 26.3)  # the lid is narrower at the hinge, clear of the left microphone port
 EAR = 2.3        # each ear reaches this far into its post
 POST_W = 2.5
-DISH_AT, DISH_R, DISH_DEEP = (15.5, 21.5), 9.0, 1.2   # a finger dish in the face under the lid's lower left corner
+DISH_AT, DISH_R, DISH_DEEP = (12.0, 21.5), 9.0, 1.2   # a finger dish in the face under the lid's lower left corner
 # Camera shutter: a 9 g servo (SG90 size) stands beside the board on the left, its shaft towards the room. The whole
 # left side of the case is moved out to make room for it, so that side stays one straight wall; the board, the face
 # and everything on it stay where they were, which leaves them a little off centre. A paddle on the shaft turns just behind the face:
@@ -86,12 +87,12 @@ SERVO_W, SERVO_L, SERVO_BODY_H = 12.2, 22.7, 22.7   # body: across, along, tall 
 SERVO_EAR, SERVO_EAR_Z, SERVO_EAR_T = 4.7, 15.9, 2.5  # each ear sticks out this far; its underside is this high above the bottom
 SERVO_SHAFT_IN = 5.9   # shaft axis from the nearer end of the body
 SERVO_TOP = 30.0       # bottom of the body to the tip of the shaft
-PIVOT = (-6.9, 60.0)   # shaft axis (KiCad x, y): beside the board, below the audio jack's opening
+PIVOT = (-6.9, 51.5)   # shaft axis (KiCad x, y): beside the board, as high as the audio jack's opening allows
 PAD_D, PAD_T, ARM_W = 15.0, 1.2, 6.0   # the disc over the lens, paddle thickness, arm width
 SHUT_GAP = 2.0         # room between the lens and the face that the paddle turns in
 POD_X0 = -15.5         # inside of the case's left wall (it was -GAP before the servo)
-POD_Y = (48.5, 91.5)   # where the servo and the paddle are (KiCad y)
-SLOT_Y0 = 60.5         # the slot in the left wall runs from here to POD_Y[1]
+POD_Y = (40.5, 80.5)   # where the servo and the paddle are (KiCad y)
+SLOT_Y0 = 47.0         # the slot in the left wall runs from here to POD_Y[1]
 MIC_D = 1.5      # microphone ports
 CAM_D = 12.0     # camera lens opening
 SPK_D = 36.0     # speaker grille (the speaker hangs in the cover; its place is a guess for now)
@@ -241,7 +242,7 @@ def label(txt, x, y, halign):
     return cq.Workplane("XY").text(txt, LABEL_H, LABEL_DEPTH + 0.5, halign=halign, valign="center", kind="bold").translate((x, Y(y), Z_TOP - LABEL_DEPTH))
 gap = BTN_W / 2 + 1.8                           # labels sit outside their buttons, clear of the speaker grille
 def small(txt, x, y): return cq.Workplane("XY").text(txt, 3.0, LABEL_DEPTH + 0.5, halign="center", valign="center", kind="bold").translate((x, Y(y), Z_TOP - LABEL_DEPTH))
-engraved = [small("LOCK", 4.6, ry - 1.2), small("DOWN", 4.6, ry + 3.2),   # left of the lid, not under it
+engraved = [small("LOCK", 1.0, ry - 1.2), small("DOWN", 1.0, ry + 3.2),   # left of the lid, not under it
             label("TALK", TALK_AT[0] - gap, TALK_AT[1] + CAP_DY, "right"), label("OFFICE", OFFICE_AT[0] + gap, OFFICE_AT[1] + CAP_DY, "left")]
 for e_ in engraved: cover = cover.cut(e_)
 # microphones: a tube from the face down to just above each mic (gasket goes between), with a small port
