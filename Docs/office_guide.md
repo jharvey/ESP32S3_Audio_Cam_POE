@@ -136,6 +136,7 @@ pages, and the unit's page is plain `http://` on the intercom network, so set th
 - **What the office sees:** the school page fills with a red panel: which room's red button was pressed and when, and what to do (call 911, speak to the school, follow the school's plan). The operator does not have to start or decide anything.
 - **Clear:** on the school page only, with the web password: **False alarm: all clear** on the red panel, or **All clear** in the Emergency box. No intercom can clear an emergency, not even the office unit.
 - An emergency nobody clears ends by itself after 4 hours.
+- **What the operator is told:** each alarm panel lists numbered steps (who to call, what to announce, when to clear). They start as a draft for lockdown, evacuate, shelter, help needed and the silent help call. Change them in Setup, **What the operator is told**, to match the school's own emergency plan, and fill in the parts in [CAPITALS]. They are kept in the browser and in the backup file.
 
 ## Setup: devices, highlight areas and backup
 

@@ -14,7 +14,7 @@ const char* schoolPage() {
 #alarm .al{width:min(760px,94vw);border-radius:14px;padding:26px 30px;color:#fff;box-shadow:0 10px 40px rgba(0,0,0,.5)}
 #alarm .red{background:#b71c1c}#alarm .amber{background:#9a3412}
 #alarm h1{font-size:44px;margin:0 0 6px;letter-spacing:1px}#alarm .big{font-size:26px;font-weight:700;margin:0 0 12px}
-#alarm p,#alarm li{font-size:19px;line-height:1.4}#alarm ol{margin:8px 0 16px 22px;padding:0}
+#alarm p,#alarm li{font-size:18px;line-height:1.35}#alarm li{margin-bottom:5px}#alarm .al{max-height:94vh;overflow:auto}#alarm ol{margin:8px 0 16px 22px;padding:0}
 #alarm .alrow{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:12px}
 #alarm button{font-size:20px;font-weight:700;padding:14px 20px;border-radius:10px;border:2px solid #fff;background:#fff;color:#1d2330;cursor:pointer}
 #alarm button.hot{background:#ffd54a}#alarm .fa button{font-size:16px;padding:9px 14px;background:transparent;color:#fff;font-weight:600}
@@ -101,6 +101,14 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
  <div class="prow"><b>Backup</b><button id="bksave">Save a backup file</button><button id="bkload">Restore from a backup file…</button></div>
  <div class="prow">After a restore, for a replaced or reset device: <select id="bkunit"></select><button id="bkunitgo">Send it its saved settings</button></div>
  <div class="mute" id="bknote">The file holds the plan, the dots, the areas and every device's settings. No passwords or keys.</div></section>
+<section class="panel"><h2>What the operator is told</h2>
+ <div class="mute">These steps appear on the office screen when an alarm or a call for help comes in. They start as a draft: change them to
+ match the school's own emergency plan, and fill in the parts in [CAPITALS]. One step per line. {room} becomes the room number.</div>
+ <div class="prow"><select id="stkind"><option value="lockdown">Lockdown</option><option value="evacuate">Evacuate</option><option value="shelter">Shelter</option>
+ <option value="help">Help needed</option><option value="silent">Silent help call</option></select><button id="stsave">Save</button>
+ <button id="stdef">Back to the draft</button><span id="stnote" class="mute"></span></div>
+ <textarea id="sttext" rows="8" style="width:100%;box-sizing:border-box;font:inherit"></textarea>
+ <div class="mute">Kept in this browser and in the backup file. Save a backup and restore it on every other office PC.</div></section>
 <section class="panel"><h2>Features</h2>
  <div class="prow" id="feats"></div>
  <div class="mute">Each feature is off until ticked. A tick sets it on this unit and sends it to all units.</div>
@@ -216,7 +224,40 @@ function callWatch(us){const now=Date.now();let ring=false;
 // A lockdown (the red button on an intercom, or this page) fills the screen in red until All clear. A call for help
 // (HELP NEEDED or a silent help call) fills it in orange until someone closes that call. "Show the plan" folds the
 // panel into a bar at the top, so the plan can be used; a new alarm opens it again.
-let alSig="",alMin=false,alT=0,alRoom=0;
+let alSig="",alMin=false,alT=0,alRoom=0,stVer=0;
+// What the operator is told, step by step. A draft: the school changes it in Setup ("What the operator is told").
+const STEPS_DEF={
+lockdown:["Call 911. Say: lockdown at [SCHOOL NAME AND ADDRESS], started from {room}.",
+ "Hold 'Talk to everyone' and say twice: 'Lockdown. Locks, lights, out of sight.'",
+ "Lock the office door, turn off the lights and stay out of sight of doors and windows.",
+ "Tell [PRINCIPAL OR PERSON IN CHARGE, PHONE].",
+ "Do not open a door for anyone. Wait for the police.",
+ "Stay by this screen: rooms can still call. Do not press All clear until the police or the person in charge says so."],
+evacuate:["Call 911 if there is fire, smoke or a smell of gas. Say what and where.",
+ "Hold 'Talk to everyone' and say twice: 'Evacuate to [ASSEMBLY POINT].'",
+ "Take the sign-in sheets, the attendance lists and the emergency folder.",
+ "Go to [ASSEMBLY POINT]. Check that every class is counted. Tell the fire service at once if anyone is missing.",
+ "Nobody goes back inside until the fire service or the person in charge says so. Then press All clear."],
+shelter:["Hold 'Talk to everyone' and say twice what the danger is and what to do. For a tornado: 'Shelter. Move to the inner halls, away from windows.'",
+ "Bring in anyone who is outside.",
+ "Call 911 if anyone is hurt or the building is damaged.",
+ "Press All clear when the danger has passed."],
+help:["Hold 'Talk to room {room}' and ask: 'Room {room}, this is the office. What do you need?'",
+ "Someone is hurt or ill: send [FIRST-AID PERSON] with the first-aid kit. Call 911 if they are not breathing, unconscious, bleeding badly or having a seizure.",
+ "A fight, a threat or someone who should not be there: send [ADMINISTRATOR]. If anyone is in danger, press 'Lockdown now' and call 911.",
+ "No answer within 30 seconds: send an adult to the room now and keep trying.",
+ "Close the call when help is in the room."],
+silent:["Do not talk to the room and do not ring it. Listen on the office unit: it plays the room for 2 minutes.",
+ "If you hear threats, a weapon, screaming or a fight: press 'Lockdown now' and call 911.",
+ "If you hear nothing clear: tell [PRINCIPAL OR PERSON IN CHARGE] and have an adult look into the room from the hall, not going in alone.",
+ "Close the call only when someone has seen that the teacher is safe."]};
+function stepsAll(){try{return JSON.parse(localStorage.getItem("icSteps1")||"{}")||{};}catch(e){return {};}}
+function stepsOf(kind){const t=stepsAll()[kind];return typeof t==="string"&&t.trim()?t.split("\n").map(x=>x.trim()).filter(x=>x):STEPS_DEF[kind];}
+function stepsHtml(kind,room){return "<ol>"+stepsOf(kind).map(x=>"<li>"+esc(x.split("{room}").join(room))+"</li>").join("")+"</ol>";}
+function stepsShow(){gid("sttext").value=stepsOf(gid("stkind").value).join("\n");gid("stnote").textContent=stepsAll()[gid("stkind").value]?"The school's own text.":"The draft.";}
+function stepsPut(v){const a=stepsAll(),k=gid("stkind").value;if(v)a[k]=v;else delete a[k];try{localStorage.setItem("icSteps1",JSON.stringify(a));}catch(e){}stVer++;stepsShow();}
+setTimeout(()=>{gid("stkind").onchange=stepsShow;gid("stsave").onclick=()=>{stepsPut(gid("sttext").value.trim());gid("stnote").textContent="Saved.";};
+gid("stdef").onclick=()=>{if(confirm("Put the draft back for this one?"))stepsPut("");};stepsShow();},0);
 function alHold(b,pick){b.addEventListener("pointerdown",async e=>{e.preventDefault();b.setPointerCapture(e.pointerId);b.classList.add("hot");pick();updTarget();await startTalk();});
   const up=()=>{b.classList.remove("hot");stopTalk();};b.addEventListener("pointerup",up);b.addEventListener("pointercancel",up);}
 async function allClear(pw,note){
@@ -228,16 +269,17 @@ async function allClear(pw,note){
 function drawAlarm(us,q){
   const box=gid("alarm"),bar=gid("albar"),em=us.filter(u=>u.online&&u.emergency),hq=q.filter(w=>w.urgent||w.silent);let h="",sig="",bt="";
   if(em.length){const by=us.filter(u=>u.online&&(u.flags2&4)).map(u=>u.room),k=EMERG[em[0].emergency];
-    sig="E"+em[0].emergency+":"+by.join();bt=k+" is on. Click here to show the alarm.";
+    sig="E"+em[0].emergency+":"+by.join()+":"+stVer;bt=k+" is on. Click here to show the alarm.";
     if(sig!==alSig)alT=Date.now();
     h=`<div class="al red"><h1>${k}</h1><p class="big">${by.length?"Red button pressed in room "+by.join(", "):"Started from the office"}, ${new Date(alT).toLocaleTimeString()}</p>
 <p>Every intercom is already showing and sounding the alarm. You do not have to start anything.</p>
-<ol><li>Call 911.</li><li>Tell the school what to do: hold the button below and speak.</li><li>Follow the school's emergency plan.</li></ol>
+${stepsHtml(["","lockdown","evacuate","shelter"][em[0].emergency],by.length?"room "+by.join(", "):"the office")}
 <div class="alrow"><button id="altalk">Hold to talk to everyone</button><button id="almin">Show the plan</button></div>
 <div class="alrow fa"><input type="password" id="alpw" placeholder="web password" autocomplete="off"><button id="alclr">False alarm: all clear</button><span id="alnote"></span></div></div>`;
-  }else if(hq.length){const w=hq[0];alRoom=w.room;sig="H"+w.room+(w.silent?"s":"u")+hq.length;bt=(w.silent?"SILENT HELP CALL":"HELP NEEDED")+" in room "+w.room+". Click here.";
+  }else if(hq.length){const w=hq[0];alRoom=w.room;sig="H"+w.room+(w.silent?"s":"u")+hq.length+":"+stVer;bt=(w.silent?"SILENT HELP CALL":"HELP NEEDED")+" in room "+w.room+". Click here.";
     h=`<div class="al amber"><h1>${w.silent?"SILENT HELP CALL":"HELP NEEDED"}</h1><p class="big">Room ${w.room} <span id="alwait"></span></p>
-<p>${w.silent?"Someone in this room asked for help without making a sound. The office unit plays what the room's microphone hears for 2 minutes. Nothing you say is heard in that room.":"Someone in this room pressed for help. Hold the button and ask what is wrong. If there is danger, or no answer, start the lockdown."}</p>
+<p>${w.silent?"Someone in this room asked for help without making a sound. Nothing you say is heard in that room.":"Someone in this room pressed for help."}</p>
+${stepsHtml(w.silent?"silent":"help",w.room)}
 <div class="alrow">${w.silent?"":'<button id="alroom">Hold to talk to room '+w.room+"</button>"}<button id="allock">Lockdown now</button></div>
 <div class="alrow fa"><button id="aldone">Help is on the way: close this call</button><button id="almin">Show the plan</button><span>${hq.length>1?(hq.length-1)+" more waiting":""}</span></div></div>`;}
   if(sig!==alSig){alSig=sig;alMin=false;box.innerHTML=h;const on=(id,f)=>{const e=gid(id);if(e)e.onclick=f;};
@@ -441,7 +483,7 @@ gid("bksave").onclick=async()=>{const n=gid("bknote");n.textContent="Asking ever
   const got={};replyTap=l=>{got[l.from]=(got[l.from]?got[l.from]+"\n":"")+l.text;};  // one device after another: all at once would overrun the reply list
   for(const u of lastSchool.units){if(!u.online||devSelf(u))continue;await cmd("send "+u.unit+" backup");await new Promise(r=>setTimeout(r,120));}
   await new Promise(r=>setTimeout(r,2500));replyTap=null;got[String(lastSchool.self)]=await cmd("backup");
-  const d=Object.assign({kind:"intercom-backup",v:1,saved:new Date().toISOString(),units:got},window.planApi?window.planApi.data():{});
+  const d=Object.assign({kind:"intercom-backup",v:1,saved:new Date().toISOString(),units:got,steps:stepsAll()},window.planApi?window.planApi.data():{});
   const name="intercom-backup-"+d.saved.slice(0,10)+".json",a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:"application/json"}));a.download=name;a.click();
   const miss=lastSchool.units.filter(u=>!got[u.unit]).map(u=>u.unit);
@@ -450,6 +492,7 @@ window.setupRestoreText=t=>{const n=gid("bknote");let d=null;try{d=JSON.parse(t)
   if(!d||d.kind!=="intercom-backup"){n.textContent="That is not an intercom backup file.";return;}
   const day=String(d.saved).slice(0,10);if(!confirm("Replace the plan, dots and areas in this browser with the backup of "+day+"?"))return;
   if(window.planApi)window.planApi.restore(d);bkData=d;devSig="";
+  if(d.steps){try{localStorage.setItem("icSteps1",JSON.stringify(d.steps));}catch(e){}stVer++;stepsShow();}
   gid("bkunit").innerHTML=Object.keys(d.units||{}).sort((a,b)=>a-b).map(k=>"<option>"+esc(k)+"</option>").join("");
   n.textContent="Plan, dots and areas restored from the backup of "+day+". Device settings are not sent by themselves: pick a device on the line above and send it its saved settings.";};
 gid("bkload").onclick=()=>{const f=Object.assign(document.createElement("input"),{type:"file",accept:".json"});
