@@ -258,7 +258,9 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
     const spots={};for(const u of units){const p=where(u);if(!p||p.f!==fi)continue;const k=p.x+","+p.y;(spots[k]=spots[k]||[]).push(u)}
     let dots="";
     for(const k in spots){const us=spots[k],p=where(us[0]);us.forEach((u,i)=>{const x=p.x+(i-(us.length-1)/2)*r*2.3,y=p.y+(p.d?0:r*1.6);
-      dots+=`<g data-u="${u.unit}"><circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${sel===String(u.unit)?` style="stroke:var(--call);stroke-width:${r*0.45}"`:""}><title>${esc(u.unit)}</title></circle>`+
+      const mark=sel===String(u.unit)?` style="stroke:var(--call);stroke-width:${r*0.45}"`:"";  // a unit that is not a room of the plan (a hall monitor) is drawn square
+      dots+=`<g data-u="${u.unit}">`+(home(u)?`<circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${mark}><title>${esc(u.unit)}</title></circle>`:
+        `<rect class="dot ${cls(u)}" x="${x-r}" y="${y-r}" width="${2*r}" height="${2*r}" rx="${r*0.3}" stroke-width="${r*0.18}"${mark}><title>${esc(u.unit)} (not a room)</title></rect>`)+
         `<text class="num" x="${x}" y="${y+r*0.36}" font-size="${r*0.95}" text-anchor="middle">${esc(lab(u))}</text></g>`})}
     for(const n in plan.rooms){if(plan.rooms[n].f!==fi||mates(+n,true).length<2)continue;  // dots placed by hand count too
       const c=centre(fi,+n),t="Entire "+(plan.rooms[n].t||"room "+n).toLowerCase(),w=r*(t.length*0.95+2.5),h=r*3.2;
