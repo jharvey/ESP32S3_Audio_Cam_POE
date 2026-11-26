@@ -138,6 +138,18 @@ pages, and the unit's page is plain `http://` on the intercom network, so set th
 - An emergency nobody clears ends by itself after 4 hours.
 - **What the operator is told:** each alarm panel lists numbered steps (who to call, what to announce, when to clear). They start as a draft for lockdown, evacuate, shelter, help needed and the silent help call. Change them in Setup, **What the operator is told**, to match the school's own emergency plan, and fill in the parts in [CAPITALS]. They are kept in the browser and in the backup file.
 
+## The camera shutter
+
+A paddle on a small servo covers the camera lens. It has three places:
+
+- **Closed:** the paddle is over the lens. This is the normal state; the camera cannot see.
+- **Open:** a silent help call. The paddle creeps aside over about 5 seconds, quietly, and stays inside the case, so nothing in the room shows that the camera is on.
+- **Flag out:** any emergency (lockdown, evacuate, shelter). The paddle swings out of the slot in the side of the case in about a second, so everyone in the room sees that the camera is on.
+
+When the call or the emergency ends, the paddle closes again slowly. The servo gets power only while it moves.
+
+To set it up (USB or the unit's own web page): `shutter closed`, `shutter open`, `shutter flag` move it by hand and `shutter auto` gives it back; `shutterus 600 1500 2400` sets the servo's pulse width in microseconds for the three places and saves it. The servo plugs into header J8 (the fourth servo output).
+
 ## Setup: devices, highlight areas and backup
 
 Open Setup with the web password. The first panel is **Devices, highlight areas and backup**.

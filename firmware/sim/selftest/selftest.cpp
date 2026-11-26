@@ -335,6 +335,9 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFi
     uint8_t lampSeen = 0;            // bit n: lamp n was switched on
     void show(const char* t, uint8_t d) override { shown.push_back(std::string(t, 3) + char(d)); }
     void set(Lamp l, uint8_t pct) override { if (pct) lampSeen |= uint8_t(1u << int(l)); }
+    unsigned shutUs = 0;
+    bool shutSlow = false;
+    void setShutter(uint16_t us, bool slow) override { shutUs = us; shutSlow = slow; }
     void setRgb(uint8_t r, uint8_t g, uint8_t b) override { rgbSeen |= uint32_t(r) << 16 | uint32_t(g) << 8 | b; }
     UnitId loadUnit() override { return id; }
     void saveUnit(const UnitId& u) override { id = u; }
@@ -2111,6 +2114,8 @@ static void testR32() {
     run(5);
     r2.held = 0;
     run(100);
+    CHECK(r2.ic->shutter() == Intercom::Shutter::Open && r2.shutUs == 1500 && r2.shutSlow && r1.ic->shutter() == Intercom::Shutter::Closed && r1.shutUs == 600,
+          "silent help call: that room's camera shutter opens slowly, without the flag; other rooms stay closed");
     CHECK(r2.ic->silentHelp() && !r2.ic->callingOffice() && has(ofc, "room 214: SILENT HELP CALL", 0) && r1.heardFrom(r2.id) == allBefore,
           "TALK and OFFICE held 1 s is a silent help call, logged at the office; no all-call went out");
     q = ofc.ic->callQueue();
@@ -2173,6 +2178,8 @@ static void testR32() {
     CHECK(r1.ic->emergency() == L && (r1.ic->statusFlags2() & kStatus2Red), "the red button: lockdown in that room at once");
     r1.held = 0;
     run(300);
+    CHECK(r2.ic->shutter() == Intercom::Shutter::Flag && r2.shutUs == 2400 && !r2.shutSlow && has(r2, "camera shutter open, flag out"),
+          "lockdown: the camera shutter goes all the way out, fast (%u us)", r2.shutUs);
     CHECK(r2.ic->emergency() == L && ofc.ic->emergency() == L && prin.ic->emergency() == L && !(r2.ic->statusFlags2() & kStatus2Red),
           "and on every unit (%d %d %d); only the room that pressed says so", int(r2.ic->emergency()), int(ofc.ic->emergency()), int(prin.ic->emergency()));
     r2.held = kRed;
@@ -2185,6 +2192,15 @@ static void testR32() {
     CHECK(r2.ic->emergency() == L && ofc.ic->emergency() == L && prin.ic->emergency() == L, "no intercom can clear it, not even an office unit");
     ofc.ic->command("emergency clear all", CmdSource::Web);
     run(300);
+    CHECK(r2.ic->shutter() == Intercom::Shutter::Closed && r2.shutUs == 600 && r2.shutSlow, "all clear: the shutter closes again, slowly (%u us)", r2.shutUs);
+    CHECK(r2.ic->command("shutterus 700 1400 2300") == "shutterus 700 1400 2300" && r2.ic->command("shutter open") == "shutter open" &&
+              r2.ic->command("shutter flag", CmdSource::Network).find("only works") != std::string::npos,
+          "the servo's positions can be set, and the shutter moved by hand (not over the network)");
+    run(3);
+    CHECK(r2.shutUs == 1400 && r2.ic->shutter() == Intercom::Shutter::Open, "by hand: open (%u us)", r2.shutUs);
+    r2.ic->command("shutter auto");
+    r2.ic->command("shutterus 600 1500 2400");
+    run(3);
     CHECK(r1.ic->emergency() == N && r2.ic->emergency() == N && ofc.ic->emergency() == N && prin.ic->emergency() == N && !(r1.ic->statusFlags2() & kStatus2Red),
           "All clear on the office page ends it everywhere");
     r1.ic->command("feature lockdown off");

@@ -160,7 +160,12 @@ public:
     uint8_t statusFlags() const;                     // StatusFlags of this unit, as sent in its status packet
     // The camera is for emergencies only: a picture is given out only while one is on at this unit.
     bool hasCamera() const { return opt_.hasCamera; }
-    bool cameraAllowed() const { return opt_.hasCamera && emerg_ != Emergency::None; }
+    bool cameraAllowed() const { return opt_.hasCamera && (emerg_ != Emergency::None || silentHelp()); }
+    // Camera shutter (a paddle on a servo): Closed = over the lens; Open = lens free, paddle still inside the case
+    // (silent help call, moved slowly and quietly); Flag = paddle out of the side of the case, so everyone sees the
+    // camera is on (any emergency, moved fast).
+    enum class Shutter : uint8_t { Closed = 0, Open = 1, Flag = 2 };
+    Shutter shutter() const { return shutter_; }
     void noteCameraView();  // writes "camera viewed" into the event log (at most once a minute)
     // Settings backup: "key=value" lines, without passwords and keys. restoreLine takes one such line.
     std::string backupText() const;
@@ -339,6 +344,10 @@ private:
     uint32_t ofcRingUntil_ = 0, ofcRingNext_ = 0;    // calling the office: this unit rings every 2 s for 10 s
     uint32_t ofcAlertUntil_ = 0, ofcAlertNext_ = 0;  // an office unit: a room is calling (ring, its number blinks, lights flash)
     uint16_t ofcAlertRoom_ = 0;
+    Shutter shutter_ = Shutter::Closed;
+    int8_t shutterManual_ = -1;                 // "shutter closed|open|flag": held there until "shutter auto"
+    bool shutterSent_ = false;
+    uint16_t shutterUs_[3] = {600, 1500, 2400};  // pulse widths for closed / open / flag ("shutterus", saved)
     uint32_t helpAlertNext_ = 0;  // an office unit: when an unanswered call for help rings again
     bool redDown_ = false;        // the red button was down on the last frame
     bool emergMine_ = false;      // this unit's red button started the emergency

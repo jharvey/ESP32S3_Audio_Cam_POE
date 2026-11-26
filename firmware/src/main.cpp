@@ -225,6 +225,7 @@ board::Tm1637 gTm(gTmLines);
 std::atomic<uint8_t> gButtons{0};
 std::atomic<uint32_t> gDisplay{0x00202020};  // 3 chars + dots, written by the audio task
 std::atomic<bool> gDisplayOk{false};
+std::atomic<uint32_t> gShutter{0};  // camera shutter from the core: pulse width in microseconds, bit 16 = slow; 0 = nothing asked yet
 std::atomic<uint8_t> gLamps[3];  // lamp levels from the core (audio task), applied by the panel task
 std::atomic<uint32_t> gRgb{0};     // RGB LED colour 0xRRGGBB, applied by the panel task
 std::atomic<bool> gButtonsOk{false};
@@ -307,6 +308,31 @@ void panelTask(void*) {
                 rgbLedWrite(pins::RGB_LED_GPIO, uint8_t(rgb >> 16), uint8_t(rgb >> 8), uint8_t(rgb));  // RMT, GRB order handled
             }
         }
+        {
+            // Camera shutter servo (signal RC_OTHER, header J8). Its 5 V is on only while it moves and for half a
+            // second after, so it does not hum or warm up. Slow = 6 us a step (about 4.5 s for a quarter turn),
+            // fast = 60 us a step. The first move after power-up jumps: the paddle's place is not known then.
+            static int cur = 0, rest = 0;
+            static bool powered = false;
+            const uint32_t w = gShutter.load();
+            const int target = int(w & 0xffff);
+            if (target && cur != target) {
+                I2cLock lock;
+                if (!powered) {
+                    gPwm.fullOn(pins::pwm::RC_PWR);
+                    powered = true;
+                }
+                const int step = (w & 0x10000u) ? 6 : 60;
+                cur = cur == 0 ? target : cur < target ? min(cur + step, target) : max(cur - step, target);
+                gPwm.servoUs(pins::pwm::RC_OTHER, cur);
+                rest = 17;
+            } else if (powered && --rest <= 0) {
+                I2cLock lock;
+                gPwm.fullOff(pins::pwm::RC_OTHER);
+                gPwm.fullOff(pins::pwm::RC_PWR);
+                powered = false;
+            }
+        }
         vTaskDelay(pdMS_TO_TICKS(30));  // ~30 button reads a second; each one is a 2-byte I2C read
     }
 }
@@ -359,6 +385,7 @@ public:
     std::string error() override { return Update.errorString(); }
 
     void set(ic::Lamp lamp, uint8_t pct) override { gLamps[int(lamp)] = pct; }
+    void setShutter(uint16_t us, bool slow) override { gShutter = uint32_t(us) | (slow ? 0x10000u : 0u); }
     void setRgb(uint8_t r, uint8_t g, uint8_t b) override { gRgb = uint32_t(r) << 16 | uint32_t(g) << 8 | b; }
     // Network: one UDP socket on the multicast group. Ethernet and Wi-Fi carry the same IP
     // (10.42.<floor>.<room>); useLink() makes the active one lwIP's default interface, which is

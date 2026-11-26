@@ -95,6 +95,9 @@ public:
     virtual void set(Lamp lamp, uint8_t pct) = 0;
     // The RGB status LED (D9, WS2812B). 0-255 per colour.
     virtual void setRgb(uint8_t r, uint8_t g, uint8_t b) { (void)r; (void)g; (void)b; }
+    // The camera shutter's servo: go to this pulse width (microseconds). slow = creep there quietly (several
+    // seconds); otherwise as fast as the servo goes. The board cuts the servo's power once it has arrived.
+    virtual void setShutter(uint16_t us, bool slow) { (void)us; (void)slow; }
 };
 
 // Firmware update over the network (R3.0): writes a new image to the spare firmware slot. The running

@@ -158,6 +158,12 @@ void Intercom::event(EventKind k, uint16_t room, const char* fmt, ...) {
 // Feature switches, the office unit and its stand-in, quiet hours and zones, from flash.
 void Intercom::loadFeatures() {
     // Nothing saved yet: help needed, the silent help call and the red lockdown button work out of the box.
+    {
+        unsigned v[3] = {0, 0, 0};
+        if (std::sscanf(hal_.store->loadText("shutterus").c_str(), "%u %u %u", &v[0], &v[1], &v[2]) == 3)
+            for (int i = 0; i < 3; i++)
+                if (v[i] >= 400 && v[i] <= 2600) shutterUs_[i] = uint16_t(v[i]);
+    }
     const std::string feat = hal_.store->loadText("features");
     features_ = feat.empty() ? uint8_t(kFeatReason | kFeatSilent | kFeatLockdown) : uint8_t(std::strtoul(feat.c_str(), nullptr, 10) & 0xff);
     unsigned o = 0, b = 0;
@@ -635,6 +641,29 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         std::string cmd;
         for (size_t i = 2; i < a.size(); i++) cmd += (i > 2 ? " " : "") + a[i];
         return sendSigned(a[1], cmd);
+    }
+    if (c == "shutter") {  // closed | open | flag | auto: move the camera shutter by hand (to set it up); "auto" gives it back
+        if (a.size() == 1) return std::string("shutter: ") + (shutter_ == Shutter::Flag ? "flag" : shutter_ == Shutter::Open ? "open" : "closed") + (shutterManual_ >= 0 ? " (by hand)" : "");
+        if (src == CmdSource::Network) return "shutter only works from USB or this unit's web page";
+        const int k = a[1] == "closed" ? 0 : a[1] == "open" ? 1 : a[1] == "flag" ? 2 : a[1] == "auto" ? -1 : -2;
+        if (k == -2) return "usage: shutter [closed|open|flag|auto]";
+        shutterManual_ = int8_t(k);
+        return "shutter " + a[1];
+    }
+    if (c == "shutterus") {  // the servo's pulse width in microseconds for closed, open and flag
+        if (a.size() == 4) {
+            unsigned v[3];
+            for (int i = 0; i < 3; i++) {
+                v[i] = unsigned(std::strtoul(a[size_t(i) + 1].c_str(), nullptr, 10));
+                if (v[i] < 400 || v[i] > 2600) return "usage: shutterus CLOSED OPEN FLAG  (400-2600 microseconds each)";
+            }
+            for (int i = 0; i < 3; i++) shutterUs_[i] = uint16_t(v[i]);
+            hal_.store->saveText("shutterus", a[1] + " " + a[2] + " " + a[3]);
+            shutterSent_ = false;  // go to the new place now
+        } else if (a.size() != 1) {
+            return "usage: shutterus CLOSED OPEN FLAG  (400-2600 microseconds each)";
+        }
+        return "shutterus " + std::to_string(shutterUs_[0]) + " " + std::to_string(shutterUs_[1]) + " " + std::to_string(shutterUs_[2]);
     }
     if (c == "ring") {  // the office rings this room (no audio): attention until TALK answers, then talk to the office
         UnitId from;
@@ -1570,6 +1599,15 @@ void Intercom::updateLamps() {
     if (rgb != rgb_) {
         rgb_ = rgb;
         if (hal_.lamps) hal_.lamps->setRgb(uint8_t(rgb >> 16), uint8_t(rgb >> 8), uint8_t(rgb));
+    }
+    // Camera shutter: out as a flag in an emergency (fast), open but hidden in a silent help call (slow and quiet),
+    // closed otherwise (slow). The first frame sends the closed position, wherever the paddle was left.
+    const Shutter sh = shutterManual_ >= 0 ? Shutter(shutterManual_) : emerg_ != Emergency::None ? Shutter::Flag : silentHelp() ? Shutter::Open : Shutter::Closed;
+    if (sh != shutter_ || !shutterSent_) {
+        if (shutterSent_) event(EventKind::Info, unit_.room, "room %u: camera shutter %s", unsigned(unit_.room), sh == Shutter::Flag ? "open, flag out" : sh == Shutter::Open ? "open" : "closed");
+        shutter_ = sh;
+        shutterSent_ = true;
+        if (hal_.lamps) hal_.lamps->setShutter(shutterUs_[int(sh)], sh != Shutter::Flag);
     }
 }
 
