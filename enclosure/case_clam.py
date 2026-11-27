@@ -210,38 +210,35 @@ for bx, by in btn: cover = cover.union(rrect(FW + 2.8, FH + 2.8, BTN_R + 2.2, Z_
 for bx, by in btn:
     cover = cover.cut(rrect(FW + 0.4, FH + 0.4, BTN_R + 1.0, Z_FACE - GUIDE_H - 1, Z_FACE - 0.01, bx, by + CAP_DY))
     cover = cover.cut(rrect(BTN_W + 0.4, BTN_H + 0.4, BTN_R + 0.2, Z_FACE - 1, Z_TOP + 1, bx, by + CAP_DY))
-# red LOCKDOWN button. The clear lid lies FLUSH with the face, in a recess of its own shape; the red cap sits in a well
-# under it, 1 mm below the lid. Below the lid's lower edge the face has a scoop that goes deeper than the lid, so a
-# fingertip gets under the edge and flips it up. Everything is placed from the switch (PB12), wherever it is moved.
+# red LOCKDOWN button. The clear lid lies flat ON the face (nothing between them), hanging from two hinge posts. The
+# red cap sits in a round hole under it, its top 0.8 mm below the face, so the lid covers it and a flat hand cannot
+# press it. Below the lid's lower edge the face has a shallow scoop, so a fingertip gets under the edge and flips it up.
+# TO FIT THE LID: lay it flat on the face above the two posts and slide it down. Its ears go through the slots in the
+# posts (the slots open towards the top of the case) into the round holes. Let go: it hangs, and its weight keeps it in.
+# Everything is placed from the switch (PB12), wherever it is moved.
 rx, ry = RED_AT
 LID_X = (rx - 10.0, rx + 10.0)                  # lid body, left and right edge
 HINGE_Y = ry - 8.5                              # hinge axis (KiCad y)
 LID_Y1 = ry + 8.5                               # lid's lower edge
 NECK_X = (rx - 6.5, rx + 6.5)                   # the lid is narrower at the hinge
-WELL = 2.2                                      # the well under the lid is this deep below the lid
-Z_AX = Z_TOP - LID_T / 2                        # hinge axis: the middle of the lid's thickness, inside the face
-# a block behind the face carries the well's floor, the ledge the lid lies on, and the scoop's floor
-cover = cover.union(slab(LID_X[0] - 1.5, HINGE_Y - 3.5, LID_X[1] + 1.5, LID_Y1 + 0.6, Z_FACE - WELL - 1.2, Z_FACE + 0.1))
-# the scoop's own floor is thin: the audio jack (about 5 mm tall, NOT MEASURED) is right under it
-cover = cover.union(slab(rx - 7.5, LID_Y1, rx + 7.5, LID_Y1 + 6.9, Z_FACE - 1.5, Z_FACE + 0.1))
-by0 = HINGE_Y + 3.0
-cover = cover.cut(slab(LID_X[0] - 0.3, by0 - 0.3, LID_X[1] + 0.3, LID_Y1 + 0.3, Z_FACE, Z_TOP + 1).edges("|Z").fillet(1.7))        # the lid's recess (body)
-cover = cover.cut(slab(NECK_X[0] - 0.3, HINGE_Y - 1.8, NECK_X[1] + 0.3, by0 + 0.5, Z_FACE - WELL, Z_TOP + 1))                      # ... and neck, deep so the lid's tail can swing down
-cover = cover.cut(slab(LID_X[0] + 1.5, by0, LID_X[1] - 1.5, LID_Y1 - 1.5, Z_FACE - WELL, Z_FACE + 0.2).edges("|Z").fillet(1.0))    # the well; a 1.5 mm ledge is left round it
-cover = cover.cut(cyl(rx, ry, RED_D + 0.5, Z_FACE - WELL - 2, Z_FACE - WELL + 0.1))                                                # the cap comes up through the well's floor
-cover = cover.cut(rrect(12.0, 6.4, 3.0, Z_FACE - 0.7, Z_TOP + 1, rx, LID_Y1 + 2.0))                                                # the finger scoop, centred under the button
+RED_DOWN = 0.8                                  # the cap's top is this far below the face
+Z_AX = Z_TOP + LID_T / 2                        # hinge axis: the middle of the lid's thickness
+cover = cover.union(cyl(rx, ry, RED_FL + 3.0, Z_FACE - GUIDE_H, Z_FACE))
+cover = cover.cut(cyl(rx, ry, RED_FL + 0.4, Z_FACE - GUIDE_H - 1, Z_FACE - 0.01)).cut(cyl(rx, ry, RED_D + 0.5, Z_FACE - 1, Z_TOP + 1))
+cover = cover.cut(cq.Workplane("XY").circle(RED_D / 2 + 0.25).workplane(offset=1.0).circle(RED_D / 2 + 1.25).loft().translate((rx, Y(ry), Z_TOP - 0.99)))   # a bevel round the hole, for the fingertip
+cover = cover.cut(slab(NECK_X[0] - 0.3, HINGE_Y - 2.0, NECK_X[1] + 0.3, HINGE_Y + 0.4, Z_TOP - 1.0, Z_TOP + 1))    # a groove for the lid's tail, which dips as the lid opens
+cover = cover.cut(rrect(12.0, 6.4, 3.0, Z_TOP - 1.3, Z_TOP + 1, rx, LID_Y1 + 1.2))                                  # the finger scoop, centred under the button
 posts = None
 for x0_, x1_ in ((NECK_X[0] - 0.2 - POST_W, NECK_X[0] - 0.2), (NECK_X[1] + 0.2, NECK_X[1] + 0.2 + POST_W)):
     # the post reaches 4 mm above the axis and 2.6 mm over it: the lid's shoulders land on that corner at about 135 degrees
-    p_ = slab(x0_, HINGE_Y - 4.0, x1_, HINGE_Y + 2.4, Z_AX - 3.0, Z_AX + 2.6)
+    p_ = slab(x0_, HINGE_Y - 4.0, x1_, HINGE_Y + 2.4, Z_TOP - 0.2, Z_AX + 2.6)
     posts = p_ if posts is None else posts.union(p_)
 posts = posts.edges("|X").fillet(0.6)
 # the ear turns in a round hole; a slot towards the top of the case lets the lid slide in while it lies flat. Once it
 # hangs, its own weight keeps it in, and a lid that is flipped up cannot leave through the slot.
+posts = posts.cut(cyl_x(HINGE_Y, Z_AX, 3.9, NECK_X[0] - EAR - 0.3, NECK_X[1] + EAR + 0.3))
+posts = posts.cut(slab(NECK_X[0] - EAR - 0.3, HINGE_Y - 5.0, NECK_X[1] + EAR + 0.3, HINGE_Y, Z_AX - LID_T / 2 - 0.15, Z_AX + LID_T / 2 + 0.15))
 cover = cover.union(posts)
-for x0_, x1_ in ((NECK_X[0] - EAR - 0.3, NECK_X[0]), (NECK_X[1], NECK_X[1] + EAR + 0.3)):   # cut in the face as well: the hinge is inside it
-    cover = cover.cut(cyl_x(HINGE_Y, Z_AX, 3.9, x0_, x1_))
-    cover = cover.cut(slab(x0_, HINGE_Y - 5.0, x1_, HINGE_Y, Z_AX - LID_T / 2 - 0.15, Z_AX + LID_T / 2 + 0.15))
 # the lid, shut (for the pictures and the fit check) and as a flat outline for the laser
 lid2d = (cq.Workplane("XY").rect(LID_X[1] - LID_X[0], LID_Y1 - (HINGE_Y + 3.0)).extrude(LID_T).edges("|Z").fillet(1.5)
          .translate(((LID_X[0] + LID_X[1]) / 2, Y((LID_Y1 + HINGE_Y + 3.0) / 2), 0)))
@@ -250,7 +247,7 @@ lid2d = lid2d.union(slab(NECK_X[0] - EAR, HINGE_Y - 1.5, NECK_X[1] + EAR, HINGE_
 micx, micy = part("U16")["x"], part("U16")["y"]
 if HINGE_Y - 3 < micy + 3.0 and NECK_X[0] < micx + 2.4 and NECK_X[1] > micx - 2.4:   # a notch, only if the lid would reach the microphone port
     lid2d = lid2d.cut(slab(micx - 2.4, HINGE_Y - 3, micx + 2.4, micy + 3.0, -1, LID_T + 1).edges("|Z").fillet(1.0))   # the notch at the microphone port
-lid = lid2d.translate((0, 0, Z_TOP - LID_T))
+lid = lid2d.translate((0, 0, Z_TOP))
 lid_open = lid.rotate((0, Y(HINGE_Y), Z_AX), (1, Y(HINGE_Y), Z_AX), -135)
 # engraved labels under the buttons
 def label(txt, x, y, halign):
@@ -371,9 +368,8 @@ for s in (-1, 1):                                                               
     legs = legs.union(slab(min(s * LEG_X0, s * R), -LEG_HALF_W, max(s * LEG_X0, s * R), LEG_HALF_W, SW_TRAVEL + STOP_EXTRA, zb))
 cap = cap.union(legs)
 # the red cap (print one, in red): round, with the same stem and legs
-red = cyl(0, 0, RED_D, Z_FACE - WELL - 1.4, Z_FACE - 1.0).faces(">Z").edges().fillet(0.6)   # its top is 1 mm under the lid
-red = red.union(cyl(0, 0, RED_D + 1.6, Z_FACE - WELL - 2.3, Z_FACE - WELL - 1.4))                                      # flange under the well's floor
-red = red.union(cyl(0, 0, 4.0, SW_TOP, Z_FACE - WELL - 2.3)).union(legs)
+red = cyl(0, 0, RED_D, Z_FACE - 0.3, Z_TOP - RED_DOWN).faces(">Z").edges().fillet(0.6)
+red = red.union(cyl(0, 0, RED_FL, BODY_Z0, Z_FACE - 0.3)).union(cyl(0, 0, 4.0, SW_TOP, BODY_Z0)).union(legs)
 red_at = red.translate((rx, Y(ry), 0))
 caps = None
 for bx, by in btn:
