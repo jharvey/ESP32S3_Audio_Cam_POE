@@ -177,22 +177,27 @@ function regionsFor(fi){
     const ls=shareOf[id].map(k=>list[k]);
     for(let i=0;i<N;i++)if(own[i]==id){const x=i%cw,y=(i/cw)|0;let b=ls[0],bd=1e18;
       for(const L of ls){const d=(L.x-x)**2+(L.y-y)**2;if(d<bd){bd=d;b=L}}own[i]=b.k}}
-  // Unlabelled pockets inside the building (court markings in the gym, closets, stair treads) join the
+  // Unlabelled pockets inside the building (court markings in the gym, closets) that are mostly surrounded by rooms join the
   // nearest labelled room they touch across a wall or line; the outside (touching the edge) stays out.
   {const seen=new Uint8Array(N),pk=new Int32Array(N),D=Math.ceil(2*shut/s)+3,dd=new Uint16Array(N);
+   const out=new Uint8Array(N);  // the outdoors: free pixels reached from the picture's edge
+   {let h=0,t=0;for(let i=0;i<N;i++){const x=i%cw,y=(i/cw)|0;if((x===0||y===0||x===cw-1||y===ch-1)&&!wall[i]&&own[i]<0){out[i]=1;q[t++]=i}}
+    while(h<t){const i=q[h++],x=i%cw;for(const j of [x>0?i-1:-1,x<cw-1?i+1:-1,i-cw,i+cw])if(j>=0&&j<N&&!wall[j]&&own[j]<0&&!out[j]){out[j]=1;q[t++]=j}}}
+   for(let pass=0,changed=true;pass<6&&changed;pass++){changed=false;seen.fill(0);
    for(let i0=0;i0<N;i0++){if(wall[i0]||own[i0]>=0||seen[i0])continue;
      let n=0,edge=false,sx=0,sy=0;pk[n++]=i0;seen[i0]=1;
      for(let h=0;h<n;h++){const i=pk[h],x=i%cw,y=(i/cw)|0;sx+=x;sy+=y;if(x===0||y===0||x===cw-1||y===ch-1)edge=true;
        for(const j of [x>0?i-1:-1,x<cw-1?i+1:-1,i-cw,i+cw])if(j>=0&&j<N&&!wall[j]&&own[j]<0&&!seen[j]){seen[j]=1;pk[n++]=j}}
      if(edge||n>0.35*N)continue;
-     const touch=new Set(),fr=[],mark=new Set();  // walk out through the walls / lines, up to D pixels
+     const touch=new Set(),fr=[],mark=new Set();let ownN=0,openN=0;  // walk out through the walls / lines, up to D pixels
      for(let k=0;k<n;k++){fr.push(pk[k]);dd[pk[k]]=0;mark.add(pk[k])}
      for(let h=0;h<fr.length;h++){const i=fr[h],x=i%cw;if(dd[i]>=D)continue;
        for(const j of [x>0?i-1:-1,x<cw-1?i+1:-1,i-cw,i+cw]){if(j<0||j>=N||mark.has(j))continue;mark.add(j);
-         if(own[j]>=0){touch.add(own[j]);continue}if(wall[j]){dd[j]=dd[i]+1;fr.push(j)}}}
-     if(!touch.size)continue;const cx=sx/n,cy=sy/n;let best=-1,bd=1e18;
+         if(own[j]>=0){touch.add(own[j]);ownN++;continue}if(wall[j]){dd[j]=dd[i]+1;fr.push(j)}else if(out[j])openN++}}
+     if(!touch.size||openN>ownN)continue;  // it borders more outdoors than rooms (a stairwell in a corner of the building): not part of a room
+     const cx=sx/n,cy=sy/n;let best=-1,bd=1e18;
      for(const k of touch){const L=list[k],d=(L.x-cx)**2+(L.y-cy)**2;if(d<bd){bd=d;best=k}}
-     for(let k=0;k<n;k++)own[pk[k]]=best}}
+     for(let k=0;k<n;k++)own[pk[k]]=best;changed=true}}}
   // grow every area into the walls and a little beyond (the walls' own thickness plus a click margin)
   let h=0,t=0;for(let i=0;i<N;i++)if(own[i]>=0)q[t++]=i;
   const dist=new Uint16Array(N);
