@@ -135,10 +135,14 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
  <div class="prow"><button id="dread">Read its settings</button><button id="dapply">Send the changed lines</button><span class="mute" id="dnote"></span></div>
  <textarea id="dtext" rows="7" spellcheck="false" style="width:100%;box-sizing:border-box;font:13px ui-monospace,Consolas,monospace"
   placeholder="The device's settings appear here, one per line: unit= is its number, group= the room it shares with other devices."></textarea></details></section>
-<section class="panel"><h2>Office unit</h2>
- <div class="prow">Office unit <input type="number" id="ofc" min="1" max="999" style="width:5em"> stand-in <input type="number" id="ofc2" min="1" max="999" style="width:5em">
- <button id="ofcset">Save on all units</button></div><div class="mute" id="ofcnow"></div>
- <div class="mute">The office unit is where rooms call when OFFICE is pressed. The stand-in takes over when the office unit is off (tick Stand-in office unit under Options).</div></section>
+<section class="panel"><h2>Office units, in order</h2>
+ <div class="prow">First <input type="number" id="ofc" min="1" max="999" style="width:5em"> then <input type="number" id="ofc2" min="1" max="999" style="width:5em">
+ then <input type="number" id="ofc3" min="1" max="999" style="width:5em"> then <input type="number" id="ofc4" min="1" max="999" style="width:5em"></div>
+ <div class="prow"><button id="ofcfill">Show the present list</button><button id="ofcset">Save on all units</button></div><div id="ofcnow"></div>
+ <div class="mute">Rooms call the first unit in this list when OFFICE is pressed. If it goes offline, the next one that is online takes over within a few seconds,
+ and hands back when the first returns (tick Stand-in office unit under Options). Every unit in the list rings for calls.
+ The acting office unit also keeps every device's school-wide settings up to date: a new or replaced device gets the office list, bells, zones, quiet hours
+ and options by itself within about a minute.</div></section>
 <section class="panel"><h2>Zones: sets of rooms to page together</h2>
  <div id="zlist"></div>
  <div class="prow"><b>Add or change:</b> number <input type="number" id="zn" min="1" max="8" value="1" style="width:4em"> name <input id="zname" placeholder="east" size="8">
@@ -212,6 +216,7 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
 <dialog id="probdlg"><h2>What needs attention</h2><div id="probs2"></div><button id="probclose">Close</button></dialog><div id="toast"></div>
 </div></main>
 <script>
+let officeIps=[];
 const EMERG=["","LOCKDOWN","EVACUATE","SHELTER"];let selfFw="";
 const FAULT=["","E1 no Ethernet (on Wi-Fi)","E2 no network","Lo battery low","dUP duplicate number","oL output shorted"];
 function card(u){
@@ -252,11 +257,15 @@ async function tick(){
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
     lastSchool=j;drawDevs(us);selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);callWatch(us);drawAlarm(us,j.queue||[]);drawZones((j.features&4)?j.zones||[]:[]);
     document.getElementById("cwnow").textContent=j.conwatch?"Now: on, after "+j.conwatch+" min.":"Now: off.";
-    document.getElementById("ofcnow").textContent=j.office?"Now: office "+j.office+(j.standin?", stand-in "+j.standin:"")+", acting "+j.acting:"No office unit set.";
+    {const o=j.offices||[],ns=us.filter(u=>u.online&&u.sync===0).length;
+     document.getElementById("ofcnow").innerHTML=o.length?"<b>Now:</b> "+o.join(", then ")+". Acting as the office: <b>"+j.acting+"</b>"+(j.acting!==o[0]?" (unit "+o[0]+" is offline)":"")+
+       ". "+(ns?ns+" device"+(ns>1?"s are":" is")+" being sent the school settings.":"Every device has the same school settings."):"No office unit set.";
+     officeIps=o.filter(n=>String(n)!==String(j.self)).map(n=>us.find(u=>u.room===n&&u.online)).filter(u=>u).map(u=>({unit:u.unit,ip:u.ip}));}
     {const em=us.filter(u=>u.online&&u.emergency);
      document.getElementById("estate").textContent=em.length?EMERG[em[0].emergency]+" on "+em.length+" of "+c.on+" units online":"No emergency.";}
     if(window.planUpdate)planUpdate(us);  // floor plan map (/floorplan.js)
-  }catch(e){document.getElementById("err").textContent="Can't reach the unit: "+e.message;}
+  }catch(e){document.getElementById("err").innerHTML="Can't reach the unit: "+esc(String(e.message))+(officeIps.length?" &nbsp; Its stand-in has the same page: "+
+      officeIps.map(o=>'<a href="http://'+o.ip+'/school">open the office page on unit '+o.unit+"</a>").join(" or ")+" (the plan is kept per address: restore it there from the backup file).":"");}
 }
 tick();setInterval(tick,2000);
 
@@ -369,6 +378,7 @@ function probList(us){const P=[],P0=window.planApi;const add=(u,cls,what,todo,bt
     if(f&64)add(u,"bad","Failed the speaker and microphone self-check","Call the room and ask for an answer. If one direction is silent, check that nothing covers the speaker or microphone; if it stays silent, replace the device.");
     if(f&16)add(u,"bad","TALK held for over 2 minutes","Something is leaning on its TALK button, or the button is stuck. Ask the room to look. Until then you can switch its TALK off; the room still hears everything.",`<button data-u="${u.unit}" data-c="mute 30">Switch its TALK off for 30 min</button>`);
     else if(f&8)add(u,"warn","Its TALK is switched off from the office","It comes back by itself when the time is up.",`<button data-u="${u.unit}" data-c="mute off">Switch TALK back on now</button>`);
+    if(u.sync===0)add(u,"info","Its school settings are being brought up to date","Nothing to do: the office unit is sending it the office list, bells, zones and options. If this line stays for more than a few minutes, check that the device has the school's network key (set over USB).");
     if(P0&&!P0.placed(u))add(u,"info","New: not on the plan yet","Open Setup, Rooms and devices, choose it under Devices and press Put it on the plan.");
     if(u.fw&&selfFw&&u.fw!==selfFw)add(u,"info","Different firmware ("+esc(u.fw)+"; the office unit has "+esc(selfFw)+")","It works, but update it with the update tool so that all devices match.");}
   const rank={bad:0,warn:1,info:2};return P.sort((a,b)=>rank[a.cls]-rank[b.cls]);}
@@ -398,7 +408,8 @@ document.getElementById("zlist").addEventListener("click",e=>{const d=e.target.d
   if(d.zdel&&confirm("Remove zone "+d.zdel+" on all units?"))both("zone "+d.zdel+" off");
   if(d.zn){document.getElementById("zn").value=d.zn;document.getElementById("zname").value=d.zname;document.getElementById("zrooms").value=d.zrooms;document.getElementById("zname").focus();}});
 const val=id=>document.getElementById(id).value.trim();
-document.getElementById("ofcset").onclick=()=>{if(val("ofc"))both("office "+val("ofc")+(val("ofc2")?" "+val("ofc2"):""));};
+document.getElementById("ofcset").onclick=()=>{const l=["ofc","ofc2","ofc3","ofc4"].map(val).filter(x=>x);if(val("ofc")&&confirm("Office units, in order: "+l.join(", ")+". Save on all units?"))both("office "+l.join(" "));};
+document.getElementById("ofcfill").onclick=()=>{const o=lastSchool.offices||[];["ofc","ofc2","ofc3","ofc4"].forEach((id,i)=>document.getElementById(id).value=o[i]||"");};
 document.getElementById("qset").onclick=()=>{if(val("q1")&&val("q2"))both("quiet "+val("q1")+" "+val("q2")+" "+(val("qdb")||"-12"));};
 document.getElementById("qoff").onclick=()=>both("quiet off");
 document.getElementById("zset").onclick=()=>{if(val("zn")&&val("zname")&&val("zrooms"))both("zone "+val("zn")+" "+val("zname")+" "+val("zrooms"));};

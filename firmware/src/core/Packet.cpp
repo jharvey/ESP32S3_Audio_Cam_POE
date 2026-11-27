@@ -60,7 +60,9 @@ size_t encodeStatus(const StatusPacket& s, uint8_t* out) {
     put32(out + 16, s.unitUid);
     put16(out + 20, s.group);
     put16(out + 22, uint16_t((s.fwVer & 0x3fff) | (uint16_t(s.emergency & 3) << 14)));
-    return 24;
+    put16(out + 24, s.syncRev);
+    put16(out + 26, s.syncHash);
+    return 28;
 }
 
 uint16_t packVersion(const char* text) {
@@ -154,6 +156,8 @@ bool decodeStatus(const uint8_t* buf, size_t len, StatusPacket* s) {
     s->emergency = uint8_t(get16(buf + 22) >> 14);
     s->fault = (buf[11] & 0x0f) <= uint8_t(Fault::Overload) ? Fault(buf[11] & 0x0f) : Fault::None;
     s->flags2 = uint8_t(buf[11] >> 4);
+    s->syncRev = len >= 28 ? get16(buf + 24) : 0;
+    s->syncHash = len >= 28 ? get16(buf + 26) : 0;
     return true;
 }
 

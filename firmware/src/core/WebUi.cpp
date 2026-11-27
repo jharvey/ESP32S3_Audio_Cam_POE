@@ -358,10 +358,11 @@ std::string WebUi::schoolJson() {
         formatIp(st.from, ip);
         snprintf(buf, sizeof(buf),
                  "{\"unit\":\"%s\",\"room\":%u,\"ip\":\"%s\",\"group\":%u,\"link\":\"%s\",\"power\":\"%s\",\"battery\":%u,"
-                 "\"flags\":%u,\"fault\":%u,\"online\":%s,\"age_s\":%.1f,\"fw\":\"%s\",\"emergency\":%u,\"flags2\":%u}",
+                 "\"flags\":%u,\"fault\":%u,\"online\":%s,\"age_s\":%.1f,\"fw\":\"%s\",\"emergency\":%u,\"flags2\":%u,\"sync\":%d}",
                  u, unsigned(st.from.room), ip, unsigned(st.group ? st.group : st.from.room), linkName(st.link),
                  st.power == PowerSource::Battery ? "battery" : "poe", unsigned(st.battery), unsigned(st.flags),
-                 unsigned(st.fault), online ? "true" : "false", ageS, versionText(st.fwVer).c_str(), unsigned(st.emergency), unsigned(st.flags2));
+                 unsigned(st.fault), online ? "true" : "false", ageS, versionText(st.fwVer).c_str(), unsigned(st.emergency), unsigned(st.flags2),
+                 !st.syncHash ? -1 : st.syncHash == ic_.syncHash() ? 1 : 0);
         return std::string(buf);
     };
     // this unit too
@@ -375,9 +376,13 @@ std::string WebUi::schoolJson() {
     me.fwVer = packVersion(kFirmwareVersion);
     me.emergency = uint8_t(ic_.emergency());
     me.flags2 = ic_.statusFlags2();
+    me.syncRev = ic_.syncRev();
+    me.syncHash = ic_.syncHash();
     // R3.2: feature switches, the office and who acts as it, zones, and the rooms waiting for the office
+    std::string officeList;
+    for (uint16_t r : ic_.offices()) officeList += (officeList.empty() ? "" : ",") + std::to_string(r);
     std::string extra = "\"features\":" + std::to_string(ic_.features()) + ",\"conwatch\":" + std::to_string(ic_.consoleWatchMin()) + ",\"office\":" + std::to_string(ic_.officeRoom()) +
-                        ",\"standin\":" + std::to_string(ic_.officeStandIn()) + ",\"acting\":" + std::to_string(ic_.actingOffice()) + ",\"zones\":[";
+                        ",\"standin\":" + std::to_string(ic_.officeStandIn()) + ",\"acting\":" + std::to_string(ic_.actingOffice()) + ",\"offices\":[" + officeList + "],\"zones\":[";
     bool firstX = true;
     for (const auto& z : ic_.zones()) {
         extra += std::string(firstX ? "" : ",") + "{\"n\":" + std::to_string(z.n) + ",\"name\":" + jsonString(z.name) + ",\"rooms\":" + jsonString(z.rooms) + "}";

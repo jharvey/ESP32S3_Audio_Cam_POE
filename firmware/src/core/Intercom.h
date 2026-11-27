@@ -53,6 +53,7 @@ enum class CmdSource : uint8_t { Local = 0, Network = 1, Web = 2 };
 struct Peer {
     StatusPacket status;
     uint32_t lastFrame = 0;
+    uint32_t syncSent = 0;       // when this office unit last sent it the school-wide settings
     bool offlineLogged = false;  // "offline" went into the event log: "back online" follows
 };
 
@@ -187,6 +188,14 @@ public:
     uint8_t statusFlags2() const { return uint8_t((dnd() ? kStatus2Dnd : 0) | (silentHelp() ? kStatus2Silent : 0) | (emergMine_ ? kStatus2Red : 0)); }
     uint16_t officeRoom() const { return office_; }
     uint16_t officeStandIn() const { return office2_; }
+    // The office units in order (up to 4): the first one that is online and has the current settings acts as the office.
+    const std::vector<uint16_t>& offices() const { return offices_; }
+    bool isOffice(uint16_t room) const;
+    // School-wide settings (office list, switches, zones, quiet hours, bells, self-check, console watch, time server) are
+    // kept the same on every unit: the acting office unit sends them to any unit whose copy differs (a new or replaced
+    // board, a unit that was off when something changed).
+    uint16_t syncRev() const { return syncRev_; }
+    uint16_t syncHash() const { return syncHash_; }
     // The office page (/school) reads this unit every 2 s while it is open on a PC. With "consolewatch N" the acting office
     // unit chirps every 30 s once nothing has read it for N minutes, so a closed page or a PC that is off is noticed.
     void consoleSeen() { conSeen_ = frame_; }
@@ -254,6 +263,13 @@ private:
     void everySecond();
     uint8_t features_ = 0;
     uint16_t office_ = 0, office2_ = 0, actingWas_ = 0;
+    std::vector<uint16_t> offices_;
+    uint16_t syncRev_ = 0, syncHash_ = 0;
+    size_t syncAt_ = 0;
+    uint16_t schoolHash() const;
+    void setSyncRev(unsigned long rev);
+    void syncTick();
+    std::string syncCommand(const std::vector<std::string>& a, const std::string& line);
     bool urgent_ = false;
     uint32_t officeSince_ = 0;                     // frame OFFICE went down (for the long presses)
     uint32_t dndUntil_ = 0;

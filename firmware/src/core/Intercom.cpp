@@ -46,6 +46,8 @@ constexpr uint32_t kEvacuateSoundFrames = 5 * 60 * 50;   // ... or 5 min (evacua
 constexpr uint32_t kEmergencyRgb = 0xC00000;
 const char* const kEmergencyNames[] = {"clear", "lockdown", "evacuate", "shelter"};
 // R3.2
+const char* const kSchoolKeys[] = {"features", "office", "zones", "quiet", "sched", "selfcheck", "conwatch", "ntp"};  // the same on every unit
+const char kSyncSep = '\x1f';
 const char* const kFeatureNames[] = {"reason", "queue", "zones", "dnd", "quiet", "silent", "failover", "lockdown"};
 constexpr uint32_t kUrgentHoldFrames = 75;            // OFFICE held 1.5 s = "help needed"
 constexpr uint32_t kSilentBothFrames = 50;            // TALK and OFFICE held together 1 s = silent help call
@@ -167,10 +169,15 @@ void Intercom::loadFeatures() {
     }
     const std::string feat = hal_.store->loadText("features");
     features_ = feat.empty() ? uint8_t(kFeatReason | kFeatSilent | kFeatLockdown) : uint8_t(std::strtoul(feat.c_str(), nullptr, 10) & 0xff);
-    unsigned o = 0, b = 0;
-    std::sscanf(hal_.store->loadText("office").c_str(), "%u %u", &o, &b);
-    office_ = uint16_t(o <= 999 ? o : 0);
-    office2_ = uint16_t(b <= 999 ? b : 0);
+    offices_.clear();
+    {
+        std::stringstream os(hal_.store->loadText("office"));
+        unsigned long r;
+        while (os >> r && offices_.size() < 4)
+            if (r >= 1 && r <= 999 && std::find(offices_.begin(), offices_.end(), uint16_t(r)) == offices_.end()) offices_.push_back(uint16_t(r));
+    }
+    office_ = offices_.empty() ? uint16_t(0) : offices_[0];
+    office2_ = offices_.size() > 1 ? offices_[1] : uint16_t(0);
     quietFrom_ = quietTo_ = -1;
     quietSetDb_ = 0;
     unsigned h1 = 0, m1 = 0, h2 = 0, m2 = 0;
@@ -214,11 +221,108 @@ uint16_t Intercom::actingOffice() const {
     auto up = [&](uint16_t r) {
         if (r == unit_.room) return true;
         for (const auto& p : peers_)
-            if (p.status.from.room == r) return true;
+            if (p.status.from.room == r && (!p.status.syncHash || p.status.syncRev >= syncRev_)) return true;  // online, and not behind on the settings
         return false;
     };
-    if (up(office_) || !feature(kFeatFailover) || !office2_ || !up(office2_)) return office_;
-    return office2_;
+    if (!feature(kFeatFailover)) return office_;
+    for (uint16_t r : offices_)
+        if (up(r)) return r;
+    return office_;
+}
+
+bool Intercom::isOffice(uint16_t room) const { return room && std::find(offices_.begin(), offices_.end(), room) != offices_.end(); }
+
+uint16_t Intercom::schoolHash() const {
+    uint32_t h = 2166136261u;
+    auto mix = [&](const std::string& t) {
+        for (unsigned char ch : t) h = (h ^ ch) * 16777619u;
+    };
+    for (const char* k : kSchoolKeys) mix(std::string(k) + "=" + (std::string(k) == "sched" ? sched_.toString() : hal_.store->loadText(k)) + "\n");
+    const uint16_t x = uint16_t(h ^ (h >> 16));
+    return x ? x : uint16_t(1);
+}
+
+void Intercom::setSyncRev(unsigned long rev) {
+    syncRev_ = uint16_t(std::min(rev, 65535ul));
+    hal_.store->saveText("syncrev", std::to_string(syncRev_));
+}
+
+// Once a second. Every 5 s: look whether the school-wide settings changed here; on an office unit that counts as a new
+// revision. The acting office unit then brings one unit a second up to date.
+void Intercom::syncTick() {
+    if (!syncHash_ || (frame_ / kStatusEveryFrames) % 5 == 0) {
+        const uint16_t h = schoolHash();
+        if (isOffice(unit_.room) && (!syncRev_ || (syncHash_ && h != syncHash_))) setSyncRev(syncRev_ + 1ul);
+        syncHash_ = h;
+    }
+    if (frame_ < 500 || !syncRev_ || unit_.room != actingOffice() || peers_.empty()) return;
+    for (size_t n = 0; n < peers_.size(); n++) {
+        const size_t i = (syncAt_ + n) % peers_.size();
+        Peer& p = peers_[i];
+        const StatusPacket& s = p.status;
+        if (!s.syncHash || s.syncRev > syncRev_ || (s.syncRev == syncRev_ && s.syncHash == syncHash_)) continue;
+        if (p.syncSent && frame_ - p.syncSent < 1500) continue;  // sent less than 30 s ago: wait for its next status
+        p.syncSent = frame_ ? frame_ : 1;
+        syncAt_ = i + 1;
+        const std::string to = std::to_string(s.from.room);
+        if (s.syncHash == syncHash_) {  // the same settings, an older count
+            sendSigned(to, "syncrev " + std::to_string(syncRev_) + " " + std::to_string(syncHash_));
+            return;
+        }
+        std::string rest;
+        for (const char* k : kSchoolKeys)
+            if (std::string(k) != "sched") rest += (rest.empty() ? "" : std::string(1, kSyncSep)) + k + "=" + hal_.store->loadText(k);
+        sendSigned(to, "sync 0 sched=" + sched_.toString());
+        const std::string r = sendSigned(to, "sync " + std::to_string(syncRev_) + " " + rest);
+        event(EventKind::Info, s.from.room, "room %u: school settings sent to it (new, replaced or out of date)%s", unsigned(s.from.room),
+              r.find("sent") == std::string::npos ? " - NOT SENT" : "");
+        return;
+    }
+}
+
+// "sync REV key=value<1f>key=value...": school-wide settings from the office unit (REV 0 = more follows, keep the count).
+// "syncrev REV HASH": the settings here are already the same, only the count is behind.
+std::string Intercom::syncCommand(const std::vector<std::string>& a, const std::string& line) {
+    if (a.size() < 3) return "usage: sync REV key=value...";
+    const unsigned long rev = std::strtoul(a[1].c_str(), nullptr, 10);
+    if (a[0] == "syncrev") {
+        if (std::strtoul(a[2].c_str(), nullptr, 10) != schoolHash()) return "settings differ";
+        syncHash_ = schoolHash();
+        if (rev >= syncRev_) setSyncRev(rev);
+        return "ok";
+    }
+    if (rev && rev < syncRev_) return "newer settings here";
+    size_t p = line.find(a[1], line.find("sync") + 4);
+    if (p == std::string::npos) return "usage: sync REV key=value...";
+    p += a[1].size();
+    while (p < line.size() && line[p] == ' ') p++;
+    std::stringstream ss(line.substr(p));
+    std::string item;
+    while (std::getline(ss, item, kSyncSep)) {
+        const size_t eq = item.find('=');
+        if (eq == std::string::npos) continue;
+        const std::string k = item.substr(0, eq), v = item.substr(eq + 1);
+        bool known = false;
+        for (const char* sk : kSchoolKeys) known = known || k == sk;
+        if (!known || v.size() > 600) continue;
+        if (k == "sched") {
+            Schedule n;
+            if (n.fromString(v)) {
+                sched_ = n;
+                saveSchedule();
+            }
+        } else {
+            hal_.store->saveText(k.c_str(), v);
+        }
+    }
+    loadFeatures();
+    loadSelfCheck();
+    syncHash_ = schoolHash();
+    if (rev) {
+        setSyncRev(rev);
+        logf("school settings received from the office (revision %lu)", rev);
+    }
+    return "ok";
 }
 
 std::vector<Intercom::Waiting> Intercom::callQueue() const {
@@ -252,13 +356,14 @@ void Intercom::everySecond() {
     if (frame_ > 250) {  // not in the first 5 s, before the other units were heard
         const uint16_t act = actingOffice();
         if (act != actingWas_) {
-            if (actingWas_ && office2_ && act == office2_)
+            if (actingWas_ && act != office_)
                 event(EventKind::Fault, act, "room %u is acting as the office (room %u is offline)", unsigned(act), unsigned(office_));
-            else if (actingWas_ && actingWas_ == office2_ && act == office_)
+            else if (actingWas_ && actingWas_ != office_ && act == office_)
                 event(EventKind::Info, act, "room %u is the office again", unsigned(act));
             actingWas_ = act;
         }
     }
+    syncTick();
     quietNowDb_ = 0;
     if (feature(kFeatQuiet) && quietFrom_ >= 0) {
         int64_t now = utcNow();
@@ -281,6 +386,7 @@ void Intercom::loadSelfCheck() {
     selfMin_ = -1;
     unsigned h = 0, m = 0;
     if (std::sscanf(hal_.store->loadText("selfcheck").c_str(), "%u:%u", &h, &m) == 2 && h < 24 && m < 60) selfMin_ = int(h * 60 + m);
+    syncRev_ = uint16_t(std::strtoul(hal_.store->loadText("syncrev").c_str(), nullptr, 10));
     conWatchMin_ = std::min(60, std::max(0, std::atoi(hal_.store->loadText("conwatch").c_str())));
 }
 
@@ -767,19 +873,32 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         for (int i = 0; i < 8; i++) out += std::string(" ") + kFeatureNames[i] + ((features_ >> i) & 1 ? "=on" : "=off");
         return out;
     }
-    if (c == "office") {  // "office 105 104": the office unit and its stand-in
+    if (c == "office") {  // "office 105 104 901 902": the office units in order; the first one that is online acts as the office
+        static const char* const usage = "usage: office | office ROOM [STAND-IN ROOM ...] (up to 4) | office off";
         if (a.size() > 1) {
-            const bool off = a[1] == "off";
-            unsigned long o = off ? 0 : std::strtoul(a[1].c_str(), nullptr, 10), b = a.size() > 2 ? std::strtoul(a[2].c_str(), nullptr, 10) : 0;
-            if (a.size() > 3 || o > 999 || b > 999 || (!off && o == 0) || (off && a.size() > 2) || (b && b == o))
-                return "usage: office | office ROOM [STAND-IN ROOM] | office off";
-            hal_.store->saveText("office", o ? std::to_string(o) + " " + std::to_string(b) : "");
+            std::string list;
+            if (a[1] == "off") {
+                if (a.size() > 2) return usage;
+            } else {
+                if (a.size() > 5) return usage;
+                std::vector<unsigned long> seen;
+                for (size_t i = 1; i < a.size(); i++) {
+                    const unsigned long r = std::strtoul(a[i].c_str(), nullptr, 10);
+                    if (r == 0 && i > 1 && a[i] == "0") continue;  // "office 105 0": no stand-in (the older form)
+                    if (r < 1 || r > 999 || std::find(seen.begin(), seen.end(), r) != seen.end()) return usage;
+                    seen.push_back(r);
+                    list += (list.empty() ? "" : " ") + std::to_string(r);
+                }
+            }
+            hal_.store->saveText("office", list);
             loadFeatures();
         }
-        if (!office_) return "no office unit set (usage: office ROOM [STAND-IN ROOM])";
-        snprintf(buf, sizeof(buf), "office unit %u, stand-in %u%s, acting now: %u", unsigned(office_), unsigned(office2_),
-                 office2_ ? (feature(kFeatFailover) ? "" : " (feature failover is off)") : " (none)", unsigned(actingOffice()));
-        return buf;
+        if (!office_) return "no office unit set (usage: office ROOM [STAND-IN ROOM ...])";
+        std::string out = "office unit " + std::to_string(office_) + ", stand-in";
+        for (size_t i = 1; i < offices_.size(); i++) out += " " + std::to_string(offices_[i]);
+        if (offices_.size() < 2) out += " (none)";
+        else if (!feature(kFeatFailover)) out += " (feature failover is off)";
+        return out + ", acting now: " + std::to_string(actingOffice());
     }
     if (c == "zone") {
         if (a.size() > 1) {
@@ -871,6 +990,7 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         }
         return out;
     }
+    if (c == "sync" || c == "syncrev") return syncCommand(a, line);
     if (c == "consolewatch") {  // the office unit chirps while no office page is open
         if (a.size() == 2) {
             const int n = std::atoi(a[1].c_str());
@@ -1206,7 +1326,7 @@ void Intercom::receive() {
                 if (wants && w == waiting_.size() && waiting_.size() < 64) {
                     waiting_.push_back(Waiting{s.from.room, false, false, frame_});
                     // The office's units (the office unit, its stand-in, and units sharing the office's room) call for attention.
-                    if (office_ && (unit_.room == office_ || unit_.room == office2_ || group() == office_)) {
+                    if (office_ && (isOffice(unit_.room) || group() == office_)) {
                         ofcAlertRoom_ = s.from.room;
                         ofcAlertUntil_ = frame_ + kOfficeRingFrames;
                         ofcAlertNext_ = frame_;
@@ -1352,6 +1472,8 @@ void Intercom::sendStatus() {
     s.uptimeS = frame_ * kFrameMs / 1000;
     s.unitUid = opt_.unitUid;
     s.group = group_;
+    s.syncRev = syncRev_;
+    s.syncHash = syncHash_;
     uint8_t buf[32];
     hal_.net->send(buf, encodeStatus(s, buf));
 }
@@ -2150,7 +2272,7 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         }
     }
     // An office unit: a call for help that nobody has answered rings again every 30 s.
-    if (!ofcAlertUntil_ && frame_ >= helpAlertNext_ && office_ && (unit_.room == office_ || unit_.room == office2_ || group() == office_)) {
+    if (!ofcAlertUntil_ && frame_ >= helpAlertNext_ && office_ && (isOffice(unit_.room) || group() == office_)) {
         for (const auto& w : waiting_) {
             if (!w.urgent && !w.silent) continue;
             ofcAlertRoom_ = w.room;

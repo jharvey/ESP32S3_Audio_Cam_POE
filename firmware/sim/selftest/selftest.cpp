@@ -1993,6 +1993,71 @@ static void testR31() {
 }
 
 // R3.2: the optional features and their switches.
+static void testR33Sync() {
+    printf("R3.3: office units in order, school-wide settings kept the same on every unit\n");
+    const int64_t clock0 = g_clock0;
+    g_clock0 = 1795451390;
+    auto has = [](FakeUnit& u, const char* text) {
+        for (const auto& e : u.ic->events())
+            if (e.text.find(text) != std::string::npos) return true;
+        return false;
+    };
+    Bus bus;
+    FakeUnit o1(&bus, {105, 0}, 120), o2(&bus, {104, 0}, 130), o3(&bus, {901, 0}, 140), r1(&bus, {101, 0}, 150);
+    std::vector<FakeUnit*> all = {&o1, &o2, &o3, &r1};
+    auto run = [&](int frames) { for (int k = 0; k < frames; k++) for (auto* u : all) u->step(); };
+    for (auto* u : all) u->ic->command("netkey sync-test-key-0123456789");
+    run(100);
+    // everything is set on the first office unit only: the others get it by themselves
+    CHECK(o1.ic->command("office 105 104 901 902 903").find("usage") != std::string::npos && o1.ic->command("office 105 105").find("usage") != std::string::npos,
+          "more than four office units, or one twice, is refused");
+    o1.ic->command("feature all on");
+    o1.ic->command("office 105 104 901");
+    o1.ic->command("zone 1 east 101-105");
+    o1.ic->command("quiet 18:00 07:00 -12");
+    o1.ic->command("sched add 08:30 mon-fri bell");
+    o1.ic->command("consolewatch 2");
+    run(1500);
+    CHECK(o1.ic->syncRev() >= 1 && r1.ic->syncRev() == o1.ic->syncRev() && r1.ic->syncHash() == o1.ic->syncHash() && o2.ic->syncHash() == o1.ic->syncHash() &&
+              o3.ic->syncHash() == o1.ic->syncHash(),
+          "settings made on the office unit reach every unit by themselves (revision %u)", unsigned(o1.ic->syncRev()));
+    CHECK(r1.ic->officeRoom() == 105 && r1.ic->offices().size() == 3 && r1.ic->features() == 255 && r1.kv["zones"] == o1.kv["zones"] &&
+              r1.kv["quiet"] == o1.kv["quiet"] && r1.ic->command("sched").find("08:30") != std::string::npos && r1.ic->consoleWatchMin() == 2,
+          "a room has the office list, switches, zone, quiet hours, bell and console watch");
+    CHECK(r1.ic->actingOffice() == 105 && o2.ic->actingOffice() == 105, "the first office unit acts as the office");
+    // the first office unit fails: the second takes over; then the second too: the third
+    all = {&o2, &o3, &r1};
+    run(400);
+    CHECK(r1.ic->actingOffice() == 104 && o2.ic->actingOffice() == 104 && o3.ic->actingOffice() == 104 && has(o2, "room 104 is acting as the office"),
+          "105 offline: 104 acts as the office");
+    all = {&o3, &r1};
+    run(400);
+    CHECK(r1.ic->actingOffice() == 901 && o3.ic->actingOffice() == 901, "104 offline too: 901 acts as the office");
+    // a setting changed while two office units are off; a room's board is replaced by a new one meanwhile
+    o3.ic->command("zone 2 gym 208");
+    FakeUnit r1new(&bus, {101, 0}, 160);
+    r1new.ic->command("netkey sync-test-key-0123456789");
+    all = {&o3, &r1new};
+    run(1500);
+    CHECK(r1new.ic->syncHash() == o3.ic->syncHash() && r1new.ic->officeRoom() == 105 && r1new.kv["zones"].find("gym") != std::string::npos &&
+              r1new.ic->command("sched").find("08:30") != std::string::npos && has(o3, "school settings sent"),
+          "a replaced board gets the school's settings from the acting office unit by itself");
+    all = {&o1, &o2, &o3, &r1new};
+    run(2000);
+    CHECK(o1.kv["zones"].find("gym") != std::string::npos && o2.kv["zones"].find("gym") != std::string::npos && o1.ic->syncRev() == o3.ic->syncRev() &&
+              o1.ic->syncHash() == o3.ic->syncHash(),
+          "the office units that were off come back and take the newer settings, they do not push their old ones");
+    CHECK(o1.ic->actingOffice() == 105 && r1new.ic->actingOffice() == 105 && has(o3, "room 105 is the office again"), "105 is back: it is the office again");
+    // a brand-new board with the number of the first office unit
+    FakeUnit o1new(&bus, {105, 0}, 170);
+    o1new.ic->command("netkey sync-test-key-0123456789");
+    all = {&o2, &o3, &r1new, &o1new};
+    run(2000);
+    CHECK(o1new.ic->syncHash() == o2.ic->syncHash() && o1new.ic->offices().size() == 3 && o1new.ic->actingOffice() == 105 && r1new.ic->actingOffice() == 105,
+          "the first office unit replaced by a new board: the stand-in fills it, then it is the office again");
+    g_clock0 = clock0;
+}
+
 static void testR32() {
     printf("R3.2: optional features (reason, queue, zones, dnd, quiet hours, silent help, office stand-in)\n");
     const int64_t clock0 = g_clock0;
@@ -2293,6 +2358,7 @@ int main() {
     testFirmwareUpdate();
     testR31();
     testR32();
+    testR33Sync();
     testPanelDriver();
     testNetAuth();
     testBringUp();
