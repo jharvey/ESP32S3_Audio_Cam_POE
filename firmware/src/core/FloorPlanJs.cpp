@@ -14,7 +14,7 @@ namespace ic {
 const char* floorPlanJs() {
     return R"JS((function(){
 "use strict";
-const KP="icPlan2",KU="icPlace1",KF="icPlanFloor",KA="icArea1";
+const KP="icPlan2",KU="icPlace1",KF="icPlanFloor",KA="icArea1",KR="icRoomArea1";
 const st=document.createElement("style");
 st.textContent=`#plan{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 16px}
 #plan .bar{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}#plan .bar b{font-size:15px}
@@ -39,6 +39,8 @@ let plan=load(KP,null),place=load(KU,{}),floor=load(KF,0),units=[],sel=null,msg=
 // Highlight areas (Setup): what a device watches, e.g. a hall monitor's stretch of corridor. Drawn faintly, strongly while the
 // device calls, talks or is picked; a click inside one picks its device.
 let areas=load(KA,{}),drawing=null;
+// Room areas drawn by hand (Setup): {room:{f,p:[[x,y],..]}}. One replaces the area worked out from the walls for that room.
+let roomAreas=load(KR,{});
 
 // ---- DXF -> floors ---------------------------------------------------------------------------------
 function parseDxf(txt){
@@ -206,6 +208,11 @@ function regionsFor(fi){
   for(const L of list)if(L.leak){const R=Math.round(0.03*M/s);
     for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++){const x=L.x+dx,y=L.y+dy;
       if(x>=0&&y>=0&&x<cw&&y<ch&&dx*dx+dy*dy<=R*R&&own[y*cw+x]<0)own[y*cw+x]=L.k}}
+  for(const L of list){const A=roomAreas[L.n];if(!A||A.f!==fi||!A.p||A.p.length<3)continue;  // drawn by hand: only what is inside the outline
+    for(let i=0;i<N;i++)if(own[i]===L.k)own[i]=-1;
+    c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cw,ch);c.setTransform(1/s,0,0,1/s,-F.x0/s+1,-F.y0/s+1);
+    c.beginPath();A.p.forEach((q,j)=>j?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]));c.closePath();c.fill();
+    const d=c.getImageData(0,0,cw,ch).data;for(let i=0;i<N;i++)if(d[i*4+3]>127)own[i]=L.k}
   return regCache[fi]={s,cw,ch,own,list,F,img:{}};
 }
 function roomAt(fi,x,y){const g=regionsFor(fi),i=Math.round((y-g.F.y0)/g.s+1)*g.cw+Math.round((x-g.F.x0)/g.s+1);
@@ -290,7 +297,7 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
   const chips=un.map(u=>`<button class="chip ${sel===String(u.unit)?"sel":""}" data-u="${u.unit}">${esc(u.unit)}</button>`).join("");
   const act=window.onPlanHold?"Click an intercom's dot or its room to pick it, hold it to talk to it, double-click it to ring it.":"Click a room to pick it.";
   document.getElementById("phint").innerHTML=
-    drawing?`<div class="hint"><b>Area of ${esc(drawing.u)}:</b> click its corners on the plan, one after another (${drawing.p.length} so far). <button id="pafin">Finish</button> <button id="pacan">Cancel</button></div>`:
+    drawing?`<div class="hint"><b>Area of ${drawing.room?"room ":""}${esc(drawing.u)}:</b> click its corners on the plan, one after another (${drawing.p.length} so far). <button id="pafin">Finish</button> <button id="pacan">Cancel</button></div>`:
     sel?`<div class="hint"><b>Unit ${esc(sel)}:</b> click the map where it is. <button id="pcancel">Cancel</button>${place[sel]?` <button id="preset">Back to its room</button>`:""}</div>`:
     moving?`<div class="hint">Click a dot, then click where it goes.</div>`:
     un.length?`<div class="hint">${act} Not on the plan yet: ${chips} pick one, then click the map.</div>`:`<div class="hint">${act}</div>`;
@@ -298,8 +305,11 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
   if(msg)document.getElementById("phint").innerHTML+=`<div class="hint">${esc(msg)}</div>`;
   const b=id=>document.getElementById(id);
   if(b("pcancel"))b("pcancel").onclick=()=>{sel=null;part()};
-  if(b("pacan"))b("pacan").onclick=()=>{drawing=null;part()};
-  if(b("pafin"))b("pafin").onclick=()=>{if(drawing.p.length>2){areas[drawing.u]={f:drawing.f,p:drawing.p};save(KA,areas)}drawing=null;part();if(window.onPlanSetup)window.onPlanSetup()};
+  if(b("pacan"))b("pacan").onclick=()=>{if(drawing.room)hot=0;drawing=null;part()};
+  if(b("pafin"))b("pafin").onclick=()=>{const room=drawing.room;
+    if(drawing.p.length>2){if(room){roomAreas[room]={f:drawing.f,p:drawing.p};save(KR,roomAreas);for(const k in regCache)delete regCache[k];spotCache={}}
+      else{areas[drawing.u]={f:drawing.f,p:drawing.p};save(KA,areas)}}
+    drawing=null;if(room){hot=room;hotUs=[];hotF=plan.rooms[room].f}part();if(window.onPlanSetup)window.onPlanSetup()};
   if(b("preset"))b("preset").onclick=()=>{delete place[sel];save(KU,place);spotCache={};sel=null;part()};
   box.querySelectorAll("button.chip").forEach(t=>t.onclick=()=>{sel=t.dataset.u;part()});
 }
@@ -402,11 +412,14 @@ window.planUpdate=us=>{units=us||[];spotCache={};part()};
 window.planHot=n=>{hot=n||0;hotUs=[];if(hot&&plan&&plan.rooms[hot])hotF=plan.rooms[hot].f;part()};  // the page can highlight a room (e.g. while ringing it)
 // For Setup on the school page: place a device, draw or remove its area, and everything a backup file holds.
 window.planApi={placed:u=>!!where(u),hasArea:n=>!!areas[n],
+  rooms:()=>plan?Object.keys(plan.rooms).map(Number).sort((a,b)=>a-b):[],hasRoomArea:n=>!!roomAreas[n],
+  drawRoomArea:n=>{if(!plan||!plan.rooms[n])return;drawing={u:String(n),room:+n,f:plan.rooms[n].f,p:[]};sel=null;moving=false;hot=+n;hotUs=[];hotF=plan.rooms[n].f;part()},
+  delRoomArea:n=>{delete roomAreas[n];save(KR,roomAreas);for(const k in regCache)delete regCache[k];spotCache={};hot=+n;hotUs=[];if(plan&&plan.rooms[n])hotF=plan.rooms[n].f;part()},
   place:n=>{sel=String(n);moving=false;drawing=null;part()},
   drawArea:n=>{drawing={u:String(n),f:-1,p:[]};sel=null;moving=false;part()},
   delArea:n=>{delete areas[n];save(KA,areas);part()},
-  data:()=>({plan,place,areas}),
-  restore:d=>{if(d.plan){plan=d.plan;save(KP,plan)}place=d.place||{};areas=d.areas||{};save(KU,place);save(KA,areas);for(const k in regCache)delete regCache[k];spotCache={};full()}};
+  data:()=>({plan,place,areas,roomAreas}),
+  restore:d=>{if(d.plan){plan=d.plan;save(KP,plan)}place=d.place||{};areas=d.areas||{};roomAreas=d.roomAreas||{};save(KU,place);save(KA,areas);save(KR,roomAreas);for(const k in regCache)delete regCache[k];spotCache={};full()}};
 window.planLoadText=loadText;  // also used by the scripted check
 window.planRoomAt=(fi,x,y)=>roomAt(fi,x,y);  // scripted check
 window.planSpots=n=>plan&&plan.rooms[n]?{label:plan.rooms[n],floor:plan.floors[plan.rooms[n].f],spots:doorSpots(plan.rooms[n].f)[n]||[]}:null;  // scripted check

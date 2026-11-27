@@ -92,6 +92,9 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
 <section class="panel"><h2>Devices, highlight areas and backup</h2>
  <div class="prow">Device <select id="dsel"></select><span class="mute" id="dinfo"></span></div>
  <div class="prow"><button id="dplace">Put it on the plan</button><button id="darea">Draw its highlight area</button><button id="dareadel">Remove its area</button></div>
+ <div class="prow">Room <select id="rsel"></select><button id="rarea">Draw this room's area</button><button id="rareadel">Back to the automatic area</button></div>
+ <div class="mute"><b>A room's area</b> is what lights up on the plan for that room and what a click picks. It is worked out from the walls. Where that
+ is wrong, pick the room, press Draw, click the corners of its real outline on the plan, then Finish. The room is shown while you draw.</div>
  <div class="mute"><b>A new device:</b> set its number on the device itself (hold SETUP for 3 seconds, UP and DOWN change the digit, MODE goes on and
  saves). It then appears in this list marked NEW. Put it on the plan; if it watches a hall or another place without a room number, draw its area:
  the area lights up when that device calls, and a click inside it picks the device.</div>
@@ -452,11 +455,11 @@ document.getElementById("csend").addEventListener("click",async()=>{
 document.getElementById("cmd").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("csend").click();});
 // ---- Setup: devices, highlight areas, settings, backup ----------------------------------------------
 const gid=id=>document.getElementById(id);let devSig="",devRead="",bkData=null;
-function drawDevs(us){const P=window.planApi,sig=us.map(u=>u.unit+(P&&!P.placed(u)?"*":"")+(P&&P.hasArea(u.unit)?"a":"")+(u.online?"":"-")+u.group).join(",");
+function drawDevs(us){drawRooms();const P=window.planApi,sig=us.map(u=>u.unit+(P&&!P.placed(u)?"*":"")+(P&&P.hasArea(u.unit)?"a":"")+(u.online?"":"-")+u.group).join(",");
   if(sig===devSig)return;devSig=sig;const s=gid("dsel"),v=s.value;
   s.innerHTML=us.map(u=>`<option value="${u.unit}">${u.unit}${u.group!==u.room?" (room "+u.group+")":""}${P&&!P.placed(u)?" · NEW: not on the plan":""}${P&&P.hasArea(u.unit)?" · has an area":""}${u.online?"":" · offline"}</option>`).join("");
   if(v)s.value=v;devInfo();}
-window.onPlanSetup=()=>{devSig="";drawDevs(lastSchool.units);};
+window.onPlanSetup=()=>{devSig="";drawDevs(lastSchool.units);roomSig="";drawRooms();};
 function devU(){return lastSchool.units.find(u=>String(u.unit)===gid("dsel").value);}
 function devInfo(){const u=devU();gid("dinfo").textContent=u?"address "+u.ip+" · firmware "+(u.fw||"?")+" · "+u.link+" · "+(u.online?"online":"offline"):"";}
 const devSelf=u=>String(lastSchool.self)===String(u.unit);
@@ -472,6 +475,11 @@ gid("dsel").onchange=()=>{devInfo();gid("dtext").value="";devRead="";gid("dnote"
 const toPlan=()=>window.scrollTo({top:0,behavior:"smooth"});  // the plan is the top of the page
 gid("dplace").onclick=()=>{const u=devU();if(u&&window.planApi){window.planApi.place(u.unit);toPlan();}};
 gid("darea").onclick=()=>{const u=devU();if(u&&window.planApi){window.planApi.drawArea(u.unit);toPlan();}};
+let roomSig="";
+function drawRooms(){const P=window.planApi;if(!P||!P.rooms)return;const rs=P.rooms(),sig=rs.map(n=>n+(P.hasRoomArea(n)?"h":"")).join(",");if(sig===roomSig)return;roomSig=sig;
+  const s=gid("rsel"),was=s.value;s.innerHTML=rs.map(n=>`<option value="${n}">${n}${P.hasRoomArea(n)?" · drawn by hand":""}</option>`).join("");if(was)s.value=was;}
+gid("rarea").onclick=()=>{if(window.planApi&&gid("rsel").value){window.planApi.drawRoomArea(+gid("rsel").value);toPlan();}};
+gid("rareadel").onclick=()=>{if(window.planApi&&gid("rsel").value){window.planApi.delRoomArea(+gid("rsel").value);roomSig="";drawRooms();toPlan();}};
 gid("dareadel").onclick=()=>{const u=devU();if(u&&window.planApi){window.planApi.delArea(u.unit);devSig="";drawDevs(lastSchool.units);}};
 gid("dread").onclick=async()=>{const u=devU();if(!u)return;gid("dnote").textContent="Reading…";let t=await devBackup(u);if(t&&t.slice(-1)!==String.fromCharCode(10))t+=String.fromCharCode(10);devRead=t;gid("dtext").value=t;
   gid("dnote").textContent=t?"Change a line, then send the changed lines.":"No answer from "+u.unit+".";};
@@ -487,7 +495,7 @@ gid("bksave").onclick=async()=>{const n=gid("bknote");n.textContent="Asking ever
   const name="intercom-backup-"+d.saved.slice(0,10)+".json",a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:"application/json"}));a.download=name;a.click();
   const miss=lastSchool.units.filter(u=>!got[u.unit]).map(u=>u.unit);
-  n.textContent="Saved "+name+": the plan, the dots, the areas and the settings of "+Object.keys(got).length+" devices."+(miss.length?" No answer from: "+miss.join(", ")+".":"")+" No passwords or keys are in it.";};
+  n.textContent="Saved "+name+": the plan, the dots, the device and room areas and the settings of "+Object.keys(got).length+" devices."+(miss.length?" No answer from: "+miss.join(", ")+".":"")+" No passwords or keys are in it.";};
 window.setupRestoreText=t=>{const n=gid("bknote");let d=null;try{d=JSON.parse(t);}catch(e){}
   if(!d||d.kind!=="intercom-backup"){n.textContent="That is not an intercom backup file.";return;}
   const day=String(d.saved).slice(0,10);if(!confirm("Replace the plan, dots and areas in this browser with the backup of "+day+"?"))return;
