@@ -93,8 +93,6 @@ SPK2_W, SPK2_H, SPK2_T = 25.0, 35.0, 6.8   # across, tall, thick (6.2 to 6.8 mm,
 SPK2_AT = (-1.9, 124.0)                    # its middle (KiCad x, y)
 MIC_D = 1.5      # microphone ports
 CAM_D = 12.0     # camera lens opening
-SPK_D = 36.0     # speaker grille (the speaker hangs in the cover; its place is a guess for now)
-SPK_AT = (50.0, 56.0)   # centred left to right, below the buttons
 
 def Y(y): return -y  # KiCad y -> model y
 def part(r): return B["parts"].get(r)
@@ -213,8 +211,10 @@ for bx, by in btn:
 # red LOCKDOWN button. The clear lid lies flat ON the face (nothing between them), hanging from two hinge posts. The
 # red cap sits in a round hole under it, its top 0.8 mm below the face, so the lid covers it and a flat hand cannot
 # press it. Below the lid's lower edge the face has a shallow scoop, so a fingertip gets under the edge and flips it up.
-# TO FIT THE LID: lay it flat on the face above the two posts and slide it down. Its ears go through the slots in the
-# posts (the slots open towards the top of the case) into the round holes. Let go: it hangs, and its weight keeps it in.
+# TO FIT THE LID: hold it sticking straight out from the face, ears towards the two posts, and press the ears into the
+# notches in the FRONT of the posts until they click into the round holes. Fold it down. Each notch is a little
+# narrower (1.85 mm) than the lid is thick (2 mm), so the ears snap past it; folded down, an ear lies across its notch
+# and cannot come out. (The lid cannot slide in along the face: its body is wider than the gap between the posts.)
 # Everything is placed from the switch (PB12), wherever it is moved.
 rx, ry = RED_AT
 LID_X = (rx - 10.0, rx + 10.0)                  # lid body, left and right edge
@@ -227,17 +227,17 @@ cover = cover.union(cyl(rx, ry, RED_FL + 3.0, Z_FACE - GUIDE_H, Z_FACE))
 cover = cover.cut(cyl(rx, ry, RED_FL + 0.4, Z_FACE - GUIDE_H - 1, Z_FACE - 0.01)).cut(cyl(rx, ry, RED_D + 0.5, Z_FACE - 1, Z_TOP + 1))
 cover = cover.cut(cq.Workplane("XY").circle(RED_D / 2 + 0.25).workplane(offset=1.0).circle(RED_D / 2 + 1.25).loft().translate((rx, Y(ry), Z_TOP - 0.99)))   # a bevel round the hole, for the fingertip
 cover = cover.cut(slab(NECK_X[0] - 0.3, HINGE_Y - 2.0, NECK_X[1] + 0.3, HINGE_Y + 0.4, Z_TOP - 1.0, Z_TOP + 1))    # a groove for the lid's tail, which dips as the lid opens
-cover = cover.cut(rrect(12.0, 6.4, 3.0, Z_TOP - 1.3, Z_TOP + 1, rx, LID_Y1 + 1.2))                                  # the finger scoop, centred under the button
+SCOOP_R, SCOOP_DEEP = 6.0, 1.4   # the finger scoop: a hollow rounded like the inside of a pipe, deepest right under the lid's lower edge and
+cover = cover.cut(cyl_x(LID_Y1, Z_TOP + SCOOP_R - SCOOP_DEEP, 2 * SCOOP_R, rx - 6.5, rx + 6.5))   # curving up to the face below it, so a fingertip slides down the curve and under the edge
 posts = None
 for x0_, x1_ in ((NECK_X[0] - 0.2 - POST_W, NECK_X[0] - 0.2), (NECK_X[1] + 0.2, NECK_X[1] + 0.2 + POST_W)):
     # the post reaches 4 mm above the axis and 2.6 mm over it: the lid's shoulders land on that corner at about 135 degrees
     p_ = slab(x0_, HINGE_Y - 4.0, x1_, HINGE_Y + 2.4, Z_TOP - 0.2, Z_AX + 2.6)
     posts = p_ if posts is None else posts.union(p_)
 posts = posts.edges("|X").fillet(0.6)
-# the ear turns in a round hole; a slot towards the top of the case lets the lid slide in while it lies flat. Once it
-# hangs, its own weight keeps it in, and a lid that is flipped up cannot leave through the slot.
+# the ear turns in a round hole; a notch in the front of each post lets it snap in while the lid sticks straight out
 posts = posts.cut(cyl_x(HINGE_Y, Z_AX, 3.9, NECK_X[0] - EAR - 0.3, NECK_X[1] + EAR + 0.3))
-posts = posts.cut(slab(NECK_X[0] - EAR - 0.3, HINGE_Y - 5.0, NECK_X[1] + EAR + 0.3, HINGE_Y, Z_AX - LID_T / 2 - 0.15, Z_AX + LID_T / 2 + 0.15))
+posts = posts.cut(slab(NECK_X[0] - EAR - 0.3, HINGE_Y - 0.925, NECK_X[1] + EAR + 0.3, HINGE_Y + 0.925, Z_AX, Z_AX + 4))
 cover = cover.union(posts)
 # the lid, shut (for the pictures and the fit check) and as a flat outline for the laser
 lid2d = (cq.Workplane("XY").rect(LID_X[1] - LID_X[0], LID_Y1 - (HINGE_Y + 3.0)).extrude(LID_T).edges("|Z").fillet(1.5)
@@ -249,13 +249,14 @@ if HINGE_Y - 3 < micy + 3.0 and NECK_X[0] < micx + 2.4 and NECK_X[1] > micx - 2.
     lid2d = lid2d.cut(slab(micx - 2.4, HINGE_Y - 3, micx + 2.4, micy + 3.0, -1, LID_T + 1).edges("|Z").fillet(1.0))   # the notch at the microphone port
 lid = lid2d.translate((0, 0, Z_TOP))
 lid_open = lid.rotate((0, Y(HINGE_Y), Z_AX), (1, Y(HINGE_Y), Z_AX), -135)
+lid_90 = lid.rotate((0, Y(HINGE_Y), Z_AX), (1, Y(HINGE_Y), Z_AX), -90)      # sticking straight out: how it goes in
+lid_pre = lid_90.translate((0, 0, 7.0))                                       # ... held in front of the posts, before it is pressed in
 # engraved labels under the buttons
 def label(txt, x, y, halign):
     return cq.Workplane("XY").text(txt, LABEL_H, LABEL_DEPTH + 0.5, halign=halign, valign="center", kind="bold").translate((x, Y(y), Z_TOP - LABEL_DEPTH))
-gap = BTN_W / 2 + 1.8                           # labels sit outside their buttons, clear of the speaker grille
-def small(txt, x, y): return cq.Workplane("XY").text(txt, 3.0, LABEL_DEPTH + 0.5, halign="center", valign="center", kind="bold").translate((x, Y(y), Z_TOP - LABEL_DEPTH))
-engraved = [small("LOCK", LID_X[0] - 6.0, ry - 2.2), small("DOWN", LID_X[0] - 6.0, ry + 2.2),   # left of the lid
-            label("TALK", TALK_AT[0] + gap, TALK_AT[1] + CAP_DY, "left"), label("OFFICE", OFFICE_AT[0] + gap, OFFICE_AT[1] + CAP_DY, "left")]   # each to the right of its button
+LABEL_Y = TALK_AT[1] + CAP_DY + BTN_H / 2 + 3.0   # every button's name is written under it, on one line
+def small(txt, x, y): return cq.Workplane("XY").text(txt, LABEL_H, LABEL_DEPTH + 0.5, halign="center", valign="center", kind="bold").translate((x, Y(y), Z_TOP - LABEL_DEPTH))
+engraved = [small("LOCKDOWN", rx + 1.5, LABEL_Y), label("TALK", TALK_AT[0], LABEL_Y, "center"), label("OFFICE", OFFICE_AT[0], LABEL_Y, "center")]
 for e_ in engraved: cover = cover.cut(e_)
 # microphones: a tube from the face down to just above each mic (gasket goes between), with a small port
 for r in ("U16", "U17"):
@@ -266,13 +267,6 @@ k = B["keepouts"].get("camera heatsink")
 if k: cover = cover.cut(cyl((k[0] + k[2]) / 2, (k[1] + k[3]) / 2, CAM_D, Z_FACE - 1, Z_TOP + 1))
 # status LED D9: light hole
 if part("D9"): cover = cover.cut(cyl(part("D9")["x"], part("D9")["y"], 3.0, Z_FACE - 1, Z_TOP + 1))
-# speaker grille: slots inside a circle
-sx, sy = SPK_AT
-grille = None
-for i in range(-4, 5):
-    s = slab(sx - SPK_D / 2, sy + i * 4.0 - 1.0, sx + SPK_D / 2, sy + i * 4.0 + 1.0, Z_FACE - 1, Z_TOP + 1)
-    grille = s if grille is None else grille.union(s)
-cover = cover.cut(grille.intersect(cyl(sx, sy, SPK_D, Z_FACE - 2, Z_TOP + 2)))
 # vents for the PoE module, which is on the back of the board: slots in the bottom wall behind the board to let
 # air in, slots in the top wall to let the warm air out. The face has none.
 if BACK_H > 9:
@@ -346,7 +340,7 @@ speaker2 = slab(sx0 + 0.2, sy0 + 0.2, sx1 - 0.2, sy1 - 0.2, Z_IN - SPK2_T, Z_IN)
 # ---- looks: an engraved ring round the speaker and round the status light, a bevel on the camera opening ------
 def ring(x, y, d_out, width):
     return cyl(x, y, d_out, Z_TOP - LABEL_DEPTH, Z_TOP + 1).cut(cyl(x, y, d_out - 2 * width, Z_TOP - LABEL_DEPTH - 1, Z_TOP + 2))
-rings = [ring(sx, sy, SPK_D + 6.0, 0.9)] + ([ring(part("D9")["x"], part("D9")["y"], 7.0, 0.8)] if part("D9") else [])
+rings = ([ring(part("D9")["x"], part("D9")["y"], 7.0, 0.8)] if part("D9") else [])
 for e_ in rings: cover = cover.cut(e_)
 # the paint in the engraving, for the pictures only: a thin layer on the bottom of every engraved shape
 paint = None
@@ -390,9 +384,9 @@ if BAY >= 30:  # the RJ45 plug with its boot
 
 out = os.path.join(here, "out_clam"); os.makedirs(out, exist_ok=True)
 for name, s in (("clam_back", back), ("clam_cover", cover), ("clam_button", cap), ("clam_buttons", caps), ("board_standin", board), ("use_card", use_card), ("paint", paint),
-                ("clam_red_button", red), ("red_at", red_at), ("lid", lid), ("lid_open", lid_open),
+                ("clam_red_button", red), ("red_at", red_at), ("lid", lid), ("lid_open", lid_open), ("lid_90", lid_90), ("lid_pre", lid_pre),
                 ("speaker_standin", speaker2), ("shutter_paddle", paddle), ("pad_closed", pad_closed), ("pad_open", pad_open), ("pad_flag", pad_flag), ("servo_standin", servo)):
-    if name not in ("clam_buttons", "use_card", "paint", "red_at", "lid_open", "pad_closed", "pad_open", "pad_flag"): cq.exporters.export(s, os.path.join(out, name + ".step"))
+    if name not in ("clam_buttons", "use_card", "paint", "red_at", "lid_open", "lid_90", "lid_pre", "pad_closed", "pad_open", "pad_flag"): cq.exporters.export(s, os.path.join(out, name + ".step"))
     cq.exporters.export(s, os.path.join(out, name + ".stl"), tolerance=0.05)
 cq.exporters.export(lid2d.faces("<Z"), os.path.join(out, "lid.dxf"))   # the lid's outline, for the laser cutter (mm)
 bb = back.union(cover).val().BoundingBox()
@@ -457,6 +451,8 @@ shot_at("preview_buttons.png", [actor("board_standin", green), actor("clam_butto
 shot_at("preview_labels.png", [actor("clam_back", grey), actor("clam_cover", blue), actor("clam_buttons", dark), actor("red_at", red_c)], (50, -30, Z_TOP), (0, -40, 150), (0, 1, 0))
 shot_at("preview_card.png", [actor("clam_cover", beige), actor("use_card", white)], (50, -122, Z_LOW), (30, -70, 90), (0, 1, 0))
 shot_at("preview_red.png", [actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear("lid")], (rx + 4, Y(ry + 2), Z_TOP), (-45, -60, 70), (0, 1, 0))
+for n_, l_ in ((1, "lid_pre"), (2, "lid_90"), (3, "lid")):   # fitting the lid, in three steps
+    shot_at("preview_lid_fit%d.png" % n_, [actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear(l_)], (rx + 2, Y(ry - 2), Z_TOP + 4), (-50, -45, 55), (0, 1, 0))
 shot_at("preview_red_open.png", [actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear("lid_open")], (rx + 4, Y(ry + 2), Z_TOP), (-45, -60, 70), (0, 1, 0))
 # the shutter: the cover seen through, with the paddle closed, open and out as a flag
 def glass(name):
