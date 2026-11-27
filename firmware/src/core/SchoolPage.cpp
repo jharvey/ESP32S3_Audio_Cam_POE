@@ -33,7 +33,23 @@ main{padding:14px;max-width:1300px;margin:0 auto}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:18px}
 .room{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--ok);border-radius:8px;padding:8px 10px;min-height:74px}
 .room{cursor:pointer}.room.sel{outline:3px solid var(--call);outline-offset:1px}
-.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px;margin-top:6px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 12px;border-bottom:2px solid var(--line)}
+.tabs button{font:600 14.5px system-ui,sans-serif;padding:9px 15px;border-radius:9px 9px 0 0;border:1px solid var(--line);border-bottom:0;background:var(--bg);color:var(--mute);cursor:pointer}
+.tabs button.on{background:var(--card);color:var(--ink);box-shadow:inset 0 3px 0 var(--call)}
+.tabs .cnt{display:inline-block;min-width:20px;margin-left:5px;padding:0 6px;border-radius:99px;background:var(--bad);color:#fff;font-size:12px;text-align:center}
+body:not(.setup) .tabs{display:none}body.hasplan:not([data-tab=rooms]) #rooms{display:none}
+.tabpage{display:none}.tabpage.on{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px;align-items:start}
+.panel details{margin:8px 0;border-top:1px solid var(--line);padding-top:6px}.panel summary{cursor:pointer;font-weight:600}
+.panel table{border-collapse:collapse;width:100%}.panel td{padding:4px 8px 4px 0;border-bottom:1px solid var(--line)}
+.prob{border-left:6px solid var(--warn);background:var(--warnbg);border-radius:8px;padding:8px 10px;margin:0 0 8px}.prob.bad{border-left-color:var(--bad);background:var(--badbg)}
+.prob.info{border-left-color:var(--line);background:var(--bg)}.prob b{font-size:16px}.prob .what{font-weight:700;margin-left:8px}.prob .do{margin:3px 0 0}
+.prob button,dialog button{font:inherit;padding:5px 11px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;margin:6px 6px 0 0}
+#sum .n.att{cursor:pointer;border-color:var(--bad);color:var(--bad);font-weight:700}#sum .n.fine{cursor:pointer}
+dialog{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;width:min(720px,94vw);max-height:86vh;overflow:auto;padding:14px 16px}
+dialog::backdrop{background:rgba(0,0,0,.45)}dialog h2{margin:0 0 10px;font-size:18px}
+#toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:40;max-width:90vw;background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:9px;font-weight:600;display:none}
+.chip{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:2px 4px 2px 10px;margin:2px 4px 2px 0}.chip button{padding:0 7px;border-radius:99px;margin-left:4px}
+.panels{margin-top:6px}body.hasplan.setup main{display:flex;flex-direction:column}body.hasplan #rooms{order:9;margin-top:14px}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
 .panel h2{margin:0 0 8px;font-size:15px}
 #extras{display:flex;flex-direction:column;gap:10px;margin:0 0 16px}#extras .talkbar,#extras .panel{margin:0}
@@ -85,71 +101,110 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
  <div class="mute">Every unit plays the signal (and its recorded message, if it has one) for a minute, evacuate for five. Then it stays
  quiet with its display and alarm light on until All clear. Talking from this page still gets through.</div></section>
 <div class="setupbar"><b>Setup</b><input type="password" id="setuppw" placeholder="web password" autocomplete="off"><button id="setupbtn">Open setup</button>
- <span class="mute" id="setupnote">Devices, areas and backup, features, timed events, commands, installer tests and the log.</span></div>
+ <span class="mute" id="setupnote">Problems, rooms and devices, bells, emergency steps, options, backup, installer.</span></div>
 </div></div>
+<div class="tabs" id="tabs"><button data-t="prob">Problems<span id="probn"></span></button><button data-t="rooms">Rooms and devices</button>
+<button data-t="bells">Bells and quiet hours</button><button data-t="steps">Emergency steps</button><button data-t="opts">Options</button>
+<button data-t="backup">Backup</button><button data-t="inst">Installer</button></div>
 <div id="rooms"></div>
 <div class="panels">
-<section class="panel"><h2>Devices, highlight areas and backup</h2>
- <div class="prow">Device <select id="dsel"></select><span class="mute" id="dinfo"></span></div>
- <div class="prow"><button id="dplace">Put it on the plan</button><button id="aedit">Edit room and device areas…</button></div>
- <div class="mute"><b>Areas.</b> A room's area is what lights up on the plan for that room and where a click picks it; it is worked out from the walls.
- A device without a room (a hall monitor) can be given an area of its own. <b>Edit room and device areas</b> opens a large view of one floor to
- correct them: fill a room with a click, or draw an outline and drag, add or remove its corners. Moving dots and loading a plan also need Setup open.</div>
- <div class="mute"><b>A new device:</b> set its number on the device itself (hold SETUP for 3 seconds, UP and DOWN change the digit, MODE goes on and
- saves). It then appears in this list marked NEW. Put it on the plan; if it watches a hall or another place without a room number, draw its area:
- the area lights up when that device calls, and a click inside it picks the device.</div>
- <div class="prow"><button id="dread">Read its settings</button><button id="dapply">Send the changed lines</button><span class="mute" id="dnote"></span></div>
- <textarea id="dtext" rows="7" spellcheck="false" style="width:100%;box-sizing:border-box;font:13px ui-monospace,Consolas,monospace"
-  placeholder="The device's settings appear here, one per line: unit= is its number, group= the room it shares with other devices."></textarea>
- <div class="prow"><b>Backup</b><button id="bksave">Save a backup file</button><button id="bkload">Restore from a backup file…</button></div>
- <div class="prow">After a restore, for a replaced or reset device: <select id="bkunit"></select><button id="bkunitgo">Send it its saved settings</button></div>
- <div class="mute" id="bknote">The file holds the plan, the dots, the areas and every device's settings. No passwords or keys.</div></section>
-<section class="panel"><h2>What the operator is told</h2>
- <div class="mute">These steps appear on the office screen when an alarm or a call for help comes in. They start as a draft: change them to
- match the school's own emergency plan, and fill in the parts in [CAPITALS]. One step per line. {room} becomes the room number.</div>
- <div class="prow"><select id="stkind"><option value="lockdown">Lockdown</option><option value="evacuate">Evacuate</option><option value="shelter">Shelter</option>
- <option value="help">Help needed</option><option value="silent">Silent help call</option></select><button id="stsave">Save</button>
- <button id="stdef">Back to the draft</button><span id="stnote" class="mute"></span></div>
- <textarea id="sttext" rows="8" style="width:100%;box-sizing:border-box;font:inherit"></textarea>
- <div class="mute">Kept in this browser and in the backup file. Save a backup and restore it on every other office PC.</div></section>
-<section class="panel"><h2>Features</h2>
- <div class="prow" id="feats"></div>
- <div class="mute">Each feature is off until ticked. A tick sets it on this unit and sends it to all units.</div>
- <div class="prow">Office unit <input type="number" id="ofc" min="1" max="999" style="width:5em"> stand-in <input type="number" id="ofc2" min="1" max="999" style="width:5em">
- <button id="ofcset">Set on all units</button><span class="mute" id="ofcnow"></span></div>
- <div class="prow">Quiet hours <input type="time" id="q1" value="18:00"> to <input type="time" id="q2" value="07:00"> by
- <input type="number" id="qdb" value="-12" min="-30" max="0" style="width:5em"> dB <button id="qset">Set on all units</button><button id="qoff">Off</button></div>
- <div class="prow">Zone <input type="number" id="zn" min="1" max="8" value="1" style="width:4em"><input id="zname" placeholder="east" size="8">
- <input id="zrooms" placeholder="101-112,201" size="16"><button id="zset">Set on all units</button><button id="zdel">Remove</button></div>
- <div class="prow">The selected room: <button id="dnd45">Do not disturb 45 min</button><button id="dndoff">End it</button>
- <button id="helpclr">Clear its call for help</button></div></section>
-<section class="panel"><h2>Log: faults and calls</h2>
+<div class="tabpage" data-t="prob">
+<section class="panel"><h2>What needs attention now</h2><div id="probs"></div>
+ <div class="mute">Each line says what is wrong and what to do about it. The same list opens from "need attention" at the top of the page, without the password.</div></section>
+<section class="panel"><h2>History: faults and calls</h2>
  <div class="prow"><select id="lkind"><option value="">Faults and calls</option><option value="0">Faults</option><option value="1">Calls</option>
  <option value="all">Everything</option></select><span class="mute">Seen by this unit since it started. Newest first.</span></div>
  <div id="log" style="max-height:320px;overflow:auto"></div></section>
+</div>
+<div class="tabpage" data-t="rooms">
+<section class="panel"><h2>The selected room</h2>
+ <div id="selnote"><b>No room selected.</b> Click a room on the plan or in the list.</div>
+ <div class="prow"><button id="dnd45">Do not disturb for 45 min</button><button id="dndoff">End do not disturb</button></div>
+ <div class="prow"><button id="helpclr">Clear its call for help</button><button id="selmute">Switch its TALK off for 30 min</button><button id="selunmute">TALK back on</button></div>
+ <div class="mute">Do not disturb: pages to everyone skip the room (a test, a nap); emergencies still sound. It must be ticked under Options.
+ Switch TALK off when a button is stuck or misused: the room still hears everything.</div></section>
+<section class="panel"><h2>Devices</h2>
+ <div class="prow">Device <select id="dsel"></select></div><div class="mute" id="dinfo"></div>
+ <div class="prow"><button id="dplace">Put it on the plan</button><button id="aedit">Edit room and device areas…</button></div>
+ <div class="mute">A room's area is what lights up on the plan for that room and where a click picks it. The editor opens a large view of one floor:
+ fill a room with a click, or draw an outline and drag its corners.</div>
+ <details><summary>Adding a new device</summary><div class="mute">Set its number on the device itself (hold SETUP for 3 seconds, UP and DOWN change the digit, MODE goes on and
+ saves). It then appears in the list above marked NEW. Put it on the plan; if it watches a hall or another place without a room number, draw its area:
+ the area lights up when that device calls, and a click inside it picks the device.</div></details>
+ <details><summary>This device's settings (advanced)</summary>
+ <div class="prow"><button id="dread">Read its settings</button><button id="dapply">Send the changed lines</button><span class="mute" id="dnote"></span></div>
+ <textarea id="dtext" rows="7" spellcheck="false" style="width:100%;box-sizing:border-box;font:13px ui-monospace,Consolas,monospace"
+  placeholder="The device's settings appear here, one per line: unit= is its number, group= the room it shares with other devices."></textarea></details></section>
+<section class="panel"><h2>Office unit</h2>
+ <div class="prow">Office unit <input type="number" id="ofc" min="1" max="999" style="width:5em"> stand-in <input type="number" id="ofc2" min="1" max="999" style="width:5em">
+ <button id="ofcset">Save on all units</button></div><div class="mute" id="ofcnow"></div>
+ <div class="mute">The office unit is where rooms call when OFFICE is pressed. The stand-in takes over when the office unit is off (tick Stand-in office unit under Options).</div></section>
+<section class="panel"><h2>Zones: sets of rooms to page together</h2>
+ <div id="zlist"></div>
+ <div class="prow"><b>Add or change:</b> number <input type="number" id="zn" min="1" max="8" value="1" style="width:4em"> name <input id="zname" placeholder="east" size="8">
+ rooms <input id="zrooms" placeholder="101-112,201" size="16"><button id="zset">Save on all units</button><button id="zdel" style="display:none">Remove</button></div>
+ <div class="mute">A saved zone appears in the "Who hears you" list beside the talk button.</div></section>
+</div>
+<div class="tabpage" data-t="bells">
+<section class="panel"><h2>Bells and timed sounds</h2>
+ <div id="schedt"></div><pre id="sched" style="display:none"></pre>
+ <div class="prow"><b>Add:</b> <input type="time" id="stime" value="11:30"><select id="sdays"><option value="mon-fri">Monday to Friday</option><option value="daily">every day</option><option value="weekend">weekend</option></select>
+ <select id="ssound"><option>bell</option><option>lunch</option><option>chime</option><option>tone</option></select>
+ for <select id="swho"><option value="all">everyone</option><option value="room">the selected room</option><option value="floor">its floor</option></select>
+ <button id="sadd">Add</button></div>
+ <div class="mute">Kept on every unit, so the bells ring even when this PC is off.</div></section>
+<section class="panel"><h2>Days without bells</h2>
+ <div class="prow"><button id="sskip">No bells today</button><button id="sresume">Bells back on today</button></div>
+ <div id="offlist"></div>
+ <div class="prow"><b>Add a day off:</b> <input type="date" id="soff"><button id="soffadd">Add</button></div></section>
+<section class="panel"><h2>Quiet hours</h2>
+ <div class="prow">From <input type="time" id="q1" value="18:00"> to <input type="time" id="q2" value="07:00"> turn every unit down by
+ <input type="number" id="qdb" value="-12" min="-30" max="0" style="width:5em"> dB</div>
+ <div class="prow"><button id="qset">Save on all units</button><button id="qoff">Switch quiet hours off</button></div>
+ <div class="mute">Quiet hours must be ticked under Options.</div></section>
+</div>
+<div class="tabpage" data-t="steps">
+<section class="panel"><h2>What the operator is told</h2>
+ <div class="mute">These steps appear on the office screen when an alarm or a call for help comes in. They start as a draft: change them to
+ match the school's own emergency plan, and fill in the parts in [CAPITALS]. One step per line. {room} becomes the room number.</div>
+ <div class="prow">Steps for <select id="stkind"><option value="lockdown">Lockdown</option><option value="evacuate">Evacuate</option><option value="shelter">Shelter</option>
+ <option value="help">Help needed</option><option value="silent">Silent help call</option></select><button id="stsave">Save</button>
+ <button id="stdef">Back to the draft</button><span id="stnote" class="mute"></span></div>
+ <textarea id="sttext" rows="10" style="width:100%;box-sizing:border-box;font:inherit"></textarea>
+ <div class="mute">Kept in this browser and in the backup file. Save a backup and restore it on every other office PC.</div></section>
+</div>
+<div class="tabpage" data-t="opts">
+<section class="panel"><h2>What the intercoms can do</h2>
+ <div class="prow" id="feats"></div>
+ <div class="mute">Each one is off until ticked. A tick is saved at once on this unit and sent to all units.</div></section>
+<section class="panel"><h2>Nightly self-check</h2>
+ <div class="prow">Check every speaker and microphone at <input type="time" id="sctime" value="02:30"><button id="scset">Save on all units</button>
+ <button id="scoff">Off</button></div>
+ <div class="mute">A unit that fails the check shows under Problems.</div></section>
+</div>
+<div class="tabpage" data-t="backup">
+<section class="panel"><h2>Backup</h2>
+ <div class="prow"><button id="bksave">Save a backup file</button><button id="bkload">Restore from a backup file…</button></div>
+ <div class="mute" id="bknote">The file holds the plan, the dots, the areas and every device's settings. No passwords or keys.</div></section>
+<section class="panel"><h2>A replaced or reset device</h2>
+ <div class="mute">1. Restore from the backup file. 2. Set the room's number on the new device. 3. Choose it here and send.</div>
+ <div class="prow">Device <select id="bkunit"></select><button id="bkunitgo">Send it its saved settings</button></div></section>
+</div>
+<div class="tabpage" data-t="inst">
+<section class="panel"><h2>Installer tests</h2>
+ <div class="prow"><button id="tclosed">Coupling test: doors closed</button><button id="topen">Coupling test: doors open</button></div>
+ <div class="prow"><button id="tcal">Auto-tune the selected room</button></div>
+ <div class="mute">Coupling test: every unit plays a short sweep in turn (about 1 s each) while the others listen, to find
+ rooms that hear each other. Run it once with the classroom doors closed and once with them open; rooms must be quiet.
+ Auto-tune: the room's unit plays noise for 2 s to set its echo canceller. Results show under Commands.</div></section>
 <section class="panel"><h2>Commands</h2>
  <div class="prow"><select id="ctarget"><option value="all">All units</option><option value="sel">The selected room</option></select>
  <input id="cmd" placeholder="stats" size="24"><button id="csend">Send</button></div>
  <div class="mute">The same commands as the USB console ("help" lists them), signed with this unit's network key.</div>
  <pre id="cout"></pre></section>
-<section class="panel"><h2>Timed events (kept on every unit)</h2>
- <pre id="sched">…</pre>
- <div class="prow"><input type="time" id="stime" value="11:30"><select id="sdays"><option>mon-fri</option><option>daily</option><option>weekend</option></select>
- <select id="ssound"><option>bell</option><option>lunch</option><option>chime</option><option>tone</option></select>
- <select id="swho"><option value="all">everyone</option><option value="room">the selected room</option><option value="floor">its floor</option></select>
- <button id="sadd">Add</button></div>
- <div class="prow">Delete number <input type="number" id="sdel" min="1" style="width:5em"><button id="sdelb">Delete</button>
- <button id="sskip">Skip today</button><button id="sresume">Resume today</button></div>
- <div class="prow">Day off <input type="date" id="soff"><button id="soffadd">Add</button><button id="soffdel">Remove</button></div>
-</section>
-<section class="panel"><h2>Installer tests</h2>
- <div class="prow"><button id="tclosed">Coupling test: doors closed</button><button id="topen">Coupling test: doors open</button></div>
- <div class="prow"><button id="tcal">Auto-tune the selected room</button></div>
- <div class="prow">Nightly speaker and microphone check at <input type="time" id="sctime" value="02:30"><button id="scset">Set on all units</button>
- <button id="scoff">Off</button></div>
- <div class="mute">Coupling test: every unit plays a short sweep in turn (about 1 s each) while the others listen, to find
- rooms that hear each other. Run it once with the classroom doors closed and once with them open; rooms must be quiet.
- Auto-tune: the room's unit plays noise for 2 s to set its echo canceller. Results show under Commands.</div></section>
+</div>
+</div>
+<dialog id="probdlg"><h2>What needs attention</h2><div id="probs2"></div><button id="probclose">Close</button></dialog><div id="toast"></div>
 </div></main>
 <script>
 const EMERG=["","LOCKDOWN","EVACUATE","SHELTER"];let selfFw="";
@@ -186,7 +241,7 @@ async function tick(){
     for(const u of us){if(!u.online){c.off++;continue}c.on++;if(u.flags&32)c.call++;if(u.flags&1)c.talk++;
       if(u.fault||(u.flags&(8|16)))c.bad++;}
     document.getElementById("sum").innerHTML=`<span class="n">${c.on} online</span><span class="n">${c.off} offline</span>`+
-      `<span class="n">${c.call} calling</span><span class="n">${c.talk} talking</span><span class="n">${c.bad} need attention</span>`;
+      `<span class="n">${c.call} calling</span><span class="n">${c.talk} talking</span>`+drawProbs(us);
     const floors={};for(const u of us){const fl=Math.floor(u.room/100);(floors[fl]=floors[fl]||[]).push(u);}
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
@@ -296,19 +351,54 @@ ${stepsHtml(w.silent?"silent":"help",w.room)}
   if(gid("alwait")&&hq.length)gid("alwait").textContent="waiting "+hq[0].wait_s+" s";
   box.style.display=h&&!alMin?"flex":"none";bar.style.display=h&&alMin?"block":"none";bar.textContent=bt;bar.onclick=()=>{alMin=false;box.style.display="flex";bar.style.display="none";};
   if(h&&!alMin&&Date.now()-ringT>1900){ringT=Date.now();ringTone();}}
+// ---- Problems: what is wrong with which device, and what to do about it (also opens from the header, no password) ----
+function probList(us){const P=[],P0=window.planApi;const add=(u,cls,what,todo,btn)=>P.push({u:u.unit,cls,what,todo,btn:btn||""});
+  for(const u of us){const f=u.flags;
+    if(!u.online){const m=Math.round(u.age_s/60);add(u,"bad","OFFLINE"+(m?", not heard for "+m+" min":""),"Look at the device. Display dark: it has no power, so check the network cable at the device and its port on the PoE switch. Display lit: push both plugs in until they click, then try another switch port.");continue;}
+    if(u.fault===4)add(u,"bad","Two devices have this number (dUP)","On one of the two, hold SETUP for 3 seconds and give it its own number (UP and DOWN change the digit, MODE saves).");
+    if(u.fault===5)add(u,"bad","Speaker output shorted (oL)","Unplug the device and check the speaker wires for a pinch or a bare end. If the wires are good, replace the device.");
+    if(u.fault===3)add(u,"bad","Battery low (Lo)","It is running on its battery. Check its power: the network cable and the switch port. It stops when the battery is empty.");
+    if(u.fault===1)add(u,"warn","No Ethernet, working over Wi-Fi (E1)","It still works. Check the network cable and the switch port when convenient.");
+    if(u.fault===2)add(u,"warn","No network (E2)","Check the network cable at the device and at the switch.");
+    if(f&64)add(u,"bad","Failed the speaker and microphone self-check","Call the room and ask for an answer. If one direction is silent, check that nothing covers the speaker or microphone; if it stays silent, replace the device.");
+    if(f&16)add(u,"bad","TALK held for over 2 minutes","Something is leaning on its TALK button, or the button is stuck. Ask the room to look. Until then you can switch its TALK off; the room still hears everything.",`<button data-u="${u.unit}" data-c="mute 30">Switch its TALK off for 30 min</button>`);
+    else if(f&8)add(u,"warn","Its TALK is switched off from the office","It comes back by itself when the time is up.",`<button data-u="${u.unit}" data-c="mute off">Switch TALK back on now</button>`);
+    if(P0&&!P0.placed(u))add(u,"info","New: not on the plan yet","Open Setup, Rooms and devices, choose it under Devices and press Put it on the plan.");
+    if(u.fw&&selfFw&&u.fw!==selfFw)add(u,"info","Different firmware ("+esc(u.fw)+"; the office unit has "+esc(selfFw)+")","It works, but update it with the update tool so that all devices match.");}
+  const rank={bad:0,warn:1,info:2};return P.sort((a,b)=>rank[a.cls]-rank[b.cls]);}
+let probSig="";
+function drawProbs(us){const P=probList(us),n=P.filter(p=>p.cls!=="info").length,sig=JSON.stringify(P);
+  if(sig!==probSig){probSig=sig;const h=P.length?P.map(p=>`<div class="prob ${p.cls}"><b>${p.u}</b><span class="what">${p.what}</span><div class="do"><b>What to do:</b> ${p.todo}</div>${p.btn}</div>`).join("")
+      :'<div class="prob info"><b>Nothing needs attention.</b> Every device is online and reports no fault.</div>';
+    document.getElementById("probs").innerHTML=h;document.getElementById("probs2").innerHTML=h;document.getElementById("probn").innerHTML=n?'<span class="cnt">'+n+"</span>":"";}
+  return `<span class="n ${n?"att":"fine"}" id="probchip" title="Click: what is wrong and what to do">${n?n+" need attention: what to do":"no problems"}</span>`;}
+document.getElementById("sum").addEventListener("click",e=>{if(e.target.id==="probchip")document.getElementById("probdlg").showModal();});
+document.getElementById("probclose").onclick=()=>document.getElementById("probdlg").close();
+for(const id of ["probs","probs2"])document.getElementById(id).addEventListener("click",e=>{const b=e.target.dataset;if(b.c&&confirm(e.target.textContent+": device "+b.u+"?"))sendTo(b.u,b.c);});
+// ---- Setup tabs ----
+function showTab(t){document.body.dataset.tab=t;document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  document.querySelectorAll(".tabpage").forEach(p=>p.classList.toggle("on",p.dataset.t===t));try{localStorage.setItem("icTab",t);}catch(e){}}
+document.getElementById("tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(b)showTab(b.dataset.t);});
+{let t="prob";try{t=localStorage.getItem("icTab")||t;}catch(e){}showTab(document.querySelector('.tabpage[data-t="'+t+'"]')?t:"prob");}
 function drawQueue(q){
   document.getElementById("queue").innerHTML=q.length?'<div class="floor">Waiting for the office</div><div class="grid">'+q.map((w,i)=>
     `<div class="room ${w.silent||w.urgent?"bad":"call"}"><b>${i+1}. Room ${w.room}</b><div class="st">${w.silent?"SILENT HELP CALL":w.urgent?"HELP NEEDED":"question"}</div><div class="d">waiting ${w.wait_s} s</div></div>`).join("")+"</div>":"";}
 function drawZones(zs){const sig=JSON.stringify(zs);if(sig===zoneSig)return;zoneSig=sig;const s=document.getElementById("tkind");
   [...s.querySelectorAll("option[data-z]")].forEach(o=>o.remove());
-  for(const z of zs){const o=document.createElement("option");o.value="zone:"+z.n;o.dataset.z="1";o.textContent="Zone "+z.n+": "+z.name+" ("+z.rooms+")";s.appendChild(o);}}
+  for(const z of zs){const o=document.createElement("option");o.value="zone:"+z.n;o.dataset.z="1";o.textContent="Zone "+z.n+": "+z.name+" ("+z.rooms+")";s.appendChild(o);}
+  document.getElementById("zlist").innerHTML=zs.length?"<table>"+zs.map(z=>`<tr><td><b>Zone ${z.n}</b></td><td>${esc(String(z.name))}</td><td>rooms ${esc(String(z.rooms))}</td><td><button data-zn="${z.n}" data-zname="${esc(String(z.name))}" data-zrooms="${esc(String(z.rooms))}">Change</button><button data-zdel="${z.n}">Remove</button></td></tr>`).join("")+"</table>"
+    :'<div class="mute">No zones yet. Zones must be ticked under Options.</div>';}
+document.getElementById("zlist").addEventListener("click",e=>{const d=e.target.dataset;
+  if(d.zdel&&confirm("Remove zone "+d.zdel+" on all units?"))both("zone "+d.zdel+" off");
+  if(d.zn){document.getElementById("zn").value=d.zn;document.getElementById("zname").value=d.zname;document.getElementById("zrooms").value=d.zrooms;document.getElementById("zname").focus();}});
 const val=id=>document.getElementById(id).value.trim();
 document.getElementById("ofcset").onclick=()=>{if(val("ofc"))both("office "+val("ofc")+(val("ofc2")?" "+val("ofc2"):""));};
 document.getElementById("qset").onclick=()=>{if(val("q1")&&val("q2"))both("quiet "+val("q1")+" "+val("q2")+" "+(val("qdb")||"-12"));};
 document.getElementById("qoff").onclick=()=>both("quiet off");
 document.getElementById("zset").onclick=()=>{if(val("zn")&&val("zname")&&val("zrooms"))both("zone "+val("zn")+" "+val("zname")+" "+val("zrooms"));};
 document.getElementById("zdel").onclick=()=>{if(val("zn"))both("zone "+val("zn")+" off");};
-function selCmd(c){if(!selRoom){out("Click a room first.");return;}sendTo(String(selRoom.room),c);}
+function selCmd(c){if(!selRoom){out("Click a room on the plan first.");return;}sendTo(String(selRoom.room),c);}
+document.getElementById("selmute").onclick=()=>selCmd("mute 30");document.getElementById("selunmute").onclick=()=>selCmd("mute off");
 document.getElementById("dnd45").onclick=()=>selCmd("dnd 45");
 document.getElementById("dndoff").onclick=()=>selCmd("dnd off");
 document.getElementById("helpclr").onclick=()=>selCmd("callofc off");
@@ -350,6 +440,7 @@ function updTarget(){
     to=grp?"group:"+selRoom.group:"room:"+selRoom.room;toText=grp?"room group "+selRoom.group:"room "+selRoom.room;}
   else if(k==="floor"){const f=Math.floor(selRoom.room/100);to="floor:"+f;toText="floor "+f;}
   else{to="all";toText="everyone";}
+  document.getElementById("selnote").innerHTML=selRoom?"<b>Room "+selRoom.room+"</b> is selected.":"<b>No room selected.</b> Click a room on the plan or in the list.";
   document.getElementById("talk").textContent=(to==="all"?"Hold to talk to ":"Hold to call ")+toText.replace(" (click a room first)","");
   if(!talking&&k!=="all"&&!k.startsWith("zone:")&&!selRoom)setState("Click a room to pick it.","st");
 }
@@ -379,13 +470,13 @@ window.onPlanRing=async info=>{if(!planSel(info))return;
 // Setup (rooms list and the panels below) opens with the unit's web password, checked by the unit, and is closed
 // again by the same button or by loading the page anew.
 function setupShown(){const on=document.body.classList.contains("setup");document.getElementById("setupbtn").textContent=on?"Lock setup":"Open setup";
-  document.getElementById("setupnote").textContent=on?"Setup is open below.":"Devices, areas and backup, features, timed events, commands, installer tests and the log.";}
+  document.getElementById("setupnote").textContent=on?"Setup is open below.":"Problems, rooms and devices, bells, emergency steps, options, backup, installer.";}
 document.getElementById("setupbtn").onclick=async()=>{
   if(document.body.classList.contains("setup")){document.body.classList.remove("setup");setupShown();return;}
   const box=document.getElementById("setuppw"),pw=box.value;box.value="";
   if(!pw){document.getElementById("setupnote").textContent="Type the web password first.";box.focus();return;}
   try{const r=await fetch(location.origin+"/api/status",{cache:"no-store",headers:{Authorization:"Basic "+btoa("admin:"+pw)}});
-    if(r.ok){document.body.classList.add("setup");setupShown();document.querySelector(".panels").scrollIntoView({behavior:"smooth"});}
+    if(r.ok){document.body.classList.add("setup");setupShown();gid("tabs").scrollIntoView({behavior:"smooth"});}
     else document.getElementById("setupnote").textContent=r.status===429?"Too many wrong passwords: wait 30 seconds.":"Wrong password.";
   }catch(e){document.getElementById("setupnote").textContent="Could not check the password.";}};
 document.getElementById("setuppw").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("setupbtn").click();});
@@ -442,10 +533,13 @@ async function cmd(text){  // runs a console command on this unit (e.g. "send al
   const r=await fetch(location.origin+"/api/cmd",{method:"POST",headers:{"X-Intercom":"1","Content-Type":"text/plain"},body:text});
   return r.ok?await r.text():"error "+r.status;}
 let replyN=0,replyTap=null;
-function out(line){const o=document.getElementById("cout");o.textContent+=line+"\n";o.scrollTop=o.scrollHeight;}
+let toastT=0;
+function out(line,quiet){const o=document.getElementById("cout");o.textContent+=line+"\n";o.scrollTop=o.scrollHeight;
+  if(quiet||!document.body.classList.contains("setup"))return;const t=document.getElementById("toast"),m=line.match(/^> (.*?)\s+\((.*)\)$/);
+  t.textContent=m?m[1]+": "+m[2]:line;t.style.display="block";clearTimeout(toastT);toastT=setTimeout(()=>t.style.display="none",4000);}
 async function pollReplies(){
   try{const r=await fetch(location.origin+"/api/replies?since="+replyN,{cache:"no-store"});const j=await r.json();
-    for(const l of j.lines){out(l.from+": "+l.text);if(replyTap)replyTap(l)}replyN=j.next;}catch(e){}}
+    for(const l of j.lines){out(l.from+": "+l.text,1);if(replyTap)replyTap(l)}replyN=j.next;}catch(e){}}
 setInterval(pollReplies,1000);
 async function sendTo(target,text){const r=await cmd("send "+target+" "+text);out("> "+target+" "+text+"   ("+r+")");return r;}
 document.getElementById("csend").addEventListener("click",async()=>{
@@ -509,7 +603,17 @@ gid("bkload").onclick=()=>{const f=Object.assign(document.createElement("input")
 gid("bkunitgo").onclick=async()=>{const k=gid("bkunit").value,n=gid("bknote");if(!bkData||!k){n.textContent="Restore from a backup file first.";return;}
   const u=lastSchool.units.find(x=>String(x.unit)===k);if(!u||!u.online){n.textContent="Device "+k+" is not online. Set its number on the device first.";return;}
   if(!confirm("Send the saved settings to device "+k+"?"))return;n.textContent="Sending…";n.textContent=await devSend(u,setLines(bkData.units[k]));};
-async function loadSched(){document.getElementById("sched").textContent=await cmd("sched");}
+const DAYS={"mon-fri":"Monday to Friday",daily:"every day",weekend:"weekend"};
+async function loadSched(){const txt=await cmd("sched"),rows=[],rest=[];let off=[],skip="";
+  for(const l of txt.split("\n")){const m=l.match(/^(\d+)\. (\d\d:\d\d) (\S+) (\S+) (\S+)(?: (\d+))?$/);
+    if(m)rows.push(`<tr><td><b>${m[2]}</b></td><td>${DAYS[m[3]]||esc(m[3])}</td><td>${esc(m[4])}</td><td>${m[5]==="all"?"everyone":esc(m[5])+" "+m[6]}</td><td><button data-del="${m[1]}" data-t="${m[2]}">Delete</button></td></tr>`);
+    else if(l.startsWith("days off:"))off=l.slice(9).trim().split(/\s+/);else if(l.startsWith("skipping "))skip=l.slice(9).trim();
+    else if(l.trim()&&l.trim()!=="no timed events")rest.push(l.trim());}
+  gid("schedt").innerHTML=(rows.length?"<table>"+rows.join("")+"</table>":'<div class="mute">No bells yet. Add the first one below.</div>')+'<div class="mute">'+esc(rest.join(" · "))+"</div>";
+  gid("offlist").innerHTML=(skip?'<div class="prob"><b>No bells today</b> ('+esc(skip)+").</div>":"")+
+    (off.length?"<div>Days off: "+off.map(d=>`<span class="chip">${esc(d)}<button data-off="${esc(d)}" title="Remove this day off">×</button></span>`).join("")+"</div>":'<div class="mute">No days off set.</div>');}
+document.getElementById("schedt").addEventListener("click",e=>{const d=e.target.dataset;if(d.del&&confirm("Delete the "+d.t+" bell on all units?"))schedAll("sched del "+d.del);});
+document.getElementById("offlist").addEventListener("click",e=>{const d=e.target.dataset;if(d.off)schedAll("dayoff del "+d.off);});
 // ---- Installer tests: need the tests password if one is set on the unit (USB: testpass) -----------
 let lastSchool={units:[]},testPw=null;
 async function testCmd(text){
@@ -536,11 +640,9 @@ document.getElementById("sadd").addEventListener("click",()=>{
   const w=document.getElementById("swho").value;let who="";
   if(w!=="all"){if(!selRoom){out("click a room first");return;}who=w==="room"?" room "+selRoom.room:" floor "+Math.floor(selRoom.room/100);}
   schedAll("sched add "+document.getElementById("stime").value+" "+document.getElementById("sdays").value+" "+document.getElementById("ssound").value+who);});
-document.getElementById("sdelb").addEventListener("click",()=>{const n=document.getElementById("sdel").value;if(n)schedAll("sched del "+n);});
 document.getElementById("sskip").addEventListener("click",()=>schedAll("skip today"));
 document.getElementById("sresume").addEventListener("click",()=>schedAll("skip off"));
 document.getElementById("soffadd").addEventListener("click",()=>{const d=document.getElementById("soff").value;if(d)schedAll("dayoff add "+d);});
-document.getElementById("soffdel").addEventListener("click",()=>{const d=document.getElementById("soff").value;if(d)schedAll("dayoff del "+d);});
 loadSched();
 if(location.hash==="#test-plan"){  // video: a demo plan; hold room 214 for 4 s (talk), then double-click it (ring)
   const go=setInterval(()=>{if(!window.planTest||lastSchool.units.filter(u=>u.online).length<4)return;clearInterval(go);
