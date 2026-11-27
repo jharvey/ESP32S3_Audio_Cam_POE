@@ -119,7 +119,7 @@ def main():
                 w.writerow([r["Ref"], "%.4fmm" % float(r["PosX"]), "%.4fmm" % float(r["PosY"]), "Top", "%g" % ((float(r["Rot"]) + off[r["Ref"]]) % 360)])
                 n += 1
     # parts whose turn JLC's preview must confirm: polarised, or more than two pins
-    risk = sorted(f["ref"] for f in placed if re.match(r"(U|Q|D|T|Y|X|J|FPC|CARD|CN|DISP|ANT|PB|BOOT)d", f["ref"]))
+    risk = sorted(f["ref"] for f in placed if re.match(r"(U|Q|D|T|Y|X|J|FPC|CARD|CN|DISP|ANT|PB|BOOT)\d", f["ref"]))
 
     # hand-fit list
     hrows = [(f["ref"] + " " + f["val"], f["side"] + " side", f["lcsc"], 1) for f in hand]
