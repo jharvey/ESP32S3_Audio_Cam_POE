@@ -75,7 +75,7 @@ HINGE_Y = 3.2    # hinge axis (KiCad y), above the cap
 NECK_X = (-1.5, 20.5)   # the lid is narrower at the hinge, clear of the left microphone port
 EAR = 2.3        # each ear reaches this far into its post
 POST_W = 2.5
-DISH_AT, DISH_R, DISH_DEEP = (0.0, 23.0), 9.0, 1.2   # a finger dish in the face under the lid's lower left corner
+DISH_W, DISH_H, DISH_DEEP = 13.0, 3.0, 1.3   # finger recess: a flat rounded slot in the face, centred under the red button, half under the lid's lower edge
 # Camera shutter: a 9 g servo (SG90 size) stands beside the board on the left, its shaft towards the room. The whole
 # left side of the case is moved out to make room for it, so that side stays one straight wall; the board, the face
 # and everything on it stay where they were, which leaves them a little off centre. A paddle on the shaft turns just behind the face:
@@ -290,8 +290,8 @@ if part("CN1"):
 
 # ---- camera shutter: the slot in the left wall that the flag comes out of ----
 cover = cover.cut(slab(POD_X0 - WALL - 1, SLOT_Y0, POD_X0 + 0.1, POD_Y[1], Z_FACE - SHUT_GAP, Z_FACE))
-# finger dish under the lid
-cover = cover.cut(cq.Workplane("XY").sphere(DISH_R).translate((DISH_AT[0], Y(DISH_AT[1]), Z_TOP + DISH_R - DISH_DEEP)))
+# finger recess under the lid's lower edge
+cover = cover.cut(rrect(DISH_W, DISH_H, DISH_H / 2 - 0.05, Z_TOP - DISH_DEEP, Z_TOP + 1, RED_AT[0], LID_Y1 + 0.2))
 # the paddle (print one): hub on the servo's shaft, arm, disc
 import math
 ARM_L = math.hypot(CAM_AT[0] - PIVOT[0], CAM_AT[1] - PIVOT[1])
