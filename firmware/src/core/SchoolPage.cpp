@@ -481,10 +481,17 @@ gid("dapply").onclick=async()=>{const u=devU();if(!u)return;if(!devRead){gid("dn
   const old=new Set(setLines(devRead)),ch=setLines(gid("dtext").value).filter(l=>!old.has(l));
   if(!ch.length){gid("dnote").textContent="Nothing changed.";return;}
   gid("dnote").textContent="Sending…";gid("dnote").textContent=await devSend(u,ch);devRead=gid("dtext").value;};
-gid("bksave").onclick=async()=>{const n=gid("bknote");n.textContent="Asking every device for its settings…";
+gid("bksave").onclick=async()=>{const n=gid("bknote"),bt=gid("bksave"),was=bt.textContent;if(bt.disabled)return;
+  // it takes several seconds (each device is asked in turn), so the button itself counts along and a bar fills
+  const ask=lastSchool.units.filter(u=>u.online&&!devSelf(u)),tot=ask.length+3;let done=0;
+  const show=t=>{bt.textContent=t;bt.style.background="linear-gradient(90deg,var(--okbg) "+Math.round(100*done/tot)+"%,transparent 0)";n.textContent=t+" Please wait: nothing is saved yet.";};
+  bt.disabled=true;bt.style.minWidth=bt.offsetWidth+"px";
   const got={};replyTap=l=>{got[l.from]=(got[l.from]?got[l.from]+"\n":"")+l.text;};  // one device after another: all at once would overrun the reply list
-  for(const u of lastSchool.units){if(!u.online||devSelf(u))continue;await cmd("send "+u.unit+" backup");await new Promise(r=>setTimeout(r,120));}
-  await new Promise(r=>setTimeout(r,2500));replyTap=null;got[String(lastSchool.self)]=await cmd("backup");
+  try{
+  for(const u of ask){show("Asking device "+(done+1)+" of "+ask.length+"…");await cmd("send "+u.unit+" backup");await new Promise(r=>setTimeout(r,120));done++;}
+  for(let k=0;k<3;k++){show("Waiting for the last answers…");await new Promise(r=>setTimeout(r,830));done++;}
+  replyTap=null;got[String(lastSchool.self)]=await cmd("backup");
+  }finally{replyTap=null;bt.disabled=false;bt.textContent=was;bt.style.background="";}
   const d=Object.assign({kind:"intercom-backup",v:1,saved:new Date().toISOString(),units:got,steps:stepsAll()},window.planApi?window.planApi.data():{});
   const name="intercom-backup-"+d.saved.slice(0,10)+".json",a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:"application/json"}));a.download=name;a.click();
