@@ -46,7 +46,7 @@ constexpr uint32_t kEvacuateSoundFrames = 5 * 60 * 50;   // ... or 5 min (evacua
 constexpr uint32_t kEmergencyRgb = 0xC00000;
 const char* const kEmergencyNames[] = {"clear", "lockdown", "evacuate", "shelter"};
 // R3.2
-const char* const kSchoolKeys[] = {"features", "office", "zones", "quiet", "sched", "selfcheck", "conwatch", "ntp"};  // the same on every unit
+const char* const kSchoolKeys[] = {"features", "office", "zones", "quiet", "sched", "selfcheck", "conwatch", "ntp", "officeuid"};  // the same on every unit
 const char kSyncSep = '\x1f';
 const char* const kFeatureNames[] = {"reason", "queue", "zones", "dnd", "quiet", "silent", "failover", "lockdown"};
 constexpr uint32_t kUrgentHoldFrames = 75;            // OFFICE held 1.5 s = "help needed"
@@ -176,6 +176,17 @@ void Intercom::loadFeatures() {
         while (os >> r && offices_.size() < 4)
             if (r >= 1 && r <= 999 && std::find(offices_.begin(), offices_.end(), uint16_t(r)) == offices_.end()) offices_.push_back(uint16_t(r));
     }
+    officeBoards_.clear();  // "105=a0000069 104=a0000068"
+    {
+        std::stringstream bs(hal_.store->loadText("officeuid"));
+        std::string it;
+        while (bs >> it) {
+            const size_t eq = it.find('=');
+            if (eq == std::string::npos) continue;
+            const unsigned long r = std::strtoul(it.c_str(), nullptr, 10), u = std::strtoul(it.c_str() + eq + 1, nullptr, 16);
+            if (r >= 1 && r <= 999 && u && officeBoards_.size() < 4) officeBoards_.push_back({uint16_t(r), uint32_t(u)});
+        }
+    }
     office_ = offices_.empty() ? uint16_t(0) : offices_[0];
     office2_ = offices_.size() > 1 ? offices_[1] : uint16_t(0);
     quietFrom_ = quietTo_ = -1;
@@ -219,9 +230,9 @@ bool Intercom::inZone(uint16_t zone, uint16_t room) const {
 uint16_t Intercom::actingOffice() const {
     if (!office_) return 0;
     auto up = [&](uint16_t r) {
-        if (r == unit_.room) return true;
+        if (r == unit_.room) return boardOk(r, opt_.unitUid);
         for (const auto& p : peers_)
-            if (p.status.from.room == r && (!p.status.syncHash || p.status.syncRev >= syncRev_)) return true;  // online, and not behind on the settings
+            if (p.status.from.room == r && boardOk(r, p.status.unitUid) && (!p.status.syncHash || p.status.syncRev >= syncRev_)) return true;  // online, and not behind on the settings
         return false;
     };
     if (!feature(kFeatFailover)) return office_;
@@ -231,6 +242,61 @@ uint16_t Intercom::actingOffice() const {
 }
 
 bool Intercom::isOffice(uint16_t room) const { return room && std::find(offices_.begin(), offices_.end(), room) != offices_.end(); }
+
+uint32_t Intercom::officeBoard(uint16_t room) const {
+    for (const auto& b : officeBoards_)
+        if (b.first == room) return b.second;
+    return 0;
+}
+
+bool Intercom::boardOk(uint16_t room, uint32_t uid) const {
+    const uint32_t b = officeBoard(room);
+    return !b || !uid || uid == b;
+}
+
+std::vector<uint16_t> Intercom::officeMismatch() const {
+    std::vector<uint16_t> out;
+    for (uint16_t r : offices_) {
+        bool bad = r == unit_.room && (!boardOk(r, opt_.unitUid) || (duplicate() && !boardOk(r, dupUid_)));
+        for (const auto& p : peers_) bad = bad || (p.status.from.room == r && !boardOk(r, p.status.unitUid));
+        if (bad) out.push_back(r);
+    }
+    return out;
+}
+
+void Intercom::saveOfficeBoards() {
+    std::string t;
+    char b[24];
+    for (const auto& ob : officeBoards_) {
+        snprintf(b, sizeof(b), "%s%u=%08lx", t.empty() ? "" : " ", unsigned(ob.first), (unsigned long)ob.second);
+        t += b;
+    }
+    hal_.store->saveText("officeuid", t);
+}
+
+// The acting office unit registers the board of each office unit the first time it sees it, and forgets the boards of
+// numbers no longer in the list. The change goes to every unit with the other school-wide settings.
+void Intercom::learnOfficeBoards() {
+    bool changed = false;
+    for (size_t i = 0; i < officeBoards_.size();)
+        if (!isOffice(officeBoards_[i].first)) {
+            officeBoards_.erase(officeBoards_.begin() + long(i));
+            changed = true;
+        } else {
+            i++;
+        }
+    for (uint16_t r : offices_) {
+        if (officeBoard(r)) continue;
+        uint32_t uid = r == unit_.room ? opt_.unitUid : 0;
+        for (const auto& p : peers_)
+            if (p.status.from.room == r && !uid) uid = p.status.unitUid;
+        if (uid && !(r == unit_.room && duplicate())) {
+            officeBoards_.push_back({r, uid});
+            changed = true;
+        }
+    }
+    if (changed) saveOfficeBoards();
+}
 
 uint16_t Intercom::schoolHash() const {
     uint32_t h = 2166136261u;
@@ -252,17 +318,32 @@ void Intercom::setSyncRev(unsigned long rev) {
 void Intercom::syncTick() {
     if (!syncHash_ || (frame_ / kStatusEveryFrames) % 5 == 0) {
         const uint16_t h = schoolHash();
-        if (isOffice(unit_.room) && (!syncRev_ || (syncHash_ && h != syncHash_))) setSyncRev(syncRev_ + 1ul);
+        if (iAmOffice() && (!syncRev_ || (syncHash_ && h != syncHash_))) setSyncRev(syncRev_ + 1ul);
         syncHash_ = h;
     }
+    {
+        uint8_t now = 0;
+        const std::vector<uint16_t> bad = officeMismatch();
+        for (size_t i = 0; i < offices_.size(); i++)
+            if (std::find(bad.begin(), bad.end(), offices_[i]) != bad.end()) {
+                now |= uint8_t(1u << i);
+                if (!(mismatchWas_ & (1u << i)))
+                    event(EventKind::Fault, offices_[i], "room %u: ANOTHER BOARD answers with this office unit's number - not used as an office unit until accepted on the office page",
+                          unsigned(offices_[i]));
+            }
+        mismatchWas_ = now;
+    }
+    if (frame_ >= 500 && iAmOffice() && unit_.room == actingOffice()) learnOfficeBoards();
     if (frame_ < 500 || !syncRev_ || unit_.room != actingOffice() || peers_.empty()) return;
     for (size_t n = 0; n < peers_.size(); n++) {
         const size_t i = (syncAt_ + n) % peers_.size();
         Peer& p = peers_[i];
         const StatusPacket& s = p.status;
         if (!s.syncHash || s.syncRev > syncRev_ || (s.syncRev == syncRev_ && s.syncHash == syncHash_)) continue;
-        if (p.syncSent && frame_ - p.syncSent < 1500) continue;  // sent less than 30 s ago: wait for its next status
+        if (p.syncSent && p.syncSentRev == syncRev_ && p.syncSentHash == syncHash_ && frame_ - p.syncSent < 1500) continue;  // the same sent less than 30 s ago
         p.syncSent = frame_ ? frame_ : 1;
+        p.syncSentRev = syncRev_;
+        p.syncSentHash = syncHash_;
         syncAt_ = i + 1;
         const std::string to = std::to_string(s.from.room);
         if (s.syncHash == syncHash_) {  // the same settings, an older count
@@ -991,6 +1072,31 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         return out;
     }
     if (c == "sync" || c == "syncrev") return syncCommand(a, line);
+    if (c == "officepin") {  // "officepin accept 105": the board that now answers as 105 is the office unit from now on
+        if (a.size() == 3 && a[1] == "accept") {
+            const unsigned long r = std::strtoul(a[2].c_str(), nullptr, 10);
+            if (!isOffice(uint16_t(r))) return "not an office unit: " + a[2];
+            uint32_t uid = r == unit_.room ? opt_.unitUid : 0;
+            for (const auto& p : peers_)
+                if (p.status.from.room == r && p.status.unitUid && p.status.unitUid != officeBoard(uint16_t(r))) uid = p.status.unitUid;
+            if (!uid) return "no unit with that number is online";
+            for (size_t i = 0; i < officeBoards_.size();)
+                if (officeBoards_[i].first == r) officeBoards_.erase(officeBoards_.begin() + long(i));
+                else i++;
+            officeBoards_.push_back({uint16_t(r), uid});
+            saveOfficeBoards();
+            event(EventKind::Info, uint16_t(r), "room %u: this board accepted as the office unit (%08lx)", unsigned(r), (unsigned long)uid);
+        } else if (a.size() == 2 && a[1] == "clear") {
+            officeBoards_.clear();
+            saveOfficeBoards();
+        } else if (a.size() != 1) {
+            return "usage: officepin | officepin accept ROOM | officepin clear";
+        }
+        const std::string t = hal_.store->loadText("officeuid");
+        std::string bad;
+        for (uint16_t r : officeMismatch()) bad += " " + std::to_string(r);
+        return (t.empty() ? std::string("no office boards registered yet") : "office boards: " + t) + (bad.empty() ? "" : "; ANOTHER BOARD at:" + bad);
+    }
     if (c == "consolewatch") {  // the office unit chirps while no office page is open
         if (a.size() == 2) {
             const int n = std::atoi(a[1].c_str());
@@ -1326,7 +1432,7 @@ void Intercom::receive() {
                 if (wants && w == waiting_.size() && waiting_.size() < 64) {
                     waiting_.push_back(Waiting{s.from.room, false, false, frame_});
                     // The office's units (the office unit, its stand-in, and units sharing the office's room) call for attention.
-                    if (office_ && (isOffice(unit_.room) || group() == office_)) {
+                    if (office_ && (iAmOffice() || (group() == office_ && !isOffice(unit_.room)))) {
                         ofcAlertRoom_ = s.from.room;
                         ofcAlertUntil_ = frame_ + kOfficeRingFrames;
                         ofcAlertNext_ = frame_;
@@ -2272,7 +2378,7 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         }
     }
     // An office unit: a call for help that nobody has answered rings again every 30 s.
-    if (!ofcAlertUntil_ && frame_ >= helpAlertNext_ && office_ && (isOffice(unit_.room) || group() == office_)) {
+    if (!ofcAlertUntil_ && frame_ >= helpAlertNext_ && office_ && (iAmOffice() || (group() == office_ && !isOffice(unit_.room)))) {
         for (const auto& w : waiting_) {
             if (!w.urgent && !w.silent) continue;
             ofcAlertRoom_ = w.room;

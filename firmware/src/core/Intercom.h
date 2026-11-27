@@ -53,6 +53,7 @@ enum class CmdSource : uint8_t { Local = 0, Network = 1, Web = 2 };
 struct Peer {
     StatusPacket status;
     uint32_t lastFrame = 0;
+    uint16_t syncSentRev = 0, syncSentHash = 0;
     uint32_t syncSent = 0;       // when this office unit last sent it the school-wide settings
     bool offlineLogged = false;  // "offline" went into the event log: "back online" follows
 };
@@ -191,6 +192,12 @@ public:
     // The office units in order (up to 4): the first one that is online and has the current settings acts as the office.
     const std::vector<uint16_t>& offices() const { return offices_; }
     bool isOffice(uint16_t room) const;
+    // Each office unit is registered with its board (the number from its MAC address), learned the first time it is seen.
+    // Another board that turns up with an office unit's number is not used as an office unit until the office page accepts it.
+    uint32_t officeBoard(uint16_t room) const;
+    bool boardOk(uint16_t room, uint32_t uid) const;
+    bool iAmOffice() const { return isOffice(unit_.room) && boardOk(unit_.room, opt_.unitUid); }
+    std::vector<uint16_t> officeMismatch() const;  // office numbers answered by a board that is not the registered one
     // School-wide settings (office list, switches, zones, quiet hours, bells, self-check, console watch, time server) are
     // kept the same on every unit: the acting office unit sends them to any unit whose copy differs (a new or replaced
     // board, a unit that was off when something changed).
@@ -264,6 +271,10 @@ private:
     uint8_t features_ = 0;
     uint16_t office_ = 0, office2_ = 0, actingWas_ = 0;
     std::vector<uint16_t> offices_;
+    std::vector<std::pair<uint16_t, uint32_t>> officeBoards_;
+    uint8_t mismatchWas_ = 0;
+    void saveOfficeBoards();
+    void learnOfficeBoards();
     uint16_t syncRev_ = 0, syncHash_ = 0;
     size_t syncAt_ = 0;
     uint16_t schoolHash() const;

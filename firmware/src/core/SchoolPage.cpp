@@ -255,7 +255,7 @@ async function tick(){
     const floors={};for(const u of us){const fl=Math.floor(u.room/100);(floors[fl]=floors[fl]||[]).push(u);}
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
-    lastSchool=j;drawDevs(us);selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);callWatch(us);drawAlarm(us,j.queue||[]);drawZones((j.features&4)?j.zones||[]:[]);
+    lastPinBad=j.pinbad||[];lastSchool=j;drawDevs(us);selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);callWatch(us);drawAlarm(us,j.queue||[]);drawZones((j.features&4)?j.zones||[]:[]);
     document.getElementById("cwnow").textContent=j.conwatch?"Now: on, after "+j.conwatch+" min.":"Now: off.";
     {const o=j.offices||[],ns=us.filter(u=>u.online&&u.sync===0).length;
      document.getElementById("ofcnow").innerHTML=o.length?"<b>Now:</b> "+o.join(", then ")+". Acting as the office: <b>"+j.acting+"</b>"+(j.acting!==o[0]?" (unit "+o[0]+" is offline)":"")+
@@ -381,8 +381,9 @@ function probList(us){const P=[],P0=window.planApi;const add=(u,cls,what,todo,bt
     if(u.sync===0)add(u,"info","Its school settings are being brought up to date","Nothing to do: the office unit is sending it the office list, bells, zones and options. If this line stays for more than a few minutes, check that the device has the school's network key (set over USB).");
     if(P0&&!P0.placed(u))add(u,"info","New: not on the plan yet","Open Setup, Rooms and devices, choose it under Devices and press Put it on the plan.");
     if(u.fw&&selfFw&&u.fw!==selfFw)add(u,"info","Different firmware ("+esc(u.fw)+"; the office unit has "+esc(selfFw)+")","It works, but update it with the update tool so that all devices match.");}
+  for(const r of lastPinBad)P.push({u:r,cls:"bad",what:"Another board answers with this office unit's number",todo:"If you replaced office unit "+r+" yourself, open Setup and accept the new board here. If you did not, someone has set another intercom to the office unit's number: find it and give it its own number. Until it is accepted, that board is not used as an office unit and the next unit in the list acts as the office.",btn:`<button data-pin="${r}">I replaced it: accept the new board as office unit ${r}</button>`});
   const rank={bad:0,warn:1,info:2};return P.sort((a,b)=>rank[a.cls]-rank[b.cls]);}
-let probSig="";
+let probSig="",lastPinBad=[];
 function drawProbs(us){const P=probList(us),n=P.filter(p=>p.cls!=="info").length,sig=JSON.stringify(P);
   if(sig!==probSig){probSig=sig;const h=P.length?P.map(p=>`<div class="prob ${p.cls}"><b>${p.u}</b><span class="what">${p.what}</span><div class="do"><b>What to do:</b> ${p.todo}</div>${p.btn}</div>`).join("")
       :'<div class="prob info"><b>Nothing needs attention.</b> Every device is online and reports no fault.</div>';
@@ -390,7 +391,10 @@ function drawProbs(us){const P=probList(us),n=P.filter(p=>p.cls!=="info").length
   return `<span class="n ${n?"att":"fine"}" id="probchip" title="Click: what is wrong and what to do">${n?n+" need attention: what to do":"no problems"}</span>`;}
 document.getElementById("sum").addEventListener("click",e=>{if(e.target.id==="probchip")document.getElementById("probdlg").showModal();});
 document.getElementById("probclose").onclick=()=>document.getElementById("probdlg").close();
-for(const id of ["probs","probs2"])document.getElementById(id).addEventListener("click",e=>{const b=e.target.dataset;if(b.c&&confirm(e.target.textContent+": device "+b.u+"?"))sendTo(b.u,b.c);});
+for(const id of ["probs","probs2"])document.getElementById(id).addEventListener("click",e=>{const b=e.target.dataset;
+  if(b.pin){if(!document.body.classList.contains("setup")){alert("Open Setup with the web password first, then press this again under Problems.");return;}
+    if(confirm("Accept the board that now answers as "+b.pin+" as the office unit?"))both("officepin accept "+b.pin);return;}
+  if(b.c&&confirm(e.target.textContent+": device "+b.u+"?"))sendTo(b.u,b.c);});
 // ---- Setup tabs ----
 function showTab(t){document.body.dataset.tab=t;document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
   document.querySelectorAll(".tabpage").forEach(p=>p.classList.toggle("on",p.dataset.t===t));try{localStorage.setItem("icTab",t);}catch(e){}}

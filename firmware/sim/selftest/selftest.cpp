@@ -2049,12 +2049,27 @@ static void testR33Sync() {
           "the office units that were off come back and take the newer settings, they do not push their old ones");
     CHECK(o1.ic->actingOffice() == 105 && r1new.ic->actingOffice() == 105 && has(o3, "room 105 is the office again"), "105 is back: it is the office again");
     // a brand-new board with the number of the first office unit
-    FakeUnit o1new(&bus, {105, 0}, 170);
+    FakeUnit o1new(&bus, {105, 0}, 170, 0xB0000069u);
     o1new.ic->command("netkey sync-test-key-0123456789");
     all = {&o2, &o3, &r1new, &o1new};
     run(2000);
-    CHECK(o1new.ic->syncHash() == o2.ic->syncHash() && o1new.ic->offices().size() == 3 && o1new.ic->actingOffice() == 105 && r1new.ic->actingOffice() == 105,
-          "the first office unit replaced by a new board: the stand-in fills it, then it is the office again");
+    CHECK(o2.ic->officeBoard(105) == 0xA0000069u && r1new.ic->officeBoard(104) == 0xA0000068u && r1new.ic->officeBoard(901) == 0xA0000385u,
+          "every unit knows which board each office unit is (%08lx)", (unsigned long)o2.ic->officeBoard(105));
+    CHECK(o1new.ic->syncHash() == o2.ic->syncHash() && o1new.ic->offices().size() == 3 && o1new.ic->actingOffice() == 104 && r1new.ic->actingOffice() == 104 &&
+              !o1new.ic->iAmOffice() && o2.ic->officeMismatch().size() == 1 && has(o2, "ANOTHER BOARD"),
+          "another board with the first office unit's number gets the settings but is not used as an office unit: 104 stays the office");
+    r1new.held = uint8_t(1u << kBtnOffice);
+    run(5);
+    r1new.held = 0;
+    run(7);
+    CHECK(o2.ic->officeAlert() == 101 && o1new.ic->officeAlert() == 0, "a call rings on the real office units, not on the board that was not accepted");
+    r1new.ic->command("callofc off");
+    run(600);
+    CHECK(o2.ic->command("officepin accept 105").find("office boards") != std::string::npos, "the office page accepts the new board");
+    run(1500);
+    CHECK(o1new.ic->iAmOffice() && o1new.ic->actingOffice() == 105 && r1new.ic->actingOffice() == 105 && o2.ic->officeMismatch().empty() &&
+              r1new.ic->officeBoard(105) == 0xB0000069u,
+          "once accepted it is the office again, on every unit");
     g_clock0 = clock0;
 }
 

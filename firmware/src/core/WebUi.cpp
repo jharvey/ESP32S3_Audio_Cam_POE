@@ -381,7 +381,9 @@ std::string WebUi::schoolJson() {
     // R3.2: feature switches, the office and who acts as it, zones, and the rooms waiting for the office
     std::string officeList;
     for (uint16_t r : ic_.offices()) officeList += (officeList.empty() ? "" : ",") + std::to_string(r);
-    std::string extra = "\"features\":" + std::to_string(ic_.features()) + ",\"conwatch\":" + std::to_string(ic_.consoleWatchMin()) + ",\"office\":" + std::to_string(ic_.officeRoom()) +
+    std::string pinBad;
+    for (uint16_t r : ic_.officeMismatch()) pinBad += (pinBad.empty() ? "" : ",") + std::to_string(r);
+    std::string extra = "\"pinbad\":[" + pinBad + "],\"features\":" + std::to_string(ic_.features()) + ",\"conwatch\":" + std::to_string(ic_.consoleWatchMin()) + ",\"office\":" + std::to_string(ic_.officeRoom()) +
                         ",\"standin\":" + std::to_string(ic_.officeStandIn()) + ",\"acting\":" + std::to_string(ic_.actingOffice()) + ",\"offices\":[" + officeList + "],\"zones\":[";
     bool firstX = true;
     for (const auto& z : ic_.zones()) {
