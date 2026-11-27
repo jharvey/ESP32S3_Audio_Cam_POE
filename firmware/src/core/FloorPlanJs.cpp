@@ -30,7 +30,20 @@ st.textContent=`#plan{background:var(--card);border:1px solid var(--line);border
 #plan .floors{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:10px;margin-top:6px}
 #plan .fl{margin:0}#plan .fl figcaption{font-size:13px;font-weight:600;margin:0 0 3px}#plan .fl svg{max-height:60vh}
 #plan button.big{font:600 15px system-ui,sans-serif;padding:9px 18px;border:2px solid var(--bad);color:var(--bad);border-radius:8px;user-select:none;touch-action:none}
-#plan button.big.sel{background:var(--bad);color:#fff}`;
+#plan button.big.sel{background:var(--bad);color:#fff}
+body.hasplan:not(.setup) #pmove,body.hasplan:not(.setup) #pload,body.hasplan:not(.setup) #pdel{display:none}
+#aed{position:fixed;inset:0;z-index:80;background:var(--bg);display:flex;font:14px system-ui,sans-serif;color:var(--ink)}
+#aed .side{width:310px;flex:none;padding:12px 14px;overflow:auto;border-right:1px solid var(--line);background:var(--card);box-sizing:border-box}
+#aed h2{font-size:17px;margin:0 0 8px}#aed h3{font-size:13px;margin:12px 0 4px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
+#aed svg{flex:1;min-width:0;height:100%;cursor:crosshair;touch-action:none;user-select:none}
+#aed button{font:14px system-ui,sans-serif;padding:5px 11px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;margin:0 4px 4px 0}
+#aed button.sel{border-color:var(--call);background:var(--callbg);color:var(--call);font-weight:600}#aed button.go{background:var(--call);border-color:var(--call);color:#fff;font-weight:600}
+#aed .list{display:flex;flex-wrap:wrap;gap:3px}#aed .it{padding:3px 7px;border-radius:6px;cursor:pointer;border:1px solid var(--line);font-size:13px}
+#aed .it.set{border-color:var(--ok);color:var(--ok);font-weight:600}#aed .it.sel{background:var(--call);border-color:var(--call);color:#fff;font-weight:600}
+#aed .keys{font-size:12.5px;color:var(--mute);line-height:1.55;margin-top:6px}#aed .keys b{color:var(--ink)}#aed .now{font-size:13.5px;line-height:1.4;margin:6px 0;min-height:56px}
+#aed .wall{fill:none;stroke:var(--mute);stroke-linecap:round}#aed .lbl{fill:var(--mute);font-weight:600;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+#aed .oth{fill:var(--call);fill-opacity:.06;stroke:var(--call);stroke-opacity:.45}#aed .cur{fill:var(--call);fill-opacity:.22;stroke:var(--call)}
+#aed .hd{fill:#fff;stroke:var(--call);cursor:grab}#aed .sd{fill:var(--call);stroke:#fff}`;
 document.head.appendChild(st);
 const box=document.getElementById("plan");if(!box)return;
 function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
@@ -266,7 +279,7 @@ function full(){
     <span class="hint">Shows every unit on its room. The file stays in this browser only: it is not sent to the unit.</span>${msg?`<span class="hint">${esc(msg)}</span>`:""}</div>`;
     hook();return}
   box.innerHTML=`<div class="pside"><div class="bar"><b>Talk</b>${window.onPlanAll?`<button id="pall" class="big">Hold to talk to ALL rooms</button>`:""}<span id="pact"></span>
-    <span style="margin-left:auto"></span><button id="parea" title="Set which part of the plan belongs to each room">Room areas</button><button id="pmove">Move dots</button><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
+    <span style="margin-left:auto"></span><button id="pmove">Move dots</button><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
     <div id="phint"></div></div><div class="floors">`+plan.floors.map((F,i)=>{const w=F.x1-F.x0,h=F.y1-F.y0,m=fsz(F)*0.03,g=regionsFor(i);
       return `<figure class="fl"><figcaption id="pcap${i}"></figcaption>
       <svg id="psvg${i}" data-f="${i}" viewBox="${F.x0-m} ${F.y0-m} ${w+2*m} ${h+2*m}" preserveAspectRatio="xMidYMid meet" style="touch-action:none">
@@ -443,7 +456,93 @@ window.planHot=n=>{hot=n||0;hotUs=[];if(hot&&plan&&plan.rooms[hot])hotF=plan.roo
 // Room areas: start (or switch to) a room. What was filled for it before can be added to or undone.
 function startRoom(n){if(!plan||!plan.rooms[n])return;const A=roomAreas[n];
   drawing={u:String(n),room:+n,f:plan.rooms[n].f,p:A&&A.s?A.s.map(q=>q.slice()):[],flood:true};sel=null;moving=false;hot=+n;hotUs=[];hotF=plan.rooms[n].f;part()}
+// ---- the area editor: a window of its own (Setup), one floor at a time and large. A room's area is filled by clicking inside it, or
+// drawn as an outline; a device without a room gets an outline. An outline's corners can be dragged, added and removed.
+function openEditor(){
+  if(!plan||document.getElementById("aed"))return;
+  let fi=plan.floors[hotF]?hotF:0,item=null,mode="fill",open=false,drag=null,pan=null,moved=false,vb=null;const undo=[];
+  const ov=document.createElement("div");ov.id="aed";ov.innerHTML=`<div class="side"></div><svg></svg>`;document.body.appendChild(ov);
+  const side=ov.firstChild,svg=ov.lastChild;
+  const fit=()=>{const F=plan.floors[fi],m=fsz(F)*0.04;vb=[F.x0-m,F.y0-m,F.x1-F.x0+2*m,F.y1-F.y0+2*m]};
+  const fresh=()=>{for(const k in regCache)delete regCache[k];spotCache={}};
+  const snap=()=>{undo.push(JSON.stringify([roomAreas,areas]));if(undo.length>60)undo.shift()};
+  const keep=()=>{save(KR,roomAreas);save(KA,areas);fresh()};
+  const cur=()=>!item?null:item.t==="room"?roomAreas[item.n]:areas[item.n];
+  const pts=()=>{const A=cur();return A&&A.f===fi&&A.p?A.p:null};
+  const setPts=p=>{if(item.t==="room")roomAreas[item.n]={f:fi,p};else areas[item.n]={f:fi,p}};
+  const at=ev=>{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse());return [Math.round(q.x),Math.round(q.y)]};
+  const segd=(q,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],l=dx*dx+dy*dy||1,t=Math.max(0,Math.min(1,((q[0]-a[0])*dx+(q[1]-a[1])*dy)/l));return Math.hypot(q[0]-a[0]-t*dx,q[1]-a[1]-t*dy)};
+  const pick=(t,n)=>{item={t,n};open=false;const A=cur();mode=t==="dev"||(A&&A.p)?"line":"fill";if(A&&A.f!==undefined&&A.f!==fi&&plan.floors[A.f]){fi=A.f;fit()}draw()};
+  function draw(){
+    const F=plan.floors[fi],r=vb[2]*0.006,g=regionsFor(fi),A=cur(),P=pts();
+    const rooms=Object.keys(plan.rooms).map(Number).filter(n=>plan.rooms[n].f===fi).sort((a,b)=>a-b);
+    const devs=units.filter(u=>!home(u)||areas[u.unit]).map(u=>String(u.unit));for(const k in areas)if(!devs.includes(k))devs.push(k);
+    let h=`<h2>Room and device areas</h2><button class="go" data-do="done">Done</button><button data-do="undo"${undo.length?"":" disabled"}>Undo (Ctrl+Z)</button>
+<h3>Floor</h3>${plan.floors.map((f,i)=>`<button data-fl="${i}" class="${i===fi?"sel":""}">${esc(f.name)}</button>`).join("")}
+<h3>Rooms on this floor</h3><div class="list">${rooms.map(n=>`<span class="it${roomAreas[n]?" set":""}${item&&item.t==="room"&&item.n===n?" sel":""}" data-room="${n}">${n}</span>`).join("")}</div>
+<h3>Devices without a room</h3><div class="list">${devs.length?devs.map(k=>`<span class="it${areas[k]?" set":""}${item&&item.t==="dev"&&item.n===k?" sel":""}" data-dev="${esc(k)}">${esc(k)}</span>`).join(""):"none"}</div>`;
+    if(!item)h+=`<div class="now">Choose a room or a device in the lists above, or click a room on the plan. Green ones are already set by hand.</div>`;
+    else if(item.t==="room")h+=`<h3>Room ${item.n}</h3><button data-mode="fill" class="${mode==="fill"?"sel":""}">Fill</button><button data-mode="line" class="${mode==="line"?"sel":""}">Outline</button><button data-do="auto">Back to automatic</button>
+<div class="now">${mode==="fill"?`<b>Click inside the room.</b> The space fills up to its walls. Click more spaces to add them (${A&&A.s?A.s.length:0} so far).${A&&A.out?" <b>The last click was not inside closed walls, so nothing was filled: undo it and use Outline.</b>":""}`:
+      P?(open?`<b>Click each corner in turn</b> (${P.length} so far). Press Enter, or double-click, when the outline is complete.`:`Outline of ${P.length} corners. <b>Drag a corner</b> to move it, <b>click on a line</b> to add a corner there, <b>double-click a corner</b> to remove it.`):`<b>Click each corner</b> of the room's outline in turn. Use this where Fill runs out through a gap in the walls.`}</div>`;
+    else h+=`<h3>Device ${esc(item.n)}</h3><button data-do="rm">Remove its area</button>
+<div class="now">${P?(open?`<b>Click each corner in turn</b> (${P.length} so far). Press Enter, or double-click, when the outline is complete.`:`Outline of ${P.length} corners. <b>Drag a corner</b> to move it, <b>click on a line</b> to add a corner there, <b>double-click a corner</b> to remove it.`):`<b>Click each corner</b> of what this device watches, in turn: a hallway, a stretch of yard.`}</div>`;
+    h+=`<h3>View</h3><button data-do="zin">Zoom in</button><button data-do="zout">Zoom out</button><button data-do="fit">Whole floor</button>
+<div class="keys"><b>Mouse wheel</b> zooms. <b>Right button, drag</b> moves the plan.<br><b>Click</b> fills, or adds a corner.<br><b>Drag a corner</b> moves it.<br><b>Click on a line</b> adds a corner there.<br><b>Double-click or right-click a corner</b> removes it.<br><b>Enter</b> finishes an outline. <b>Backspace</b> takes back its last corner.<br><b>Ctrl+Z</b> undoes. <b>Esc</b> lets go of the room or device.<br>Everything is saved as you go.</div>`;
+    side.innerHTML=h;
+    svg.setAttribute("viewBox",vb.join(" "));
+    let o=item&&item.t==="room"?`<image href="${highlight(fi,item.n)}" x="${F.x0-g.s}" y="${F.y0-g.s}" width="${g.cw*g.s}" height="${g.ch*g.s}" preserveAspectRatio="none"/>`:"";
+    o+=`<path class="wall" d="${F.d}" stroke-width="${fsz(F)*0.0012}"/>`;
+    for(const k in areas){const B=areas[k];if(B.f===fi&&B.p&&!(item&&item.t==="dev"&&item.n===k))o+=`<polygon class="oth" points="${B.p.map(q=>q.join(",")).join(" ")}" stroke-width="${r*0.25}" stroke-dasharray="${r} ${r*0.8}"/>`}
+    for(const n of rooms)o+=`<text class="lbl" x="${plan.rooms[n].x}" y="${plan.rooms[n].y}" font-size="${vb[2]*0.013}">${n}</text>`;
+    if(P){o+=open?`<polyline class="cur" style="fill:none" points="${P.map(q=>q.join(",")).join(" ")}" stroke-width="${r*0.35}"/>`:`<polygon class="cur" points="${P.map(q=>q.join(",")).join(" ")}" stroke-width="${r*0.35}"/>`;
+      o+=P.map((q,i)=>`<circle class="hd" data-h="${i}" cx="${q[0]}" cy="${q[1]}" r="${r}" stroke-width="${r*0.3}"/>`).join("")}
+    if(item&&item.t==="room"&&A&&A.f===fi&&A.s)o+=A.s.map(q=>`<circle class="sd" cx="${q[0]}" cy="${q[1]}" r="${r*0.6}" stroke-width="${r*0.2}"/>`).join("");
+    svg.innerHTML=o}
+  function close(){document.removeEventListener("keydown",key,true);ov.remove();drawing=null;hot=item&&item.t==="room"?item.n:hot;if(item&&item.t==="room")hotF=fi;full();if(window.onPlanSetup)window.onPlanSetup()}
+  function doUndo(){if(!undo.length)return;const d=JSON.parse(undo.pop());roomAreas=d[0];areas=d[1];open=false;keep();draw()}
+  function zoom(k,c){c=c||[vb[0]+vb[2]/2,vb[1]+vb[3]/2];const w=Math.max(fsz(plan.floors[fi])*0.04,Math.min(fsz(plan.floors[fi])*1.6,vb[2]*k)),s2=w/vb[2];vb=[c[0]-(c[0]-vb[0])*s2,c[1]-(c[1]-vb[1])*s2,w,vb[3]*s2];draw()}
+  function key(ev){
+    if(ev.key==="Escape"){if(open){open=false;const P=pts();if(P&&P.length<3){snap();if(item.t==="room")delete roomAreas[item.n];else delete areas[item.n];keep()}}else item=null;draw()}
+    else if(ev.key==="Enter"&&open){const P=pts();if(P&&P.length>2){open=false;draw()}}
+    else if(ev.key==="Backspace"&&open){const P=pts();if(P&&P.length){snap();P.pop();if(!P.length){if(item.t==="room")delete roomAreas[item.n];else delete areas[item.n];open=false}keep();draw()}}
+    else if((ev.ctrlKey||ev.metaKey)&&(ev.key==="z"||ev.key==="Z"))doUndo();
+    else return;ev.preventDefault();ev.stopPropagation()}
+  document.addEventListener("keydown",key,true);
+  side.addEventListener("click",ev=>{const t=ev.target,d=t.dataset;
+    if(d.fl!==undefined){fi=+d.fl;item=null;open=false;fit();draw()}
+    else if(d.room)pick("room",+d.room);else if(d.dev)pick("dev",d.dev);
+    else if(d.mode){mode=d.mode;open=false;draw()}
+    else if(d.do==="done")close();else if(d.do==="undo")doUndo();
+    else if(d.do==="auto"){snap();delete roomAreas[item.n];open=false;keep();draw()}
+    else if(d.do==="rm"){snap();delete areas[item.n];open=false;keep();draw()}
+    else if(d.do==="zin")zoom(0.7);else if(d.do==="zout")zoom(1.4);else if(d.do==="fit"){fit();draw()}});
+  svg.addEventListener("wheel",ev=>{ev.preventDefault();zoom(ev.deltaY<0?0.8:1.25,at(ev))},{passive:false});
+  svg.addEventListener("contextmenu",ev=>ev.preventDefault());
+  const dropCorner=i=>{const P=pts();if(!P)return;snap();P.splice(i,1);if(P.length<3&&!open){if(item.t==="room")delete roomAreas[item.n];else delete areas[item.n]}keep();draw()};
+  svg.addEventListener("pointerdown",ev=>{moved=false;const hd=ev.target.dataset&&ev.target.dataset.h;
+    if(ev.button===2){if(hd!==undefined&&!open){dropCorner(+hd);return}pan={x:ev.clientX,y:ev.clientY,v:vb.slice()};try{svg.setPointerCapture(ev.pointerId)}catch(e){}return}
+    if(ev.button===0&&hd!==undefined&&!open){snap();drag=+hd;try{svg.setPointerCapture(ev.pointerId)}catch(e){}}});
+  svg.addEventListener("pointermove",ev=>{
+    if(pan){const k=pan.v[2]/svg.getBoundingClientRect().width;vb=[pan.v[0]-(ev.clientX-pan.x)*k,pan.v[1]-(ev.clientY-pan.y)*k,pan.v[2],pan.v[3]];moved=true;draw();return}
+    if(drag!==null){const P=pts();if(P){P[drag]=at(ev);moved=true;draw()}}});
+  svg.addEventListener("pointerup",ev=>{if(pan){pan=null;return}if(drag!==null){drag=null;if(moved)keep();else undo.pop();draw()}});
+  svg.addEventListener("dblclick",ev=>{const hd=ev.target.dataset&&ev.target.dataset.h;
+    if(open){const P=pts();if(P&&P.length>3){P.pop();}if(P&&P.length>2){open=false;keep();draw()}return}   // the second click of the pair added a corner: take it back
+    if(hd!==undefined)dropCorner(+hd)});
+  svg.addEventListener("click",ev=>{if(moved||ev.button!==0){moved=false;return}const q=at(ev);
+    if(ev.target.dataset&&ev.target.dataset.h!==undefined&&!open)return;
+    if(!item){const n=roomAt(fi,q[0],q[1]);if(n)pick("room",n);return}
+    if(item.t==="room"&&mode==="fill"){snap();const A=roomAreas[item.n];const sd=A&&A.f===fi&&A.s?A.s.slice():[];sd.push(q);roomAreas[item.n]={f:fi,s:sd};keep();draw();return}
+    let P=pts();
+    if(!P){snap();setPts([q]);open=true;keep();draw();return}
+    if(open){snap();P.push(q);keep();draw();return}
+    const tol=vb[2]*0.012;let best=-1,bd=tol;
+    for(let i=0;i<P.length;i++){const d=segd(q,P[i],P[(i+1)%P.length]);if(d<bd){bd=d;best=i}}
+    if(best>=0){snap();P.splice(best+1,0,q);keep();draw()}});
+  fit();draw()}
 window.planApi={placed:u=>!!where(u),hasArea:n=>!!areas[n],
+  editAreas:openEditor,
   rooms:()=>plan?Object.keys(plan.rooms).map(Number).sort((a,b)=>a-b):[],hasRoomArea:n=>!!roomAreas[n],
   drawRoomArea:n=>startRoom(n),
   delRoomArea:n=>{delete roomAreas[n];save(KR,roomAreas);for(const k in regCache)delete regCache[k];spotCache={};hot=+n;hotUs=[];if(plan&&plan.rooms[n])hotF=plan.rooms[n].f;part()},

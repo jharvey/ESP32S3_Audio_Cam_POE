@@ -46,7 +46,7 @@ body.hasplan main{max-width:none}
 body.hasplan #quad{display:grid;gap:10px;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"f1 f2" "f3 x1" "f3 x2";height:calc(100vh - 92px);min-height:600px;margin-bottom:16px}
 body.hasplan #plan,body.hasplan #plan .floors{display:contents}
 body.hasplan #plan .fl{display:flex;flex-direction:column;min-height:0;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
-body.hasplan #plan .fl:nth-child(1){grid-area:f1}body.hasplan #plan .fl:nth-child(2){grid-area:f2}body.hasplan #plan .fl:nth-child(3){grid-area:f3}
+body.hasplan #plan .fl:nth-child(1){grid-area:f1}body.hasplan #plan .fl:nth-child(2){grid-area:f3}body.hasplan #plan .fl:nth-child(3){grid-area:f2}
 body.hasplan #plan .fl figcaption{font-size:15px}body.hasplan #plan .fl svg{flex:1;min-height:0;height:100%;max-height:none}
 body.hasplan #plan .pside{grid-area:x1;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
 body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
@@ -91,11 +91,10 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
 <div class="panels">
 <section class="panel"><h2>Devices, highlight areas and backup</h2>
  <div class="prow">Device <select id="dsel"></select><span class="mute" id="dinfo"></span></div>
- <div class="prow"><button id="dplace">Put it on the plan</button><button id="darea">Draw its highlight area</button><button id="dareadel">Remove its area</button></div>
- <div class="prow">Room <select id="rsel"></select><button id="rarea">Set this room's area</button><button id="rareadel">Back to the automatic area</button></div>
- <div class="mute"><b>A room's area</b> is what lights up on the plan for that room and what a click picks. It is worked out from the walls. To correct
- one, press <b>Room areas</b> above the plan (or Set here), choose the room in the list that appears there, and click inside the room: the space fills
- up to its walls and is saved at once. Click more spaces to add them. Press Done when you have finished.</div>
+ <div class="prow"><button id="dplace">Put it on the plan</button><button id="aedit">Edit room and device areas…</button></div>
+ <div class="mute"><b>Areas.</b> A room's area is what lights up on the plan for that room and where a click picks it; it is worked out from the walls.
+ A device without a room (a hall monitor) can be given an area of its own. <b>Edit room and device areas</b> opens a large view of one floor to
+ correct them: fill a room with a click, or draw an outline and drag, add or remove its corners. Moving dots and loading a plan also need Setup open.</div>
  <div class="mute"><b>A new device:</b> set its number on the device itself (hold SETUP for 3 seconds, UP and DOWN change the digit, MODE goes on and
  saves). It then appears in this list marked NEW. Put it on the plan; if it watches a hall or another place without a room number, draw its area:
  the area lights up when that device calls, and a click inside it picks the device.</div>
@@ -456,11 +455,11 @@ document.getElementById("csend").addEventListener("click",async()=>{
 document.getElementById("cmd").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("csend").click();});
 // ---- Setup: devices, highlight areas, settings, backup ----------------------------------------------
 const gid=id=>document.getElementById(id);let devSig="",devRead="",bkData=null;
-function drawDevs(us){drawRooms();const P=window.planApi,sig=us.map(u=>u.unit+(P&&!P.placed(u)?"*":"")+(P&&P.hasArea(u.unit)?"a":"")+(u.online?"":"-")+u.group).join(",");
+function drawDevs(us){const P=window.planApi,sig=us.map(u=>u.unit+(P&&!P.placed(u)?"*":"")+(P&&P.hasArea(u.unit)?"a":"")+(u.online?"":"-")+u.group).join(",");
   if(sig===devSig)return;devSig=sig;const s=gid("dsel"),v=s.value;
   s.innerHTML=us.map(u=>`<option value="${u.unit}">${u.unit}${u.group!==u.room?" (room "+u.group+")":""}${P&&!P.placed(u)?" · NEW: not on the plan":""}${P&&P.hasArea(u.unit)?" · has an area":""}${u.online?"":" · offline"}</option>`).join("");
   if(v)s.value=v;devInfo();}
-window.onPlanSetup=()=>{devSig="";drawDevs(lastSchool.units);roomSig="";drawRooms();};
+window.onPlanSetup=()=>{devSig="";drawDevs(lastSchool.units);};
 function devU(){return lastSchool.units.find(u=>String(u.unit)===gid("dsel").value);}
 function devInfo(){const u=devU();gid("dinfo").textContent=u?"address "+u.ip+" · firmware "+(u.fw||"?")+" · "+u.link+" · "+(u.online?"online":"offline"):"";}
 const devSelf=u=>String(lastSchool.self)===String(u.unit);
@@ -475,13 +474,7 @@ async function devSend(u,lines){let n=0,long=0;
 gid("dsel").onchange=()=>{devInfo();gid("dtext").value="";devRead="";gid("dnote").textContent="";};
 const toPlan=()=>window.scrollTo({top:0,behavior:"smooth"});  // the plan is the top of the page
 gid("dplace").onclick=()=>{const u=devU();if(u&&window.planApi){window.planApi.place(u.unit);toPlan();}};
-gid("darea").onclick=()=>{const u=devU();if(u&&window.planApi){window.planApi.drawArea(u.unit);toPlan();}};
-let roomSig="";
-function drawRooms(){const P=window.planApi;if(!P||!P.rooms)return;const rs=P.rooms(),sig=rs.map(n=>n+(P.hasRoomArea(n)?"h":"")).join(",");if(sig===roomSig)return;roomSig=sig;
-  const s=gid("rsel"),was=s.value;s.innerHTML=rs.map(n=>`<option value="${n}">${n}${P.hasRoomArea(n)?" · set by hand":""}</option>`).join("");if(was)s.value=was;}
-gid("rarea").onclick=()=>{if(window.planApi&&gid("rsel").value){window.planApi.drawRoomArea(+gid("rsel").value);toPlan();}};
-gid("rareadel").onclick=()=>{if(window.planApi&&gid("rsel").value){window.planApi.delRoomArea(+gid("rsel").value);roomSig="";drawRooms();toPlan();}};
-gid("dareadel").onclick=()=>{const u=devU();if(u&&window.planApi){window.planApi.delArea(u.unit);devSig="";drawDevs(lastSchool.units);}};
+gid("aedit").onclick=()=>{if(window.planApi&&window.planApi.editAreas)window.planApi.editAreas();};
 gid("dread").onclick=async()=>{const u=devU();if(!u)return;gid("dnote").textContent="Reading…";let t=await devBackup(u);if(t&&t.slice(-1)!==String.fromCharCode(10))t+=String.fromCharCode(10);devRead=t;gid("dtext").value=t;
   gid("dnote").textContent=t?"Change a line, then send the changed lines.":"No answer from "+u.unit+".";};
 gid("dapply").onclick=async()=>{const u=devU();if(!u)return;if(!devRead){gid("dnote").textContent="Read its settings first.";return;}
