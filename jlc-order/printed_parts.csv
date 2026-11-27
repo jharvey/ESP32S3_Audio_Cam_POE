@@ -1,0 +1,9 @@
+Part,File,Qty per unit,Volume cm3 each
+Case front (clam_cover),clam_cover.stl,1,82.77
+Case back (clam_back),clam_back.stl,1,53.91
+TALK / OFFICE button cap,clam_button.stl,2,0.96
+Red lockdown button cap,clam_red_button.stl,1,0.73
+"Lid clip, left",lid_clip_left.stl,1,0.14
+"Lid clip, right",lid_clip_right.stl,1,0.14
+Camera shutter paddle,shutter_paddle.stl,1,0.42
+"Lockdown lid, clear 2 mm (laser cut from lid.dxf, or clear resin print)",lid.stl,1,0.7

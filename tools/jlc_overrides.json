@@ -1,0 +1,17 @@
+{
+  "_note": "LCSC numbers for parts whose footprint has none yet. Move these into the schematic when the board is next edited.",
+  "lcsc": { "J20": "C177225" },
+  "hand_fit_extra": [
+    { "item": "Speaker 35x25 mm box, 4 ohm 3 W, 1.25 mm 2-pin plug", "lcsc": "C49247004", "qty": 1 }
+  ],
+  "printed": [
+    { "part": "Case front (clam_cover)", "file": "clam_cover.stl", "qty": 1, "cm3": 82.77 },
+    { "part": "Case back (clam_back)", "file": "clam_back.stl", "qty": 1, "cm3": 53.91 },
+    { "part": "TALK / OFFICE button cap", "file": "clam_button.stl", "qty": 2, "cm3": 0.96 },
+    { "part": "Red lockdown button cap", "file": "clam_red_button.stl", "qty": 1, "cm3": 0.73 },
+    { "part": "Lid clip, left", "file": "lid_clip_left.stl", "qty": 1, "cm3": 0.14 },
+    { "part": "Lid clip, right", "file": "lid_clip_right.stl", "qty": 1, "cm3": 0.14 },
+    { "part": "Camera shutter paddle", "file": "shutter_paddle.stl", "qty": 1, "cm3": 0.42 },
+    { "part": "Lockdown lid, clear 2 mm (laser cut from lid.dxf, or clear resin print)", "file": "lid.stl", "qty": 1, "cm3": 0.70 }
+  ]
+}
