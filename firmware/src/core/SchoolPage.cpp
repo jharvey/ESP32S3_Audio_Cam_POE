@@ -93,9 +93,9 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
  <div class="prow">Device <select id="dsel"></select><span class="mute" id="dinfo"></span></div>
  <div class="prow"><button id="dplace">Put it on the plan</button><button id="darea">Draw its highlight area</button><button id="dareadel">Remove its area</button></div>
  <div class="prow">Room <select id="rsel"></select><button id="rarea">Set this room's area</button><button id="rareadel">Back to the automatic area</button></div>
- <div class="mute"><b>A room's area</b> is what lights up on the plan for that room and what a click picks. It is worked out from the walls. Where that
- is wrong, pick the room, press Set, then click inside the room on the plan: the space is filled up to its walls. Click more spaces to add them
- (each part of the gym floor, a closet), then Finish. Where filling runs out through a gap, use "Draw corners instead". The intercoms' dots are hidden meanwhile.</div>
+ <div class="mute"><b>A room's area</b> is what lights up on the plan for that room and what a click picks. It is worked out from the walls. To correct
+ one, press <b>Room areas</b> above the plan (or Set here), choose the room in the list that appears there, and click inside the room: the space fills
+ up to its walls and is saved at once. Click more spaces to add them. Press Done when you have finished.</div>
  <div class="mute"><b>A new device:</b> set its number on the device itself (hold SETUP for 3 seconds, UP and DOWN change the digit, MODE goes on and
  saves). It then appears in this list marked NEW. Put it on the plan; if it watches a hall or another place without a room number, draw its area:
  the area lights up when that device calls, and a click inside it picks the device.</div>

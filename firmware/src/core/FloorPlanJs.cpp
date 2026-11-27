@@ -266,7 +266,7 @@ function full(){
     <span class="hint">Shows every unit on its room. The file stays in this browser only: it is not sent to the unit.</span>${msg?`<span class="hint">${esc(msg)}</span>`:""}</div>`;
     hook();return}
   box.innerHTML=`<div class="pside"><div class="bar"><b>Talk</b>${window.onPlanAll?`<button id="pall" class="big">Hold to talk to ALL rooms</button>`:""}<span id="pact"></span>
-    <span style="margin-left:auto"></span><button id="pmove">Move dots</button><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
+    <span style="margin-left:auto"></span><button id="parea" title="Set which part of the plan belongs to each room">Room areas</button><button id="pmove">Move dots</button><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
     <div id="phint"></div></div><div class="floors">`+plan.floors.map((F,i)=>{const w=F.x1-F.x0,h=F.y1-F.y0,m=fsz(F)*0.03,g=regionsFor(i);
       return `<figure class="fl"><figcaption id="pcap${i}"></figcaption>
       <svg id="psvg${i}" data-f="${i}" viewBox="${F.x0-m} ${F.y0-m} ${w+2*m} ${h+2*m}" preserveAspectRatio="xMidYMid meet" style="touch-action:none">
@@ -313,7 +313,9 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
   const chips=un.map(u=>`<button class="chip ${sel===String(u.unit)?"sel":""}" data-u="${u.unit}">${esc(u.unit)}</button>`).join("");
   const act=window.onPlanHold?"Click an intercom's dot or its room to pick it, hold it to talk to it, double-click it to ring it.":"Click a room to pick it.";
   document.getElementById("phint").innerHTML=
-    drawing&&drawing.flood?`<div class="hint"><b>Area of room ${esc(drawing.u)}:</b> click inside the room: the space is filled up to its walls. Click any other space that belongs to it (a closet, each part of a gym floor) to add it. ${drawing.p.length} filled so far.${roomAreas[drawing.room]&&roomAreas[drawing.room].out?" <b>The last click was not inside closed walls (the fill ran outdoors), so nothing was filled there: press Undo last, then Draw corners instead.</b>":""} <button id="paundo">Undo last</button> <button id="pafin">Finish</button> <button id="pacan">Cancel</button> <button id="pacor">Draw corners instead</button></div>`:
+    drawing&&drawing.flood?`<div class="hint"><b>Room areas.</b> Room <select id="paroom">${Object.keys(plan.rooms).map(Number).sort((a,b)=>a-b).map(n=>`<option value="${n}"${n===drawing.room?" selected":""}>${n}${roomAreas[n]?" ✓":""}</option>`).join("")}</select>
+ (on ${esc(plan.floors[drawing.f].name)}, shown in blue). <b>Click inside the room on the plan:</b> the space fills up to its walls and is saved at once. Click more spaces to add them. ${drawing.p.length} filled.${roomAreas[drawing.room]&&roomAreas[drawing.room].out?" <b>The last click was not inside closed walls (the fill ran outdoors), so nothing was filled there: press Undo last, then Draw corners instead.</b>":""}
+ <button id="paundo">Undo last</button> <button id="paauto">Back to automatic</button> <button id="pacor">Draw corners instead</button> <button id="pafin">Done</button></div>`:
     drawing?`<div class="hint"><b>Area of ${drawing.room?"room ":""}${esc(drawing.u)}:</b> click its corners on the plan, one after another (${drawing.p.length} so far). <button id="pafin">Finish</button> <button id="pacan">Cancel</button></div>`:
     sel?`<div class="hint"><b>Unit ${esc(sel)}:</b> click the map where it is. <button id="pcancel">Cancel</button>${place[sel]?` <button id="preset">Back to its room</button>`:""}</div>`:
     moving?`<div class="hint">Click a dot, then click where it goes.</div>`:
@@ -323,12 +325,14 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
   const b=id=>document.getElementById(id);
   if(b("pcancel"))b("pcancel").onclick=()=>{sel=null;part()};
   const fresh=()=>{for(const k in regCache)delete regCache[k];spotCache={}};
-  const floodSet=()=>{const d=drawing;if(d.p.length)roomAreas[d.room]={f:d.f,s:d.p.slice()};else if(d.was)roomAreas[d.room]=d.was;else delete roomAreas[d.room];fresh()};
+  const floodSet=()=>{const d=drawing;if(d.p.length)roomAreas[d.room]={f:d.f,s:d.p.slice()};else delete roomAreas[d.room];fresh();save(KR,roomAreas)};
+  if(b("paroom"))b("paroom").onchange=()=>startRoom(+b("paroom").value);
+  if(b("paauto"))b("paauto").onclick=()=>{drawing.p=[];floodSet();part()};
   if(b("paundo"))b("paundo").onclick=()=>{drawing.p.pop();floodSet();part()};
-  if(b("pacor"))b("pacor").onclick=()=>{drawing.p=[];floodSet();drawing.flood=false;part()};
-  if(b("pacan"))b("pacan").onclick=()=>{if(drawing.flood){drawing.p=[];floodSet()}if(drawing.room)hot=0;drawing=null;part()};
+  if(b("pacor"))b("pacor").onclick=()=>{drawing.p=[];drawing.flood=false;part()};
+  if(b("pacan"))b("pacan").onclick=()=>{if(drawing.room)hot=0;drawing=null;part()};
   if(b("pafin"))b("pafin").onclick=()=>{const room=drawing.room;
-    if(drawing.flood){if(drawing.p.length)save(KR,roomAreas);drawing=null;hot=room;hotUs=[];hotF=plan.rooms[room].f;part();if(window.onPlanSetup)window.onPlanSetup();return}
+    if(drawing.flood){drawing=null;hot=room;hotUs=[];hotF=plan.rooms[room].f;part();if(window.onPlanSetup)window.onPlanSetup();return}
     if(drawing.p.length>2){if(room){roomAreas[room]={f:drawing.f,p:drawing.p};save(KR,roomAreas);for(const k in regCache)delete regCache[k];spotCache={}}
       else{areas[drawing.u]={f:drawing.f,p:drawing.p};save(KA,areas)}}
     drawing=null;if(room){hot=room;hotUs=[];hotF=plan.rooms[room].f}part();if(window.onPlanSetup)window.onPlanSetup()};
@@ -343,6 +347,7 @@ function hook(){
   if(b("pload"))b("pload").onclick=()=>fi.click();
   if(b("pdemo"))b("pdemo").onclick=showDemo;
   if(b("pmove"))b("pmove").onclick=()=>{moving=!moving;sel=null;part()};
+  if(b("parea"))b("parea").onclick=()=>{if(drawing){drawing=null;part();return}const rs=Object.keys(plan.rooms).map(Number).sort((a,b)=>a-b);startRoom(plan.rooms[hot]?hot:rs[0])};
   if(b("pdel"))b("pdel").onclick=()=>{if(confirm("Remove the floor plan from this browser? Unit positions you placed are kept.")){plan=null;try{localStorage.removeItem(KP)}catch(e){}full()}};
   if(window.onPlanAll)holdButton(b("pall"),()=>window.onPlanAll(true),()=>window.onPlanAll(false));
   box.querySelectorAll("svg[data-f]").forEach(svg=>{const fi=+svg.dataset.f;
@@ -375,7 +380,7 @@ function hook(){
   for(const e of ["pointercancel","lostpointercapture"])svg.addEventListener(e,()=>{down=null;endHold()});
   svg.addEventListener("click",ev=>{  // drawing an area; placing or moving a dot
     if(drawing){const q=at(ev);if(drawing.f<0)drawing.f=fi;if(drawing.f===fi)drawing.p.push([Math.round(q.x),Math.round(q.y)]);
-      if(drawing.flood&&drawing.f===fi){roomAreas[drawing.room]={f:fi,s:drawing.p.slice()};for(const k in regCache)delete regCache[k];spotCache={}}  // filled at once, so it shows
+      if(drawing.flood&&drawing.f===fi){roomAreas[drawing.room]={f:fi,s:drawing.p.slice()};for(const k in regCache)delete regCache[k];spotCache={};save(KR,roomAreas)}  // filled at once, so it shows
       part();return}
     if(!sel&&!moving)return;
     const g=ev.target.closest&&ev.target.closest("g[data-u]");
@@ -435,9 +440,12 @@ function loadText(txt){
 window.planUpdate=us=>{units=us||[];spotCache={};part()};
 window.planHot=n=>{hot=n||0;hotUs=[];if(hot&&plan&&plan.rooms[hot])hotF=plan.rooms[hot].f;part()};  // the page can highlight a room (e.g. while ringing it)
 // For Setup on the school page: place a device, draw or remove its area, and everything a backup file holds.
+// Room areas: start (or switch to) a room. What was filled for it before can be added to or undone.
+function startRoom(n){if(!plan||!plan.rooms[n])return;const A=roomAreas[n];
+  drawing={u:String(n),room:+n,f:plan.rooms[n].f,p:A&&A.s?A.s.map(q=>q.slice()):[],flood:true};sel=null;moving=false;hot=+n;hotUs=[];hotF=plan.rooms[n].f;part()}
 window.planApi={placed:u=>!!where(u),hasArea:n=>!!areas[n],
   rooms:()=>plan?Object.keys(plan.rooms).map(Number).sort((a,b)=>a-b):[],hasRoomArea:n=>!!roomAreas[n],
-  drawRoomArea:n=>{if(!plan||!plan.rooms[n])return;drawing={u:String(n),room:+n,f:plan.rooms[n].f,p:[],flood:true,was:roomAreas[n]};sel=null;moving=false;hot=+n;hotUs=[];hotF=plan.rooms[n].f;part()},
+  drawRoomArea:n=>startRoom(n),
   delRoomArea:n=>{delete roomAreas[n];save(KR,roomAreas);for(const k in regCache)delete regCache[k];spotCache={};hot=+n;hotUs=[];if(plan&&plan.rooms[n])hotF=plan.rooms[n].f;part()},
   place:n=>{sel=String(n);moving=false;drawing=null;part()},
   drawArea:n=>{drawing={u:String(n),f:-1,p:[]};sel=null;moving=false;part()},
