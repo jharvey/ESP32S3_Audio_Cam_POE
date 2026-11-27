@@ -19,6 +19,8 @@
 #include "Mixer.h"
 #include "RoomSetup.h"
 #include "Schedule.h"
+
+#include <map>
 #include "Sounds.h"
 #include "Tuning.h"
 
@@ -201,6 +203,14 @@ public:
     // School-wide settings (office list, switches, zones, quiet hours, bells, self-check, console watch, time server) are
     // kept the same on every unit: the acting office unit sends them to any unit whose copy differs (a new or replaced
     // board, a unit that was off when something changed).
+    // The office page's own data (plan, dots, areas, emergency steps) is kept on every office unit, so the page shows the
+    // same from any of them. The page saves it on the unit it is open on; the other office units fetch the newest copy.
+    bool siteAvailable() const { return hal_.store->hasBlobs(); }
+    uint16_t siteRev() const { return siteRev_; }
+    uint16_t siteHash() const { return siteHash_; }
+    uint32_t siteSize() const { return siteSize_; }
+    std::string siteText();                        // "" = none here
+    std::string sitePut(const std::string& text);  // from the office page; "" = saved
     uint16_t syncRev() const { return syncRev_; }
     uint16_t syncHash() const { return syncHash_; }
     // The office page (/school) reads this unit every 2 s while it is open on a PC. With "consolewatch N" the acting office
@@ -273,6 +283,15 @@ private:
     std::vector<uint16_t> offices_;
     std::vector<std::pair<uint16_t, uint32_t>> officeBoards_;
     uint8_t mismatchWas_ = 0;
+    uint16_t siteRev_ = 0, siteHash_ = 0, sitePullRoom_ = 0, sitePullRev_ = 0, sitePullHash_ = 0;
+    uint32_t siteSize_ = 0, sitePullTotal_ = 0, sitePullAt_ = 0, siteCacheAt_ = 0;
+    int sitePullTries_ = 0;
+    std::string sitePullBuf_, siteCache_;
+    void siteSetMeta(uint16_t rev, uint16_t hash, uint32_t size);
+    void siteTick();
+    void siteAsk();
+    void sitePart(const TextPacket& r);
+    std::string siteGet(const std::vector<std::string>& a);
     void saveOfficeBoards();
     void learnOfficeBoards();
     uint16_t syncRev_ = 0, syncHash_ = 0;
@@ -414,6 +433,8 @@ private:
     TalkTarget webTarget_;         // who web talk goes to (R2: everyone, a room, a floor or a group)
     int webState_ = 0;             // 0 idle, 1 buffering (waits for ~120 ms of audio), 2 sending
     uint32_t webLast_ = 0;         // frame the last web audio arrived
+    uint64_t nonceFloor_ = 0;  // ... as it was when this unit started: the least a sender not heard since then must show
+    std::map<uint16_t, uint64_t> nonceBy_;  // last accepted command of each sender
     uint64_t lastNonce_ = 0;   // last accepted network command (replay protection)
     int testPhase_ = 0;        // selftest: 0 idle, 1 quiet, 2 tone
     int testCount_ = 0;

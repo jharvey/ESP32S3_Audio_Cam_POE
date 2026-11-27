@@ -2,6 +2,8 @@
 
 #include "Auth.h"
 
+#include "Auth.h"
+
 #include <algorithm>
 #include <cmath>
 #include <cstdarg>
@@ -48,6 +50,25 @@ const char* const kEmergencyNames[] = {"clear", "lockdown", "evacuate", "shelter
 // R3.2
 const char* const kSchoolKeys[] = {"features", "office", "zones", "quiet", "sched", "selfcheck", "conwatch", "ntp", "officeuid"};  // the same on every unit
 const char kSyncSep = '\x1f';
+constexpr size_t kSiteMax = 200000, kSitePiece = 420;
+uint16_t hash16(const std::string& t) {
+    uint32_t h = 2166136261u;
+    for (unsigned char ch : t) h = (h ^ ch) * 16777619u;
+    const uint16_t x = uint16_t(h ^ (h >> 16));
+    return x ? x : uint16_t(1);
+}
+std::string b64(const std::string& in) {
+    static const char* const t = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    std::string out;
+    for (size_t i = 0; i < in.size(); i += 3) {
+        const uint32_t n = uint32_t(uint8_t(in[i])) << 16 | (i + 1 < in.size() ? uint32_t(uint8_t(in[i + 1])) << 8 : 0) | (i + 2 < in.size() ? uint32_t(uint8_t(in[i + 2])) : 0);
+        out += t[n >> 18];
+        out += t[(n >> 12) & 63];
+        out += i + 1 < in.size() ? t[(n >> 6) & 63] : '=';
+        out += i + 2 < in.size() ? t[n & 63] : '=';
+    }
+    return out;
+}
 const char* const kFeatureNames[] = {"reason", "queue", "zones", "dnd", "quiet", "silent", "failover", "lockdown"};
 constexpr uint32_t kUrgentHoldFrames = 75;            // OFFICE held 1.5 s = "help needed"
 constexpr uint32_t kSilentBothFrames = 50;            // TALK and OFFICE held together 1 s = silent help call
@@ -298,6 +319,115 @@ void Intercom::learnOfficeBoards() {
     if (changed) saveOfficeBoards();
 }
 
+// ---- the office page's data on the office units ----
+void Intercom::siteSetMeta(uint16_t rev, uint16_t hash, uint32_t size) {
+    siteRev_ = rev;
+    siteHash_ = hash;
+    siteSize_ = size;
+    hal_.store->saveText("sitemeta", std::to_string(rev) + " " + std::to_string(hash) + " " + std::to_string(size));
+    siteCache_.clear();
+    sendStatus();
+}
+
+std::string Intercom::siteText() {
+    std::string t;
+    if (!siteRev_ || !hal_.store->loadBlob("site", &t)) return "";
+    return t;
+}
+
+std::string Intercom::sitePut(const std::string& text) {
+    if (!siteAvailable()) return "this unit has no room to keep the plan";
+    if (text.empty() || text.size() > kSiteMax) return "the plan is too large for the unit (200 kB at most)";
+    if (!hal_.store->saveBlob("site", text)) return "could not save the plan on the unit";
+    uint16_t top = siteRev_;
+    for (const auto& p : peers_) top = std::max(top, p.status.siteRev);
+    sitePullRoom_ = 0;
+    siteSetMeta(uint16_t(top < 65535 ? top + 1 : top), hash16(text), uint32_t(text.size()));
+    event(EventKind::Info, unit_.room, "the office page's plan and areas were saved on unit %u (version %u)", unsigned(unit_.room), unsigned(siteRev_));
+    return "";
+}
+
+void Intercom::siteAsk() {
+    sitePullAt_ = frame_;
+    sendSigned(std::to_string(sitePullRoom_), "siteget " + std::to_string(sitePullRev_) + " " + std::to_string(sitePullBuf_.size()));
+}
+
+// Once a second on an office unit: if another office unit has a newer copy, fetch it piece by piece.
+void Intercom::siteTick() {
+    if (siteCacheAt_ && frame_ - siteCacheAt_ > 1000) {
+        siteCache_.clear();
+        siteCache_.shrink_to_fit();
+        siteCacheAt_ = 0;
+    }
+    if (!siteAvailable() || !isOffice(unit_.room) || frame_ < 500) return;
+    if (sitePullRoom_) {
+        if (frame_ - sitePullAt_ < 100) return;
+        if (++sitePullTries_ <= 8) {
+            siteAsk();  // a piece was lost: ask again
+            return;
+        }
+        sitePullRoom_ = 0;
+        sitePullBuf_.clear();
+    }
+    auto place = [&](uint16_t r) { return std::find(offices_.begin(), offices_.end(), r) - offices_.begin(); };
+    const Peer* best = nullptr;
+    for (const auto& p : peers_) {
+        const StatusPacket& s = p.status;
+        if (!s.siteRev || !s.siteHash || !isOffice(s.from.room) || !boardOk(s.from.room, s.unitUid)) continue;
+        const bool newer = s.siteRev > siteRev_ || (s.siteRev == siteRev_ && s.siteHash != siteHash_ && place(s.from.room) < place(unit_.room));
+        if (newer && (!best || s.siteRev > best->status.siteRev)) best = &p;
+    }
+    if (!best) return;
+    sitePullRoom_ = best->status.from.room;
+    sitePullRev_ = best->status.siteRev;
+    sitePullHash_ = best->status.siteHash;
+    sitePullTotal_ = 0;
+    sitePullTries_ = 0;
+    sitePullBuf_.clear();
+    siteAsk();
+}
+
+// "siteget REV OFFSET" from another office unit -> "sitepart REV TOTAL OFFSET base64"
+std::string Intercom::siteGet(const std::vector<std::string>& a) {
+    if (a.size() != 3) return "usage: siteget REV OFFSET";
+    const unsigned long rev = std::strtoul(a[1].c_str(), nullptr, 10), off = std::strtoul(a[2].c_str(), nullptr, 10);
+    if (!siteRev_ || rev != siteRev_) return "sitepart 0 0 0 -";
+    if (siteCache_.empty() && !hal_.store->loadBlob("site", &siteCache_)) return "sitepart 0 0 0 -";
+    siteCacheAt_ = frame_ ? frame_ : 1;
+    if (off > siteCache_.size()) return "sitepart 0 0 0 -";
+    return "sitepart " + std::to_string(siteRev_) + " " + std::to_string(siteCache_.size()) + " " + std::to_string(off) + " " + b64(siteCache_.substr(off, kSitePiece));
+}
+
+void Intercom::sitePart(const TextPacket& r) {
+    if (!sitePullRoom_ || r.from.room != sitePullRoom_) return;
+    std::istringstream in(r.text);
+    std::string w, data;
+    unsigned long rev = 0, total = 0, off = 0;
+    in >> w >> rev >> total >> off >> data;
+    std::string bytes;
+    if (rev != sitePullRev_ || total == 0 || total > kSiteMax || !base64Decode(data, &bytes) || bytes.empty()) {  // it has another version by now
+        sitePullRoom_ = 0;
+        sitePullBuf_.clear();
+        return;
+    }
+    if (off != sitePullBuf_.size()) return;  // a repeated piece
+    sitePullBuf_ += bytes;
+    sitePullTotal_ = uint32_t(total);
+    sitePullTries_ = 0;
+    if (sitePullBuf_.size() < total) {
+        siteAsk();
+        return;
+    }
+    const uint16_t from = sitePullRoom_;
+    sitePullRoom_ = 0;
+    if (sitePullBuf_.size() == total && hash16(sitePullBuf_) == sitePullHash_ && hal_.store->saveBlob("site", sitePullBuf_)) {
+        siteSetMeta(sitePullRev_, sitePullHash_, uint32_t(total));
+        event(EventKind::Info, unit_.room, "unit %u: the office page's plan and areas copied from unit %u (version %u)", unsigned(unit_.room), unsigned(from), unsigned(siteRev_));
+    }
+    sitePullBuf_.clear();
+    sitePullBuf_.shrink_to_fit();
+}
+
 uint16_t Intercom::schoolHash() const {
     uint32_t h = 2166136261u;
     auto mix = [&](const std::string& t) {
@@ -445,6 +575,7 @@ void Intercom::everySecond() {
         }
     }
     syncTick();
+    siteTick();
     quietNowDb_ = 0;
     if (feature(kFeatQuiet) && quietFrom_ >= 0) {
         int64_t now = utcNow();
@@ -468,6 +599,14 @@ void Intercom::loadSelfCheck() {
     unsigned h = 0, m = 0;
     if (std::sscanf(hal_.store->loadText("selfcheck").c_str(), "%u:%u", &h, &m) == 2 && h < 24 && m < 60) selfMin_ = int(h * 60 + m);
     syncRev_ = uint16_t(std::strtoul(hal_.store->loadText("syncrev").c_str(), nullptr, 10));
+    {
+        unsigned r = 0, h = 0, z = 0;
+        if (std::sscanf(hal_.store->loadText("sitemeta").c_str(), "%u %u %u", &r, &h, &z) == 3 && hal_.store->hasBlobs()) {
+            siteRev_ = uint16_t(r);
+            siteHash_ = uint16_t(h);
+            siteSize_ = z;
+        }
+    }
     conWatchMin_ = std::min(60, std::max(0, std::atoi(hal_.store->loadText("conwatch").c_str())));
 }
 
@@ -485,7 +624,8 @@ void Intercom::begin() {
     if (!opt_.bootNote.empty())
         event(opt_.bootFault ? EventKind::Fault : EventKind::Info, unit_.room, "room %u started: %s", unsigned(unit_.room), opt_.bootNote.c_str());
     hal_.links->setWifi(hal_.store->loadText(kWifiSsidKey), hal_.store->loadText(kWifiPassKey));
-    lastNonce_ = netauth::loadNonce(*hal_.store);
+    lastNonce_ = nonceFloor_ = netauth::loadNonce(*hal_.store);
+    nonceBy_.clear();
     params_ = TuneParams();
     params_.taps = std::min(params_.taps, opt_.maxTaps);
     std::string saved = hal_.store->loadText(kTuneKey);
@@ -1072,6 +1212,12 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         return out;
     }
     if (c == "sync" || c == "syncrev") return syncCommand(a, line);
+    if (c == "siteget") return siteGet(a);
+    if (c == "site") {
+        snprintf(buf, sizeof(buf), "office page data: version %u, %lu bytes%s", unsigned(siteRev_), (unsigned long)siteSize_,
+                 !siteAvailable() ? " (this unit cannot keep it)" : sitePullRoom_ ? " (fetching a newer copy)" : "");
+        return buf;
+    }
     if (c == "officepin") {  // "officepin accept 105": the board that now answers as 105 is the office unit from now on
         if (a.size() == 3 && a[1] == "accept") {
             const unsigned long r = std::strtoul(a[2].c_str(), nullptr, 10);
@@ -1463,6 +1609,10 @@ void Intercom::receive() {
         } else if (type == PacketType::Reply) {  // answers to commands this unit sent (web console)
             TextPacket r;
             if (!decodeText(buf, n, &r) || r.targetRoom != unit_.room) continue;
+            if (r.text.compare(0, 9, "sitepart ") == 0) {  // a piece of the plan from another office unit
+                sitePart(r);
+                continue;
+            }
             size_t a = 0;
             while (a < r.text.size()) {
                 size_t e = r.text.find('\n', a);
@@ -1477,14 +1627,17 @@ void Intercom::receive() {
             if (!decodeText(buf, n, &t) || !t.addressedTo(unit_)) continue;
             std::string cmd;
             uint64_t nonce = 0;
-            netauth::Check ck = netauth::verify(netauth::loadKey(*hal_.store), lastNonce_, t, &cmd, &nonce);
+            netauth::Check ck = netauth::verify(netauth::loadKey(*hal_.store), nonceBy_.count(t.from.room) ? nonceBy_[t.from.room] : nonceFloor_, t, &cmd, &nonce);  // each sender counts by its own clock
             if (ck != netauth::Check::Ok) {
                 logf("net command from %u refused: %s", unsigned(t.from.room), netauth::describe(ck));
                 sendReply(t, netauth::describe(ck));
                 continue;
             }
-            lastNonce_ = nonce;
-            netauth::saveNonce(*hal_.store, nonce);
+            nonceBy_[t.from.room] = nonce;
+            if (nonce > lastNonce_) {
+                lastNonce_ = nonce;
+                netauth::saveNonce(*hal_.store, nonce);
+            }
             std::string reply = command(cmd, CmdSource::Network);
             bool secret = cmd.compare(0, 7, "webpass") == 0 || cmd.compare(0, 6, "netkey") == 0;
             logf("net command from %u: %s", unsigned(t.from.room), secret ? "(password command, hidden)" : cmd.c_str());
@@ -1580,7 +1733,9 @@ void Intercom::sendStatus() {
     s.group = group_;
     s.syncRev = syncRev_;
     s.syncHash = syncHash_;
-    uint8_t buf[32];
+    s.siteRev = siteRev_;
+    s.siteHash = siteHash_;
+    uint8_t buf[40];
     hal_.net->send(buf, encodeStatus(s, buf));
 }
 

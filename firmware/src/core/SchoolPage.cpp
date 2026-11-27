@@ -195,6 +195,10 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
 <section class="panel"><h2>Backup</h2>
  <div class="prow"><button id="bksave">Save a backup file</button><button id="bkload">Restore from a backup file…</button></div>
  <div class="mute" id="bknote">The file holds the plan, the dots, the areas and every device's settings. No passwords or keys.</div></section>
+<section class="panel"><h2>Kept on the office units</h2>
+ <div id="sitenote">…</div>
+ <div class="mute">The plan, the dots, the room and device areas and the emergency steps are saved on the office unit this page is open on, a few seconds after a change.
+ The other office units copy it by themselves, so the page shows the same from any office unit and on any office PC. The backup file is still the copy to keep somewhere safe.</div></section>
 <section class="panel"><h2>A replaced or reset device</h2>
  <div class="mute">1. Restore from the backup file. 2. Set the room's number on the new device. 3. Choose it here and send.</div>
  <div class="prow">Device <select id="bkunit"></select><button id="bkunitgo">Send it its saved settings</button></div></section>
@@ -217,6 +221,35 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
 </div></main>
 <script>
 let officeIps=[];
+// ---- The plan, dots, areas and emergency steps live on the office units; this browser keeps a working copy ----
+let siteMark="",siteLast=null,siteBusy=false,siteChanged=0,siteMsg="";
+try{siteMark=localStorage.getItem("icSiteMark")||"";}catch(e){}
+function siteBlob(){return JSON.stringify(Object.assign({kind:"intercom-site",v:1,steps:stepsAll()},window.planApi.data()));}
+function siteNote(s,t){const e=document.getElementById("sitenote");if(e)e.innerHTML=!s.ok?"This unit cannot keep the plan (no storage for it): it stays in this browser and in the backup file."
+  :(s.rev?"<b>Saved on this unit:</b> version "+s.rev+", "+Math.round(s.size/1024)+" kB. ":"<b>Nothing saved on this unit yet.</b> ")+(t||siteMsg);}
+async function siteSync(s){
+  if(!s||!window.planApi||siteBusy)return;if(!s.ok){siteNote(s);return;}
+  siteBusy=true;
+  try{const cur=siteBlob(),mark=s.rev+":"+s.hash;if(siteLast===null)siteLast=cur;
+    const dirty=cur!==siteLast,has=!!window.planApi.data().plan;
+    if(dirty&&!siteChanged)siteChanged=Date.now();
+    if(s.rev&&mark!==siteMark&&!dirty){  // the unit holds another version than this browser last saw: take it
+      const r=await fetch(location.origin+"/api/site",{cache:"no-store"});
+      if(r.ok){const d=JSON.parse(await r.text());
+        if(d&&d.kind==="intercom-site"){if(d.steps){try{localStorage.setItem("icSteps1",JSON.stringify(d.steps));}catch(e){}stVer++;stepsShow();}
+          window.planApi.restore(d);siteLast=siteBlob();siteMark=mark;try{localStorage.setItem("icSiteMark",mark);}catch(e){}siteMsg="This browser shows that version.";}}
+    }else if((dirty&&Date.now()-siteChanged>4000)||(!s.rev&&has&&siteMark!=="up")){  // changed here (or the unit has none yet): save it on the unit
+      const bytes=new TextEncoder().encode(cur);let ans="";siteNote(s,"Saving…");
+      for(let off=0;off<bytes.length;off+=4000){
+        const r=await fetch(location.origin+"/api/site/put?off="+off+"&total="+bytes.length,{method:"POST",headers:{"X-Intercom":"1","Content-Type":"text/plain"},body:bytes.slice(off,off+4000)});
+        ans=await r.text();if(!r.ok)throw new Error(ans);}
+      const m=ans.match(/^saved (\d+) (\d+)/);if(!m)throw new Error(ans||"no answer");
+      siteLast=cur;siteChanged=0;siteMark=m[1]+":"+m[2];try{localStorage.setItem("icSiteMark",siteMark);}catch(e){}siteMsg="This browser shows that version.";
+    }else if(mark===siteMark&&!dirty)siteMsg="This browser shows that version.";
+    else if(dirty)siteMsg="A change here is about to be saved.";
+    siteNote(s);
+  }catch(e){siteChanged=Date.now()+20000;siteNote(s,"Could not save on the unit: "+esc(String(e.message))+". Trying again shortly.");}
+  siteBusy=false;}
 const EMERG=["","LOCKDOWN","EVACUATE","SHELTER"];let selfFw="";
 const FAULT=["","E1 no Ethernet (on Wi-Fi)","E2 no network","Lo battery low","dUP duplicate number","oL output shorted"];
 function card(u){
@@ -255,7 +288,7 @@ async function tick(){
     const floors={};for(const u of us){const fl=Math.floor(u.room/100);(floors[fl]=floors[fl]||[]).push(u);}
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
-    lastPinBad=j.pinbad||[];lastSchool=j;drawDevs(us);selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);callWatch(us);drawAlarm(us,j.queue||[]);drawZones((j.features&4)?j.zones||[]:[]);
+    siteSync(j.site);lastPinBad=j.pinbad||[];lastSchool=j;drawDevs(us);selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);callWatch(us);drawAlarm(us,j.queue||[]);drawZones((j.features&4)?j.zones||[]:[]);
     document.getElementById("cwnow").textContent=j.conwatch?"Now: on, after "+j.conwatch+" min.":"Now: off.";
     {const o=j.offices||[],ns=us.filter(u=>u.online&&u.sync===0).length;
      document.getElementById("ofcnow").innerHTML=o.length?"<b>Now:</b> "+o.join(", then ")+". Acting as the office: <b>"+j.acting+"</b>"+(j.acting!==o[0]?" (unit "+o[0]+" is offline)":"")+

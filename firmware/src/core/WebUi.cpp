@@ -236,6 +236,7 @@ HttpResponse WebUi::handle(const HttpRequest& req) {
         r.camera = true;
         return r;
     }
+    if (path.compare(0, 9, "/api/site") == 0) return siteRequest(req, path);
     if (path.compare(0, 7, "/api/fw") == 0) return firmwareRequest(req, path);
     if (path == "/api/cmd") {
         if (req.method != "POST") return text(405, "POST only");
@@ -271,6 +272,37 @@ bool parseSize(const std::string& s, size_t* out) {
     return true;
 }
 }  // namespace
+
+// The office page's plan, dots, areas and emergency steps, kept on the unit (and copied between the office units).
+//   GET  /api/site                      the saved text, or 404
+//   POST /api/site/put?off=N&total=T    a piece of at most 4096 bytes, in order; the last piece saves it
+HttpResponse WebUi::siteRequest(const HttpRequest& req, const std::string& path) {
+    if (path == "/api/site") {
+        if (req.method != "GET") return text(405, "GET only");
+        HttpResponse r;
+        r.contentType = "application/json";
+        r.body = ic_.siteText();
+        if (r.body.empty()) return text(404, "no plan saved on this unit");
+        return r;
+    }
+    if (path == "/api/site/put") {
+        if (req.method != "POST") return text(405, "POST only");
+        if (req.xIntercom != "1") return text(403, "missing X-Intercom header");
+        size_t off = 0, total = 0;
+        if (!parseSize(queryValue(req.path, "off"), &off) || !parseSize(queryValue(req.path, "total"), &total)) return text(400, "off=N and total=T are needed");
+        if (total == 0 || total > 200000 || req.body.empty() || req.body.size() > 4096) return text(400, "the plan is too large for the unit (200 kB at most)");
+        if (off == 0) siteUp_.clear();
+        if (off != siteUp_.size() || off + req.body.size() > total) return text(409, "out of order: start again at off=0");
+        siteUp_ += req.body;
+        if (siteUp_.size() < total) return text(200, "more");
+        std::string err = ic_.sitePut(siteUp_);
+        siteUp_.clear();
+        siteUp_.shrink_to_fit();
+        if (!err.empty()) return text(507, err);
+        return text(200, "saved " + std::to_string(ic_.siteRev()) + " " + std::to_string(ic_.siteHash()));
+    }
+    return text(404, "not found");
+}
 
 HttpResponse WebUi::firmwareRequest(const HttpRequest& req, const std::string& path) {
     static const char* kStates[] = {"idle", "receiving", "done", "failed"};
@@ -378,12 +410,15 @@ std::string WebUi::schoolJson() {
     me.flags2 = ic_.statusFlags2();
     me.syncRev = ic_.syncRev();
     me.syncHash = ic_.syncHash();
+    me.siteRev = ic_.siteRev();
+    me.siteHash = ic_.siteHash();
     // R3.2: feature switches, the office and who acts as it, zones, and the rooms waiting for the office
     std::string officeList;
     for (uint16_t r : ic_.offices()) officeList += (officeList.empty() ? "" : ",") + std::to_string(r);
     std::string pinBad;
     for (uint16_t r : ic_.officeMismatch()) pinBad += (pinBad.empty() ? "" : ",") + std::to_string(r);
-    std::string extra = "\"pinbad\":[" + pinBad + "],\"features\":" + std::to_string(ic_.features()) + ",\"conwatch\":" + std::to_string(ic_.consoleWatchMin()) + ",\"office\":" + std::to_string(ic_.officeRoom()) +
+    std::string extra = std::string("\"site\":{\"ok\":") + (ic_.siteAvailable() ? "true" : "false") + ",\"rev\":" + std::to_string(ic_.siteRev()) +
+                        ",\"hash\":" + std::to_string(ic_.siteHash()) + ",\"size\":" + std::to_string(ic_.siteSize()) + "},\"pinbad\":[" + pinBad + "],\"features\":" + std::to_string(ic_.features()) + ",\"conwatch\":" + std::to_string(ic_.consoleWatchMin()) + ",\"office\":" + std::to_string(ic_.officeRoom()) +
                         ",\"standin\":" + std::to_string(ic_.officeStandIn()) + ",\"acting\":" + std::to_string(ic_.actingOffice()) + ",\"offices\":[" + officeList + "],\"zones\":[";
     bool firstX = true;
     for (const auto& z : ic_.zones()) {

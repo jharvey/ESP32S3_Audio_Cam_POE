@@ -172,6 +172,10 @@ struct Unit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFirmwa
     UnitId loadUnit() override { return id; }
     void saveUnit(const UnitId& u) override { id = u; }
     void log(const char* m) override { logBytes += strlen(m); }
+    std::map<std::string, std::string> blobs;
+    bool hasBlobs() const override { return true; }
+    bool saveBlob(const char* n, const std::string& d) override { blobs[n] = d; return true; }
+    bool loadBlob(const char* n, std::string* o) override { *o = blobs[n]; return !o->empty(); }
     std::string loadText(const char* k) override { return kv[k]; }
     void saveText(const char* k, const std::string& v) override { kv[k] = v; }
     std::string boardTest() override { return "ok fake board\n"; }

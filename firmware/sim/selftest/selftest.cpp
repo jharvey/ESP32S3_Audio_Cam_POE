@@ -246,6 +246,7 @@ struct Bus {
     std::vector<std::deque<std::vector<uint8_t>>*> queues;
 };
 
+static int64_t g_clockFrames = -1;  // >= 0: all units share this clock (frames since g_clock0), as with NTP; -1: each counts its own frames
 static int64_t g_clock0 = 0;  // test wall clock: UTC at frame 0 (0 = no clock)
 static bool g_camera = false;       // new FakeUnits have a camera
 static std::string g_bootNote;      // ... and this start reason
@@ -305,7 +306,7 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFi
         bus->queues.push_back(&rx);
         IntercomOptions opt;
         opt.unitUid = uid ? uid : 0xA0000000u + u.room;  // stands in for the board's MAC
-        opt.utcNow = [this] { return g_clock0 ? g_clock0 + int64_t(ic->frame()) / 50 : int64_t(0); };
+        opt.utcNow = [this] { return g_clock0 ? g_clock0 + (g_clockFrames >= 0 ? g_clockFrames : int64_t(ic->frame())) / 50 : int64_t(0); };
         if (!g_bootTest) kv["boottest"] = "off";
         opt.restart = [this](bool d) { restarts++; restartDownload = d; };
         opt.hasCamera = g_camera;
@@ -342,7 +343,11 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFi
     UnitId loadUnit() override { return id; }
     void saveUnit(const UnitId& u) override { id = u; }
     void log(const char* m) override { logs.push_back(m); }
-    std::map<std::string, std::string> kv;
+    std::map<std::string, std::string> kv, blobs;
+    bool blobsOn = true;
+    bool hasBlobs() const override { return blobsOn; }
+    bool saveBlob(const char* n, const std::string& d) override { if (blobsOn) blobs[n] = d; return blobsOn; }
+    bool loadBlob(const char* n, std::string* o) override { *o = blobs[n]; return blobsOn && !o->empty(); }
     std::string loadText(const char* k) override { return kv[k]; }
     void saveText(const char* k, const std::string& v) override { kv[k] = v; }
 
@@ -2005,7 +2010,8 @@ static void testR33Sync() {
     Bus bus;
     FakeUnit o1(&bus, {105, 0}, 120), o2(&bus, {104, 0}, 130), o3(&bus, {901, 0}, 140), r1(&bus, {101, 0}, 150);
     std::vector<FakeUnit*> all = {&o1, &o2, &o3, &r1};
-    auto run = [&](int frames) { for (int k = 0; k < frames; k++) for (auto* u : all) u->step(); };
+    g_clockFrames = 0;
+    auto run = [&](int frames) { for (int k = 0; k < frames; k++) { g_clockFrames++; for (auto* u : all) u->step(); } };
     for (auto* u : all) u->ic->command("netkey sync-test-key-0123456789");
     run(100);
     // everything is set on the first office unit only: the others get it by themselves
@@ -2070,6 +2076,48 @@ static void testR33Sync() {
     CHECK(o1new.ic->iAmOffice() && o1new.ic->actingOffice() == 105 && r1new.ic->actingOffice() == 105 && o2.ic->officeMismatch().empty() &&
               r1new.ic->officeBoard(105) == 0xB0000069u,
           "once accepted it is the office again, on every unit");
+    // ---- the office page's plan and areas are kept on every office unit ----
+    all = {&o1new, &o2, &o3, &r1new};
+    std::string planA = "{\"kind\":\"intercom-site\",\"plan\":\"";
+    for (int k = 0; k < 6000; k++) planA += char('a' + (k * 7 + k / 13) % 26);
+    planA += "\xc3\xa9\"}";
+    CHECK(o2.ic->sitePut(planA).empty() && o2.ic->siteRev() == 1 && o2.ic->siteText() == planA, "the office page saves the plan on the unit it is open on");
+    run(1500);
+    CHECK(o1new.ic->siteText() == planA && o3.ic->siteText() == planA && o1new.ic->siteRev() == 1 && o3.ic->siteHash() == o2.ic->siteHash() && has(o3, "copied from unit 104"),
+          "the other office units copy it by themselves (%u bytes) [%s | %s | %s]", unsigned(o3.ic->siteSize()), o1new.ic->command("site").c_str(), o1new.ic->replies().empty() ? "-" : o1new.ic->replies().back().text.substr(0, 60).c_str(), o2.logs.empty() ? "-" : o2.logs.back().substr(0, 90).c_str());
+    CHECK(r1new.ic->siteText().empty() && r1new.ic->siteRev() == 0, "a classroom unit does not hold a copy");
+    std::string planB = planA + " changed on 901";
+    all = {&o2, &o3, &r1new};
+    run(300);
+    CHECK(o3.ic->sitePut(planB).empty() && o3.ic->siteRev() == 2, "a change saved on another office unit is a newer version");
+    run(1000);
+    all = {&o1new, &o2, &o3, &r1new};
+    run(1500);
+    CHECK(o2.ic->siteText() == planB && o1new.ic->siteText() == planB && o1new.ic->siteRev() == 2, "every office unit ends up with the newest version, also one that was off");
+    {
+        WebUi web(*o2.ic);
+        o2.ic->command("webpass site-pass-123");
+        HttpRequest q;
+        q.authorization = basic("admin:site-pass-123");
+        q.method = "GET";
+        q.path = "/api/site";
+        const bool got = web.handle(q).body == planB;
+        std::string planC = planB + " and again from the page";
+        q.method = "POST";
+        q.xIntercom = "1";
+        std::string last;
+        for (size_t off = 0; off < planC.size(); off += 4000) {
+            q.path = "/api/site/put?off=" + std::to_string(off) + "&total=" + std::to_string(planC.size());
+            q.body = planC.substr(off, 4000);
+            last = web.handle(q).body;
+        }
+        CHECK(got && last.compare(0, 8, "saved 3 ") == 0 && o2.ic->siteText() == planC, "the page reads the plan from the unit and saves a change in pieces (%s)", last.c_str());
+        q.method = "GET";
+        q.path = "/api/school";
+        q.body.clear();
+        CHECK(web.handle(q).body.find("\"site\":{\"ok\":true,\"rev\":3,") != std::string::npos, "the school page is told which version the unit holds");
+    }
+    g_clockFrames = -1;
     g_clock0 = clock0;
 }
 

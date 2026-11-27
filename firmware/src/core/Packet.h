@@ -98,6 +98,7 @@ struct StatusPacket {
     uint8_t emergency = 0;  // 0 none, 1 lockdown, 2 evacuate, 3 shelter (R3.1)
     uint8_t flags2 = 0;     // StatusFlags2 (R3.2)
     uint16_t syncRev = 0;   // school-wide settings (R3.3): how often the office changed them ...
+    uint16_t siteRev = 0, siteHash = 0;  // the office page's plan and areas kept on this unit (office units only); 0 = none
     uint16_t syncHash = 0;  // ... and a check value over them; 0 = older firmware that does not send it
 };
 // "0.5.0" <-> 14 bits (major 0-15, minor 0-31, patch 0-31), carried in the status packet.

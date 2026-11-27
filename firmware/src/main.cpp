@@ -7,6 +7,7 @@
 #include <ESP_I2S.h>
 #include <ETH.h>
 #include <NetworkUdp.h>
+#include <LittleFS.h>
 #include <Preferences.h>
 #include <SD_MMC.h>
 #include <Update.h>
@@ -339,6 +340,7 @@ void panelTask(void*) {
 I2SClass gMic, gSpk;
 NetworkUDP gUdp;
 Preferences gPrefs;
+bool gFsOk = false;  // the data partition is mounted (it is formatted the first time)
 
 // ---- HAL for the core ----------------------------------------------------------------
 class Board : public ic::INet, public ic::ILinks, public ic::IPower, public ic::IPanel, public ic::IStore, public ic::ILog, public ic::IDiag,
@@ -500,6 +502,34 @@ public:
     void saveUnit(const ic::UnitId& id) override {
         gPrefs.putUShort("room", id.room);
         gIntercomUnit = id;
+    }
+    // The office page's plan: one file in the data partition (LittleFS). Written to a second file first, so a power cut
+    // during the write leaves the old one.
+    bool hasBlobs() const override { return gFsOk; }
+    bool saveBlob(const char* name, const std::string& data) override {
+        if (!gFsOk) return false;
+        const String path = String("/") + name, tmp = path + ".new";
+        File f = LittleFS.open(tmp, "w");
+        if (!f) return false;
+        const size_t n = f.write(reinterpret_cast<const uint8_t*>(data.data()), data.size());
+        f.close();
+        if (n != data.size()) {
+            LittleFS.remove(tmp);
+            return false;
+        }
+        LittleFS.remove(path);
+        return LittleFS.rename(tmp, path);
+    }
+    bool loadBlob(const char* name, std::string* out) override {
+        out->clear();
+        if (!gFsOk) return false;
+        File f = LittleFS.open(String("/") + name, "r");
+        if (!f) return false;
+        out->resize(f.size());
+        const size_t n = f.read(reinterpret_cast<uint8_t*>(&(*out)[0]), out->size());
+        f.close();
+        if (n != out->size()) out->clear();
+        return !out->empty();
     }
     std::string loadText(const char* key) override { return gPrefs.getString(key, "").c_str(); }
     void saveText(const char* key, const std::string& v) override { gPrefs.putString(key, v.c_str()); }
@@ -706,6 +736,7 @@ void setup() {
     sdUpdate();
     loadClips();
     gPrefs.begin("intercom", false);
+    gFsOk = LittleFS.begin(true);
     gExp.begin();
     gPwm.begin();
     gPmu.begin();

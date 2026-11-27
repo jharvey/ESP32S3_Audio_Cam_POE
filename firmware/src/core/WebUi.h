@@ -70,6 +70,8 @@ private:
 
     Intercom& ic_;
     FwUpdate fw_;
+    std::string siteUp_;  // the office page's plan while it is being uploaded
+    HttpResponse siteRequest(const HttpRequest& req, const std::string& path);
     std::string goodHeader_;  // hash of the last accepted Authorization header (skips the slow check)
     std::string goodFor_;     // ...valid only while the stored password is unchanged
     int failures_ = 0;

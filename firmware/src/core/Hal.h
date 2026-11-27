@@ -65,6 +65,19 @@ public:
     // Small text values in flash (tuning parameters). Empty string = not set.
     virtual std::string loadText(const char* key) = 0;
     virtual void saveText(const char* key, const std::string& value) = 0;
+    // One large text kept in flash (the office page's plan, dots and areas; up to 200 kB). A unit without room for it
+    // keeps these defaults and simply does not hold a copy.
+    virtual bool hasBlobs() const { return false; }
+    virtual bool saveBlob(const char* name, const std::string& data) {
+        (void)name;
+        (void)data;
+        return false;
+    }
+    virtual bool loadBlob(const char* name, std::string* out) {
+        (void)name;
+        out->clear();
+        return false;
+    }
 };
 
 // Optional board checks for the "selftest" command: which chips answer, link state, etc.
