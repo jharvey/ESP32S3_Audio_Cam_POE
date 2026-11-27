@@ -92,9 +92,10 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
 <section class="panel"><h2>Devices, highlight areas and backup</h2>
  <div class="prow">Device <select id="dsel"></select><span class="mute" id="dinfo"></span></div>
  <div class="prow"><button id="dplace">Put it on the plan</button><button id="darea">Draw its highlight area</button><button id="dareadel">Remove its area</button></div>
- <div class="prow">Room <select id="rsel"></select><button id="rarea">Draw this room's area</button><button id="rareadel">Back to the automatic area</button></div>
+ <div class="prow">Room <select id="rsel"></select><button id="rarea">Set this room's area</button><button id="rareadel">Back to the automatic area</button></div>
  <div class="mute"><b>A room's area</b> is what lights up on the plan for that room and what a click picks. It is worked out from the walls. Where that
- is wrong, pick the room, press Draw, click the corners of its real outline on the plan, then Finish. The room is shown while you draw.</div>
+ is wrong, pick the room, press Set, then click inside the room on the plan: the space is filled up to its walls. Click more spaces to add them
+ (each part of the gym floor, a closet), then Finish. Where filling runs out through a gap, use "Draw corners instead". The intercoms' dots are hidden meanwhile.</div>
  <div class="mute"><b>A new device:</b> set its number on the device itself (hold SETUP for 3 seconds, UP and DOWN change the digit, MODE goes on and
  saves). It then appears in this list marked NEW. Put it on the plan; if it watches a hall or another place without a room number, draw its area:
  the area lights up when that device calls, and a click inside it picks the device.</div>
@@ -477,7 +478,7 @@ gid("dplace").onclick=()=>{const u=devU();if(u&&window.planApi){window.planApi.p
 gid("darea").onclick=()=>{const u=devU();if(u&&window.planApi){window.planApi.drawArea(u.unit);toPlan();}};
 let roomSig="";
 function drawRooms(){const P=window.planApi;if(!P||!P.rooms)return;const rs=P.rooms(),sig=rs.map(n=>n+(P.hasRoomArea(n)?"h":"")).join(",");if(sig===roomSig)return;roomSig=sig;
-  const s=gid("rsel"),was=s.value;s.innerHTML=rs.map(n=>`<option value="${n}">${n}${P.hasRoomArea(n)?" · drawn by hand":""}</option>`).join("");if(was)s.value=was;}
+  const s=gid("rsel"),was=s.value;s.innerHTML=rs.map(n=>`<option value="${n}">${n}${P.hasRoomArea(n)?" · set by hand":""}</option>`).join("");if(was)s.value=was;}
 gid("rarea").onclick=()=>{if(window.planApi&&gid("rsel").value){window.planApi.drawRoomArea(+gid("rsel").value);toPlan();}};
 gid("rareadel").onclick=()=>{if(window.planApi&&gid("rsel").value){window.planApi.delRoomArea(+gid("rsel").value);roomSig="";drawRooms();toPlan();}};
 gid("dareadel").onclick=()=>{const u=devU();if(u&&window.planApi){window.planApi.delArea(u.unit);devSig="";drawDevs(lastSchool.units);}};

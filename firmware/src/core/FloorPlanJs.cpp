@@ -39,7 +39,8 @@ let plan=load(KP,null),place=load(KU,{}),floor=load(KF,0),units=[],sel=null,msg=
 // Highlight areas (Setup): what a device watches, e.g. a hall monitor's stretch of corridor. Drawn faintly, strongly while the
 // device calls, talks or is picked; a click inside one picks its device.
 let areas=load(KA,{}),drawing=null;
-// Room areas drawn by hand (Setup): {room:{f,p:[[x,y],..]}}. One replaces the area worked out from the walls for that room.
+// Room areas set by hand (Setup): {room:{f,s:[[x,y],..]}} = the spaces filled from these clicked points, each up to its walls;
+// or {room:{f,p:[[x,y],..]}} = an outline drawn corner by corner. Either replaces the area worked out from the walls for that room.
 let roomAreas=load(KR,{});
 
 // ---- DXF -> floors ---------------------------------------------------------------------------------
@@ -208,6 +209,20 @@ function regionsFor(fi){
   for(const L of list)if(L.leak){const R=Math.round(0.03*M/s);
     for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++){const x=L.x+dx,y=L.y+dy;
       if(x>=0&&y>=0&&x<cw&&y<ch&&dx*dx+dy*dy<=R*R&&own[y*cw+x]<0)own[y*cw+x]=L.k}}
+  for(const L of list){const A=roomAreas[L.n];if(!A||A.f!==fi||!A.s||!A.s.length)continue;  // filled by hand: the clicked spaces, each up to its walls
+    for(let i=0;i<N;i++)if(own[i]===L.k)own[i]=-1;
+    const zone=new Uint8Array(N),zd=new Uint16Array(N);let h=0,t=0;
+    for(const sd of A.s){const sx=Math.round((sd[0]-F.x0)/s+1),sy=Math.round((sd[1]-F.y0)/s+1);let st=-1;
+      for(let r=0;r<10&&st<0;r++)for(let dy=-r;dy<=r&&st<0;dy++)for(let dx=-r;dx<=r;dx++){
+        const x=sx+dx,y=sy+dy;if(x<0||y<0||x>=cw||y>=ch)continue;const i=y*cw+x;if(!wall[i]){st=i;break}}
+      if(st<0||zone[st])continue;
+      const t0=t;q[t++]=st;zone[st]=1;
+      for(let hh=t0;hh<t;hh++){const i=q[hh],x=i%cw;
+        for(const j of [x>0?i-1:-1,x<cw-1?i+1:-1,i-cw,i+cw])if(j>=0&&j<N&&!wall[j]&&!zone[j]){zone[j]=1;q[t++]=j}}
+      if(t-t0>0.35*N){for(let k=t0;k<t;k++)zone[q[k]]=0;t=t0}}  // it ran outside through a gap: not a room
+    while(h<t){const i=q[h++],x=i%cw;if(zd[i]>=grow)continue;  // out into the walls round it, as for every room
+      for(const j of [x>0?i-1:-1,x<cw-1?i+1:-1,i-cw,i+cw])if(j>=0&&j<N&&wall[j]&&!zone[j]){zone[j]=1;zd[j]=zd[i]+1;q[t++]=j}}
+    for(let i=0;i<N;i++)if(zone[i])own[i]=L.k}
   for(const L of list){const A=roomAreas[L.n];if(!A||A.f!==fi||!A.p||A.p.length<3)continue;  // drawn by hand: only what is inside the outline
     for(let i=0;i<N;i++)if(own[i]===L.k)own[i]=-1;
     c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cw,ch);c.setTransform(1/s,0,0,1/s,-F.x0/s+1,-F.y0/s+1);
@@ -275,9 +290,10 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
     for(const k in areas){const A=areas[k];if(A.f!==fi)continue;const u=units.find(x=>String(x.unit)===k),c=u?cls(u):"";
       const on=u&&(c==="call"||c==="talk"||hotUs.includes(u)||(u.online&&u.emergency));
       dots+=`<polygon class="area${on?" on":""}" data-a="${esc(k)}" points="${A.p.map(q=>q.join(",")).join(" ")}" stroke-width="${r*0.2}" stroke-dasharray="${r*0.9} ${r*0.7}"><title>Area of ${esc(k)}</title></polygon>`}
-    if(drawing&&drawing.f===fi)dots+=`<polyline points="${drawing.p.map(q=>q.join(",")).join(" ")}" fill="none" stroke="var(--call)" stroke-width="${r*0.3}"/>`+
+    if(drawing&&drawing.f===fi)dots+=(drawing.flood?"":`<polyline points="${drawing.p.map(q=>q.join(",")).join(" ")}" fill="none" stroke="var(--call)" stroke-width="${r*0.3}"/>`)+
       drawing.p.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="${r*0.45}" fill="var(--call)"/>`).join("");
-    for(const k in spots){const us=spots[k],p=where(us[0]);us.forEach((u,i)=>{const x=p.x+(i-(us.length-1)/2)*r*2.3,y=p.y+(p.d?0:r*1.6);
+    // no dots while an area is being set: they would be in the way
+    if(!drawing)for(const k in spots){const us=spots[k],p=where(us[0]);us.forEach((u,i)=>{const x=p.x+(i-(us.length-1)/2)*r*2.3,y=p.y+(p.d?0:r*1.6);
       const mark=sel===String(u.unit)?` style="stroke:var(--call);stroke-width:${r*0.45}"`:"";  // a unit that is not a room of the plan (a hall monitor) is drawn square
       dots+=`<g data-u="${u.unit}">`+(home(u)?`<circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${mark}><title>${esc(u.unit)}</title></circle>`:
         `<rect class="dot ${cls(u)}" x="${x-r}" y="${y-r}" width="${2*r}" height="${2*r}" rx="${r*0.3}" stroke-width="${r*0.18}"${mark}><title>${esc(u.unit)} (not a room)</title></rect>`)+
@@ -297,6 +313,7 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
   const chips=un.map(u=>`<button class="chip ${sel===String(u.unit)?"sel":""}" data-u="${u.unit}">${esc(u.unit)}</button>`).join("");
   const act=window.onPlanHold?"Click an intercom's dot or its room to pick it, hold it to talk to it, double-click it to ring it.":"Click a room to pick it.";
   document.getElementById("phint").innerHTML=
+    drawing&&drawing.flood?`<div class="hint"><b>Area of room ${esc(drawing.u)}:</b> click inside the room: the space is filled up to its walls. Click any other space that belongs to it (a closet, each part of a gym floor) to add it. ${drawing.p.length} filled so far. <button id="paundo">Undo last</button> <button id="pafin">Finish</button> <button id="pacan">Cancel</button> <button id="pacor">Draw corners instead</button></div>`:
     drawing?`<div class="hint"><b>Area of ${drawing.room?"room ":""}${esc(drawing.u)}:</b> click its corners on the plan, one after another (${drawing.p.length} so far). <button id="pafin">Finish</button> <button id="pacan">Cancel</button></div>`:
     sel?`<div class="hint"><b>Unit ${esc(sel)}:</b> click the map where it is. <button id="pcancel">Cancel</button>${place[sel]?` <button id="preset">Back to its room</button>`:""}</div>`:
     moving?`<div class="hint">Click a dot, then click where it goes.</div>`:
@@ -305,8 +322,13 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
   if(msg)document.getElementById("phint").innerHTML+=`<div class="hint">${esc(msg)}</div>`;
   const b=id=>document.getElementById(id);
   if(b("pcancel"))b("pcancel").onclick=()=>{sel=null;part()};
-  if(b("pacan"))b("pacan").onclick=()=>{if(drawing.room)hot=0;drawing=null;part()};
+  const fresh=()=>{for(const k in regCache)delete regCache[k];spotCache={}};
+  const floodSet=()=>{const d=drawing;if(d.p.length)roomAreas[d.room]={f:d.f,s:d.p.slice()};else if(d.was)roomAreas[d.room]=d.was;else delete roomAreas[d.room];fresh()};
+  if(b("paundo"))b("paundo").onclick=()=>{drawing.p.pop();floodSet();part()};
+  if(b("pacor"))b("pacor").onclick=()=>{drawing.p=[];floodSet();drawing.flood=false;part()};
+  if(b("pacan"))b("pacan").onclick=()=>{if(drawing.flood){drawing.p=[];floodSet()}if(drawing.room)hot=0;drawing=null;part()};
   if(b("pafin"))b("pafin").onclick=()=>{const room=drawing.room;
+    if(drawing.flood){if(drawing.p.length)save(KR,roomAreas);drawing=null;hot=room;hotUs=[];hotF=plan.rooms[room].f;part();if(window.onPlanSetup)window.onPlanSetup();return}
     if(drawing.p.length>2){if(room){roomAreas[room]={f:drawing.f,p:drawing.p};save(KR,roomAreas);for(const k in regCache)delete regCache[k];spotCache={}}
       else{areas[drawing.u]={f:drawing.f,p:drawing.p};save(KA,areas)}}
     drawing=null;if(room){hot=room;hotUs=[];hotF=plan.rooms[room].f}part();if(window.onPlanSetup)window.onPlanSetup()};
@@ -352,7 +374,9 @@ function hook(){
     last={n,t:Date.now()};if(window.onPlanPick)window.onPlanPick(info(n))});
   for(const e of ["pointercancel","lostpointercapture"])svg.addEventListener(e,()=>{down=null;endHold()});
   svg.addEventListener("click",ev=>{  // drawing an area; placing or moving a dot
-    if(drawing){const q=at(ev);if(drawing.f<0)drawing.f=fi;if(drawing.f===fi)drawing.p.push([Math.round(q.x),Math.round(q.y)]);part();return}
+    if(drawing){const q=at(ev);if(drawing.f<0)drawing.f=fi;if(drawing.f===fi)drawing.p.push([Math.round(q.x),Math.round(q.y)]);
+      if(drawing.flood&&drawing.f===fi){roomAreas[drawing.room]={f:fi,s:drawing.p.slice()};for(const k in regCache)delete regCache[k];spotCache={}}  // filled at once, so it shows
+      part();return}
     if(!sel&&!moving)return;
     const g=ev.target.closest&&ev.target.closest("g[data-u]");
     if(g&&!sel){sel=g.dataset.u;part();return}
@@ -413,7 +437,7 @@ window.planHot=n=>{hot=n||0;hotUs=[];if(hot&&plan&&plan.rooms[hot])hotF=plan.roo
 // For Setup on the school page: place a device, draw or remove its area, and everything a backup file holds.
 window.planApi={placed:u=>!!where(u),hasArea:n=>!!areas[n],
   rooms:()=>plan?Object.keys(plan.rooms).map(Number).sort((a,b)=>a-b):[],hasRoomArea:n=>!!roomAreas[n],
-  drawRoomArea:n=>{if(!plan||!plan.rooms[n])return;drawing={u:String(n),room:+n,f:plan.rooms[n].f,p:[]};sel=null;moving=false;hot=+n;hotUs=[];hotF=plan.rooms[n].f;part()},
+  drawRoomArea:n=>{if(!plan||!plan.rooms[n])return;drawing={u:String(n),room:+n,f:plan.rooms[n].f,p:[],flood:true,was:roomAreas[n]};sel=null;moving=false;hot=+n;hotUs=[];hotF=plan.rooms[n].f;part()},
   delRoomArea:n=>{delete roomAreas[n];save(KR,roomAreas);for(const k in regCache)delete regCache[k];spotCache={};hot=+n;hotUs=[];if(plan&&plan.rooms[n])hotF=plan.rooms[n].f;part()},
   place:n=>{sel=String(n);moving=false;drawing=null;part()},
   drawArea:n=>{drawing={u:String(n),f:-1,p:[]};sel=null;moving=false;part()},
