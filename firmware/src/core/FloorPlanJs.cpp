@@ -216,10 +216,10 @@ function regionsFor(fi){
       for(let r=0;r<10&&st<0;r++)for(let dy=-r;dy<=r&&st<0;dy++)for(let dx=-r;dx<=r;dx++){
         const x=sx+dx,y=sy+dy;if(x<0||y<0||x>=cw||y>=ch)continue;const i=y*cw+x;if(!wall[i]){st=i;break}}
       if(st<0||zone[st])continue;
-      const t0=t;q[t++]=st;zone[st]=1;
-      for(let hh=t0;hh<t;hh++){const i=q[hh],x=i%cw;
+      const t0=t;let edge=false;q[t++]=st;zone[st]=1;
+      for(let hh=t0;hh<t;hh++){const i=q[hh],x=i%cw,y=(i/cw)|0;if(x===0||y===0||x===cw-1||y===ch-1)edge=true;
         for(const j of [x>0?i-1:-1,x<cw-1?i+1:-1,i-cw,i+cw])if(j>=0&&j<N&&!wall[j]&&!zone[j]){zone[j]=1;q[t++]=j}}
-      if(t-t0>0.35*N){for(let k=t0;k<t;k++)zone[q[k]]=0;t=t0}}  // it ran outside through a gap: not a room
+      if(edge){for(let k=t0;k<t;k++)zone[q[k]]=0;t=t0;A.out=true}}  // it ran outdoors through a gap (it reached the edge of the picture): not a room. A big room, a gym, is fine.
     while(h<t){const i=q[h++],x=i%cw;if(zd[i]>=grow)continue;  // out into the walls round it, as for every room
       for(const j of [x>0?i-1:-1,x<cw-1?i+1:-1,i-cw,i+cw])if(j>=0&&j<N&&wall[j]&&!zone[j]){zone[j]=1;zd[j]=zd[i]+1;q[t++]=j}}
     for(let i=0;i<N;i++)if(zone[i])own[i]=L.k}
@@ -313,7 +313,7 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
   const chips=un.map(u=>`<button class="chip ${sel===String(u.unit)?"sel":""}" data-u="${u.unit}">${esc(u.unit)}</button>`).join("");
   const act=window.onPlanHold?"Click an intercom's dot or its room to pick it, hold it to talk to it, double-click it to ring it.":"Click a room to pick it.";
   document.getElementById("phint").innerHTML=
-    drawing&&drawing.flood?`<div class="hint"><b>Area of room ${esc(drawing.u)}:</b> click inside the room: the space is filled up to its walls. Click any other space that belongs to it (a closet, each part of a gym floor) to add it. ${drawing.p.length} filled so far. <button id="paundo">Undo last</button> <button id="pafin">Finish</button> <button id="pacan">Cancel</button> <button id="pacor">Draw corners instead</button></div>`:
+    drawing&&drawing.flood?`<div class="hint"><b>Area of room ${esc(drawing.u)}:</b> click inside the room: the space is filled up to its walls. Click any other space that belongs to it (a closet, each part of a gym floor) to add it. ${drawing.p.length} filled so far.${roomAreas[drawing.room]&&roomAreas[drawing.room].out?" <b>The last click was not inside closed walls (the fill ran outdoors), so nothing was filled there: press Undo last, then Draw corners instead.</b>":""} <button id="paundo">Undo last</button> <button id="pafin">Finish</button> <button id="pacan">Cancel</button> <button id="pacor">Draw corners instead</button></div>`:
     drawing?`<div class="hint"><b>Area of ${drawing.room?"room ":""}${esc(drawing.u)}:</b> click its corners on the plan, one after another (${drawing.p.length} so far). <button id="pafin">Finish</button> <button id="pacan">Cancel</button></div>`:
     sel?`<div class="hint"><b>Unit ${esc(sel)}:</b> click the map where it is. <button id="pcancel">Cancel</button>${place[sel]?` <button id="preset">Back to its room</button>`:""}</div>`:
     moving?`<div class="hint">Click a dot, then click where it goes.</div>`:
