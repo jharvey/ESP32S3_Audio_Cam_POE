@@ -54,7 +54,7 @@ SW_TOP = 1.5     # top of the push button above the board (its 3D model; the swi
 SW_TRAVEL = 0.25 # how far the switch moves to click: A GUESS, check the part
 STOP_EXTRA = 0.15  # the cap's two legs land on the board this much after the click, so a hard press goes into the FR4
 LEG_X0, LEG_HALF_W = 2.95, 0.9   # legs stand left and right of the switch, between its two pads on each side
-LABEL_H, LABEL_DEPTH = 3.6, 0.6   # engraved text height and depth
+LABEL_H, LABEL_DEPTH = 3.2, 0.6   # engraved text height and depth
 CORNER_R = 7.0   # the case's four corners
 FACE_R = 2.5     # rounding of the front edge
 CARD_W, CARD_H = 80.0, 42.0   # the use card (paper or laminated, up to 0.8 mm thick), in the area below the board
@@ -104,7 +104,7 @@ def part(r): return B["parts"].get(r)
 # the firmware (or the board) has to make that switch the OFFICE button.
 TALK_AT = (part("PB1")["x"], part("PB1")["y"])
 OFFICE_AT = (61.45, TALK_AT[1])
-RED_AT = (part("PB11")["x"], part("PB11")["y"])
+RED_AT = (part("PB12")["x"], part("PB12")["y"])   # the third switch of the left column: low enough that the hinge is clear of the microphone
 SD_OPEN = False   # microSD is reached only with the cover off
 def box_of(r, grow=0.0):
     x0, y0, x1, y1 = part(r)["box"]
@@ -212,22 +212,24 @@ for bx, by in btn:
     cover = cover.cut(rrect(BTN_W + 0.4, BTN_H + 0.4, BTN_R + 0.2, Z_FACE - 1, Z_TOP + 1, bx, by + CAP_DY))
 # red LOCKDOWN button. The clear lid lies FLUSH with the face, in a recess of its own shape; the red cap sits in a well
 # under it, 1 mm below the lid. Below the lid's lower edge the face has a scoop that goes deeper than the lid, so a
-# fingertip gets under the edge and flips it up. Everything is placed from the switch (PB11), wherever it is moved.
+# fingertip gets under the edge and flips it up. Everything is placed from the switch (PB12), wherever it is moved.
 rx, ry = RED_AT
 LID_X = (rx - 10.0, rx + 10.0)                  # lid body, left and right edge
 HINGE_Y = ry - 8.5                              # hinge axis (KiCad y)
-LID_Y1 = ry + 10.5                              # lid's lower edge
-NECK_X = (rx - 9.5, rx + 3.5)                   # the lid is narrower at the hinge and stops short of the left microphone's tube
+LID_Y1 = ry + 8.5                               # lid's lower edge
+NECK_X = (rx - 6.5, rx + 6.5)                   # the lid is narrower at the hinge
 WELL = 2.2                                      # the well under the lid is this deep below the lid
 Z_AX = Z_TOP - LID_T / 2                        # hinge axis: the middle of the lid's thickness, inside the face
 # a block behind the face carries the well's floor, the ledge the lid lies on, and the scoop's floor
-cover = cover.union(slab(LID_X[0] - 1.5, HINGE_Y - 3.5, LID_X[1] + 1.5, LID_Y1 + 7.5, Z_FACE - WELL - 1.2, Z_FACE + 0.1))
+cover = cover.union(slab(LID_X[0] - 1.5, HINGE_Y - 3.5, LID_X[1] + 1.5, LID_Y1 + 0.6, Z_FACE - WELL - 1.2, Z_FACE + 0.1))
+# the scoop's own floor is thin: the audio jack (about 5 mm tall, NOT MEASURED) is right under it
+cover = cover.union(slab(rx - 7.5, LID_Y1, rx + 7.5, LID_Y1 + 6.9, Z_FACE - 1.5, Z_FACE + 0.1))
 by0 = HINGE_Y + 3.0
 cover = cover.cut(slab(LID_X[0] - 0.3, by0 - 0.3, LID_X[1] + 0.3, LID_Y1 + 0.3, Z_FACE, Z_TOP + 1).edges("|Z").fillet(1.7))        # the lid's recess (body)
 cover = cover.cut(slab(NECK_X[0] - 0.3, HINGE_Y - 1.8, NECK_X[1] + 0.3, by0 + 0.5, Z_FACE - WELL, Z_TOP + 1))                      # ... and neck, deep so the lid's tail can swing down
 cover = cover.cut(slab(LID_X[0] + 1.5, by0, LID_X[1] - 1.5, LID_Y1 - 1.5, Z_FACE - WELL, Z_FACE + 0.2).edges("|Z").fillet(1.0))    # the well; a 1.5 mm ledge is left round it
 cover = cover.cut(cyl(rx, ry, RED_D + 0.5, Z_FACE - WELL - 2, Z_FACE - WELL + 0.1))                                                # the cap comes up through the well's floor
-cover = cover.cut(rrect(12.0, 6.4, 3.0, Z_FACE - 1.4, Z_TOP + 1, rx, LID_Y1 + 2.0))                                                # the finger scoop, centred under the button
+cover = cover.cut(rrect(12.0, 6.4, 3.0, Z_FACE - 0.7, Z_TOP + 1, rx, LID_Y1 + 2.0))                                                # the finger scoop, centred under the button
 posts = None
 for x0_, x1_ in ((NECK_X[0] - 0.2 - POST_W, NECK_X[0] - 0.2), (NECK_X[1] + 0.2, NECK_X[1] + 0.2 + POST_W)):
     # the post reaches 4 mm above the axis and 2.6 mm over it: the lid's shoulders land on that corner at about 135 degrees
@@ -246,7 +248,8 @@ lid2d = (cq.Workplane("XY").rect(LID_X[1] - LID_X[0], LID_Y1 - (HINGE_Y + 3.0)).
 lid2d = lid2d.union(slab(NECK_X[0], HINGE_Y - 1.5, NECK_X[1], HINGE_Y + 3.5, 0, LID_T))
 lid2d = lid2d.union(slab(NECK_X[0] - EAR, HINGE_Y - 1.5, NECK_X[1] + EAR, HINGE_Y + 1.5, 0, LID_T))
 micx, micy = part("U16")["x"], part("U16")["y"]
-lid2d = lid2d.cut(slab(micx - 2.4, HINGE_Y - 3, micx + 2.4, micy + 3.0, -1, LID_T + 1).edges("|Z").fillet(1.0))   # the notch at the microphone port
+if HINGE_Y - 3 < micy + 3.0 and NECK_X[0] < micx + 2.4 and NECK_X[1] > micx - 2.4:   # a notch, only if the lid would reach the microphone port
+    lid2d = lid2d.cut(slab(micx - 2.4, HINGE_Y - 3, micx + 2.4, micy + 3.0, -1, LID_T + 1).edges("|Z").fillet(1.0))   # the notch at the microphone port
 lid = lid2d.translate((0, 0, Z_TOP - LID_T))
 lid_open = lid.rotate((0, Y(HINGE_Y), Z_AX), (1, Y(HINGE_Y), Z_AX), -135)
 # engraved labels under the buttons
@@ -255,7 +258,7 @@ def label(txt, x, y, halign):
 gap = BTN_W / 2 + 1.8                           # labels sit outside their buttons, clear of the speaker grille
 def small(txt, x, y): return cq.Workplane("XY").text(txt, 3.0, LABEL_DEPTH + 0.5, halign="center", valign="center", kind="bold").translate((x, Y(y), Z_TOP - LABEL_DEPTH))
 engraved = [small("LOCK", LID_X[0] - 6.0, ry - 2.2), small("DOWN", LID_X[0] - 6.0, ry + 2.2),   # left of the lid
-            label("TALK", TALK_AT[0] - gap, TALK_AT[1] + CAP_DY, "right"), label("OFFICE", OFFICE_AT[0] + gap, OFFICE_AT[1] + CAP_DY, "left")]
+            label("TALK", TALK_AT[0] + gap, TALK_AT[1] + CAP_DY, "left"), label("OFFICE", OFFICE_AT[0] + gap, OFFICE_AT[1] + CAP_DY, "left")]   # each to the right of its button
 for e_ in engraved: cover = cover.cut(e_)
 # microphones: a tube from the face down to just above each mic (gasket goes between), with a small port
 for r in ("U16", "U17"):

@@ -10,7 +10,7 @@ M = pcbnew.ToMM
 e = b.GetBoardEdgesBoundingBox()
 x0, y0 = round(M(e.GetX()), 1), round(M(e.GetY()), 1)
 out = {"w": round(M(e.GetWidth()), 1), "h": round(M(e.GetHeight()), 1), "holes": [], "parts": {}, "keepouts": {}}
-WANT = {"DISP1", "PB1", "PB7", "PB11", "U16", "U17", "J9", "J1", "CARD1", "CN1", "D9", "BT1", "U14", "FPC1", "J10"}
+WANT = {"DISP1", "PB1", "PB7", "PB11", "PB12", "U16", "U17", "J9", "J1", "CARD1", "CN1", "D9", "BT1", "U14", "FPC1", "J10"}
 for f in b.GetFootprints():
     r = f.GetReference()
     p = f.GetPosition()
