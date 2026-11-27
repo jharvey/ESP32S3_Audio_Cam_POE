@@ -66,8 +66,9 @@ CARD_RAIL, CARD_LIP, CARD_SLOT = 2.4, 2.0, 0.9   # rail width, how far the rail 
 # it hangs on two ears in the hinge posts, falls shut by its own weight and opens to about 135 degrees.
 RED_D, RED_FL = 14.0, 15.6   # red cap and its flange behind the face
 LID_T = 2.0      # acrylic sheet
-EAR = 2.3        # each ear reaches this far into its post
-POST_W = 2.5
+EAR = 2.4        # each ear reaches this far past the lid's neck
+HGAP = 0.6       # play between the lid's neck and each post, so the lid swings and falls freely
+POST_W = 3.4
 # Camera shutter: a 9 g servo (SG90 size) stands beside the board on the left, its shaft towards the room. The whole
 # left side of the case is moved out to make room for it, so that side stays one straight wall; the board, the face
 # and everything on it stay where they were, which leaves them a little off centre. A paddle on the shaft turns just behind the face:
@@ -227,31 +228,31 @@ Z_AX = Z_TOP + LID_T / 2                        # hinge axis: the middle of the 
 cover = cover.union(cyl(rx, ry, RED_FL + 3.0, Z_FACE - GUIDE_H, Z_FACE))
 cover = cover.cut(cyl(rx, ry, RED_FL + 0.4, Z_FACE - GUIDE_H - 1, Z_FACE - 0.01)).cut(cyl(rx, ry, RED_D + 0.5, Z_FACE - 1, Z_TOP + 1))
 cover = cover.cut(cq.Workplane("XY").circle(RED_D / 2 + 0.25).workplane(offset=1.0).circle(RED_D / 2 + 1.25).loft().translate((rx, Y(ry), Z_TOP - 0.99)))   # a bevel round the hole, for the fingertip
-cover = cover.cut(slab(NECK_X[0] - 0.3, HINGE_Y - 2.0, NECK_X[1] + 0.3, HINGE_Y + 0.4, Z_TOP - 1.0, Z_TOP + 1))    # a groove for the lid's tail, which dips as the lid opens
+cover = cover.cut(slab(NECK_X[0] - HGAP, HINGE_Y - 2.4, NECK_X[1] + HGAP, HINGE_Y + 0.8, Z_TOP - 1.4, Z_TOP + 1))    # a groove for the lid's tail, which dips as the lid opens
 SCOOP_R, SCOOP_DEEP = 9.0, 1.5   # the finger scoop: a hollow rounded like the inside of a pipe, deepest right under the lid's lower edge and
 cover = cover.cut(cyl_x(LID_Y1, Z_TOP + SCOOP_R - SCOOP_DEEP, 2 * SCOOP_R, rx - 8.0, rx + 8.0))   # curving up to the face below it, so a fingertip slides down the curve and under the edge
 posts = None
-for x0_, x1_ in ((NECK_X[0] - 0.2 - POST_W, NECK_X[0] - 0.2), (NECK_X[1] + 0.2, NECK_X[1] + 0.2 + POST_W)):
+for x0_, x1_ in ((NECK_X[0] - HGAP - POST_W, NECK_X[0] - HGAP), (NECK_X[1] + HGAP, NECK_X[1] + HGAP + POST_W)):
     # the post reaches 4 mm above the axis and 2.6 mm over it: the lid's shoulders land on that corner at about 135 degrees
     p_ = slab(x0_, HINGE_Y - 4.0, x1_, HINGE_Y + 2.4, Z_TOP - 0.2, Z_AX + 2.6)
     posts = p_ if posts is None else posts.union(p_)
 posts = posts.edges("|X").fillet(0.6)
 # the ear turns in a round hole; a notch in the front of each post lets it snap in while the lid sticks straight out
-posts = posts.cut(cyl_x(HINGE_Y, Z_AX, 3.9, NECK_X[0] - EAR - 0.3, NECK_X[1] + EAR + 0.3))
-posts = posts.cut(slab(NECK_X[0] - EAR - 0.3, HINGE_Y - 1.1, NECK_X[1] + EAR + 0.3, HINGE_Y + 1.1, Z_AX, Z_AX + 4))
+posts = posts.cut(cyl_x(HINGE_Y, Z_AX, 4.6, NECK_X[0] - EAR - 0.7, NECK_X[1] + EAR + 0.7))   # 4.6 mm hole for an ear 2.4 x 2 mm: it rattles, on purpose
+posts = posts.cut(slab(NECK_X[0] - EAR - 0.7, HINGE_Y - 1.4, NECK_X[1] + EAR + 0.7, HINGE_Y + 1.4, Z_AX, Z_AX + 4))
 cover = cover.union(posts)
 # the two clips (print one of each hand): cap on the lower half of the post, tongue in the notch, barbed split pin
-CLIP_PIN_D, CLIP_BARB_D, CLIP_SLOT, CLIP_PIN_OUT = 3.0, 3.9, 0.9, 2.2   # pin, its barb, the slit that lets it squeeze, pin centre outside the post
+CLIP_PIN_D, CLIP_BARB_D, CLIP_SLOT, CLIP_PIN_OUT = 4.0, 5.0, 1.1, 3.0   # pin, its barb, the slit that lets it squeeze, pin centre outside the post
 clips = None
 clip_parts = []
-for side_, (x0_, x1_) in ((-1, (NECK_X[0] - 0.2 - POST_W, NECK_X[0] - 0.2)), (1, (NECK_X[1] + 0.2, NECK_X[1] + 0.2 + POST_W))):
+for side_, (x0_, x1_) in ((-1, (NECK_X[0] - HGAP - POST_W, NECK_X[0] - HGAP)), (1, (NECK_X[1] + HGAP, NECK_X[1] + HGAP + POST_W))):
     pxc = (x0_ if side_ < 0 else x1_) + side_ * CLIP_PIN_OUT; pyc = HINGE_Y + 0.5
     cover = cover.cut(cyl(pxc, pyc, CLIP_PIN_D + 0.25, Z_FACE - 1, Z_TOP + 1))                       # the hole the pin clicks into
-    xa, xb = min(x0_, pxc - 2.0), max(x1_, pxc + 2.0)
-    c_ = slab(xa, HINGE_Y - 1.5, xb, HINGE_Y + 2.5, Z_AX + 2.6, Z_AX + 3.8)                          # cap
-    c_ = c_.union(slab(x0_ + 0.1, HINGE_Y - 0.95, x1_ - 0.1, HINGE_Y + 0.95, Z_AX + 2.05, Z_AX + 2.7))   # tongue in the notch, just clear of the ear
+    xa, xb = min(x0_, pxc - 3.0), max(x1_, pxc + 3.0)
+    c_ = slab(xa, HINGE_Y - 1.5, xb, HINGE_Y + 3.2, Z_AX + 2.6, Z_AX + 4.2).edges("|Z").fillet(1.0)                          # cap
+    c_ = c_.union(slab(max(x0_ + 0.1, NECK_X[0] - EAR - 0.6), HINGE_Y - 1.25, min(x1_ - 0.1, NECK_X[1] + EAR + 0.6), HINGE_Y + 1.25, Z_AX + 1.9, Z_AX + 2.7))   # tongue in the notch, just clear of the ear
     pin = cyl(pxc, pyc, CLIP_PIN_D, Z_FACE - 0.15, Z_AX + 2.7)
-    pin = pin.union(cq.Workplane("XY").circle(1.3).workplane(offset=1.5).circle(CLIP_BARB_D / 2).loft().translate((pxc, Y(pyc), Z_FACE - 1.65)))
+    pin = pin.union(cq.Workplane("XY").circle(1.7).workplane(offset=1.5).circle(CLIP_BARB_D / 2).loft().translate((pxc, Y(pyc), Z_FACE - 1.65)))
     pin = pin.cut(slab(pxc - 3, pyc - CLIP_SLOT / 2, pxc + 3, pyc + CLIP_SLOT / 2, Z_FACE - 2, Z_TOP + 1.5))
     c_ = c_.union(pin)
     clip_parts.append(c_); clips = c_ if clips is None else clips.union(c_)
@@ -259,7 +260,7 @@ for side_, (x0_, x1_) in ((-1, (NECK_X[0] - 0.2 - POST_W, NECK_X[0] - 0.2)), (1,
 lid2d = (cq.Workplane("XY").rect(LID_X[1] - LID_X[0], LID_Y1 - (HINGE_Y + 3.0)).extrude(LID_T).edges("|Z").fillet(1.5)
          .translate(((LID_X[0] + LID_X[1]) / 2, Y((LID_Y1 + HINGE_Y + 3.0) / 2), 0)))
 lid2d = lid2d.union(slab(NECK_X[0], HINGE_Y - 1.5, NECK_X[1], HINGE_Y + 3.5, 0, LID_T))
-lid2d = lid2d.union(slab(NECK_X[0] - EAR, HINGE_Y - 1.5, NECK_X[1] + EAR, HINGE_Y + 1.5, 0, LID_T))
+lid2d = lid2d.union(slab(NECK_X[0] - EAR, HINGE_Y - 1.2, NECK_X[1] + EAR, HINGE_Y + 1.2, 0, LID_T))
 micx, micy = part("U16")["x"], part("U16")["y"]
 if HINGE_Y - 3 < micy + 3.0 and NECK_X[0] < micx + 2.4 and NECK_X[1] > micx - 2.4:   # a notch, only if the lid would reach the microphone port
     lid2d = lid2d.cut(slab(micx - 2.4, HINGE_Y - 3, micx + 2.4, micy + 3.0, -1, LID_T + 1).edges("|Z").fillet(1.0))   # the notch at the microphone port
@@ -469,9 +470,9 @@ shot_at("preview_labels.png", [actor("clam_back", grey), actor("clam_cover", blu
 shot_at("preview_card.png", [actor("clam_cover", beige), actor("use_card", white)], (50, -122, Z_LOW), (30, -70, 90), (0, 1, 0))
 shot_at("preview_red.png", [actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear("lid")], (rx + 4, Y(ry + 2), Z_TOP), (-45, -60, 70), (0, 1, 0))
 for n_, l_, c_ in ((1, "lid_pre", None), (2, "lid_90", "clips_pre"), (3, "lid_90", "clips_at"), (4, "lid", "clips_at")):   # fitting the lid, in four steps
-    shot_at("preview_lid_fit%d.png" % n_, [actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear(l_)] + ([actor(c_, dark)] if c_ else []),
+    shot_at("preview_lid_fit%d.png" % n_, [actor("clam_cover", beige), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear(l_)] + ([actor(c_, beige)] if c_ else []),
             (rx + 2, Y(ry - 2), Z_TOP + 4), (-50, -45, 55), (0, 1, 0))
-shot_at("preview_red_open.png", [actor("clam_cover", beige), actor("clips_at", dark), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear("lid_open")], (rx + 4, Y(ry + 2), Z_TOP), (-45, -60, 70), (0, 1, 0))
+shot_at("preview_red_open.png", [actor("clam_cover", beige), actor("clips_at", beige), actor("clam_buttons", dark), actor("red_at", red_c), black_paint(), clear("lid_open")], (rx + 4, Y(ry + 2), Z_TOP), (-45, -60, 70), (0, 1, 0))
 # the shutter: the cover seen through, with the paddle closed, open and out as a flag
 def glass(name):
     a = actor(name, beige); a.GetProperty().SetOpacity(0.35); return a
