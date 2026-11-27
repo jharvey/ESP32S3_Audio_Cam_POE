@@ -121,6 +121,7 @@ const char* kHelp =
     "  quiet [HH:MM HH:MM DB|off]  quieter between two times of day (quiet); emergency signals stay loud\n"
     "  log [calls|faults] [N]  the event log: faults and calls this unit saw, school-wide (last 30)\n"
     "  selfcheck [HH:MM|off|now]  nightly speaker->microphone check; a failure shows on the school page\n"
+    "  consolewatch [MIN|off]  the office unit chirps when no office page has read it for MIN minutes (1-60)\n"
     "  emergency [lockdown|evacuate|shelter|clear] [all]  emergency signal here; all = on every unit (USB / web)\n"
     "  backup               this unit's settings as key=value lines (no passwords or keys)\n"
     "  restore key=value    put one line of a backup back\n"
@@ -280,6 +281,7 @@ void Intercom::loadSelfCheck() {
     selfMin_ = -1;
     unsigned h = 0, m = 0;
     if (std::sscanf(hal_.store->loadText("selfcheck").c_str(), "%u:%u", &h, &m) == 2 && h < 24 && m < 60) selfMin_ = int(h * 60 + m);
+    conWatchMin_ = std::min(60, std::max(0, std::atoi(hal_.store->loadText("conwatch").c_str())));
 }
 
 void Intercom::begin() {
@@ -868,6 +870,19 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
             out += std::string(buf) + kinds[int(e.kind)] + " " + e.text + "\n";
         }
         return out;
+    }
+    if (c == "consolewatch") {  // the office unit chirps while no office page is open
+        if (a.size() == 2) {
+            const int n = std::atoi(a[1].c_str());
+            if (a[1] == "off") hal_.store->saveText("conwatch", "");
+            else if (n >= 1 && n <= 60) hal_.store->saveText("conwatch", std::to_string(n));
+            else return "usage: consolewatch [1-60|off]";
+            loadSelfCheck();
+        } else if (a.size() > 2) {
+            return "usage: consolewatch [1-60|off]";
+        }
+        snprintf(buf, sizeof(buf), "console watch: the office unit chirps after %d min without the office page%s", conWatchMin_, conMissing_ ? "; NOT OPEN NOW" : "");
+        return conWatchMin_ ? buf : "console watch off";
     }
     if (c == "selfcheck") {  // nightly speaker->microphone check
         if (a.size() == 2 && a[1] == "now") {
@@ -1792,7 +1807,7 @@ void Intercom::noteCameraView() {
 
 // ---- settings backup (R3.1) ----------------------------------------------------------------
 namespace {
-const char* const kBackupKeys[] = {"group", "tune", "sched", "ntp", "boottest", "selfcheck", "couple_map", "couple_open_map",
+const char* const kBackupKeys[] = {"group", "tune", "sched", "ntp", "boottest", "selfcheck", "conwatch", "couple_map", "couple_open_map",
                                    "features", "office", "zones", "quiet"};
 }
 
@@ -1852,6 +1867,13 @@ std::string Intercom::restoreLine(const std::string& lineIn) {
         auto m = CouplingTest::fromString(v);
         hal_.store->saveText(k.c_str(), CouplingTest::toString(m));
         (k == "couple_map" ? couplings_ : couplingsOpen_) = m;
+        return "";
+    }
+    if (k == "conwatch") {
+        const int n = std::atoi(v.c_str());
+        if (n < 1 || n > 60) return "conwatch: not 1 to 60 minutes";
+        hal_.store->saveText("conwatch", std::to_string(n));
+        loadSelfCheck();
         return "";
     }
     if (k == "selfcheck") {
@@ -2147,6 +2169,22 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
             startSound(Sound::Ring);
             ofcAlertNext_ = frame_ + 100;
         }
+    }
+    // Console watch: the acting office unit chirps every 30 s while no office page reads it. Never during an emergency or
+    // quiet hours, and never over a call.
+    if (conWatchMin_ > 0 && unit_.room != 0 && unit_.room == actingOffice()) {
+        const bool miss = frame_ - conSeen_ >= uint32_t(conWatchMin_) * 60000u / kFrameMs;
+        if (miss != conMissing_) {
+            conMissing_ = miss;
+            conChirpNext_ = frame_;
+            event(EventKind::Fault, unit_.room, miss ? "office unit %u: the office page is not open on any PC" : "office unit %u: the office page is open again", unsigned(unit_.room));
+        }
+        if (miss && frame_ >= conChirpNext_ && !soundActive_ && !transmitting_ && !inCall() && emerg_ == Emergency::None && quietNowDb_ == 0) {
+            startSound(Sound::Chirp);
+            conChirpNext_ = frame_ + 30000 / kFrameMs;
+        }
+    } else {
+        conMissing_ = false;
     }
     if (ringUntil_) {  // "ring": chime again every 2 s until answered or the 10 s are up
         if (callAnswered_ || frame_ >= ringUntil_) ringUntil_ = 0;

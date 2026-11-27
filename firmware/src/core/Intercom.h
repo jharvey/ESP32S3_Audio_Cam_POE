@@ -187,6 +187,11 @@ public:
     uint8_t statusFlags2() const { return uint8_t((dnd() ? kStatus2Dnd : 0) | (silentHelp() ? kStatus2Silent : 0) | (emergMine_ ? kStatus2Red : 0)); }
     uint16_t officeRoom() const { return office_; }
     uint16_t officeStandIn() const { return office2_; }
+    // The office page (/school) reads this unit every 2 s while it is open on a PC. With "consolewatch N" the acting office
+    // unit chirps every 30 s once nothing has read it for N minutes, so a closed page or a PC that is off is noticed.
+    void consoleSeen() { conSeen_ = frame_; }
+    bool consoleMissing() const { return conMissing_; }
+    int consoleWatchMin() const { return conWatchMin_; }
     uint16_t actingOffice() const;  // the office unit, or its stand-in while the office unit is offline; 0 = none set
     bool urgent() const { return urgent_ && callingOffice_; }
     bool dnd() const { return dndUntil_ != 0; }
@@ -269,6 +274,9 @@ private:
     std::vector<HeardCall> heardCalls_;  // transmissions on the network right now (for the call log)
     bool powerKnown_ = false, wasLow_ = false;
     PowerSource lastSource_ = PowerSource::PoE;
+    int conWatchMin_ = 0;        // consolewatch: minutes without the office page before the chirp, 0 = off
+    uint32_t conSeen_ = 0, conChirpNext_ = 0;
+    bool conMissing_ = false;
     int selfMin_ = -1;           // nightly self-check: minute of the day, -1 = off
     uint32_t selfDay_ = 0;       // yyyymmdd it last ran
     uint32_t selfRetryAt_ = 0;   // a failed nightly check runs once more at this frame

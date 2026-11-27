@@ -120,6 +120,7 @@ HttpResponse WebUi::handle(const HttpRequest& req) {
     if (path == "/api/school") {
         HttpResponse r;
         r.contentType = "application/json";
+        ic_.consoleSeen();  // an office page is open (console watch)
         r.body = schoolJson();
         return r;
     }
@@ -375,7 +376,7 @@ std::string WebUi::schoolJson() {
     me.emergency = uint8_t(ic_.emergency());
     me.flags2 = ic_.statusFlags2();
     // R3.2: feature switches, the office and who acts as it, zones, and the rooms waiting for the office
-    std::string extra = "\"features\":" + std::to_string(ic_.features()) + ",\"office\":" + std::to_string(ic_.officeRoom()) +
+    std::string extra = "\"features\":" + std::to_string(ic_.features()) + ",\"conwatch\":" + std::to_string(ic_.consoleWatchMin()) + ",\"office\":" + std::to_string(ic_.officeRoom()) +
                         ",\"standin\":" + std::to_string(ic_.officeStandIn()) + ",\"acting\":" + std::to_string(ic_.actingOffice()) + ",\"zones\":[";
     bool firstX = true;
     for (const auto& z : ic_.zones()) {

@@ -8,7 +8,7 @@
 namespace ic {
 
 namespace {
-const char* const kNames[] = {"chime", "bell", "lunch", "tone", "lockdown", "evacuate", "shelter", "allclear", "ring"};
+const char* const kNames[] = {"chime", "bell", "lunch", "tone", "lockdown", "evacuate", "shelter", "allclear", "ring", "chirp"};
 constexpr float kTwoPi = 6.28318531f;
 
 // Length of each sound in samples (16 kHz).
@@ -22,6 +22,7 @@ constexpr uint32_t kLen[] = {
     kSampleRate * 3,       // shelter: 700 Hz pulses, 0.25 s on / 0.25 s off
     kSampleRate * 12 / 10, // allclear: two calm rising notes
     kSampleRate * 85 / 100, // ring: two short warbles, like a telephone (a call to the office)
+    kSampleRate * 24 / 100, // chirp: two short quiet blips (the office page is not open)
 };
 
 float note(float f, uint32_t i) { return std::sin(kTwoPi * f * float(i) / kSampleRate); }
@@ -82,6 +83,11 @@ float sample(Sound s, uint32_t i) {
             const uint32_t half = kLen[7] / 2;
             const uint32_t k = i % half;
             return 0.25f * edge(k, half) * note(i < half ? 660.0f : 880.0f, k);
+        }
+        case Sound::Chirp: {  // 2 kHz, 70 ms on, 100 ms off, 70 ms on: heard across an office, not across a hall
+            const uint32_t on = kSampleRate * 7 / 100, gap = kSampleRate / 10;
+            const uint32_t k = i < on ? i : i >= on + gap ? i - on - gap : on;
+            return k < on ? 0.12f * edge(k, on) * note(2000.0f, k) : 0.0f;
         }
         default:
             return 0;

@@ -1862,6 +1862,40 @@ static void testR31() {
         for (int k = 0; k < 11; k++) c.step();
         CHECK(signal && c.lastSpk[100] == 1000, "the recorded message plays after the 3 s signal");
     }
+    {   // ---- console watch: the office unit chirps while no office page reads it ----
+        Bus bus;
+        FakeUnit o(&bus, {105, 0}, 120), r(&bus, {101, 0}, 130);
+        std::vector<FakeUnit*> all = {&o, &r};
+        int so = 0, sr = 0;
+        auto run = [&](int frames, bool page = false) {
+            so = sr = 0;
+            for (int k = 0; k < frames; k++) {
+                if (page && k % 100 == 0) o.ic->consoleSeen();
+                for (auto* u : all) u->step();
+                so += o.ic->speakerLevel() > 0;
+                sr += r.ic->speakerLevel() > 0;
+            }
+        };
+        for (auto* u : all) u->ic->command("office 105");
+        run(3500);
+        CHECK(so == 0 && !o.ic->consoleMissing(), "console watch is off until it is set (%d)", so);
+        for (auto* u : all) u->ic->command("consolewatch 1");
+        CHECK(o.kv["conwatch"] == "1" && o.ic->command("consolewatch 99").find("usage") != std::string::npos, "consolewatch N is saved, a bad time refused");
+        run(3100);  // 62 s: three chirps of 0.24 s
+        CHECK(o.ic->consoleMissing() && so >= 20 && so <= 60 && sr == 0 && !r.ic->consoleMissing(),
+              "no office page for a minute: the office unit chirps every 30 s, a room does not (%d, %d frames)", so, sr);
+        run(3200, true);
+        CHECK(!o.ic->consoleMissing() && so <= 12, "the page is open again: the chirping stops (%d)", so);
+        run(3200);
+        CHECK(o.ic->consoleMissing() && so > 0, "the page closed for a minute: it chirps again (%d)", so);
+        o.ic->command("emergency lockdown");
+        run(600);
+        o.ic->command("emergency clear");
+        o.ic->command("consolewatch off");
+        run(300);  // the all-clear sound
+        run(1600);
+        CHECK(o.kv["conwatch"].empty() && so == 0 && !o.ic->consoleMissing(), "consolewatch off: silent (%d)", so);
+    }
     {   // ---- self-check ----
         Bus bus;
         FakeUnit a(&bus, {101, 0}, 120), b(&bus, {102, 0}, 130), c(&bus, {103, 0}, 140);

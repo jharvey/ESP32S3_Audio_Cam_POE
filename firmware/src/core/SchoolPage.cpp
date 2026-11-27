@@ -177,6 +177,11 @@ body.hasplan #extras{grid-area:x2;overflow:auto;min-height:0;margin:0}
 <section class="panel"><h2>What the intercoms can do</h2>
  <div class="prow" id="feats"></div>
  <div class="mute">Each one is off until ticked. A tick is saved at once on this unit and sent to all units.</div></section>
+<section class="panel"><h2>Reminder when this page is closed</h2>
+ <div class="prow">The office unit chirps when no office page has been open for <input type="number" id="cwmin" min="1" max="60" value="1" style="width:4em"> min
+ <button id="cwset">Save on all units</button><button id="cwoff">Off</button></div><div class="mute" id="cwnow"></div>
+ <div class="mute">A short, quiet double chirp every 30 seconds from the office unit (or its stand-in) until this page is open again on a PC.
+ It is silent during quiet hours and emergencies. Calls and alarms from the rooms still reach the office unit while the page is closed.</div></section>
 <section class="panel"><h2>Nightly self-check</h2>
  <div class="prow">Check every speaker and microphone at <input type="time" id="sctime" value="02:30"><button id="scset">Save on all units</button>
  <button id="scoff">Off</button></div>
@@ -246,6 +251,7 @@ async function tick(){
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
     lastSchool=j;drawDevs(us);selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);callWatch(us);drawAlarm(us,j.queue||[]);drawZones((j.features&4)?j.zones||[]:[]);
+    document.getElementById("cwnow").textContent=j.conwatch?"Now: on, after "+j.conwatch+" min.":"Now: off.";
     document.getElementById("ofcnow").textContent=j.office?"Now: office "+j.office+(j.standin?", stand-in "+j.standin:"")+", acting "+j.acting:"No office unit set.";
     {const em=us.filter(u=>u.online&&u.emergency);
      document.getElementById("estate").textContent=em.length?EMERG[em[0].emergency]+" on "+em.length+" of "+c.on+" units online":"No emergency.";}
@@ -423,6 +429,8 @@ async function pollLog(){
 }
 document.getElementById("lkind").onchange=drawLog;pollLog();setInterval(pollLog,3000);
 document.getElementById("scset").onclick=async()=>{const t=document.getElementById("sctime").value;if(!t)return;await cmd("selfcheck "+t);sendTo("all","selfcheck "+t);};
+document.getElementById("cwset").onclick=()=>{const n=+document.getElementById("cwmin").value;if(n>=1&&n<=60)both("consolewatch "+n);};
+document.getElementById("cwoff").onclick=()=>both("consolewatch off");
 document.getElementById("scoff").onclick=async()=>{await cmd("selfcheck off");sendTo("all","selfcheck off");};
 
 // ---- Talk from this PC's microphone -------------------------------------------------------------
