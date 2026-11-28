@@ -319,6 +319,34 @@ void Intercom::learnOfficeBoards() {
     if (changed) saveOfficeBoards();
 }
 
+// ---- the mmWave people sensor ----
+void Intercom::radarBytes(const uint8_t* data, size_t n) {
+    radarParser_.feed(data, n);
+    RadarState s;
+    while (radarParser_.take(&s)) {
+        radarKind_ = s.kind;
+        radarAt_ = frame_ + 1;
+        for (int k = 0; k < int(s.count) && k < 3; k++) {
+            radarX_[k] = s.x[k];
+            radarY_[k] = s.y[k];
+            radarSeen_[k] = frame_ + 1;
+        }
+    }
+}
+
+RadarState Intercom::radar() const {
+    RadarState s;
+    if (!radarAt_ || frame_ + 1 - radarAt_ > uint32_t(5000 / kFrameMs)) return s;
+    s.kind = radarKind_;
+    for (int k = 0; k < 3; k++)
+        if (radarSeen_[k] && frame_ + 1 - radarSeen_[k] <= uint32_t(1000 / kFrameMs)) {
+            s.x[s.count] = radarX_[k];
+            s.y[s.count] = radarY_[k];
+            s.count++;
+        }
+    return s;
+}
+
 // ---- the office page's data on the office units ----
 void Intercom::siteSetMeta(uint16_t rev, uint16_t hash, uint32_t size) {
     siteRev_ = rev;
@@ -1229,6 +1257,21 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
     }
     if (c == "sync" || c == "syncrev") return syncCommand(a, line);
     if (c == "siteget") return siteGet(a);
+    if (c == "radar") {  // what the people sensor sees right now
+        const RadarState r = radar();
+        if (r.kind == kRadarNone) return "no people sensor heard (HLK-LD2450 or HLK-LD2410 on the radar connector)";
+        std::string t = r.kind == kRadarTracking ? "people sensor LD2450: " : "people sensor LD2410: ";
+        if (!r.count) return t + "nobody";
+        char rb[64];
+        for (int k = 0; k < int(r.count); k++) {
+            if (r.kind == kRadarTracking)
+                snprintf(rb, sizeof(rb), "%s%.1f m out, %.1f m %s", k ? "; " : "", r.y[k] / 1000.0, std::abs(r.x[k]) / 1000.0, r.x[k] < 0 ? "left" : "right");
+            else
+                snprintf(rb, sizeof(rb), "someone %.1f m away", r.y[k] / 1000.0);
+            t += rb;
+        }
+        return t;
+    }
     if (c == "site") {
         snprintf(buf, sizeof(buf), "office page data: version %u, %lu bytes%s", unsigned(siteRev_), (unsigned long)siteSize_,
                  !siteAvailable() ? " (this unit cannot keep it)" : sitePullRoom_ ? " (fetching a newer copy)" : "");
@@ -1751,7 +1794,16 @@ void Intercom::sendStatus() {
     s.syncHash = syncHash_;
     s.siteRev = siteRev_;
     s.siteHash = siteHash_;
-    uint8_t buf[40];
+    {
+        const RadarState r = radar();
+        s.radarKind = r.kind;
+        s.radarCount = r.count;
+        for (int k = 0; k < 3; k++) {
+            s.radarX[k] = r.x[k];
+            s.radarY[k] = r.y[k];
+        }
+    }
+    uint8_t buf[48];
     hal_.net->send(buf, encodeStatus(s, buf));
 }
 

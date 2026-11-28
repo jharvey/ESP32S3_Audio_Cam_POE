@@ -395,7 +395,14 @@ std::string WebUi::schoolJson() {
                  st.power == PowerSource::Battery ? "battery" : "poe", unsigned(st.battery), unsigned(st.flags),
                  unsigned(st.fault), online ? "true" : "false", ageS, versionText(st.fwVer).c_str(), unsigned(st.emergency), unsigned(st.flags2),
                  !st.syncHash ? -1 : st.syncHash == ic_.syncHash() ? 1 : 0);
-        return std::string(buf);
+        std::string o(buf);
+        if (st.radarKind) {  // "radar":[kind, x1,y1, x2,y2, ...] in mm
+            o.pop_back();
+            o += ",\"radar\":[" + std::to_string(st.radarKind);
+            for (int k = 0; k < int(st.radarCount) && k < 3; k++) o += "," + std::to_string(st.radarX[k]) + "," + std::to_string(st.radarY[k]);
+            o += "]}";
+        }
+        return o;
     };
     // this unit too
     StatusPacket me;
@@ -412,6 +419,15 @@ std::string WebUi::schoolJson() {
     me.syncHash = ic_.syncHash();
     me.siteRev = ic_.siteRev();
     me.siteHash = ic_.siteHash();
+    {
+        const RadarState r = ic_.radar();
+        me.radarKind = r.kind;
+        me.radarCount = r.count;
+        for (int k = 0; k < 3; k++) {
+            me.radarX[k] = r.x[k];
+            me.radarY[k] = r.y[k];
+        }
+    }
     // R3.2: feature switches, the office and who acts as it, zones, and the rooms waiting for the office
     std::string officeList;
     for (uint16_t r : ic_.offices()) officeList += (officeList.empty() ? "" : ",") + std::to_string(r);

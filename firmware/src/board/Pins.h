@@ -22,7 +22,8 @@ constexpr int SPI_MISO = 5;
 constexpr int SPI_SCLK = 4;
 constexpr int ETH_CS = 13;
 constexpr int LORA_CS = 11;
-constexpr int LORA_DIO0 = 10;  // LORA_IRQ
+constexpr int RADAR_RX = 10;  // /RADAR.TX: the mmWave people sensor's data line (J21 LD2410C or J22 LD2450), 256000 baud
+// LoRa DIO0 (LORA_IRQ) moved to U22 P14, and the LD2410C's OUT pin is on U22 P13: both are read through the expander
 
 // PDM microphones U16/U17 (L/R by JP7/JP8) on I2S0
 constexpr int MIC_CLK = 9;

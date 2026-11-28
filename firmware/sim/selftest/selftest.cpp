@@ -2127,6 +2127,58 @@ static void testR33Sync() {
     CHECK(o3.ic->siteText().empty() && o3.ic->siteRev() == 0 && o3.kv["sitemeta"].empty() && has(o3, "plan removed") && o2.ic->siteText() == o1new.ic->siteText() &&
               !o2.ic->siteText().empty(),
           "after 5 minutes it deletes its copy of the plan; the office units keep theirs"); 
+    // ---- the mmWave people sensor: the room's unit reads it, the office page gets the people with the unit's status ----
+    {
+        // LD2450 frame from the manual: one person 0.78 m to the left and 1.71 m out; the other two slots empty
+        const uint8_t f2450[30] = {0xAA, 0xFF, 0x03, 0x00, 0x0E, 0x03, 0xB1, 0x86, 0x10, 0x00, 0x40, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x55, 0xCC};
+        const uint8_t junk[5] = {0x00, 0xAA, 0xFF, 0x17, 0xF4};
+        CHECK(r1new.ic->radar().kind == kRadarNone && r1new.ic->command("radar").find("no people sensor") != std::string::npos, "no people sensor: the unit says so");
+        r1new.ic->radarBytes(junk, sizeof(junk));
+        for (int k = 0; k < 20; k++) {
+            r1new.ic->radarBytes(f2450, 11);  // a frame arrives in pieces
+            r1new.ic->radarBytes(f2450 + 11, 19);
+            run(5);
+        }
+        const RadarState rs = r1new.ic->radar();
+        CHECK(rs.kind == kRadarTracking && rs.count == 1 && rs.x[0] == -782 && rs.y[0] == 1713, "LD2450: one person at -0.78 m, 1.71 m (%d: %d, %d) [%s]", int(rs.count),
+              int(rs.x[0]), int(rs.y[0]), r1new.ic->command("radar").c_str());
+        run(60);
+        WebUi web(*o2.ic);
+        HttpRequest q;
+        q.authorization = basic("admin:site-pass-123");
+        q.method = "GET";
+        q.path = "/api/school";
+        for (int k = 0; k < 12; k++) {
+            r1new.ic->radarBytes(f2450, 30);
+            run(5);
+        }
+        run(60);
+        std::string body = web.handle(q).body;
+        const size_t at = body.find("\"room\":101,");
+        const std::string unit101 = at == std::string::npos ? "" : body.substr(at, body.find('}', at) - at);
+        CHECK(unit101.find("\"radar\":[2") != std::string::npos, "the office page is told what room 101's sensor sees [%s]", unit101.c_str());
+        for (int k = 0; k < 4; k++) {
+            r1new.ic->radarBytes(f2450, 30);
+            run(5);
+        }
+        bool seen = false;
+        for (int k = 0; k < 30 && !seen; k++) {  // the status goes out about once a second
+            r1new.ic->radarBytes(f2450, 30);
+            run(5);
+            seen = web.handle(q).body.find("\"radar\":[2,-782,1713]") != std::string::npos;
+        }
+        CHECK(seen, "the person's position reaches the office page");
+        run(80);
+        CHECK(r1new.ic->radar().kind == kRadarTracking && r1new.ic->radar().count == 0, "the person is gone a second after the sensor stops seeing them");
+        run(300);
+        CHECK(r1new.ic->radar().kind == kRadarNone, "5 s without data: no sensor");
+        // LD2410: someone sitting still 2.0 m away (presence only)
+        const uint8_t f2410[23] = {0xF4, 0xF3, 0xF2, 0xF1, 0x0D, 0x00, 0x02, 0xAA, 0x02, 0x00, 0x00, 0x00, 0xC8, 0x00, 0x3B, 0xC8, 0x00, 0x55, 0x00, 0xF8, 0xF7, 0xF6, 0xF5};
+        r1new.ic->radarBytes(f2410, sizeof(f2410));
+        run(2);
+        const RadarState r1 = r1new.ic->radar();
+        CHECK(r1.kind == kRadarPresence && r1.count == 1 && r1.x[0] == 0 && r1.y[0] == 2000, "LD2410: someone 2.0 m away, no direction [%s]", r1new.ic->command("radar").c_str());
+    }
     g_clockFrames = -1;
     g_clock0 = clock0;
 }

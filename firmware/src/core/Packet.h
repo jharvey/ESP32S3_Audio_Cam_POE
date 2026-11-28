@@ -100,6 +100,9 @@ struct StatusPacket {
     uint16_t syncRev = 0;   // school-wide settings (R3.3): how often the office changed them ...
     uint16_t siteRev = 0, siteHash = 0;  // the office page's plan and areas kept on this unit (office units only); 0 = none
     uint16_t syncHash = 0;  // ... and a check value over them; 0 = older firmware that does not send it
+    // People seen by the unit's mmWave sensor (Radar.h): kind 0 = no sensor, 1 = presence only, 2 = positions
+    uint8_t radarKind = 0, radarCount = 0;
+    int16_t radarX[3] = {0, 0, 0}, radarY[3] = {0, 0, 0};  // mm
 };
 // "0.5.0" <-> 14 bits (major 0-15, minor 0-31, patch 0-31), carried in the status packet.
 uint16_t packVersion(const char* text);

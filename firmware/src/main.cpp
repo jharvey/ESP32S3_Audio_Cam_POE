@@ -663,6 +663,14 @@ void audioTask(void*) {
         }
         // Blocks until 20 ms of mic samples are in: the I2S clock paces everything.
         if (gMic.readBytes(reinterpret_cast<char*>(mic), sizeof(mic)) != sizeof(mic)) continue;
+        {  // the people sensor: a few bytes each frame
+            uint8_t rb[64];
+            int n = Serial1.available();
+            if (n > 0) {
+                n = int(Serial1.read(rb, size_t(n > 64 ? 64 : n)));
+                if (n > 0) gIntercom->radarBytes(rb, size_t(n));
+            }
+        }
         gIntercom->processFrame(mic, spk);
         gSpk.write(reinterpret_cast<uint8_t*>(spk), sizeof(spk));
     }
@@ -800,6 +808,9 @@ void setup() {
             },
             "autotune", 16384, j, 1, nullptr, 0);
     };
+    Serial1.setRxBufferSize(1024);
+    Serial1.begin(256000, SERIAL_8N1, pins::RADAR_RX, -1);
+    pinMode(pins::RADAR_RX, INPUT_PULLUP);  // quiet when no sensor is fitted
     gEspAec = new board::EspSrAec();
     ic::EchoCanceller& aec = gEspAec->ok() ? static_cast<ic::EchoCanceller&>(*gEspAec) : gNlms;
     Serial.printf("echo canceller: %s\n", gEspAec->ok() ? "ESP-SR" : "NLMS (ESP-SR did not start)");

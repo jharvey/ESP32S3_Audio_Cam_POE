@@ -23,7 +23,7 @@ st.textContent=`#plan{background:var(--card);border:1px solid var(--line);border
 #plan .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 6px}#plan .hint{font-size:13px;color:var(--mute);margin:4px 0}
 #plan svg{width:100%;height:auto;max-height:72vh;display:block;background:var(--bg);border-radius:6px;cursor:crosshair}
 #plan .wall{fill:none;stroke:var(--mute);stroke-linecap:round}#plan .lbl{fill:var(--mute)}
-#plan .dot{stroke:var(--card);cursor:pointer}#plan .area{fill:var(--call);fill-opacity:.1;stroke:var(--call);stroke-opacity:.55;cursor:pointer}#plan .area.on{fill-opacity:.36}#plan .num{fill:#fff;font-weight:700;pointer-events:none}
+#plan .dot{stroke:var(--card);cursor:pointer}#plan .ppl{fill:#111;stroke:#fff;pointer-events:none}#plan .area{fill:var(--call);fill-opacity:.1;stroke:var(--call);stroke-opacity:.55;cursor:pointer}#plan .area.on{fill-opacity:.36}#plan .num{fill:#fff;font-weight:700;pointer-events:none}
 #plan .ok{fill:var(--ok)}#plan .warn{fill:var(--warn)}#plan .bad{fill:var(--bad)}#plan .call{fill:var(--call)}#plan .talk{fill:#d4a800}
 #plan .chip{font-size:13px;padding:2px 8px}
 #plan .dot.call{animation:pcall 1s steps(2,jump-none) infinite}@keyframes pcall{to{fill:#fff}}
@@ -279,7 +279,7 @@ function full(){
     <span class="hint">Shows every unit on its room. The file stays in this browser only: it is not sent to the unit.</span>${msg?`<span class="hint">${esc(msg)}</span>`:""}</div>`;
     hook();return}
   box.innerHTML=`<div class="pside"><div class="bar"><b>Talk</b>${window.onPlanAll?`<button id="pall" class="big">Hold to talk to ALL rooms</button>`:""}<span id="pact"></span>
-    <span style="margin-left:auto"></span><button id="pmove">Move dots</button><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
+    <span style="margin-left:auto"></span><button id="pscale" title="Needed to show people where they stand">Plan scale</button><button id="pmove">Move dots</button><button id="pload">Load another DXF…</button><button id="pdel">Remove</button></div>
     <div id="phint"></div></div><div class="floors">`+plan.floors.map((F,i)=>{const w=F.x1-F.x0,h=F.y1-F.y0,m=fsz(F)*0.03,g=regionsFor(i);
       return `<figure class="fl"><figcaption id="pcap${i}"></figcaption>
       <svg id="psvg${i}" data-f="${i}" viewBox="${F.x0-m} ${F.y0-m} ${w+2*m} ${h+2*m}" preserveAspectRatio="xMidYMid meet" style="touch-action:none">
@@ -311,6 +311,16 @@ function part(){  // what changes every refresh: captions, hint, dots, highlight
       dots+=`<g data-u="${u.unit}">`+(home(u)?`<circle class="dot ${cls(u)}" cx="${x}" cy="${y}" r="${r}" stroke-width="${r*0.18}"${mark}><title>${esc(u.unit)}</title></circle>`:
         `<rect class="dot ${cls(u)}" x="${x-r}" y="${y-r}" width="${2*r}" height="${2*r}" rx="${r*0.3}" stroke-width="${r*0.18}"${mark}><title>${esc(u.unit)} (not a room)</title></rect>`)+
         `<text class="num" x="${x}" y="${y+r*0.36}" font-size="${r*0.95}" text-anchor="middle">${esc(lab(u))}</text></g>`})}
+    // people seen by a unit's mmWave sensor: small black dots. The sensor looks from the unit's dot towards the middle of its
+    // room; with the plan's scale set they are put where they stand, without it they line up in the middle of the room.
+    if(!drawing)for(const u of units){const R=u.radar;if(!R||R.length<3||!u.online)continue;const p=where(u);if(!p||p.f!==fi)continue;
+      const n=home(u)||roomAt(fi,p.x,p.y),c=n?centre(fi,n):null;if(!c)continue;let dx=c.x-p.x,dy=c.y-p.y;const l=Math.hypot(dx,dy)||1;dx/=l;dy/=l;
+      const k=(R.length-1)/2,S=plan.upm?plan.upm/1000:0;
+      for(let i=0;i<k;i++){let x,y;
+        if(S){x=p.x+dx*R[2+2*i]*S-dy*R[1+2*i]*S;y=p.y+dy*R[2+2*i]*S+dx*R[1+2*i]*S;
+          for(let t=0;t<5&&roomAt(fi,x,y)!==n;t++){x=(x+c.x)/2;y=(y+c.y)/2}}
+        else{x=c.x+(i-(k-1)/2)*r*1.5;y=c.y+r*2.2}
+        dots+=`<circle class="ppl" cx="${x}" cy="${y}" r="${r*0.5}" stroke-width="${r*0.14}"><title>Someone seen by the sensor of ${esc(u.unit)}</title></circle>`}}
     for(const n in plan.rooms){if(plan.rooms[n].f!==fi||mates(+n,true).length<2)continue;  // dots placed by hand count too
       const c=centre(fi,+n),t="Entire "+(plan.rooms[n].t||"room "+n).toLowerCase(),w=r*(t.length*0.95+2.5),h=r*3.2;
       dots+=`<g data-all="${n}" style="cursor:pointer"><rect x="${c.x-w/2}" y="${c.y-h/2}" width="${w}" height="${h}" rx="${r*0.8}" fill="var(--card)" stroke="var(--bad)" stroke-width="${r*0.22}"/>`+
@@ -360,6 +370,9 @@ function hook(){
   if(b("pload"))b("pload").onclick=()=>fi.click();
   if(b("pdemo"))b("pdemo").onclick=showDemo;
   if(b("pmove"))b("pmove").onclick=()=>{moving=!moving;sel=null;part()};
+  if(b("pscale"))b("pscale").onclick=()=>{const F=plan.floors[0],W=F.x1-F.x0,now=plan.upm?(W/plan.upm).toFixed(1):"";
+    const t=prompt("To show people where they stand, the plan needs its scale. How long is the drawing of "+F.name+" from its left edge to its right edge, in metres? (1 m = 3.28 ft)",now);
+    if(t===null)return;const m=parseFloat(t);if(m>0){plan.upm=W/m}else{delete plan.upm}save(KP,plan);part()};
   if(b("parea"))b("parea").onclick=()=>{if(drawing){drawing=null;part();return}const rs=Object.keys(plan.rooms).map(Number).sort((a,b)=>a-b);startRoom(plan.rooms[hot]?hot:rs[0])};
   if(b("pdel"))b("pdel").onclick=()=>{if(confirm("Remove the floor plan from this browser? Unit positions you placed are kept.")){plan=null;try{localStorage.removeItem(KP)}catch(e){}full()}};
   if(window.onPlanAll)holdButton(b("pall"),()=>window.onPlanAll(true),()=>window.onPlanAll(false));

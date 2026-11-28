@@ -17,6 +17,7 @@
 #include "Hal.h"
 #include "JitterBuffer.h"
 #include "Mixer.h"
+#include "Radar.h"
 #include "RoomSetup.h"
 #include "Schedule.h"
 
@@ -205,6 +206,10 @@ public:
     // board, a unit that was off when something changed).
     // The office page's own data (plan, dots, areas, emergency steps) is kept on every office unit, so the page shows the
     // same from any of them. The page saves it on the unit it is open on; the other office units fetch the newest copy.
+    // Bytes from the unit's mmWave people sensor, as they arrive (call from the audio task). radar() is what the unit
+    // reports: nothing for 5 s = no sensor; a person is kept for 1 s after the sensor last saw them, so dots do not flicker.
+    void radarBytes(const uint8_t* data, size_t n);
+    RadarState radar() const;
     bool siteAvailable() const { return hal_.store->hasBlobs(); }
     // Only office units keep the plan (any unit while no office list is set). A unit that is out of the list for
     // 5 minutes deletes its copy, so a former office unit used as a classroom does not carry the floor plan.
@@ -293,6 +298,10 @@ private:
     void siteSetMeta(uint16_t rev, uint16_t hash, uint32_t size);
     void siteTick();
     void siteAsk();
+    RadarParser radarParser_;
+    uint8_t radarKind_ = kRadarNone;
+    uint32_t radarAt_ = 0, radarSeen_[3] = {0, 0, 0};  // frame + 1; 0 = never
+    int16_t radarX_[3] = {0, 0, 0}, radarY_[3] = {0, 0, 0};
     void sitePart(const TextPacket& r);
     std::string siteGet(const std::vector<std::string>& a);
     void saveOfficeBoards();
