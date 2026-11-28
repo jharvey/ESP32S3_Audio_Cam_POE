@@ -61,8 +61,16 @@ Fit one or the other. The firmware works out which one is attached from the data
 
 ## Added later
 
-- **JP9** (solder jumper, open by default) sits in the line from J21 pin 1 (the LD2410C's TX) to `RADAR.TX`. Close it only
-  on a board that has the LD2410C soldered to J21. Leave it open when a radar is plugged into J22, so an unused or
-  unpowered module on J21 cannot load the data line. Only one radar may drive `RADAR.TX` at a time.
+- **R113 and R114** (0 ohm, 0402, C17168, fitted) are removable links for a radar soldered to J21. R113 is in the line
+  from J21 pin 1 (the LD2410C's TX) to `RADAR.TX`; R114 feeds J21 pin 5 from VBUS. Take both off to disable a module on
+  J21 without unsoldering it. Only one radar may drive `RADAR.TX` at a time. (They replace solder jumper JP9.)
 - The case has a snap-in frame for an LD2410C behind the lower face (wired to J22 by a 4-wire JST ZH pigtail).
 - The PoE isolation zone was redrawn around the PoE parts' present positions; J21 and J22 are outside it.
+
+## PoE isolation (same session)
+
+- The six line-side nets that had automatic names are now `W_BR_P`, `W_BR_N`, `W_TERM`, `W_TERM2`, `W_TAP12`, `W_TAP13`.
+- A design rule in `ESP32S3_Audio_Cam_POE.kicad_dru` keeps all line-side copper 2.5 mm from logic copper.
+- D6 was turned and moved clear of U20; C63, C60 and C65 were adjusted; TP54 and TP55 are parked further off the board.
+- C68 is now 1 nF, 2 kV, 1206 (C9196, as C65) and is the one part allowed to bridge the barrier. It sits under J21's outline.
+- Still to do on real boards: a 1500 V hi-pot test between the Ethernet pins and COM.
