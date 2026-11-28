@@ -38794,7 +38794,7 @@
 		(uuid "15a3da73-9841-462e-9de4-e3ebd3ce4a6f")
 	)
 	(junction
-		(at 209.55 134.62)
+		(at 214.63 134.62)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "16176012-ac27-41ea-af61-a1e9b6714683")
@@ -38890,7 +38890,7 @@
 		(uuid "28d95755-6640-4422-b226-b6bea67a7984")
 	)
 	(junction
-		(at 217.17 123.19)
+		(at 222.25 123.19)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "293d7750-9a5a-4f57-8c17-80858c02892e")
@@ -38960,6 +38960,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "3e5b46c9-4757-4e11-ae71-40095c79fc37")
+	)
+	(junction
+		(at 217.17 134.62)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "40b88c93-144d-4ee7-a90b-62666c87263f")
 	)
 	(junction
 		(at 424.18 147.32)
@@ -39046,12 +39052,6 @@
 		(uuid "56581c03-c324-4237-b9ab-532e680379be")
 	)
 	(junction
-		(at 222.25 123.19)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "56b65210-e9a3-4137-be0d-8bf52cf2cceb")
-	)
-	(junction
 		(at 386.08 200.66)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -39100,7 +39100,7 @@
 		(uuid "5bc01073-ddd9-496a-9449-efb2bf17ab22")
 	)
 	(junction
-		(at 209.55 123.19)
+		(at 217.17 123.19)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "5d530ba8-210e-4d00-8455-b9f8f9b07755")
@@ -39154,22 +39154,10 @@
 		(uuid "6b7d2de2-ec94-4aa2-bd35-6e81d989c463")
 	)
 	(junction
-		(at 213.36 134.62)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6c3da7b4-8697-4fcd-8c89-c0c5aedd1fb5")
-	)
-	(junction
 		(at 297.18 379.73)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "6da52ede-bafd-4af1-8b7a-30c70ccf49e8")
-	)
-	(junction
-		(at 217.17 134.62)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6f7669a1-6afa-4fb1-a2c8-0409f6804328")
 	)
 	(junction
 		(at 321.31 104.14)
@@ -39260,6 +39248,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7f59642a-c8eb-439d-99aa-8da57b1e6aae")
+	)
+	(junction
+		(at 219.71 123.19)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "807a9422-798f-4c60-8e30-7fa9d5974179")
 	)
 	(junction
 		(at 139.7 217.17)
@@ -39634,12 +39628,6 @@
 		(uuid "d7da94a8-53c2-40b2-9f4a-61df97e9a927")
 	)
 	(junction
-		(at 213.36 123.19)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d87f20dd-30d8-4bc3-8158-8d301f6c7dcd")
-	)
-	(junction
 		(at 495.3 35.56)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -39680,12 +39668,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e0c21620-7ec2-4520-b72c-867cb6acace9")
-	)
-	(junction
-		(at 205.74 134.62)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "e1e375d7-10ba-49f2-9a22-77fe5059ab57")
 	)
 	(junction
 		(at 396.24 316.23)
@@ -40129,7 +40111,7 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 133.35) (xy 209.55 134.62)
+			(xy 217.17 133.35) (xy 217.17 134.62)
 		)
 		(stroke
 			(width 0)
@@ -40339,7 +40321,7 @@
 	)
 	(wire
 		(pts
-			(xy 205.74 123.19) (xy 209.55 123.19)
+			(xy 214.63 123.19) (xy 222.25 123.19)
 		)
 		(stroke
 			(width 0)
@@ -40749,16 +40731,6 @@
 	)
 	(wire
 		(pts
-			(xy 213.36 123.19) (xy 217.17 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1adca567-0e22-4ce3-95f2-437cd8c95baa")
-	)
-	(wire
-		(pts
 			(xy 529.59 207.01) (xy 519.43 207.01)
 		)
 		(stroke
@@ -41009,7 +40981,7 @@
 	)
 	(wire
 		(pts
-			(xy 205.74 134.62) (xy 205.74 133.35)
+			(xy 214.63 134.62) (xy 214.63 133.35)
 		)
 		(stroke
 			(width 0)
@@ -41279,7 +41251,7 @@
 	)
 	(wire
 		(pts
-			(xy 204.47 134.62) (xy 205.74 134.62)
+			(xy 209.55 134.62) (xy 217.17 134.62)
 		)
 		(stroke
 			(width 0)
@@ -41716,16 +41688,6 @@
 			(type default)
 		)
 		(uuid "3bfae426-f02d-44c1-b6a8-a7478ebbdd1f")
-	)
-	(wire
-		(pts
-			(xy 213.36 134.62) (xy 217.17 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3c2d70fa-2475-4778-a4ac-54bba4baa267")
 	)
 	(wire
 		(pts
@@ -42269,6 +42231,16 @@
 	)
 	(wire
 		(pts
+			(xy 504.19 227.33) (xy 504.19 223.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4bedd1d2-4f2c-4da1-a251-9b6c33b890f0")
+	)
+	(wire
+		(pts
 			(xy 260.35 283.21) (xy 262.89 283.21)
 		)
 		(stroke
@@ -42276,16 +42248,6 @@
 			(type default)
 		)
 		(uuid "4d4a8080-bc38-4b01-bcf8-9d40a7812bed")
-	)
-	(wire
-		(pts
-			(xy 213.36 134.62) (xy 209.55 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4d993832-2d5b-4008-b3ca-d7958f935a7b")
 	)
 	(wire
 		(pts
@@ -42536,6 +42498,16 @@
 			(type default)
 		)
 		(uuid "5538b64e-898b-46ed-8db0-078e49b507c3")
+	)
+	(wire
+		(pts
+			(xy 217.17 134.62) (xy 222.25 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "55974d6d-74fe-4be9-b1ae-87d28f248486")
 	)
 	(polyline
 		(pts
@@ -43119,16 +43091,6 @@
 	)
 	(wire
 		(pts
-			(xy 219.71 134.62) (xy 222.25 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6a6449e3-5560-4b93-bde8-23a4447ec6f8")
-	)
-	(wire
-		(pts
 			(xy 106.68 279.4) (xy 113.03 279.4)
 		)
 		(stroke
@@ -43186,16 +43148,6 @@
 			(type default)
 		)
 		(uuid "6bf1e656-6a34-42c6-afe8-c27ec6efe5dc")
-	)
-	(wire
-		(pts
-			(xy 209.55 134.62) (xy 205.74 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6c1ca4b0-a8ee-4640-8044-2c4406a0c8a5")
 	)
 	(wire
 		(pts
@@ -43476,16 +43428,6 @@
 			(type default)
 		)
 		(uuid "7438dff2-c658-47e5-beff-1bb3cf4fff0e")
-	)
-	(wire
-		(pts
-			(xy 209.55 123.19) (xy 213.36 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7447dd17-b101-485f-9a60-6ef149e3241c")
 	)
 	(wire
 		(pts
@@ -44179,7 +44121,7 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 123.19) (xy 209.55 125.73)
+			(xy 217.17 123.19) (xy 217.17 125.73)
 		)
 		(stroke
 			(width 0)
@@ -44229,7 +44171,7 @@
 	)
 	(wire
 		(pts
-			(xy 217.17 123.19) (xy 217.17 125.73)
+			(xy 222.25 123.19) (xy 222.25 125.73)
 		)
 		(stroke
 			(width 0)
@@ -44336,16 +44278,6 @@
 			(type default)
 		)
 		(uuid "8c2b76ed-4a21-4c86-b176-9bd59e33a2e9")
-	)
-	(wire
-		(pts
-			(xy 222.25 133.35) (xy 222.25 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8c421dc9-f558-482c-bf90-e90371eebe65")
 	)
 	(wire
 		(pts
@@ -44556,6 +44488,16 @@
 			(type default)
 		)
 		(uuid "9425f958-e6db-4a63-8c16-4d6391843231")
+	)
+	(wire
+		(pts
+			(xy 214.63 123.19) (xy 214.63 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9472f6e2-7f49-43cb-933a-79f3f4c5556a")
 	)
 	(wire
 		(pts
@@ -45449,16 +45391,6 @@
 	)
 	(wire
 		(pts
-			(xy 205.74 125.73) (xy 205.74 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b3b88aba-826f-475f-a0cd-28f23d178126")
-	)
-	(wire
-		(pts
 			(xy 93.98 274.32) (xy 99.06 274.32)
 		)
 		(stroke
@@ -46039,7 +45971,7 @@
 	)
 	(wire
 		(pts
-			(xy 505.46 234.95) (xy 518.16 234.95)
+			(xy 504.19 234.95) (xy 518.16 234.95)
 		)
 		(stroke
 			(width 0)
@@ -46076,16 +46008,6 @@
 			(type default)
 		)
 		(uuid "c710e2f9-0215-4e4d-a67b-09619a2696a1")
-	)
-	(wire
-		(pts
-			(xy 213.36 123.19) (xy 213.36 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c719cc18-6977-438e-9489-4e2600428845")
 	)
 	(wire
 		(pts
@@ -46249,7 +46171,7 @@
 	)
 	(wire
 		(pts
-			(xy 213.36 133.35) (xy 213.36 134.62)
+			(xy 219.71 133.35) (xy 219.71 134.62)
 		)
 		(stroke
 			(width 0)
@@ -46476,16 +46398,6 @@
 			(type default)
 		)
 		(uuid "d4921490-6548-4402-a8c2-17281fdca408")
-	)
-	(wire
-		(pts
-			(xy 217.17 134.62) (xy 219.71 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d4db3002-9cf0-46cd-b9a7-79bb3acba727")
 	)
 	(wire
 		(pts
@@ -46959,7 +46871,17 @@
 	)
 	(wire
 		(pts
-			(xy 217.17 133.35) (xy 217.17 134.62)
+			(xy 219.71 123.19) (xy 219.71 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e55d2e1e-6041-4224-a9b3-8a768f5be64a")
+	)
+	(wire
+		(pts
+			(xy 222.25 133.35) (xy 222.25 134.62)
 		)
 		(stroke
 			(width 0)
@@ -47146,16 +47068,6 @@
 			(type default)
 		)
 		(uuid "edbaf667-cc44-4f85-b541-1c9062f004a4")
-	)
-	(wire
-		(pts
-			(xy 222.25 123.19) (xy 222.25 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ee1c22a9-98af-49e1-9fa2-c424b733b28f")
 	)
 	(wire
 		(pts
@@ -47496,16 +47408,6 @@
 			(type default)
 		)
 		(uuid "f58bbce6-fc2d-48cc-b206-dc9f7585affd")
-	)
-	(wire
-		(pts
-			(xy 217.17 123.19) (xy 222.25 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f595d5cf-cb25-4efe-aaa0-729ebb01aab4")
 	)
 	(wire
 		(pts
@@ -49136,16 +49038,6 @@
 			(justify left bottom)
 		)
 		(uuid "1c145319-2e11-4562-aa10-53a020bf4cb8")
-	)
-	(label "CHIP_BOOT"
-		(at 548.64 240.03 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "1c5bf7be-8494-4e7f-a049-788601398e01")
 	)
 	(label "PMU.Vd2"
 		(at 214.63 387.35 180)
@@ -52169,7 +52061,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0603,20Ω")
+		(lib_id "JLCPCB-Resistors:0402,22Ω")
 		(at 304.8 48.26 90)
 		(unit 1)
 		(body_style 1)
@@ -52189,7 +52081,7 @@
 				)
 			)
 		)
-		(property "Value" "20Ω"
+		(property "Value" "22Ω"
 			(at 304.8 48.26 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -52199,7 +52091,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:R_0603"
+		(property "Footprint" "JLCPCB:R_0402"
 			(at 304.8 50.038 90)
 			(hide yes)
 			(show_name no)
@@ -52210,7 +52102,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010130_UNI-ROYAL-Uniroyal-Elec-0603WAF200JT5E_C22950.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2205311900_UNI-ROYAL-Uniroyal-Elec-0402WGF220JTCE_C25092.pdf"
 			(at 304.8 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -52221,7 +52113,7 @@
 				)
 			)
 		)
-		(property "Description" "100mW Thick Film Resistors 75V ±100ppm/°C ±1% 20Ω 0603 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "62.5mW Thick Film Resistors 50V ±1% ±100ppm/°C 22Ω 0402 Chip Resistor - Surface Mount ROHS"
 			(at 304.8 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -52232,7 +52124,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C22950"
+		(property "LCSC" "C25092"
 			(at 304.8 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -52860,96 +52752,6 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "C81")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLCPCB-Capacitors:0603,100nF")
-		(at 222.25 129.54 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "01994bbf-e5c1-4d37-b6a8-fb582eb97ba4")
-		(property "Reference" "C30"
-			(at 223.52 126.492 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "100nF"
-			(at 223.266 132.334 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 0.8 0.8)
-				)
-			)
-		)
-		(property "Footprint" "JLCPCB:C_0603"
-			(at 224.028 129.54 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
-			(at 222.25 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 222.25 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C14663"
-			(at 222.25 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "8ff6dd2d-0268-47a1-8b2e-059cd47e2a9f")
-		)
-		(pin "2"
-			(uuid "195265fe-052a-410b-ab6f-ec524d86d82b")
-		)
-		(instances
-			(project "ESP32S3_Audio_Cam_POE"
-				(path "/c5870406-763b-471e-b639-251ff1f3739e"
-					(reference "C30")
 					(unit 1)
 				)
 			)
@@ -58805,7 +58607,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 196.85 134.62 90)
+		(at 201.93 134.62 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -58815,7 +58617,7 @@
 		(dnp no)
 		(uuid "193351ae-1243-4d22-b005-9d4b4cd75ec6")
 		(property "Reference" "#PWR048"
-			(at 200.66 134.62 0)
+			(at 205.74 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -58826,7 +58628,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 191.262 134.62 90)
+			(at 196.342 134.62 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -58836,7 +58638,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 196.85 134.62 0)
+			(at 201.93 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -58847,7 +58649,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 196.85 134.62 0)
+			(at 201.93 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -58858,7 +58660,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 196.85 134.62 0)
+			(at 201.93 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -61651,7 +61453,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Capacitors:0603,1uF")
-		(at 205.74 129.54 0)
+		(at 214.63 129.54 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -61661,7 +61463,7 @@
 		(dnp no)
 		(uuid "2587768f-cfee-43a2-a657-4affebac3dab")
 		(property "Reference" "C23"
-			(at 207.01 128.27 90)
+			(at 215.9 128.27 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -61672,7 +61474,7 @@
 			)
 		)
 		(property "Value" "1uF"
-			(at 206.756 132.842 90)
+			(at 215.646 132.842 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -61683,7 +61485,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:C_0603"
-			(at 203.962 129.54 90)
+			(at 212.852 129.54 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -61694,7 +61496,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Samsung-Electro-Mechanics-CL10A105KB8NNNC_C15849.pdf"
-			(at 205.74 129.54 0)
+			(at 214.63 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -61705,7 +61507,7 @@
 			)
 		)
 		(property "Description" "50V 1uF X5R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 205.74 129.54 0)
+			(at 214.63 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -61716,7 +61518,7 @@
 			)
 		)
 		(property "LCSC" "C15849"
-			(at 205.74 129.54 0)
+			(at 214.63 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -65673,7 +65475,7 @@
 	)
 	(symbol
 		(lib_id "power:PWR_FLAG")
-		(at 213.36 134.62 180)
+		(at 214.63 134.62 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -65683,7 +65485,7 @@
 		(dnp no)
 		(uuid "3d21762a-c724-4295-8996-6a3bc550a361")
 		(property "Reference" "#FLG08"
-			(at 213.36 136.525 0)
+			(at 214.63 136.525 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -65694,7 +65496,8 @@
 			)
 		)
 		(property "Value" "PWR_FLAG"
-			(at 213.36 142.494 90)
+			(at 214.63 142.494 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -65704,7 +65507,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 213.36 134.62 0)
+			(at 214.63 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -65715,7 +65518,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 213.36 134.62 0)
+			(at 214.63 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -65726,7 +65529,7 @@
 			)
 		)
 		(property "Description" "Special symbol for telling ERC where power comes from"
-			(at 213.36 134.62 0)
+			(at 214.63 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -69393,7 +69196,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Resistors:0603,0Ω")
-		(at 200.66 134.62 270)
+		(at 205.74 134.62 270)
 		(mirror x)
 		(unit 1)
 		(body_style 1)
@@ -69404,7 +69207,7 @@
 		(dnp no)
 		(uuid "4eabd723-d0cf-444f-b3b3-77c4cc71c71a")
 		(property "Reference" "TST-R10"
-			(at 200.66 132.08 90)
+			(at 205.74 132.08 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -69414,7 +69217,7 @@
 			)
 		)
 		(property "Value" "0Ω"
-			(at 200.66 134.62 90)
+			(at 205.74 134.62 90)
 			(show_name no)
 			(do_not_autoplace yes)
 			(effects
@@ -69424,7 +69227,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:R_0603"
-			(at 200.66 136.398 90)
+			(at 205.74 136.398 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -69435,7 +69238,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0603WAF0000T5E_C21189.pdf"
-			(at 200.66 134.62 0)
+			(at 205.74 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -69446,7 +69249,7 @@
 			)
 		)
 		(property "Description" "100mW Thick Film Resistors 75V ±1% 0Ω 0603 Chip Resistor - Surface Mount ROHS"
-			(at 200.66 134.62 0)
+			(at 205.74 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -69457,7 +69260,7 @@
 			)
 		)
 		(property "LCSC" "C21189"
-			(at 200.66 134.62 0)
+			(at 205.74 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -73880,7 +73683,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 548.64 232.41 0)
+		(at 504.19 223.52 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -73890,7 +73693,7 @@
 		(dnp no)
 		(uuid "6449cc52-ba5d-4a0b-8a61-8e6300f303fb")
 		(property "Reference" "#PWR0379"
-			(at 552.45 232.41 0)
+			(at 508 223.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -73901,7 +73704,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 543.05 232.41 90)
+			(at 503.174 225.552 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -73911,7 +73714,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 548.64 232.41 0)
+			(at 504.19 223.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -73922,7 +73725,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 548.64 232.41 0)
+			(at 504.19 223.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -73933,7 +73736,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 548.64 232.41 0)
+			(at 504.19 223.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -79316,7 +79119,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Capacitors:0603,100nF")
-		(at 217.17 129.54 180)
+		(at 222.25 129.54 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -79326,7 +79129,7 @@
 		(dnp no)
 		(uuid "7eead1f4-fe30-4d84-809b-426c5e527dd7")
 		(property "Reference" "C27"
-			(at 218.44 126.238 90)
+			(at 223.52 126.238 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -79336,7 +79139,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 218.186 132.334 90)
+			(at 223.266 132.334 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -79346,7 +79149,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:C_0603"
-			(at 218.948 129.54 90)
+			(at 224.028 129.54 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -79357,7 +79160,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
-			(at 217.17 129.54 0)
+			(at 222.25 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -79368,7 +79171,7 @@
 			)
 		)
 		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 217.17 129.54 0)
+			(at 222.25 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -79379,7 +79182,7 @@
 			)
 		)
 		(property "LCSC" "C14663"
-			(at 217.17 129.54 0)
+			(at 222.25 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -89059,7 +88862,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0603,20Ω")
+		(lib_id "JLCPCB-Resistors:0402,22Ω")
 		(at 304.8 45.72 90)
 		(unit 1)
 		(body_style 1)
@@ -89079,7 +88882,7 @@
 				)
 			)
 		)
-		(property "Value" "20Ω"
+		(property "Value" "22Ω"
 			(at 304.8 45.72 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -89089,7 +88892,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:R_0603"
+		(property "Footprint" "JLCPCB:R_0402"
 			(at 304.8 47.498 90)
 			(hide yes)
 			(show_name no)
@@ -89100,7 +88903,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010130_UNI-ROYAL-Uniroyal-Elec-0603WAF200JT5E_C22950.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2205311900_UNI-ROYAL-Uniroyal-Elec-0402WGF220JTCE_C25092.pdf"
 			(at 304.8 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -89111,7 +88914,7 @@
 				)
 			)
 		)
-		(property "Description" "100mW Thick Film Resistors 75V ±100ppm/°C ±1% 20Ω 0603 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "62.5mW Thick Film Resistors 50V ±1% ±100ppm/°C 22Ω 0402 Chip Resistor - Surface Mount ROHS"
 			(at 304.8 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -89122,7 +88925,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C22950"
+		(property "LCSC" "C25092"
 			(at 304.8 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -89810,7 +89613,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Capacitors:0603,100nF")
-		(at 209.55 129.54 180)
+		(at 217.17 129.54 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -89820,7 +89623,7 @@
 		(dnp no)
 		(uuid "b3561904-25ab-4468-a976-8359d947f88a")
 		(property "Reference" "C24"
-			(at 210.82 126.238 90)
+			(at 218.44 126.238 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -89830,7 +89633,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 210.566 132.334 90)
+			(at 218.186 132.334 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -89840,7 +89643,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:C_0603"
-			(at 211.328 129.54 90)
+			(at 218.948 129.54 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -89851,7 +89654,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
-			(at 209.55 129.54 0)
+			(at 217.17 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -89862,7 +89665,7 @@
 			)
 		)
 		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 209.55 129.54 0)
+			(at 217.17 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -89873,7 +89676,7 @@
 			)
 		)
 		(property "LCSC" "C14663"
-			(at 209.55 129.54 0)
+			(at 217.17 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -97623,7 +97426,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Capacitors:0603,100nF")
-		(at 213.36 129.54 180)
+		(at 219.71 129.54 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -97633,7 +97436,7 @@
 		(dnp no)
 		(uuid "d448ca01-8d9b-48d1-aabb-b55d7efbc6e1")
 		(property "Reference" "C25"
-			(at 214.63 126.238 90)
+			(at 220.98 126.238 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -97643,7 +97446,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 214.376 132.334 90)
+			(at 220.726 132.334 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -97653,7 +97456,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:C_0603"
-			(at 215.138 129.54 90)
+			(at 221.488 129.54 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -97664,7 +97467,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
-			(at 213.36 129.54 0)
+			(at 219.71 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -97675,7 +97478,7 @@
 			)
 		)
 		(property "Description" "50V 100nF X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
-			(at 213.36 129.54 0)
+			(at 219.71 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -97686,7 +97489,7 @@
 			)
 		)
 		(property "LCSC" "C14663"
-			(at 213.36 129.54 0)
+			(at 219.71 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -103672,7 +103475,7 @@
 	)
 	(symbol
 		(lib_id "JLCPCB-Resistors:0402,10kΩ")
-		(at 548.64 236.22 180)
+		(at 504.19 231.14 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -103682,7 +103485,7 @@
 		(dnp no)
 		(uuid "ef81d69d-957e-4282-aab6-1a9cca765933")
 		(property "Reference" "R109"
-			(at 550.16 241.05 90)
+			(at 505.46 225.298 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -103692,7 +103495,7 @@
 			)
 		)
 		(property "Value" "10kΩ"
-			(at 548.64 236.22 90)
+			(at 504.19 231.14 90)
 			(show_name no)
 			(do_not_autoplace yes)
 			(effects
@@ -103702,7 +103505,7 @@
 			)
 		)
 		(property "Footprint" "JLCPCB:R_0402"
-			(at 550.42 236.22 90)
+			(at 505.97 231.14 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -103713,7 +103516,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0402WGF1002TCE_C25744.pdf"
-			(at 548.64 236.22 0)
+			(at 504.19 231.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -103724,7 +103527,7 @@
 			)
 		)
 		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 10kΩ 0402 Chip Resistor - Surface Mount ROHS"
-			(at 548.64 236.22 0)
+			(at 504.19 231.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -103735,7 +103538,7 @@
 			)
 		)
 		(property "LCSC" "C25744"
-			(at 548.64 236.22 0)
+			(at 504.19 231.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -104646,7 +104449,7 @@
 		)
 	)
 	(symbol
-		(lib_id "JLCPCB-Resistors:0603,20Ω")
+		(lib_id "JLCPCB-Resistors:0402,22Ω")
 		(at 304.8 53.34 90)
 		(unit 1)
 		(body_style 1)
@@ -104666,7 +104469,7 @@
 				)
 			)
 		)
-		(property "Value" "20Ω"
+		(property "Value" "22Ω"
 			(at 304.8 53.34 90)
 			(show_name no)
 			(do_not_autoplace yes)
@@ -104676,7 +104479,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:R_0603"
+		(property "Footprint" "JLCPCB:R_0402"
 			(at 304.8 55.118 90)
 			(hide yes)
 			(show_name no)
@@ -104687,7 +104490,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010130_UNI-ROYAL-Uniroyal-Elec-0603WAF200JT5E_C22950.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2205311900_UNI-ROYAL-Uniroyal-Elec-0402WGF220JTCE_C25092.pdf"
 			(at 304.8 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -104698,7 +104501,7 @@
 				)
 			)
 		)
-		(property "Description" "100mW Thick Film Resistors 75V ±100ppm/°C ±1% 20Ω 0603 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "62.5mW Thick Film Resistors 50V ±1% ±100ppm/°C 22Ω 0402 Chip Resistor - Surface Mount ROHS"
 			(at 304.8 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -104709,7 +104512,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C22950"
+		(property "LCSC" "C25092"
 			(at 304.8 53.34 0)
 			(hide yes)
 			(show_name no)
