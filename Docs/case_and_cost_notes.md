@@ -39,6 +39,26 @@ Suggestions for the 3D-printed case and for lowering the JLCPCB order cost. Boar
 - Access with the cover off: USB-C J1 (right edge), the microSD slot (left edge), the battery holder BT1 on the back.
 - **ASA** for the ordered cases (does not yellow or turn brittle with age; JLC3DP prints it in black or white). PETG for prototypes, not PLA or ABS. Tamper-resistant screws for hallway units.
 
+### Three versions of the case (28 Nov)
+
+`enclosure/case_clam.py` builds one of three versions, chosen with the environment variable `CASE_VARIANT`:
+
+- **room** (default, `out_clam/`): the classroom unit.
+- **office** (`out_clam_office/`): one more small round button, **QUIET**, over the spare switch PB10 above the lockdown lid. It needs one more printed part, `clam_quiet_button`. The switches between TALK and OFFICE are 9.5 mm apart, too close for a cap of their own.
+- **mobile** (`out_clam_mobile/`): the network cable plugs in from outside. A keystone RJ45 coupler (the snap-in kind for wall plates) clicks into the bottom wall, and a short flat patch lead (about 15 cm) goes from it to the board's jack inside. The back plate has no cable hole. The opening is the usual keystone size from published drawings and is NOT test fitted: print the bottom edge alone first and try the coupler.
+
+All three: the face is thinned to 1.2 mm from the inside in front of the people sensor (2.0 mm of ASA is close to the thickness that reflects 24 GHz most).
+
+### Where to print the cases (prices of 28 Nov 2026, 35 units)
+
+| Where | Per unit (two halves) | Notes |
+|---|---|---|
+| JLC3DP, ASA black | $55.97 + shipping, about $60 | live quote; duty may come on top |
+| US online service | about $8 to $70 | estimates from published rates, no quote yet; the cheapest found publishes $0.075/g for ASA |
+| Own enclosed printer | $3 to $5 of ASA filament | about 5 to 7 hours of printing per unit (estimate) |
+
+US import duty on plastic prints from China is about 40% (JLC3DP pre-charges it on DDP shipping); the $800 duty-free limit no longer applies. No local shop in southern Maine with published ASA prices was found. Get two real US quotes before ordering.
+
 ## JLCPCB cost
 
 1. **Extended parts cost a setup fee each** (about $3 per unique extended part per order); basic parts don't.

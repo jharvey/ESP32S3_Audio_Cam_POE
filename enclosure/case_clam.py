@@ -11,6 +11,13 @@ import json, os
 import cadquery as cq
 
 here = os.path.dirname(os.path.abspath(__file__))
+# Three versions of the case, chosen with the environment variable CASE_VARIANT:
+#   room    (default) a classroom unit on the wall                                        -> out_clam/
+#   office  the office unit: one more small button, QUIET, above the lockdown lid         -> out_clam_office/
+#   mobile  a unit that is carried about: the network cable plugs in from outside, into a
+#           coupler in the bottom wall, so it is charged and unplugged without opening it -> out_clam_mobile/
+VARIANT = os.environ.get("CASE_VARIANT", "room")
+assert VARIANT in ("room", "office", "mobile"), VARIANT
 B = json.load(open(os.path.join(here, "board_features.json")))
 W, H = B["w"], B["h"]
 
@@ -101,6 +108,21 @@ RADAR = True
 RADAR_W, RADAR_H, RADAR_PCB = 22.0, 16.0, 1.0   # across, tall, board thickness
 RADAR_AT = (82.0, 120.0)                   # its middle (KiCad x, y)
 RADAR_GAP = 6.0                            # room between the module's front and the inside of the face: about half a wavelength at 24 GHz (6.2 mm)
+RADAR_THIN = 1.2  # the face is thinned to this in front of the sensor, from the inside. 24 GHz passes a thin wall best:
+                  # 2.0 mm of ASA is close to a quarter wave in the plastic (about 1.8 mm), which reflects most
+# office version: a small round QUIET cap over PB10, the top switch of the left column (wired to U22 P10). It sits above
+# the lockdown lid's hinge, between the two hinge posts and left of the microphone port. The switches between TALK and
+# OFFICE are only 9.5 mm apart, too close for a cap of their own.
+QUIET_D, QUIET_FL, QUIET_PROUD = 5.5, 7.1, 0.8   # cap, its flange behind the face, how far it stands out
+# mobile version: a keystone RJ45 coupler (the snap-in kind for wall plates, both ends sockets) clicks into the bottom
+# wall from inside; a short flat patch lead (about 15 cm) goes from its inner end to J9. THE OPENING IS THE USUAL
+# KEYSTONE SIZE FROM PUBLISHED DRAWINGS, NOT TEST FITTED: print the cover's bottom edge alone first and try your coupler.
+KEY_X = 75.0                # middle of the coupler (KiCad x): right of the plug, clear of the board's post and the snaps
+KEY_W, KEY_H = 14.9, 16.4   # the opening in the outer skin of the wall
+KEY_H_IN = 19.6             # ... and behind that skin, where the coupler's two catches spread
+KEY_SKIN = 1.8              # thickness the catches grip
+KEY_ZC = -10.7              # middle of the coupler above the board's front face (it lies behind the board's plane)
+KEY_L = 35.0                # coupler length, for the fit check only (30 to 36 mm, by maker)
 MIC_D = 1.5      # microphone ports
 CAM_D = 12.0     # camera lens opening
 
@@ -173,8 +195,10 @@ for x, y, dx, dy in ((45, 20, 2, 0), (80, 20, 2, 0), (20, yb, 0, 2), (80, yb, 0,
 for y in (H / 2 - BOX_PITCH / 2, H / 2 + BOX_PITCH / 2):
     back = back.cut(slot(W / 2, y, 4.0, 0, 1.5))
 # the cable comes through a hole in the bay, right behind the plug, and goes straight into the wall
-if BAY >= 30:
+if BAY >= 30 and VARIANT != "mobile":       # (a mobile unit has no wall behind it: its back is closed)
     back = back.cut(slab(40, H + 6, 62, H + 32, Z_BACK - 1, Z_FLOOR + 1).edges("|Z").fillet(4.0))
+if VARIANT == "mobile":                     # gap in the lip where the coupler sits in the cover's bottom wall
+    back = back.cut(slab(KEY_X - KEY_W / 2 - 1.5, YB_IN - FIT - LIP_T - 0.1, KEY_X + KEY_W / 2 + 1.5, YB_IN, Z_FLOOR, Z_FLOOR + LIP_H + 1))
 
 # ---- camera shutter: a pocket in the back plate and two posts for the servo ----
 k_ = B["keepouts"]["camera heatsink"]; CAM_AT = ((k_[0] + k_[2]) / 2, (k_[1] + k_[3]) / 2)
@@ -218,6 +242,16 @@ for bx, by in btn: cover = cover.union(rrect(FW + 2.8, FH + 2.8, BTN_R + 2.2, Z_
 for bx, by in btn:
     cover = cover.cut(rrect(FW + 0.4, FH + 0.4, BTN_R + 1.0, Z_FACE - GUIDE_H - 1, Z_FACE - 0.01, bx, by + CAP_DY))
     cover = cover.cut(rrect(BTN_W + 0.4, BTN_H + 0.4, BTN_R + 0.2, Z_FACE - 1, Z_TOP + 1, bx, by + CAP_DY))
+# office version: the QUIET button, a small round cap over PB10
+QUIET_AT = (part("PB10")["x"], part("PB10")["y"]) if part("PB10") else (5.35, 6.35)   # from the board file (PB10 at 55.35, 56.35)
+if VARIANT == "office":
+    qbx, qby = QUIET_AT
+    cover = cover.union(cyl(qbx, qby, QUIET_FL + 3.0, Z_FACE - GUIDE_H, Z_FACE))
+    cover = cover.cut(cyl(qbx, qby, QUIET_FL + 0.4, Z_FACE - GUIDE_H - 1, Z_FACE - 0.01)).cut(cyl(qbx, qby, QUIET_D + 0.5, Z_FACE - 1, Z_TOP + 1))
+# mobile version: the opening for the keystone coupler in the bottom wall
+if VARIANT == "mobile":
+    cover = cover.cut(slab(KEY_X - KEY_W / 2, YB_IN - 0.1, KEY_X + KEY_W / 2, YB + 0.1, KEY_ZC - KEY_H / 2, KEY_ZC + KEY_H / 2))
+    cover = cover.cut(slab(KEY_X - KEY_W / 2, YB_IN - 0.1, KEY_X + KEY_W / 2, YB - KEY_SKIN, KEY_ZC - KEY_H_IN / 2, KEY_ZC + KEY_H_IN / 2))
 # red LOCKDOWN button. The clear lid lies flat ON the face (nothing between them), hanging from two hinge posts. The
 # red cap sits in a round hole under it, its top 0.8 mm below the face, so the lid covers it and a flat hand cannot
 # press it. Below the lid's lower edge the face has a shallow scoop, so a fingertip gets under the edge and flips it up.
@@ -283,6 +317,7 @@ def label(txt, x, y, halign):
 LABEL_Y = TALK_AT[1] + CAP_DY + BTN_H / 2 + 3.0   # every button's name is written under it, on one line
 def small(txt, x, y): return cq.Workplane("XY").text(txt, LABEL_H, LABEL_DEPTH + 0.5, halign="center", valign="center", kind="bold").translate((x, Y(y), Z_TOP - LABEL_DEPTH))
 engraved = [small("LOCKDOWN", rx + 1.5, LABEL_Y), label("TALK", TALK_AT[0], LABEL_Y, "center"), label("OFFICE", OFFICE_AT[0], LABEL_Y, "center")]
+if VARIANT == "office": engraved.append(small("QUIET", QUIET_AT[0] - 10.8, QUIET_AT[1] - 4.6))   # above and left of its cap, clear of the hinge post
 for e_ in engraved: cover = cover.cut(e_)
 # microphones: a tube from the face down to just above each mic (gasket goes between), with a small port
 for r in ("U16", "U17"):
@@ -407,6 +442,8 @@ if RADAR:
         bump = bump.intersect(prism_y([(xe, zq1 + 1.2), (xe + sg * RD_BUMP, zq1 + 1.2 - RD_BUMP), (xe + sg * RD_BUMP, zq0 - 0.4), (xe, zq0 - 0.4)], qy0 - 3.0, qy0))
         ch = ch.union(bump); bumps.append(bump)
     cover = cover.union(ch)
+    if RADAR_THIN < FACE:               # the thin patch in front of the sensor, cut from the inside (nothing shows outside)
+        cover = cover.cut(slab(qx0 + RD_LIP + 0.6, qy0 + 1.0, qx1 - RD_LIP - 0.6, qy1 - 1.0, Z_IN - 0.01, Z_IN + FACE - RADAR_THIN))
     radar = slab(qx0 + 0.2, qy0 + 0.2, qx1 - 0.2, qy1 - 0.2, zq1 - RADAR_PCB, zq1)
     radar_path = radar.union(radar.translate((0, RADAR_H - 1.0, 0)))                     # the room it needs on its way in
     radar = radar.union(slab(RADAR_AT[0] - 2.5, RADAR_AT[1] - 2.5, RADAR_AT[0] + 2.5, RADAR_AT[1] + 2.5, zq1, zq1 + 0.9))   # its chip
@@ -441,6 +478,15 @@ red_at = red.translate((rx, Y(ry), 0))
 caps = None
 for bx, by in btn:
     c = cap.translate((bx, Y(by), 0)); caps = c if caps is None else caps.union(c)
+quiet = quiet_at = keystone = None
+if VARIANT == "office":   # the QUIET cap (print one): small and round, with the same stem and legs
+    quiet = cyl(0, 0, QUIET_D, Z_FACE - 0.3, Z_TOP + QUIET_PROUD).faces(">Z").edges().fillet(0.5)
+    quiet = quiet.union(cyl(0, 0, QUIET_FL, BODY_Z0, Z_FACE - 0.3)).union(cyl(0, 0, 4.0, SW_TOP, BODY_Z0)).union(legs)
+    quiet_at = quiet.translate((QUIET_AT[0], Y(QUIET_AT[1]), 0))
+    caps = caps.union(quiet_at)
+if VARIANT == "mobile":   # the coupler with the inner lead's plug and boot above it, for the fit check and the pictures
+    keystone = slab(KEY_X - 7.3, YB - KEY_L, KEY_X + 7.3, YB, KEY_ZC - 8.0, KEY_ZC + 8.0)
+    keystone = keystone.union(slab(KEY_X - 6.0, YB - KEY_L - 26.0, KEY_X + 6.0, YB - KEY_L, KEY_ZC - 5.0, KEY_ZC + 5.0))
 
 # ---- a stand-in for the board, to check the fit ----------------------------------------------------------
 board = slab(0, 0, W, H, -PCB_T, 0)
@@ -451,15 +497,15 @@ board = board.union(slab(u14[0], u14[1], u14[2], u14[3], -PCB_T - POE_H, -PCB_T)
 if BATTERY:
     bt = box_of("BT1"); board = board.union(slab(bt[0], bt[1], bt[2], bt[3], -PCB_T - BT_H, -PCB_T))
 dd = box_of("DISP1"); board = board.union(slab(dd[0], dd[1], dd[2], dd[3], 0, DISP_TOP))
-for bx, by in btn + [RED_AT]: board = board.union(slab(bx - 2.5, by - 2.5, bx + 2.5, by + 2.5, 0, SW_TOP))
+for bx, by in btn + [RED_AT] + ([QUIET_AT] if VARIANT == "office" else []): board = board.union(slab(bx - 2.5, by - 2.5, bx + 2.5, by + 2.5, 0, SW_TOP))
 if BAY >= 30:  # the RJ45 plug with its boot
     board = board.union(slab(j9[0] + 4, j9[3] - 1, j9[2] - 4, j9[3] + 24, *((-PCB_T - 8.4, -PCB_T - 0.4) if J9_BACK else (0.5, 8.4))))
 
-out = os.path.join(here, "out_clam"); os.makedirs(out, exist_ok=True)
+out = os.path.join(here, "out_clam" if VARIANT == "room" else "out_clam_" + VARIANT); os.makedirs(out, exist_ok=True)
 for name, s in (("clam_back", back), ("clam_cover", cover), ("clam_button", cap), ("clam_buttons", caps), ("board_standin", board), ("use_card", use_card), ("paint", paint),
                 ("clam_red_button", red), ("red_at", red_at), ("lid", lid), ("lid_open", lid_open), ("lid_90", lid_90), ("lid_pre", lid_pre),
                 ("lid_clip_left", clip_parts[0]), ("lid_clip_right", clip_parts[1]), ("clips_at", clips), ("clips_pre", clips.translate((0, 0, 9.0))),
-                ("speaker_standin", speaker2), ("radar_standin", radar), ("shutter_paddle", paddle), ("pad_closed", pad_closed), ("pad_open", pad_open), ("pad_flag", pad_flag), ("servo_standin", servo)):
+                ("speaker_standin", speaker2), ("radar_standin", radar), ("clam_quiet_button", quiet), ("keystone_standin", keystone), ("shutter_paddle", paddle), ("pad_closed", pad_closed), ("pad_open", pad_open), ("pad_flag", pad_flag), ("servo_standin", servo)):
     if s is None: continue
     if name not in ("clam_buttons", "use_card", "paint", "red_at", "lid_open", "lid_90", "lid_pre", "clips_at", "clips_pre", "pad_closed", "pad_open", "pad_flag"): cq.exporters.export(s, os.path.join(out, name + ".step"))
     cq.exporters.export(s, os.path.join(out, name + ".stl"), tolerance=0.05)
@@ -469,7 +515,8 @@ for b_ in bumps: cover_nb = cover_nb.cut(b_)   # the cover without the bumps, to
 bb = back.union(cover).val().BoundingBox()
 print("outside: %.1f x %.1f x %.1f mm" % (bb.xlen, bb.ylen, bb.zlen))
 for name, a, b in (("cover/board", cover, board), ("cover/back", cover, back), ("back/board", back, board), ("caps/cover", caps, cover), ("caps/board", caps, board),
-                   ("red/cover", red_at, cover), ("red/board", red_at, board), ("lid/cover", lid, cover), ("lid open/cover", lid_open, cover), ("lid/red", lid, red_at), ("clips/cover", clips, cover), ("clips/lid", clips, lid), ("clips/lid open", clips, lid_open),
+                   ("red/cover", red_at, cover), ("red/board", red_at, board), ("quiet/lid", quiet_at, lid), ("quiet/lid open", quiet_at, lid_open), ("quiet/clips", quiet_at, clips),
+                   ("coupler/cover", keystone, cover), ("coupler/back", keystone, back), ("coupler/board", keystone, board), ("coupler/radar", keystone, radar), ("coupler/speaker", keystone, speaker2), ("lid/cover", lid, cover), ("lid open/cover", lid_open, cover), ("lid/red", lid, red_at), ("clips/cover", clips, cover), ("clips/lid", clips, lid), ("clips/lid open", clips, lid_open),
                    ("speaker/cover", speaker2, cover), ("speaker/back", speaker2, back), ("speaker/board", speaker2, board), ("speaker way in/cover", speaker_path, cover_nb), ("radar/cover", radar, cover), ("radar/back", radar, back), ("radar/board", radar, board), ("radar way in/cover", radar_path, cover_nb), ("servo/cover", servo, cover), ("servo/back", servo, back), ("servo/board", servo, board),
                    ("paddle closed/cover", pad_closed, cover), ("paddle open/cover", pad_open, cover), ("paddle flag/cover", pad_flag, cover),
                    ("paddle closed/board", pad_closed, board), ("paddle open/board", pad_open, board), ("paddle/servo", pad_closed, servo)):

@@ -170,7 +170,7 @@ def main():
           "**Material: ASA** (FDM), chosen because it does not yellow or turn brittle with age as ABS does. JLC3DP lists ASA in black and white, "
           "250 x 250 x 250 mm largest part, +/-0.3 mm; the clear lockdown lid is laser-cut acrylic, not printed. Prototypes: PETG.", "",
           "Total %.0f cm3 per unit (at most %.0f g in ASA, printed solid); the two case halves are 97%% of it. "
-          "**ASA price: not known, take it from the live JLC3DP quote.** For comparison, MJF nylon at $%.3f/g would be about $%.0f per unit." % (vol, vol * ASA_DENS, NYLON_G, vol * NYLON_DENS * NYLON_G), "",
+          "**ASA price (JLC3DP live quote, 28 Nov 2026, black, no finish, 35 of each):** front $34.01, back $21.96, so $55.97 per unit for the two halves ($1,958.95 for 35, no quantity discount), plus $127.92 UPS Express Saver DDP for 11.95 kg; about $60 per unit delivered. Whether the 40%% US duty that JLC3DP pre-charges on plastic prints is inside that figure was not shown on the quote page: check at checkout. A US print service or the school's own enclosed printer is likely cheaper (see Docs/case_and_cost_notes.md). For comparison, MJF nylon at $%.3f/g would be about $%.0f per unit." % (vol, vol * ASA_DENS, NYLON_G, vol * NYLON_DENS * NYLON_G), "",
           "## Check these turns in JLCPCB's placement preview", "", " ".join(risk), ""]
     open(os.path.join(OUT, "cost_report.md"), "w", encoding="utf-8").write("\n".join(L))
     shutil.rmtree(tmp, ignore_errors=True)
