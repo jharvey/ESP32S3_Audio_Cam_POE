@@ -21,13 +21,15 @@
 
 # PoE isolation. The Ethernet line side (jack pins, the line side of transformer T1, the bridges D5 and D6, D7, C107,
 # the PoE module's input pins and the 75 ohm termination parts) must stay 2.5 mm from all logic-side copper, on every
-# layer, so the barrier stands the 1500 V that PoE asks for. Line-side nets may be close to each other, and to the
-# jack's shield (/FGND1). The line-side nets are: W_TD_P/N, W_RD_P/N (pairs), W_TXCM, W_RXCM (centre taps), W_VP, W_VN
+# layer, so the barrier stands the 1500 V that PoE asks for. Line-side nets may be close to each other. The jack's
+# shield (/FGND1) counts as logic side: it joins COM through 100 V capacitors (C59, C60, C62, C63), so the line side
+# must stay 2.5 mm from it as well. The line-side nets are: W_TD_P/N, W_RD_P/N (pairs), W_TXCM, W_RXCM (centre taps), W_VP, W_VN
 # (spare pairs), W_BR_P, W_BR_N (bridge outputs), W_TERM, W_TERM2 (termination), W_TAP12, W_TAP13 (T1's spare taps).
 # W_TD_OUT_* and W_RD_OUT_* are the logic side of T1 and are not in the rule.
-# C68 (1 nF, 2 kV, 1206) is the one part allowed to bridge the barrier, so its own two pads are left out.
+# C65 (line to shield) and C68 (line to COM), both 1 nF, 2 kV, 1206, are the only parts allowed to bridge the barrier,
+# so each one's own two pads are left out.
 (rule "PoE isolation: 2.5 mm from the Ethernet line side to logic"
-	(condition "(A.NetName == '/W_?D_?' || A.NetName == '/W_?XCM' || A.NetName == '/W_V?' || A.NetName == '/W_BR_?' || A.NetName == '/W_TERM*' || A.NetName == '/W_TAP*') && !(B.NetName == '/W_?D_?' || B.NetName == '/W_?XCM' || B.NetName == '/W_V?' || B.NetName == '/W_BR_?' || B.NetName == '/W_TERM*' || B.NetName == '/W_TAP*') && B.NetName != '/FGND1' && B.NetName != '' && !(A.memberOfFootprint('C68') && B.memberOfFootprint('C68'))")
+	(condition "(A.NetName == '/W_?D_?' || A.NetName == '/W_?XCM' || A.NetName == '/W_V?' || A.NetName == '/W_BR_?' || A.NetName == '/W_TERM*' || A.NetName == '/W_TAP*') && !(B.NetName == '/W_?D_?' || B.NetName == '/W_?XCM' || B.NetName == '/W_V?' || B.NetName == '/W_BR_?' || B.NetName == '/W_TERM*' || B.NetName == '/W_TAP*') && B.NetName != '' && !(A.memberOfFootprint('C68') && B.memberOfFootprint('C68')) && !(A.memberOfFootprint('C65') && B.memberOfFootprint('C65'))")
 	(constraint clearance (min 2.5mm)))
 
 # J21 is the optional LD2410C radar module (do-not-fit). Its courtyard is the whole 22 x 16 mm module, which rides
