@@ -51,7 +51,9 @@ Made by `tools/jlc_pack.py`. Prices are list prices from a public parts index; s
 
 ## Printed parts
 
-Total 141 cm3 per unit (142 g in nylon). In MJF nylon at $0.275/g that is about **$39 per unit**; the two case halves are 97% of it.
+**Material: ASA** (FDM), chosen because it does not yellow or turn brittle with age as ABS does. JLC3DP lists ASA in black and white, 250 x 250 x 250 mm largest part, +/-0.3 mm; the clear lockdown lid is laser-cut acrylic, not printed. Prototypes: PETG.
+
+Total 141 cm3 per unit (at most 151 g in ASA, printed solid); the two case halves are 97% of it. **ASA price: not known, take it from the live JLC3DP quote.** For comparison, MJF nylon at $0.275/g would be about $39 per unit.
 
 ## Check these turns in JLCPCB's placement preview
 

@@ -20,6 +20,7 @@ SETUP = {"economic": 8.0, "standard": 25.0}
 STENCIL = 1.5
 NYLON_G = 0.275        # USD per gram, MJF PA12 (JLC3DP notice of August 2025)
 NYLON_DENS = 1.01      # g per cm3
+ASA_DENS = 1.07        # g per cm3, printed solid (FDM parts with infill weigh less)
 
 
 def kicad_cli():
@@ -131,9 +132,9 @@ def main():
             w.writerow([it, wh, l, q, "%.4f" % unit(info.get(l, {}).get("price"), q * qtys[0]), info.get(l, {}).get("mfr", "")])
     with open(os.path.join(OUT, "printed_parts.csv"), "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
-        w.writerow(["Part", "File", "Qty per unit", "Volume cm3 each"])
+        w.writerow(["Part", "File", "Qty per unit", "Volume cm3 each", "Material"])
         for p in OVER["printed"]:
-            w.writerow([p["part"], p["file"], p["qty"], p["cm3"]])
+            w.writerow([p["part"], p["file"], p["qty"], p["cm3"], "clear acrylic 2 mm" if p["file"].startswith("lid.") else "ASA"])
 
     if a.gerbers:
         gd = os.path.join(tmp, "gerber")
@@ -166,7 +167,10 @@ def main():
         if kind(info.get(l, {})) == "extended":
             L.append("| %s | %s | %d | %s |" % (l, info.get(l, {}).get("mfr", "?"), k, " ".join(sorted(f["ref"] for f in placed if f["lcsc"] == l))[:60]))
     L += ["", "## Printed parts", "",
-          "Total %.0f cm3 per unit (%.0f g in nylon). In MJF nylon at $%.3f/g that is about **$%.0f per unit**; the two case halves are 97%% of it." % (vol, vol * NYLON_DENS, NYLON_G, vol * NYLON_DENS * NYLON_G), "",
+          "**Material: ASA** (FDM), chosen because it does not yellow or turn brittle with age as ABS does. JLC3DP lists ASA in black and white, "
+          "250 x 250 x 250 mm largest part, +/-0.3 mm; the clear lockdown lid is laser-cut acrylic, not printed. Prototypes: PETG.", "",
+          "Total %.0f cm3 per unit (at most %.0f g in ASA, printed solid); the two case halves are 97%% of it. "
+          "**ASA price: not known, take it from the live JLC3DP quote.** For comparison, MJF nylon at $%.3f/g would be about $%.0f per unit." % (vol, vol * ASA_DENS, NYLON_G, vol * NYLON_DENS * NYLON_G), "",
           "## Check these turns in JLCPCB's placement preview", "", " ".join(risk), ""]
     open(os.path.join(OUT, "cost_report.md"), "w", encoding="utf-8").write("\n".join(L))
     shutil.rmtree(tmp, ignore_errors=True)

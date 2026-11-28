@@ -94,13 +94,13 @@ SPK2_W, SPK2_H, SPK2_T = 25.0, 35.0, 6.8   # across, tall, thick (6.2 to 6.8 mm,
 SPK2_AT = (-1.9, 124.0)                    # its middle (KiCad x, y)
 # People sensor (Hi-Link HLK-LD2410C, 22 x 16 mm, about 3 mm thick): it stands behind the lower face, right of the
 # Ethernet plug, looking into the room through the face and the use card (plastic and paper do not stop it; no metal
-# or foil there). It presses into a frame from behind and two snap fingers hold it; its wires go to J22 on the board.
-# THE MODULE'S SIZE IS FROM THE MAKER'S MANUAL, NOT MEASURED. The fingers are near two opposite corners, so the
-# soldered wires are free whichever edge the module's pins are on.
+# or foil there). It slides down into two grooves from above and two posts close over it; its wires go to J22 on the board.
+# THE MODULE'S SIZE IS FROM THE MAKER'S MANUAL, NOT MEASURED. The grooves take 0.8 mm of its two short edges, so the
+# soldered wires are free if its pins are on a long edge (NOT CHECKED on a real module).
 RADAR = True
 RADAR_W, RADAR_H, RADAR_PCB = 22.0, 16.0, 1.0   # across, tall, board thickness
 RADAR_AT = (82.0, 120.0)                   # its middle (KiCad x, y)
-RADAR_GAP = 4.0                            # room between the module's front and the inside of the face, for its parts
+RADAR_GAP = 6.0                            # room between the module's front and the inside of the face: about half a wavelength at 24 GHz (6.2 mm)
 MIC_D = 1.5      # microphone ports
 CAM_D = 12.0     # camera lens opening
 
@@ -348,50 +348,67 @@ holder = holder.cut(cyl(W / 2 + CARD_DX, cy1 + CARD_RAIL, 18.0, Z_LOW, zt + 1)) 
 cover = cover.union(holder)
 use_card = slab(cx0 + 0.3, cy1 - 0.3 - CARD_H, cx1 - 0.3, cy1 - 0.3, Z_LOW + 0.1, Z_LOW + 0.6)   # the card itself, for the pictures only
 
-# ---- box speaker in the lower left: a frame behind the face that it presses into (foam tape or a gasket between
-# speaker and face seals it), and a grille of slots in front of it ----
+# ---- pockets that a part slides into, flat along the inside of the face. Rails hold the part against the face; a
+# stop wall ends the pocket; at the open end two thin posts with a small bump spring apart as the part passes and
+# close behind it. Everything prints without support with the face on the bed: walls and posts stand straight up, and
+# the rails' lips and the bumps' undersides are cut at 45 degrees. To take a part out, bend one post aside with a
+# fingernail and slide it back. THE POSTS BEND 0.3 TO 0.4 mm: PRINT IN PETG (PLA may crack them).
+def prism_x(pts, x0, x1):  # a profile of (KiCad y, z) points, from x0 to x1
+    return cq.Workplane("YZ").workplane(offset=x0).polyline([(Y(y_), z_) for y_, z_ in pts]).close().extrude(x1 - x0)
+def prism_y(pts, y0, y1):  # a profile of (x, z) points, from KiCad y0 to y1
+    return cq.Workplane("XZ").workplane(offset=y0).polyline(pts).close().extrude(y1 - y0)
+def prism_z(pts, z0, z1):  # a profile of (x, KiCad y) points, from z0 to z1
+    return cq.Workplane("XY").workplane(offset=z0).polyline([(x_, Y(y_)) for x_, y_ in pts]).close().extrude(z1 - z0)
+
+# ---- box speaker in the lower left: it slides in from the right, along the face, until it meets the left wall (foam
+# tape or a gasket between speaker and face seals it: use a kind that slides), and a grille of slots in front of it ----
 sx0, sx1 = SPK2_AT[0] - SPK2_W / 2 - 0.2, SPK2_AT[0] + SPK2_W / 2 + 0.2
 sy0, sy1 = SPK2_AT[1] - SPK2_H / 2 - 0.2, SPK2_AT[1] + SPK2_H / 2 + 0.2
 Z_IN = Z_FACE + JACK_BUMP                       # inside of the raised lower face
-frame = slab(max(sx0 - 1.2, XL_IN), sy0 - 1.2, sx1 + 1.2, sy1 + 1.2, Z_IN - 5.0, Z_IN + 0.1).cut(slab(sx0, sy0, sx1, sy1, Z_IN - 6, Z_IN + 1))
-frame = frame.cut(slab(sx1 - 1, sy0 + 3, sx1 + 2, sy0 + 9, Z_IN - 6, Z_IN - 1.5))   # a gap for the speaker's wires
-cover = cover.union(frame)
+SPK_LIP, SPK_RAIL, SPK_POST_T, SPK_BUMP = 1.5, 1.6, 0.9, 0.6   # lip over the speaker's back, rail and post thickness, bump height
+zs = Z_IN - SPK2_T - 0.3                        # the speaker's back, with a little play
+pocket = slab(max(sx0 - 1.5, XL_IN), sy0 - SPK_RAIL, sx0, sy1 + SPK_RAIL, Z_IN - 5.0, Z_IN + 0.1)      # the stop, on the left
+bumps = []
+x_rail = sx1 - 4.6                              # the rails end here; the posts stand beyond
+for ye, sg in ((sy0, 1), (sy1, -1)):            # sg +1: the speaker lies below this rail (larger KiCad y)
+    pocket = pocket.union(slab(max(sx0 - 1.5, XL_IN), min(ye, ye - sg * SPK_RAIL), x_rail, max(ye, ye - sg * SPK_RAIL), zs - SPK_LIP, Z_IN + 0.1))
+    pocket = pocket.union(prism_x([(ye, zs), (ye + sg * SPK_LIP, zs - SPK_LIP), (ye, zs - SPK_LIP)], sx0, x_rail))
+    # the post, and its bump just past the speaker's right edge: a long slope on the way in, a steep face on the way out
+    pocket = pocket.union(slab(sx1 - 4.0, min(ye, ye - sg * SPK_POST_T), sx1 + 3.0, max(ye, ye - sg * SPK_POST_T), zs - 0.6, Z_IN + 0.1))
+    bump = prism_z([(sx1 + 0.1, ye), (sx1 + 0.3, ye + sg * SPK_BUMP), (sx1 + 2.8, ye)], zs - 0.6, zs + 1.6)
+    bump = bump.intersect(prism_x([(ye, zs + 1.6), (ye + sg * SPK_BUMP, zs + 1.6 - SPK_BUMP), (ye + sg * SPK_BUMP, zs - 0.6), (ye, zs - 0.6)], sx1, sx1 + 3.0))
+    pocket = pocket.union(bump); bumps.append(bump)
+cover = cover.union(pocket)
 g2 = None
 for i in range(-3, 4):
     s_ = slab(SPK2_AT[0] - 9.5, SPK2_AT[1] + i * 4.0 - 1.0, SPK2_AT[0] + 9.5, SPK2_AT[1] + i * 4.0 + 1.0, Z_IN - 1, Z_LOW + 1).edges("|Z").fillet(0.9)
     g2 = s_ if g2 is None else g2.union(s_)
 cover = cover.cut(g2)
 speaker2 = slab(sx0 + 0.2, sy0 + 0.2, sx1 - 0.2, sy1 - 0.2, Z_IN - SPK2_T, Z_IN)
+speaker_path = speaker2.union(speaker2.translate((SPK2_W - 1.0, 0, 0)))    # the room it needs on its way in
 
-# ---- snap fingers: a springy strip standing on the inside of the face beside a part, with a hook that clicks over
-# the part's back. Press the part in from behind; bend the finger away with a fingernail to take it out. ----
-def finger(xc, w, y_edge, sgn, z_back, t, hook):
-    # sgn +1: the part lies below the finger (larger KiCad y); -1: above it. hook = how far it reaches over the part
-    yi = y_edge - sgn * 0.15                                  # the finger's inner face, 0.15 mm clear of the part
-    f_ = slab(xc - w / 2, min(yi, yi - sgn * t), xc + w / 2, max(yi, yi - sgn * t), z_back - 1.6, Z_IN + 0.1)
-    pts = [(Y(yi), z_back - 1.6), (Y(yi + sgn * 0.1), z_back - 1.6), (Y(yi + sgn * (hook + 0.15)), z_back - 0.2), (Y(yi), z_back - 0.2)]
-    return f_.union(cq.Workplane("YZ").workplane(offset=xc - w / 2).polyline(pts).close().extrude(w))
-# the speaker: one finger above it and one below it
-for ye, sg in ((sy0, 1), (sy1, -1)):
-    cover = cover.cut(slab(SPK2_AT[0] - 4.5, ye - 1.5 if sg > 0 else ye, SPK2_AT[0] + 4.5, ye if sg > 0 else ye + 1.5, Z_IN - 6, Z_IN))   # a gap in the frame, so the finger is free
-    cover = cover.union(finger(SPK2_AT[0], 7.0, ye, sg, Z_IN - SPK2_T - 0.2, 1.0, 0.7))
-# ---- people sensor: a frame behind the lower face that the module presses into from behind. It rests on ledges
-# RADAR_GAP off the face and two fingers click over its back, at opposite corners (clear of its row of pins). ----
-radar = None
+# ---- people sensor: it slides down from above, its two short edges in grooves, until it stands on the bottom wall.
+# The grooves hold its board RADAR_GAP off the face; the two posts at the top close over its upper corners. ----
+radar = radar_path = None
 if RADAR:
     qx0, qx1 = RADAR_AT[0] - RADAR_W / 2 - 0.2, RADAR_AT[0] + RADAR_W / 2 + 0.2
     qy0, qy1 = RADAR_AT[1] - RADAR_H / 2 - 0.2, RADAR_AT[1] + RADAR_H / 2 + 0.2
     zq1 = Z_IN - RADAR_GAP                  # the module's front
     zq0 = zq1 - RADAR_PCB - 0.3             # its back, with a little play
-    ch = slab(qx0 - 1.5, qy0 - 1.5, qx1 + 1.5, qy1 + 1.5, zq0, Z_IN + 0.1).cut(slab(qx0, qy0, qx1, qy1, zq0 - 1, Z_IN + 1))   # frame
-    for xa, xb in ((qx0, qx0 + 0.8), (qx1 - 0.8, qx1)):                                 # ledges under its two short edges
-        ch = ch.union(slab(xa, qy0, xb, qy1, zq1, Z_IN + 0.1))
-    fx = RADAR_W / 2 - 3.5
-    for xc_, ye, sg in ((RADAR_AT[0] + fx, qy0, 1), (RADAR_AT[0] - fx, qy1, -1)):
-        ch = ch.cut(slab(xc_ - 3.0, ye - 1.6 if sg > 0 else ye, xc_ + 3.0, ye if sg > 0 else ye + 1.6, zq0 - 1, Z_IN))
-        ch = ch.union(finger(xc_, 4.5, ye, sg, zq0, 0.8, 0.5))
+    RD_LIP, RD_POST_T, RD_BUMP = 0.8, 0.8, 0.55   # the groove's depth, post thickness, bump height (0.2 of it is the play)
+    y_rail = qy0 + 3.5                      # the grooves start here; the posts stand above
+    ch = slab(qx0 - 1.5, qy1, qx1 + 1.5, qy1 + 1.5, zq0 - RD_LIP, Z_IN + 0.1)             # the stop, at the bottom
+    for xe, sg in ((qx0, 1), (qx1, -1)):    # sg +1: the module lies right of this rail
+        ch = ch.union(slab(min(xe, xe - sg * 1.5), y_rail, max(xe, xe - sg * 1.5), qy1 + 1.5, zq0 - RD_LIP, Z_IN + 0.1))
+        ch = ch.union(slab(min(xe, xe + sg * RD_LIP), y_rail, max(xe, xe + sg * RD_LIP), qy1, zq1, Z_IN + 0.1))      # the ledge its front rests on
+        ch = ch.union(prism_y([(xe, zq0), (xe + sg * RD_LIP, zq0 - RD_LIP), (xe, zq0 - RD_LIP)], y_rail, qy1))       # the lip over its back
+        ch = ch.union(slab(min(xe, xe - sg * RD_POST_T), qy0 - 3.0, max(xe, xe - sg * RD_POST_T), qy0 + 3.0, zq0 - RD_LIP, Z_IN + 0.1))   # the post
+        bump = prism_z([(xe, qy0 - 0.1), (xe + sg * RD_BUMP, qy0 - 0.3), (xe, qy0 - 2.8)], zq0 - 0.4, zq1 + 1.2)
+        bump = bump.intersect(prism_y([(xe, zq1 + 1.2), (xe + sg * RD_BUMP, zq1 + 1.2 - RD_BUMP), (xe + sg * RD_BUMP, zq0 - 0.4), (xe, zq0 - 0.4)], qy0 - 3.0, qy0))
+        ch = ch.union(bump); bumps.append(bump)
     cover = cover.union(ch)
     radar = slab(qx0 + 0.2, qy0 + 0.2, qx1 - 0.2, qy1 - 0.2, zq1 - RADAR_PCB, zq1)
+    radar_path = radar.union(radar.translate((0, RADAR_H - 1.0, 0)))                     # the room it needs on its way in
     radar = radar.union(slab(RADAR_AT[0] - 2.5, RADAR_AT[1] - 2.5, RADAR_AT[0] + 2.5, RADAR_AT[1] + 2.5, zq1, zq1 + 0.9))   # its chip
 # ---- looks: an engraved ring round the speaker and round the status light, a bevel on the camera opening ------
 def ring(x, y, d_out, width):
@@ -447,15 +464,18 @@ for name, s in (("clam_back", back), ("clam_cover", cover), ("clam_button", cap)
     if name not in ("clam_buttons", "use_card", "paint", "red_at", "lid_open", "lid_90", "lid_pre", "clips_at", "clips_pre", "pad_closed", "pad_open", "pad_flag"): cq.exporters.export(s, os.path.join(out, name + ".step"))
     cq.exporters.export(s, os.path.join(out, name + ".stl"), tolerance=0.05)
 cq.exporters.export(lid2d.faces("<Z"), os.path.join(out, "lid.dxf"))   # the lid's outline, for the laser cutter (mm)
+cover_nb = cover
+for b_ in bumps: cover_nb = cover_nb.cut(b_)   # the cover without the bumps, to check that nothing else is in a part's way
 bb = back.union(cover).val().BoundingBox()
 print("outside: %.1f x %.1f x %.1f mm" % (bb.xlen, bb.ylen, bb.zlen))
 for name, a, b in (("cover/board", cover, board), ("cover/back", cover, back), ("back/board", back, board), ("caps/cover", caps, cover), ("caps/board", caps, board),
                    ("red/cover", red_at, cover), ("red/board", red_at, board), ("lid/cover", lid, cover), ("lid open/cover", lid_open, cover), ("lid/red", lid, red_at), ("clips/cover", clips, cover), ("clips/lid", clips, lid), ("clips/lid open", clips, lid_open),
-                   ("speaker/cover", speaker2, cover), ("speaker/back", speaker2, back), ("speaker/board", speaker2, board), ("servo/cover", servo, cover), ("servo/back", servo, back), ("servo/board", servo, board),
+                   ("speaker/cover", speaker2, cover), ("speaker/back", speaker2, back), ("speaker/board", speaker2, board), ("speaker way in/cover", speaker_path, cover_nb), ("radar/cover", radar, cover), ("radar/back", radar, back), ("radar/board", radar, board), ("radar way in/cover", radar_path, cover_nb), ("servo/cover", servo, cover), ("servo/back", servo, back), ("servo/board", servo, board),
                    ("paddle closed/cover", pad_closed, cover), ("paddle open/cover", pad_open, cover), ("paddle flag/cover", pad_flag, cover),
                    ("paddle closed/board", pad_closed, board), ("paddle open/board", pad_open, board), ("paddle/servo", pad_closed, servo)):
+    if a is None or b is None: continue
     v = a.intersect(b).val().Volume() if a.intersect(b).vals() else 0.0
-    print("overlap %-12s %.2f mm3" % (name, v))
+    print("overlap %-22s %.2f mm3" % (name, v))
 
 # ---- preview pictures ------------------------------------------------------------------------------------
 import vtk

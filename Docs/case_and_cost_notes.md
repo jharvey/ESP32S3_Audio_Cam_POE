@@ -37,7 +37,7 @@ Suggestions for the 3D-printed case and for lowering the JLCPCB order cost. Boar
 - Fits a single-gang box or surface mount; the RJ45 (J9) enters from the bottom edge.
 - **PoE module U14 and the bridge diodes get warm:** vents low and high on that side, away from the mic chambers.
 - Access with the cover off: USB-C J1 (right edge), the microSD slot (left edge), the battery holder BT1 on the back.
-- PETG or ASA rather than PLA (warm rooms, sun near windows). Tamper-resistant screws for hallway units.
+- **ASA** for the ordered cases (does not yellow or turn brittle with age; JLC3DP prints it in black or white). PETG for prototypes, not PLA or ABS. Tamper-resistant screws for hallway units.
 
 ## JLCPCB cost
 
