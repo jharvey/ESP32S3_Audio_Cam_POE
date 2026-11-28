@@ -75855,7 +75855,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -80791,6 +80791,128 @@
 				)
 			)
 		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 529.59 180.34 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d1a7b149-f80f-4f5e-9c26-7215e37a1b78")
+		(property "Reference" "J20"
+			(at 528.828 177.546 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "53261-0271"
+			(at 532.13 182.8799 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_Molex:Molex_PicoBlade_53261-0271_1x02-1MP_P1.25mm_Horizontal"
+			(at 529.59 180.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 529.59 180.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 529.59 180.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a838aaf1-0d9b-454a-85d2-f627ff32d494")
+		)
+		(pin "2"
+			(uuid "8210ad81-a66d-4a28-a351-6d8ea25edc1b")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "J20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "SPK.OutPS"
+		(at 524.51 180.34 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b96e8b88-d5d4-4a89-8cc4-0301c649d19d")
+	)
+	(label "SPK.OutPS"
+		(at 504.19 201.93 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "00cde0fb-e4b5-4918-a5db-6cb36ba44a68")
+	)
+	(label "SPK.OutN"
+		(at 524.51 182.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3b394558-da85-4a3f-83ff-ffaf5698f1b8")
+	)
+	(label "SPK.OutN"
+		(at 504.19 201.93 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e781586a-50d3-4da9-bec8-b9353abbc0b4")
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
