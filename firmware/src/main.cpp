@@ -19,7 +19,9 @@
 #include <atomic>
 #include <functional>
 
+#include <driver/spi_master.h>
 #include <esp_camera.h>
+#include <esp_heap_caps.h>
 #include <esp_netif.h>
 #include <esp_ota_ops.h>
 #include <esp_system.h>
@@ -549,6 +551,152 @@ private:
 };
 
 Board gBoard;
+
+// ---- LoRa radio: RFM95 (SX1276, U19). DRAFT: compiles, never run on a board ---------------------------
+// The radio shares the SPI bus with the W5500. ETH.begin() in setup() sets that bus up on SPI3 with ESP-IDF's
+// SPI master driver and adds the W5500 as one device on it. The radio is added here as a second device on the
+// same bus with its own chip select (GPIO11). The driver gives the bus to one device at a time, so the Ethernet
+// task and the audio task cannot talk on it at once. To check on hardware: that Ethernet keeps working with the
+// radio on, and how long a radio access waits while the W5500 reads a full frame (expected: under 1 ms).
+// No interrupt: DIO0 is on U22 P14 (board::kLoraIrqBit), which the panel task reads only every 30 ms, so this
+// driver reads the radio's own interrupt flags over SPI instead (the core asks once per 20 ms audio frame).
+// Each access is a few bytes at 4 MHz. Only begin() is slow (an 11 ms reset): it runs at start or on "lora on".
+// Only the 500 kHz bandwidth is set up here (narrower ones need other register fixes from the SX1276 errata).
+class Sx1276 : public ic::LoraRadio {
+public:
+    bool begin(const ic::LoraConfig& c) override {
+        ok_ = tx_ = false;
+        if (!dev_) {
+            spi_device_interface_config_t d = {};
+            d.mode = 0;
+            d.clock_speed_hz = 4000000;  // the SX1276 takes up to 10 MHz
+            d.spics_io_num = pins::LORA_CS;
+            d.queue_size = 1;
+            d.address_bits = 8;  // the register number, bit 7 = write
+            if (!txb_) txb_ = static_cast<uint8_t*>(heap_caps_malloc(kBuf, MALLOC_CAP_DMA));
+            if (!rxb_) rxb_ = static_cast<uint8_t*>(heap_caps_malloc(kBuf, MALLOC_CAP_DMA));
+            if (!txb_ || !rxb_ || spi_bus_add_device(SPI3_HOST, &d, &dev_) != ESP_OK) {
+                dev_ = nullptr;
+                Serial.println("LoRa: the SPI bus is not set up (did Ethernet start?)");
+                return false;
+            }
+        }
+        gExp.set(pins::exp::LORA_RST, false);
+        delay(1);
+        gExp.set(pins::exp::LORA_RST, true);
+        delay(10);
+        if (rd(0x42) != 0x12) {  // RegVersion
+            Serial.println("no LoRa radio fitted (the SX1276 version register does not read 0x12)");
+            return false;
+        }
+        wr(0x01, 0x80);  // RegOpMode: sleep, LoRa mode (the mode bit only changes in sleep), high-band registers
+        const uint64_t frf = (uint64_t(c.freqHz) << 19) / 32000000u;  // 32 MHz crystal
+        wr(0x06, uint8_t(frf >> 16));
+        wr(0x07, uint8_t(frf >> 8));
+        wr(0x08, uint8_t(frf));
+        const int p = c.powerDbm < 2 ? 2 : c.powerDbm > 17 ? 17 : c.powerDbm;
+        wr(0x09, uint8_t(0x80 | (p - 2)));  // RegPaConfig: PA_BOOST pin (the only output the RFM95 has), 2-17 dBm
+        wr(0x4D, 0x84);                     // RegPaDac: the +20 dBm mode stays off
+        wr(0x0B, 0x2B);                     // RegOcp: current limit 100 mA
+        wr(0x0C, 0x23);                     // RegLna: highest gain, boost on
+        wr(0x0E, 0x00);                     // FIFO: transmit and receive both start at 0
+        wr(0x0F, 0x00);
+        const int cr = c.cr < 5 ? 5 : c.cr > 8 ? 8 : c.cr;
+        const int sf = c.sf < 7 ? 7 : c.sf > 12 ? 12 : c.sf;
+        wr(0x1D, uint8_t(0x90 | (cr - 4) << 1));  // RegModemConfig1: 500 kHz, coding rate, explicit header
+        wr(0x1E, uint8_t(sf << 4 | 0x04));        // RegModemConfig2: spreading factor, CRC on
+        wr(0x26, 0x04);                           // RegModemConfig3: automatic gain (symbols are under 16 ms at 500 kHz)
+        wr(0x20, 0x00);                           // preamble: 8 symbols
+        wr(0x21, 0x08);
+        wr(0x39, 0x12);                           // sync word: private network (not LoRaWAN)
+        wr(0x31, uint8_t((rd(0x31) & 0xF8) | 0x03));  // RegDetectOptimize for SF7-12
+        wr(0x37, 0x0A);                           // RegDetectionThreshold for SF7-12
+        wr(0x36, 0x02);                           // SX1276 errata 2.1: better sensitivity at 500 kHz, 862-1020 MHz
+        wr(0x3A, 0x64);
+        ok_ = true;
+        listen();
+        return true;
+    }
+    // Starts a transmission and returns (a 60-byte message at SF9 is about 90 ms on the air). busy() ends it.
+    bool send(const uint8_t* data, size_t n) override {
+        if (!ok_ || tx_ || !n || n > kBuf) return false;
+        wr(0x01, 0x81);  // standby
+        wr(0x0D, 0x00);  // FIFO pointer
+        xfer(0x80, data, nullptr, n);
+        wr(0x22, uint8_t(n));  // payload length
+        wr(0x40, 0x40);        // DIO0 = transmit done
+        wr(0x12, 0xFF);        // clear the interrupt flags
+        wr(0x01, 0x83);        // transmit
+        tx_ = true;
+        txStart_ = millis();
+        return true;
+    }
+    bool busy() override {
+        if (!tx_) return false;
+        const bool done = (rd(0x12) & 0x08) != 0;  // TxDone
+        if (done || millis() - txStart_ > 3000) {   // 3 s: longer than any message at SF12
+            if (!done) Serial.println("LoRa: a transmission did not end; receiving again");
+            tx_ = false;
+            listen();
+        }
+        return tx_;
+    }
+    int receive(uint8_t* buf, size_t max, int* rssi, float* snr) override {
+        if (!ok_ || (tx_ && busy())) return 0;  // nothing is heard while sending
+        const uint8_t irq = rd(0x12);
+        if (!(irq & 0x40)) return 0;  // RxDone
+        size_t n = rd(0x13);          // bytes in the packet
+        if (n > max || n > kBuf) n = 0;
+        if (n) {
+            wr(0x0D, rd(0x10));  // FIFO pointer = start of this packet
+            xfer(0x00, nullptr, buf, n);
+        }
+        const int s = int8_t(rd(0x19));  // signal to noise, in quarter dB
+        *snr = s / 4.0f;
+        *rssi = -157 + int(rd(0x1A)) + (s < 0 ? s / 4 : 0);  // high-band formula
+        wr(0x12, 0xFF);
+        return (irq & 0x20) ? 0 : int(n);  // CRC error: dropped
+    }
+    void sleep() override {
+        if (ok_) wr(0x01, 0x80);
+        ok_ = tx_ = false;
+    }
+
+private:
+    static constexpr size_t kBuf = 64;
+    void listen() {
+        wr(0x40, 0x00);  // DIO0 = receive done
+        wr(0x12, 0xFF);
+        wr(0x01, 0x85);  // receive, until told otherwise
+    }
+    // One SPI access: the register number, then n bytes out (tx) or in (rx).
+    void xfer(uint8_t addr, const uint8_t* tx, uint8_t* rx, size_t n) {
+        spi_transaction_t t = {};
+        t.addr = addr;
+        t.length = 8 * n;
+        if (tx) memcpy(txb_, tx, n);
+        else memset(txb_, 0, n);
+        t.tx_buffer = txb_;
+        t.rx_buffer = rx ? rxb_ : nullptr;
+        if (spi_device_polling_transmit(dev_, &t) != ESP_OK) {
+            if (rx) memset(rx, 0, n);
+            return;
+        }
+        if (rx) memcpy(rx, rxb_, n);
+    }
+    void wr(uint8_t reg, uint8_t v) { xfer(uint8_t(reg | 0x80), &v, nullptr, 1); }
+    uint8_t rd(uint8_t reg) {
+        uint8_t v = 0;
+        xfer(reg, nullptr, &v, 1);
+        return v;
+    }
+    spi_device_handle_t dev_ = nullptr;
+    uint8_t *txb_ = nullptr, *rxb_ = nullptr;
+    bool ok_ = false, tx_ = false;
+    uint32_t txStart_ = 0;
+};
+Sx1276 gLora;
+
 // Echo canceller: ESP-SR's esp_aec, with the portable NLMS canceller as the fallback if it can't
 // start. Next step (roadmap 1.6a): the full ESP-SR audio front end with both mics.
 ic::NlmsAec gNlms(1024, 0);
@@ -766,6 +914,10 @@ void setup() {
     gSpk.setPins(pins::SPK_BCLK, pins::SPK_WS, pins::SPK_DOUT);
     gSpk.begin(I2S_MODE_STD, ic::kSampleRate, I2S_DATA_BIT_WIDTH_16BIT, I2S_SLOT_MODE_MONO);
 
+    // The LoRa radio (U19) is on the same SPI bus: its chip select is held high, so it stays off the bus
+    // whether the radio is used or not.
+    pinMode(pins::LORA_CS, OUTPUT);
+    digitalWrite(pins::LORA_CS, HIGH);
     // W5500 in polled mode: no INT pin on a GPIO (irq = -1), reset through the expander.
     gExp.set(pins::exp::ETH_RST, false);
     delay(2);
@@ -819,7 +971,7 @@ void setup() {
     gEspAec = new board::EspSrAec();
     ic::EchoCanceller& aec = gEspAec->ok() ? static_cast<ic::EchoCanceller&>(*gEspAec) : gNlms;
     Serial.printf("echo canceller: %s\n", gEspAec->ok() ? "ESP-SR" : "NLMS (ESP-SR did not start)");
-    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard}, aec, io);
+    static ic::Intercom intercom(ic::Hal{&gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gBoard, &gLora}, aec, io);
     gIntercom = &intercom;
     intercom.begin();
     static ic::WebUi web(intercom);

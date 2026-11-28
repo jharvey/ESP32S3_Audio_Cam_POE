@@ -46,7 +46,7 @@ public:
 // Front panel: buttons (U22, a TCA9555 input each) and the 3-digit display (TM1637). SETUP is the hidden
 // button under the front cover: holding it 3 s starts room-number setup.
 // Front: TALK and OFFICE (calls / answers the office, R2). Under the cover: MODE, UP, DOWN, SETUP.
-enum Button : uint8_t { kBtnTalk = 0, kBtnMode = 1, kBtnUp = 2, kBtnDown = 3, kBtnSetup = 4, kBtnOffice = 5, kBtnRed = 6, kButtonCount = 7 };
+enum Button : uint8_t { kBtnTalk = 0, kBtnMode = 1, kBtnUp = 2, kBtnDown = 3, kBtnSetup = 4, kBtnOffice = 5, kBtnRed = 6, kBtnQuiet = 7, kButtonCount = 8 };
 
 class IPanel {
 public:
@@ -140,6 +140,26 @@ public:
     virtual const int16_t* clip(const char* name, size_t* samples) = 0;
 };
 
+// LoRa radio (RFM95 / SX1276), optional: a slow long-range side channel for alarms (LoraLink.h).
+struct LoraConfig {
+    uint32_t freqHz = 915000000;
+    uint32_t bwHz = 500000;  // 500 kHz wide (see the FCC note in the README)
+    uint8_t sf = 9;          // spreading factor, 7-12
+    uint8_t cr = 5;          // coding rate 4/5
+    int8_t powerDbm = 17;    // 2-17
+};
+// The core calls this from the audio thread, so nothing here may take more than a millisecond or two:
+// send() starts the transmission and returns, busy() tells when it is over.
+class LoraRadio {
+public:
+    virtual ~LoraRadio() = default;
+    virtual bool begin(const LoraConfig& cfg) = 0;                             // false = no radio fitted
+    virtual bool send(const uint8_t* data, size_t len) = 0;                    // false = could not start
+    virtual int receive(uint8_t* buf, size_t max, int* rssi, float* snr) = 0;  // length of a received packet, 0 = none
+    virtual bool busy() = 0;                                                   // still sending
+    virtual void sleep() {}                                                    // "lora off"
+};
+
 struct Hal {
     INet* net;
     ILinks* links;
@@ -151,6 +171,7 @@ struct Hal {
     ILamps* lamps = nullptr;  // optional
     IFirmware* fw = nullptr;  // optional: no network updates without it
     IClips* clips = nullptr;  // optional: recorded emergency messages
+    LoraRadio* lora = nullptr;  // optional: LoRa side channel (draft)
 };
 
 }  // namespace ic

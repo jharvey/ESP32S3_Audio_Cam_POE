@@ -16,6 +16,7 @@
 #include "EchoCanceller.h"
 #include "Hal.h"
 #include "JitterBuffer.h"
+#include "LoraLink.h"
 #include "Mixer.h"
 #include "Radar.h"
 #include "RoomSetup.h"
@@ -255,6 +256,9 @@ public:
     };
     const std::vector<Zone>& zones() const { return zones_; }
     bool inZone(uint16_t zone, uint16_t room) const;
+    // LoRa side channel (draft, LoraLink.h): alarms by radio for a person outside. Off until "lora on".
+    const LoraLink& lora() const { return lora_; }
+    bool emergencyByRadio() const { return emergByRadio_; }  // the emergency shown here was heard by radio (no network link)
     // Talkers heard since start, for tests: (unit key, frames played).
     const std::vector<std::pair<uint32_t, uint32_t>>& heard() const { return heard_; }
 
@@ -298,6 +302,12 @@ private:
     void loadFeatures();
     void setSilent(bool on, const char* why);
     void everySecond();
+    LoraLink lora_;
+    bool emergByRadio_ = false;
+    uint32_t loraLinkAt_ = 0;  // the network link came back at this frame while a radio alarm was shown
+    LoraLink::State loraState() const;
+    std::vector<lora::PeopleEntry> loraPeople() const;
+    void loraTick();
     uint8_t features_ = 0;
     uint16_t office_ = 0, office2_ = 0, actingWas_ = 0;
     std::vector<uint16_t> offices_;
@@ -352,6 +362,7 @@ private:
     PowerSource lastSource_ = PowerSource::PoE;
     int conWatchMin_ = 0;        // consolewatch: minutes without the office page before the chirp, 0 = off
     uint32_t conSeen_ = 0, conChirpNext_ = 0, conQuietUntil_ = 0, hushSince_ = 0;
+    bool quietDown_ = false;
     void quietConsole(unsigned minutes, const char* how);
     bool conMissing_ = false;
     int selfMin_ = -1;           // nightly self-check: minute of the day, -1 = off

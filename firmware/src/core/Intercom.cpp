@@ -103,6 +103,10 @@ const char* kHelp =
     "commands:\n"
     "  radar                what this unit's people sensor sees\n"
     "  people               people seen in every room with a sensor\n"
+    "  lora [on|off]        LoRa side channel (draft): alarms by radio for a person outside; lora = its state\n"
+    "  lora freq|sf|power N radio settings: MHz 903-927 (915), spreading factor 7-12 (9), power 2-17 dBm (17)\n"
+    "  lora test|people     send one test message / the people list now\n"
+    "  lora query|heard     a unit outside: ask the office for the people list / show the last one heard\n"
     "  help                 this list\n"
     "  get [key]            show tuning parameters\n"
     "  set key value ...    change parameters now (not saved)\n"
@@ -720,6 +724,7 @@ void Intercom::begin() {
     formatIp(unit_, ip);
     logf("unit %s, ip %s, group %u, id %08lx, aec %s, %s tuning: %s", u, ip, unsigned(group()), (unsigned long)opt_.unitUid,
          aec_.name(), saved.empty() ? "default" : "saved", params_.toString().c_str());
+    lora_.begin(hal_.store, hal_.lora, opt_.unitUid ^ unit_.room, [this] { return loraPeople(); });
 }
 
 void Intercom::applyParams() {
@@ -1297,6 +1302,7 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
     }
     if (c == "sync" || c == "syncrev") return syncCommand(a, line);
     if (c == "siteget") return siteGet(a);
+    if (c == "lora") return lora_.command(a, loraState());  // LoRa side channel (IntercomLora.cpp)
     if (c == "radar") {  // what the people sensor sees right now
         const RadarState r = radar();
         const std::string pin = !radarOutAt_ ? std::string() : std::string("; OUT pin ") + (radarOutHigh_ ? "high" : "low") + (radarOutLow_ ? "" : " (never low yet: not taken as a sensor)");
@@ -2482,6 +2488,7 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
             }
         }
     }
+    loraTick();  // LoRa side channel: does nothing unless "lora on"
     if (emerg_ != Emergency::None && frame_ - emergSince_ > kEmergencyMaxFrames) setEmergency(Emergency::None, "nobody cleared it in 4 hours");
     // "emergency ... all": the first ten go out 2 s apart, so one lost packet can't leave a room out, then
     // one every 30 s for units that start later. It stops when this unit's state changes; "clear" after 5 min.
@@ -2620,6 +2627,20 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
     } else if (!ofcRaw) {
         hushSince_ = 0;
     }
+    // QUIET (the office version of the case): one press on an office unit quiets what it is sounding for. Ringing for a
+    // room stops here (the call still waits, and a call for help rings again after 5 minutes, not 30 seconds); the beep
+    // for the office page stops for an hour. It never touches an emergency, and a new call rings as always.
+    const bool quietBtn = (held & (1u << kBtnQuiet)) && !setup_.active();
+    if (quietBtn && !quietDown_ && isOffice(unit_.room)) {
+        if (ofcAlertUntil_) {
+            event(EventKind::Info, unit_.room, "office unit %u: ringing for room %u quieted with QUIET (the call still waits)", unsigned(unit_.room), unsigned(ofcAlertRoom_));
+            ofcAlertUntil_ = 0;
+            helpAlertNext_ = frame_ + 300000u / kFrameMs;
+        } else if (conMissing_ && !consoleQuiet()) {
+            quietConsole(kConQuietMin, "QUIET button");
+        }
+    }
+    quietDown_ = quietBtn;
     if (hushing) {
     } else if (office && canAnswer()) {
         if (!muted()) talk = true;

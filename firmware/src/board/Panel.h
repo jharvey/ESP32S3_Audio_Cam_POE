@@ -2,9 +2,12 @@
 //
 // Board 75d75fb: every button switches its own U22 input to ground (TCA9555 internal pull-ups), so
 // several buttons can be pressed at once (the TM1637 key scan they used before saw only one).
-//   P00 PB1 TALK   P01 PB2 MODE   P02 PB4 UP   P03 PB5 DOWN   P04 PB6 hidden SETUP (under the cover)
-//   P05 PB7 OFFICE   P12 PB12 the red LOCKDOWN button (under the clear lid)
-//   P06 PB8  P07 PB9  P10 PB10  P11 PB11: more TALK buttons, any one talks
+//   P00 PB1 TALK   P01 PB2 MODE   P02 PB4 UP   P04 PB6 hidden SETUP (under the cover)
+//   P03 PB5 OFFICE: the case's OFFICE cap sits over PB5, the right end of the row under the display
+//   P05 PB7 DOWN: bottom of the left column, under the cover (the two were the other way round before the clam shell case)
+//   P12 PB12 the red LOCKDOWN button (under the clear lid)
+//   P10 PB10 QUIET: top of the left column; only the office version of the case has a cap over it
+//   P06 PB8  P07 PB9  P11 PB11: more TALK buttons, any one talks
 //   P13 RADAR.OUT: the LD2410C's OUT pin on J21 through the 0R link (high = someone there)
 //   P14 LORA_IRQ: the RFM95's DIO0 (moved here from GPIO10, which now reads the people sensor's serial line)
 //   P15-P17 free.  (PB3 is the AXP2101 power button, not on U22.)
@@ -17,7 +20,7 @@ namespace board {
 
 constexpr uint8_t kButtonExpanderAddr = 0x21;
 constexpr int kRadarOutBit = 11;  // P13
-constexpr int kLoraIrqBit = 12;   // P14 (LoRa is not used by the firmware yet)
+constexpr int kLoraIrqBit = 12;   // P14 (not read yet: the LoRa driver in main.cpp polls the radio over SPI instead)
 
 struct PinMap {
     int bit;  // 0..15 = P00..P17
@@ -27,12 +30,12 @@ constexpr PinMap kPanelPins[] = {
     {0, ic::kBtnTalk},   // PB1
     {1, ic::kBtnMode},   // PB2
     {2, ic::kBtnUp},     // PB4
-    {3, ic::kBtnDown},   // PB5
+    {3, ic::kBtnOffice}, // PB5 (front: OFFICE)
     {4, ic::kBtnSetup},  // PB6 (hidden)
-    {5, ic::kBtnOffice}, // PB7 (front: OFFICE)
+    {5, ic::kBtnDown},   // PB7
     {6, ic::kBtnTalk},   // PB8
     {7, ic::kBtnTalk},   // PB9
-    {8, ic::kBtnTalk},   // PB10
+    {8, ic::kBtnQuiet},  // PB10 (front of the office case: QUIET)
     {9, ic::kBtnTalk},   // PB11
     {10, ic::kBtnRed},   // PB12 (front: red LOCKDOWN button)
 };

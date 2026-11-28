@@ -10,6 +10,7 @@ the same code. The plan is in [Docs/firmware_plan.md](../Docs/firmware_plan.md).
 | Path | What |
 |---|---|
 | `src/core/` | The intercom itself, plain C++17 with no Arduino calls: packets, jitter buffer, multi-talker mixer, NLMS echo canceller, link failover, room-number setup. Built unchanged into both the firmware and the simulator. |
+| `src/core/LoraLink.*`, `IntercomLora.cpp` | LoRa side channel (draft): radio messages, signing, who sends what when. |
 | `src/board/Pins.h` | ESP32-S3 pin map from the schematic netlist. |
 | `src/board/Tm1637.*`, `Panel.h` | Front-panel display and buttons (TM1637 through the TCA9555), plain C++ so the PC tests check it. |
 | `src/main.cpp` | ESP32-S3 drivers behind the core's interfaces. **Compiles; not tested on hardware yet.** |
@@ -372,6 +373,112 @@ LoRa DIO0 moved to U22 P14 to free GPIO10.
 The count is a help, not a head count: a sensor sees only part of a room, and rooms without a sensor are not counted.
 
 Not tested on a real sensor yet. The PC console change is not compiled (the build machine has no Qt).
+
+## LoRa side channel (draft)
+
+**Draft. It compiles and passes its PC checks. Nothing here has run on a radio or a board.**
+
+The board has an RFM95 radio (SX1276, 915 MHz, U19). This is a slow, long-range link beside the network.
+It is for the day the network or the building's power is in trouble: a person outside (parking lot,
+playground, a few hundred metres) with a battery-powered mobile unit is told about alarms.
+Later any 915 MHz LoRa receiver with the same settings and the key could listen too.
+It is far too slow for voice.
+
+It is off until `lora on`. A unit without the radio says "no LoRa radio fitted" and works as before.
+
+**Who sends.** Only the acting office unit sends the alarms and the heartbeat, so 35 units do not talk over
+each other. If the office unit is offline, its stand-in sends (feature `failover`). A stand-in that has no
+network link itself only listens: it cannot know whether it is the acting office. The main office unit sends
+even when it is cut off from the network. With no office set (`office ROOM`), nobody sends.
+
+**When.** A new emergency or call for help goes out at once, then every 10 s for the first minute, then once
+a minute while it lasts. A people list follows each of the first three emergency messages. "All clear" goes out
+3 times. A heartbeat goes out every 5 minutes. Each send waits a small random time first (up to 0.3 s).
+Airtime budget: 10 s in hand, and 1 % of the time comes back. Alarms may overdraw it by another 10 s;
+everything else waits.
+
+**Messages.** All are small (60 bytes at most; about 90 ms on the air with the default settings).
+Each has a type, the sender's room, a counter and, when a network key is set, a signature.
+
+| Message | Bytes (signed) | What it says |
+|---|---|---|
+| EMERGENCY | 21 | lockdown, evacuate, shelter or all clear; the room whose red button started it (0 = the office); seconds since it started |
+| HELP | 17 to 57 | up to 8 rooms waiting for help: room, help needed or silent call, seconds waiting. An empty list = no call waiting any more |
+| PEOPLE | 17 to 57 | rooms with a people sensor, 20 per message: room, count (empty, 1, 2, 3 or more, or "someone" from a sensor that cannot count), and roughly how long the room has been empty |
+| STATUS | 24 | the heartbeat: units online and offline, any emergency, calls for help waiting, the sender's power source and battery, minutes running |
+| ACK | 24 | from a receiver: "I got it", with the signal strength it heard. The office log then shows that someone outside got the alarm |
+| QUERY | 17 | from a receiver: "send the people list now" (answered at most every 30 s) |
+| TEST | 20 | `lora test`: for range tests |
+
+The byte layout is at the top of `src/core/LoraLink.h`.
+
+**Signing.** Messages are signed with the network key (`netkey`): 8 bytes of the same HMAC-SHA256 that signs
+network commands. The counter goes up with every message; a receiver refuses a signed message whose counter
+is not higher than the last one from that sender, so a recorded message cannot be sent again. Without a key,
+messages go out not signed and receivers show them as "NOT SIGNED". The messages are not secret: anyone with
+a LoRa receiver can read them.
+
+**What a radio message can do.** It can be shown, logged and acknowledged. It cannot change a setting.
+On a unit with a network link it cannot start, change or clear an emergency, even when it is signed.
+One case goes further: a unit with **no** network link for 10 s or more (the mobile unit outside) that hears
+an EMERGENCY message signed with the key, from a room in its office list, shows and sounds that emergency as
+if it had come over the network. The radio's "all clear" ends only an emergency that came by radio. When the
+unit is back on the network for 90 s, the office's state over the network decides. A call for help heard
+outside goes into the log with one chime.
+
+**Settings and commands.**
+
+| Command | What |
+|---|---|
+| `lora` | State: fitted or not, settings, this unit's role, counters, the last message sent and received with its signal |
+| `lora on` / `lora off` | Off by default |
+| `lora freq MHZ` | 903 to 927, default 915.0 |
+| `lora sf N` | Spreading factor 7 to 12, default 9. Higher = more range, longer on the air (SF12: about 0.6 s for 60 bytes) |
+| `lora power N` | 2 to 17 dBm, default 17 |
+| `lora test` | Send one test message. Every unit that hears it logs it with the signal strength |
+| `lora people` | Send the people list now |
+| `lora query` / `lora heard` | On a unit outside: ask the office for the people list / show the last one heard |
+| `lora forget` | Forget the other units' counters (after a unit's flash was erased, its low counter is refused until this) |
+
+Fixed: 500 kHz bandwidth, coding rate 4/5, CRC on, 8-symbol preamble, sync word 0x12, PA_BOOST output.
+Every unit must use the same frequency and spreading factor; set them on all units (`send all lora sf 9`).
+They are not part of the school-wide settings or the backup yet.
+
+**Hardware.** The radio shares the SPI bus with the W5500 Ethernet chip (MOSI GPIO6, MISO GPIO5, SCLK GPIO4);
+its chip select is GPIO11, its reset is U21 P05. Its DIO0 line is on U22 P14, not on a GPIO, so there is no
+interrupt: the driver reads the radio's interrupt flags over SPI once per 20 ms audio frame. Ethernet sets the
+bus up with ESP-IDF's SPI driver; the radio is added to the same bus as a second device, and that driver lets
+one device use the bus at a time. The radio's chip select is held high from power-up, whether LoRa is on or not.
+
+**Not tested** (everything on hardware):
+
+- The SX1276 driver in `main.cpp`: register values are from the datasheet and errata, never run on a chip.
+- Sharing the SPI bus with Ethernet while both are busy. It is built the way ESP-IDF means it to be used, but it has not been seen working.
+- Range, antenna, and whether transmitting disturbs the microphones or the audio.
+- Timing: a radio access from the audio loop should take well under 1 ms. `lora on` resets the radio, which takes about 11 ms once.
+- Battery drain on a mobile unit (the radio listens all the time while LoRa is on).
+- Two units sending at once (the PC checks have no collisions), and a unit that has to keep its counters for years.
+
+**FCC note (our understanding, to be checked before use).** In the US the 902-928 MHz band is used under
+47 CFR 15.247. A system with a bandwidth of at least 500 kHz counts as "digital modulation" and may stay on one
+frequency; narrower LoRa settings (125 or 250 kHz) would need frequency hopping. That is why the bandwidth is
+fixed at 500 kHz. The limits as we read them: 1 W conducted power (we use 50 mW, +17 dBm) and 8 dBm in any
+3 kHz. There is no duty-cycle limit, the airtime budget is good manners. The unit as a whole still needs FCC
+authorization as an intentional radiator, with its antenna; a bare RFM95 module does not bring that with it
+as far as we know.
+
+**What is worth sending, and why.**
+
+- *The emergency and its kind.* The one thing a person outside must know: do not walk back in, or where to go.
+- *Who started it and when.* Tells responders where to look first, and whether the alarm is new.
+- *Calls for help, with the room.* A silent call is the most urgent thing the system knows.
+- *The people list.* Which rooms have people in them, for the people who search the building. It is rough: a sensor sees part of a room and counts 3 at most.
+- *The heartbeat.* Shows the link is alive. "Sender on battery" means the building lost power; many units offline means the network is in trouble.
+- *The answer from outside.* The office learns that the alarm reached someone.
+
+Not sent: voice, pictures, positions of people, plain calls to the office, bells, settings. They are too big, or
+not worth airtime in an emergency. Ideas for later: which rooms are offline, a repeater on the top floor, and a
+linkless classroom whose own red button was pressed sending its alarm itself.
 
 ## USB updates and first-time setup
 

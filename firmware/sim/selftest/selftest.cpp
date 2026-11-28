@@ -251,6 +251,7 @@ static int64_t g_clock0 = 0;  // test wall clock: UTC at frame 0 (0 = no clock)
 static bool g_camera = false;       // new FakeUnits have a camera
 static std::string g_bootNote;      // ... and this start reason
 static bool g_bootTest = false;  // power-up light test in new FakeUnits (off: it would light lamps in other tests)
+static LoraRadio* g_radio = nullptr;  // new FakeUnits get this LoRa radio (none: as a board without one)
 
 struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFirmware, IClips {
     // R3.1: fall-back state of the running firmware, a recorded message, a speaker->microphone path
@@ -311,7 +312,9 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFi
         opt.restart = [this](bool d) { restarts++; restartDownload = d; };
         opt.hasCamera = g_camera;
         opt.bootNote = g_bootNote;
-        ic.reset(new Intercom(Hal{this, this, this, this, this, this, this, this, this, this}, aec, opt));
+        Hal hal{this, this, this, this, this, this, this, this, this, this};
+        hal.lora = g_radio;
+        ic.reset(new Intercom(hal, aec, opt));
         ic->begin();
     }
     void send(const uint8_t* d, size_t n) override {
@@ -950,9 +953,9 @@ static void testPanelDriver() {
 
     // Buttons are on U22 (TCA9555 0x21), one input each, pressed = 0.
     struct Case { int bit; Button b; const char* name; };
-    const Case cases[] = {{0, kBtnTalk, "PB1 TALK"}, {1, kBtnMode, "PB2 MODE"}, {2, kBtnUp, "PB4 UP"}, {3, kBtnDown, "PB5 DOWN"},
-                          {4, kBtnSetup, "PB6 SETUP"}, {5, kBtnOffice, "PB7 OFFICE"}, {6, kBtnTalk, "PB8 TALK"}, {7, kBtnTalk, "PB9 TALK"},
-                          {8, kBtnTalk, "PB10 TALK"}, {9, kBtnTalk, "PB11 TALK"}, {10, kBtnRed, "PB12 RED"}};
+    const Case cases[] = {{0, kBtnTalk, "PB1 TALK"}, {1, kBtnMode, "PB2 MODE"}, {2, kBtnUp, "PB4 UP"}, {3, kBtnOffice, "PB5 OFFICE"},
+                          {4, kBtnSetup, "PB6 SETUP"}, {5, kBtnDown, "PB7 DOWN"}, {6, kBtnTalk, "PB8 TALK"}, {7, kBtnTalk, "PB9 TALK"},
+                          {8, kBtnQuiet, "PB10 QUIET"}, {9, kBtnTalk, "PB11 TALK"}, {10, kBtnRed, "PB12 RED"}};
     for (const Case& c : cases)
         CHECK(board::buttonsFromInputs(uint16_t(~(1u << c.bit))) == (1u << c.b), "U22 P%d%d low -> %s", c.bit / 8, c.bit % 8, c.name);
     CHECK(board::buttonsFromInputs(0xFFFF) == 0, "nothing pressed -> no buttons");
@@ -1924,6 +1927,36 @@ static void testR31() {
         run(3200, true);
         run(3200);
         CHECK(o.ic->consoleMissing() && !o.ic->consoleQuiet() && so > 0, "the page was open in between: the quiet is over, so the next time is heard (%d)", so);
+        // the office version of the case has a QUIET button: one press does it
+        r.held = uint8_t(1u << kBtnQuiet);
+        run(5);
+        r.held = 0;
+        CHECK(!o.ic->consoleQuiet(), "QUIET on a classroom unit does nothing");
+        o.held = uint8_t(1u << kBtnQuiet);
+        run(3);
+        o.held = 0;
+        CHECK(o.ic->consoleQuiet() && has(o, "QUIET button"), "QUIET on the office unit: the beep for the office page is quiet for an hour");
+        run(200);
+        r.held = uint8_t(1u << kBtnOffice);
+        run(5);
+        r.held = 0;
+        run(60);
+        CHECK(o.ic->officeAlert() == 101, "a room calls: the office unit rings");
+        o.held = uint8_t(1u << kBtnQuiet);
+        run(3);
+        o.held = 0;
+        run(150);
+        CHECK(o.ic->officeAlert() == 0 && so == 0 && has(o, "quieted with QUIET") && r.ic->command("callofc").find("calling") != std::string::npos,
+              "QUIET stops the ringing at the office unit; the room's call still waits (%d, %u, %d) [%s]", so, unsigned(o.ic->officeAlert()), int(has(o, "quieted with QUIET")), r.ic->command("callofc").c_str());
+        o.ic->command("emergency lockdown");
+        run(100);
+        o.held = uint8_t(1u << kBtnQuiet);
+        run(3);
+        o.held = 0;
+        run(50);
+        CHECK(o.ic->emergency() == Intercom::Emergency::Lockdown && so > 0, "QUIET does nothing to an emergency (%d)", so);
+        o.ic->command("emergency clear");
+        run(600);
         o.ic->command("emergency lockdown");
         run(600);
         o.ic->command("emergency clear");
@@ -2563,7 +2596,382 @@ static void testR32() {
     g_clock0 = clock0;
 }
 
+// ---------------------------------------------------------------------------------
+// LoRa side channel (draft). The "air" joins the fake radios: what one sends, every other one receives.
+struct FakeRadio;
+struct Air {
+    std::vector<FakeRadio*> radios;
+};
+struct FakeRadio : LoraRadio {
+    Air* air;
+    bool fitted = true;
+    int begun = 0, slept = 0;
+    int busyFrames = 0, overlap = 0;  // a message is on the air for 5 frames (100 ms); overlap: one started during another
+    LoraConfig cfg;
+    std::deque<std::vector<uint8_t>> rx;
+    std::vector<std::vector<uint8_t>> sentLog;
+    explicit FakeRadio(Air* a) : air(a) { air->radios.push_back(this); }
+    bool begin(const LoraConfig& c) override {
+        begun++;
+        cfg = c;
+        return fitted;
+    }
+    bool send(const uint8_t* d, size_t n) override {
+        if (busyFrames > 0) overlap++;
+        busyFrames = 5;
+        sentLog.push_back(std::vector<uint8_t>(d, d + n));
+        for (FakeRadio* r : air->radios)
+            if (r != this) r->rx.push_back(sentLog.back());
+        return true;
+    }
+    int receive(uint8_t* buf, size_t max, int* rssi, float* snr) override {
+        if (rx.empty() || busyFrames > 0) return 0;
+        const std::vector<uint8_t> p = rx.front();
+        rx.pop_front();
+        if (p.size() > max) return 0;
+        memcpy(buf, p.data(), p.size());
+        *rssi = -92;
+        *snr = 7.5f;
+        return int(p.size());
+    }
+    bool busy() override { return busyFrames > 0 && busyFrames-- > 1; }  // asked once a frame while it sends
+    void sleep() override { slept++; }
+    // How many messages of this type it sent (kind >= 0: EMERGENCY messages of that kind only).
+    int count(const std::string& key, lora::Type t, int kind = -1) const {
+        int n = 0;
+        for (const auto& p : sentLog) {
+            lora::Msg m;
+            if (lora::decode(p.data(), p.size(), key, &m) == lora::Check::Malformed) continue;
+            if (m.type == t && (kind < 0 || m.kind == kind)) n++;
+        }
+        return n;
+    }
+};
+struct TinyStore : IStore {
+    std::map<std::string, std::string> kv;
+    UnitId loadUnit() override { return UnitId(); }
+    void saveUnit(const UnitId&) override {}
+    std::string loadText(const char* k) override { return kv[k]; }
+    void saveText(const char* k, const std::string& v) override { kv[k] = v; }
+};
+
+static void testLora() {
+    printf("LoRa side channel (draft): messages, signing, who sends, alarms outside\n");
+    const std::string key = "school-network-key-1";
+    using lora::Check;
+    using lora::Msg;
+    using lora::Type;
+    {   // ---- messages ----
+        uint8_t buf[lora::kMaxBytes];
+        Msg e, d;
+        e.type = Type::Emergency;
+        e.from = 104;
+        e.counter = 77;
+        e.kind = 2;
+        e.origin = 214;
+        e.ageS = 35;
+        size_t n = lora::encode(e, key, buf);
+        Check c = lora::decode(buf, n, key, &d);
+        CHECK(c == Check::Ok && n == 21 && d.type == Type::Emergency && d.from == 104 && d.counter == 77 && d.kind == 2 && d.origin == 214 && d.ageS == 35 && d.isSigned,
+              "EMERGENCY round trip, %zu bytes: %s", n, lora::describe(d).c_str());
+        buf[9] ^= 1;  // the room that started it
+        CHECK(lora::decode(buf, n, key, &d) == Check::BadSignature, "one bit changed on the way: the signature no longer fits");
+        buf[9] ^= 1;
+        CHECK(lora::decode(buf, n, "another-network-key-9", &d) == Check::BadSignature && lora::decode(buf, n, "", &d) == Check::NoKey,
+              "signed with another key: refused; a unit without a key cannot check it");
+        CHECK(lora::decode(buf, n - 1, key, &d) != Check::Ok && lora::decode(buf, 5, key, &d) == Check::Malformed, "a cut-off message is refused");
+        const size_t nu = lora::encode(e, "", buf);
+        CHECK(nu == 13 && lora::decode(buf, nu, key, &d) == Check::NotSigned && !d.isSigned && d.kind == 2, "without a key the message goes out not signed and is marked so (%zu bytes)", nu);
+        buf[1] |= lora::kFlagSigned;
+        CHECK(lora::decode(buf, nu, key, &d) != Check::Ok, "the signed mark alone, without a signature, is not enough");
+
+        Msg h;
+        h.type = Type::Help;
+        h.from = 104;
+        for (int i = 0; i < 8; i++) {
+            lora::HelpEntry he;
+            he.room = uint16_t(201 + i);
+            he.urgent = i % 2 == 0;
+            he.silent = i % 2 == 1;
+            he.waitS = uint16_t(10 * i);
+            h.help.push_back(he);
+        }
+        n = lora::encode(h, key, buf);
+        c = lora::decode(buf, n, key, &d);
+        CHECK(c == Check::Ok && n <= lora::kMaxBytes && d.help.size() == 8 && d.help[3].room == 204 && d.help[3].silent && !d.help[3].urgent && d.help[4].urgent && d.help[7].waitS == 70,
+              "HELP round trip with 8 rooms, %zu bytes", n);
+
+        Msg p;
+        p.type = Type::People;
+        p.from = 104;
+        p.part = 1;
+        p.parts = 2;
+        for (int i = 0; i < 20; i++) {
+            lora::PeopleEntry pe;
+            pe.room = uint16_t(100 + 47 * i);
+            pe.code = uint8_t(i % 5);
+            pe.quiet = uint8_t(i % 8);
+            p.people.push_back(pe);
+        }
+        n = lora::encode(p, key, buf);
+        c = lora::decode(buf, n, key, &d);
+        bool same = c == Check::Ok && d.part == 1 && d.parts == 2 && d.people.size() == 20;
+        for (size_t i = 0; same && i < 20; i++) same = d.people[i].room == p.people[i].room && d.people[i].code == p.people[i].code && d.people[i].quiet == p.people[i].quiet;
+        CHECK(same && n <= lora::kMaxBytes, "PEOPLE round trip with 20 rooms (up to room %u), %zu bytes", unsigned(p.people[19].room), n);
+
+        Msg s;
+        s.type = Type::Status;
+        s.from = 104;
+        s.online = 33;
+        s.offline = 2;
+        s.kind = 1;
+        s.power = 1;
+        s.battery = 64;
+        s.helpWaiting = 1;
+        s.uptimeMin = 4321;
+        n = lora::encode(s, key, buf);
+        c = lora::decode(buf, n, key, &d);
+        CHECK(c == Check::Ok && d.online == 33 && d.offline == 2 && d.kind == 1 && d.power == 1 && d.battery == 64 && d.helpWaiting == 1 && d.uptimeMin == 4321,
+              "STATUS round trip, %zu bytes: %s", n, lora::describe(d).c_str());
+        Msg a;
+        a.type = Type::Ack;
+        a.from = 110;
+        a.ackRoom = 104;
+        a.ackCounter = 0x12345678;
+        a.ackType = 1;
+        a.ackRssi = -97;
+        n = lora::encode(a, key, buf);
+        c = lora::decode(buf, n, key, &d);
+        Msg q, q2;
+        q.type = Type::Query;
+        q.what = 1;
+        uint8_t qb[lora::kMaxBytes];
+        const size_t qn = lora::encode(q, key, qb);
+        CHECK(c == Check::Ok && d.ackRoom == 104 && d.ackCounter == 0x12345678 && d.ackType == 1 && d.ackRssi == -97 && lora::decode(qb, qn, key, &q2) == Check::Ok && q2.type == Type::Query &&
+                  q2.what == 1,
+              "ACK and QUERY round trips, %zu and %zu bytes", n, qn);
+        LoraConfig cfg;
+        const uint32_t t9 = lora::airtimeMs(60, cfg);
+        cfg.sf = 12;
+        const uint32_t t12 = lora::airtimeMs(60, cfg);
+        CHECK(cfg.freqHz == 915000000 && cfg.bwHz == 500000 && cfg.powerDbm == 17 && t9 > 70 && t9 < 110 && t12 > 500 && t12 < 800,
+              "defaults 915 MHz, 500 kHz, SF9, +17 dBm; 60 bytes are %u ms on the air (SF12: %u ms)", unsigned(t9), unsigned(t12));
+    }
+    {   // ---- the counter survives a restart ----
+        Air air;
+        FakeRadio radio(&air);
+        TinyStore store;
+        LoraLink::State st;
+        st.room = 104;
+        std::vector<LoraLink::Note> notes;
+        uint32_t last = 0;
+        for (int boot = 0; boot < 2; boot++) {
+            LoraLink link;
+            link.begin(&store, &radio, 7, nullptr);
+            if (!boot) link.command({"lora", "on"}, st);
+            for (int k = 0; k < 3; k++) {
+                link.command({"lora", "test"}, st);
+                for (int f = 0; f < 60; f++) {
+                    st.frame++;
+                    link.tick(st, &notes);
+                }
+            }
+            Msg m;
+            lora::decode(radio.sentLog.back().data(), radio.sentLog.back().size(), "", &m);
+            if (boot) CHECK(link.on() && radio.sentLog.size() == 6 && m.type == Type::Test && m.counter > last + 3, "after a restart the message counter goes on above every number used before (%u, then %u)", unsigned(last), unsigned(m.counter));
+            last = m.counter;
+        }
+    }
+
+    auto has = [](FakeUnit& u, const char* text) {
+        for (const auto& e : u.ic->events())
+            if (e.text.find(text) != std::string::npos) return true;
+        return false;
+    };
+    const int64_t clock0 = g_clock0;
+    g_clock0 = 1795451390;  // signed network commands need the clock
+    Bus bus;
+    Air air;
+    FakeRadio rOfc(&air), rStand(&air), rRoom(&air), rMob(&air);
+    g_radio = &rOfc;
+    FakeUnit ofc(&bus, {104, 0}, 120);
+    g_radio = &rStand;
+    FakeUnit stand(&bus, {105, 0}, 130);
+    g_radio = &rRoom;
+    FakeUnit room(&bus, {101, 0}, 140);
+    g_radio = &rMob;
+    FakeUnit mob(&bus, {110, 0}, 150);  // a mobile office unit: it will be carried outside
+    g_radio = nullptr;
+    FakeUnit plain(&bus, {102, 0}, 160);  // a board without a radio
+    std::vector<FakeUnit*> all = {&ofc, &stand, &room, &mob, &plain};
+    auto run = [&](int frames) {
+        for (int k = 0; k < frames; k++) {
+            room.ic->radarOut(k > 2);  // room 101: a presence sensor, someone there
+            stand.ic->radarOut(false); // room 105: a presence sensor, nobody
+            for (auto* u : all) u->step();
+        }
+    };
+    for (auto* u : all) {
+        u->ic->command("netkey " + key);
+        u->ic->command("office 104 105 110");
+        u->ic->command("feature failover on");
+    }
+    run(600);
+    CHECK(!ofc.ic->lora().on() && rOfc.begun == 0 && rOfc.sentLog.empty() && ofc.ic->command("lora").find("off") != std::string::npos, "LoRa is off until it is switched on: the radio is not touched [%s]",
+          ofc.ic->command("lora").substr(0, 60).c_str());
+    CHECK(plain.ic->command("lora on").find("no LoRa radio") != std::string::npos && plain.ic->command("lora test").find("no LoRa radio") != std::string::npos, "a board without a radio says so: %s",
+          plain.ic->command("lora on").c_str());
+    rRoom.fitted = false;
+    CHECK(room.ic->command("lora on").find("NO LoRa radio fitted") != std::string::npos && !room.ic->lora().fitted(), "a radio that does not answer: %s", room.ic->command("lora on").c_str());
+    rRoom.fitted = true;
+    for (auto* u : {&ofc, &stand, &room, &mob}) u->ic->command("lora on");
+    CHECK(ofc.ic->lora().fitted() && room.ic->lora().fitted() && ofc.kv["lora"] == "on" && rOfc.cfg.freqHz == 915000000 && rOfc.cfg.sf == 9 && rOfc.cfg.powerDbm == 17, "lora on: saved, and the radio is started with the defaults");
+    CHECK(ofc.ic->command("lora freq 950").find("903 to 927") != std::string::npos && ofc.ic->command("lora sf 13").find("7 to 12") != std::string::npos &&
+              ofc.ic->command("lora power 20").find("2 to 17") != std::string::npos && ofc.ic->command("lora nonsense").find("usage") != std::string::npos && rOfc.cfg.sf == 9,
+          "settings outside their limits are refused");
+    ofc.ic->command("lora freq 920.5");
+    ofc.ic->command("lora sf 10");
+    ofc.ic->command("lora power 10");
+    CHECK(rOfc.cfg.freqHz == 920500000 && rOfc.cfg.sf == 10 && rOfc.cfg.powerDbm == 10 && ofc.kv["lora_freq"] == "920500", "lora freq 920.5, sf 10, power 10: saved and given to the radio");
+    ofc.ic->command("lora freq 915");
+    ofc.ic->command("lora sf 9");
+    ofc.ic->command("lora power 17");
+
+    // ---- only the acting office unit sends ----
+    run(800);
+    CHECK(rOfc.count(key, Type::Status) == 1 && rOfc.sentLog.size() == 1 && rStand.sentLog.empty() && rRoom.sentLog.empty() && rMob.sentLog.empty(),
+          "idle: the acting office unit sends a heartbeat, nobody else sends (%zu, %zu, %zu, %zu)", rOfc.sentLog.size(), rStand.sentLog.size(), rRoom.sentLog.size(), rMob.sentLog.size());
+    CHECK(ofc.ic->command("lora").find("SENDS the alarms") != std::string::npos && stand.ic->command("lora").find("listens") != std::string::npos &&
+              stand.ic->command("lora").find("status: 5 units online") != std::string::npos,
+          "lora shows the role and the last message:\n%s", stand.ic->command("lora").c_str());
+    room.ic->command("lora test");
+    run(60);
+    CHECK(rRoom.count(key, Type::Test) == 1 && has(ofc, "radio, room 101: test message"), "lora test: one test message, logged where it is heard with its signal");
+
+    // ---- an emergency, heard by a unit outside ----
+    mob.eth = false;  // carried outside: no network link
+    run(700);
+    CHECK(mob.ic->link() == LinkType::None && mob.ic->command("lora").find("listens") != std::string::npos, "the mobile unit outside has no network link and only listens");
+    const size_t before = rOfc.sentLog.size();
+    ofc.ic->command("emergency lockdown all", CmdSource::Web);
+    run(50);
+    CHECK(rOfc.count(key, Type::Emergency, 1) == 1 && rOfc.sentLog.size() > before, "an emergency goes out by radio within a second");
+    CHECK(mob.ic->emergency() == Intercom::Emergency::Lockdown && mob.ic->emergencyByRadio() && has(mob, "radio, room 104: EMERGENCY lockdown, started by the office"),
+          "the unit outside shows the lockdown it heard by radio (signed, from an office unit)");
+    CHECK(room.ic->emergency() == Intercom::Emergency::Lockdown && !room.ic->emergencyByRadio() && !has(room, "radio, room 104"), "a unit on the network has it from the network, not from the radio");
+    run(3100);  // 63 s after the start
+    CHECK(rOfc.count(key, Type::Emergency, 1) == 7 && rOfc.count(key, Type::People) == 3, "it is repeated every 10 s for the first minute (%d messages), with the people list after the first three (%d)",
+          rOfc.count(key, Type::Emergency, 1), rOfc.count(key, Type::People));
+    run(6000);  // two more minutes
+    CHECK(rOfc.count(key, Type::Emergency, 1) == 9, "then once a minute (%d)", rOfc.count(key, Type::Emergency, 1));
+    CHECK(rOfc.overlap == 0 && rMob.overlap == 0 && rOfc.busyFrames == 0, "each message waits for the one before it to leave the air, and the radio listens again after");
+    {
+        const auto& hp = mob.ic->lora().heardPeople();
+        const std::string heard = mob.ic->command("lora heard");
+        CHECK(mob.ic->lora().heardPeopleComplete() && hp.size() == 2 && hp[0].room == 101 && hp[0].code == lora::kPeopleSomeone && hp[1].room == 105 && hp[1].code == lora::kPeopleEmpty &&
+                  heard.find("room 101: someone") != std::string::npos && heard.find("room 105: empty") != std::string::npos &&
+                  ofc.ic->command("people").find("room 101: someone") != std::string::npos,
+              "the people list arrives outside and matches the office's: %s", heard.c_str());
+    }
+    CHECK(has(ofc, "radio: room 110 got the EMERGENCY message of room 104") && rMob.count(key, Type::Ack) >= 1 && int(rMob.sentLog.size()) == rMob.count(key, Type::Ack),
+          "the unit outside answers \"I got it\" (and sends nothing else); the office log shows it (%d answers)", rMob.count(key, Type::Ack));
+    CHECK(rStand.sentLog.empty() && rRoom.sentLog.size() == 1, "the stand-in and the classroom still send nothing by themselves");
+    const std::vector<uint8_t> oldLockdown = rOfc.sentLog[before];  // kept for the replay check below
+    ofc.ic->command("emergency clear all", CmdSource::Web);
+    run(1300);
+    CHECK(rOfc.count(key, Type::Emergency, 0) == 3 && mob.ic->emergency() == Intercom::Emergency::None && has(mob, "ALL CLEAR") && has(mob, "all clear heard by radio"),
+          "all clear goes out 3 times (%d) and ends the alarm that came by radio", rOfc.count(key, Type::Emergency, 0));
+
+    // ---- what the radio must never do ----
+    auto forged = [&](uint16_t from, uint32_t counter, uint8_t kind, const std::string& k) {
+        Msg m;
+        m.type = Type::Emergency;
+        m.from = from;
+        m.counter = counter;
+        m.kind = kind;
+        uint8_t b[lora::kMaxBytes];
+        const size_t n = lora::encode(m, k, b);
+        return std::vector<uint8_t>(b, b + n);
+    };
+    const uint32_t rep0 = mob.ic->lora().replayed(), bad0 = mob.ic->lora().badSignature();
+    rMob.rx.push_back(oldLockdown);
+    run(20);
+    CHECK(mob.ic->lora().replayed() == rep0 + 1 && mob.ic->emergency() == Intercom::Emergency::None, "a recorded lockdown message sent again is refused (old counter)");
+    rMob.rx.push_back(forged(104, 900000, 1, "a-strangers-own-key-123"));
+    run(20);
+    CHECK(mob.ic->lora().badSignature() == bad0 + 1 && mob.ic->emergency() == Intercom::Emergency::None, "a lockdown message with a wrong signature is refused");
+    rMob.rx.push_back(forged(104, 900001, 1, ""));
+    run(20);
+    CHECK(mob.ic->emergency() == Intercom::Emergency::None && has(mob, "NOT SIGNED"), "a lockdown message that is not signed is shown as \"not signed\" and starts nothing");
+    rMob.rx.push_back(forged(101, 900002, 1, key));
+    run(20);
+    CHECK(mob.ic->emergency() == Intercom::Emergency::None, "a signed lockdown message from a room that is not an office unit starts nothing");
+    rRoom.rx.push_back(forged(104, 900003, 1, key));
+    rStand.rx.push_back(forged(104, 900003, 1, key));
+    run(20);
+    CHECK(room.ic->emergency() == Intercom::Emergency::None && stand.ic->emergency() == Intercom::Emergency::None && ofc.ic->emergency() == Intercom::Emergency::None,
+          "on a unit with a network link even a correctly signed radio message cannot start an emergency");
+    room.ic->command("emergency evacuate");
+    mob.ic->command("emergency shelter");
+    run(20);
+    rRoom.rx.push_back(forged(104, 900004, 0, key));
+    rMob.rx.push_back(forged(104, 900004, 0, key));
+    rMob.rx.push_back(forged(104, 900005, 1, key));
+    run(20);
+    CHECK(room.ic->emergency() == Intercom::Emergency::Evacuate && mob.ic->emergency() == Intercom::Emergency::Shelter && !mob.ic->emergencyByRadio(),
+          "a radio message cannot clear or change an emergency that did not come by radio");
+    room.ic->command("emergency clear");
+    mob.ic->command("emergency clear");
+    run(400);
+    // The made-up messages above used very high counters; the real office unit's counter is far below them.
+    for (auto* u : {&stand, &room, &mob}) u->ic->command("lora forget");
+    CHECK(mob.kv["lora_freq"].empty() && mob.kv["office"] == "104 105 110" && mob.ic->lora().config().sf == 9, "no radio message changed a setting");
+
+    // ---- a call for help ----
+    const int helpBefore = rOfc.count(key, Type::Help);
+    room.ic->command("callofc help");
+    run(100);
+    CHECK(rOfc.count(key, Type::Help) == helpBefore + 1 && has(mob, "room 101 needs HELP") && mob.ic->emergency() == Intercom::Emergency::None, "a call for help goes out by radio at once and is logged outside");
+    run(400);
+    CHECK(has(ofc, "radio: room 110 got the HELP message"), "... and the office log shows that the unit outside got it");
+    room.ic->command("callofc off");
+    run(700);
+    CHECK(has(mob, "no call for help waiting any more"), "the call ended: the unit outside is told");
+
+    // ---- the office unit is gone: the stand-in sends ----
+    const size_t standBefore = rStand.sentLog.size();
+    ofc.eth = false;
+    run(1200);
+    CHECK(rStand.sentLog.size() > standBefore && rStand.count(key, Type::Status) >= 1 && stand.ic->command("lora").find("SENDS the alarms") != std::string::npos,
+          "the office unit is offline: the stand-in becomes the sender (%d heartbeat)", rStand.count(key, Type::Status));
+    ofc.eth = true;
+    run(600);
+
+    // ---- no network key: not signed, shown but never acted on ----
+    ofc.ic->command("netkey off");
+    run(50);
+    const size_t unsignedFrom = rOfc.sentLog.size();
+    ofc.ic->command("emergency lockdown");
+    run(200);
+    {
+        bool sentOne = false;
+        for (size_t i = unsignedFrom; i < rOfc.sentLog.size(); i++) {
+            Msg m;
+            sentOne = sentOne || (lora::decode(rOfc.sentLog[i].data(), rOfc.sentLog[i].size(), key, &m) == Check::NotSigned && m.type == Type::Emergency && m.kind == 1);
+        }
+        CHECK(sentOne && mob.ic->emergency() == Intercom::Emergency::None && ofc.ic->command("lora").find("NOT SIGNED") != std::string::npos,
+              "an office unit without a network key sends not signed; the unit outside shows it but raises no alarm");
+    }
+    ofc.ic->command("emergency clear");
+    CHECK(ofc.ic->command("lora off") == "LoRa off" && rOfc.slept == 1 && !ofc.ic->lora().on() && ofc.kv["lora"].empty(), "lora off: the radio is put to sleep");
+    const size_t offAt = rOfc.sentLog.size();
+    run(600);
+    CHECK(rOfc.sentLog.size() == offAt, "... and nothing more is sent");
+    g_clock0 = clock0;
+}
+
 int main() {
+    testLora();
     testBootLightTest();
     testTuning();
     testAutoTune();

@@ -141,6 +141,12 @@ is off is noticed this way. It is silent in quiet hours and during an emergency.
   The log keeps a line. The quiet ends at once when the page is open again, so the next time is heard.
   `consolewatch quiet [MIN]` does the same from the command line (60 minutes if left out, up to 240).
 - While the unit beeps for its page, OFFICE on that unit does nothing else.
+- **The office version of the case has a QUIET button** (small and round, above the lockdown lid). One press on an
+  office unit does the same without holding: the beep for the page is quiet for 1 hour. While the unit rings for a room,
+  QUIET stops the ringing at that unit; the call still waits on the page, and a call for help rings again after 5 minutes.
+  A new call rings as always. QUIET does nothing to an emergency and nothing on a classroom unit.
+- **Which switch is which (0.5.3):** the OFFICE cap on the case sits over switch PB5, so PB5 is now OFFICE and PB7
+  (bottom of the left column, under the cover) is DOWN. QUIET is PB10.
 
 **Cards for the office** (in the board repository, folder `enclosure`): `office_card.html` prints the small card
 for the holder on the office unit (buttons on the front, what the sounds mean on the back), and
