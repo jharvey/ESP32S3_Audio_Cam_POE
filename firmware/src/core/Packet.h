@@ -103,6 +103,8 @@ struct StatusPacket {
     // People seen by the unit's mmWave sensor (Radar.h): kind 0 = no sensor, 1 = presence only, 2 = positions
     uint8_t radarKind = 0, radarCount = 0;
     int16_t radarX[3] = {0, 0, 0}, radarY[3] = {0, 0, 0};  // mm
+    uint8_t radarPeople = 0;    // people in the room: the most seen at once in the last 3 s (3 = three or more)
+    uint8_t radarQuietMin = 0;  // minutes since the sensor last saw anyone (254 = longer, 255 = nobody since it started)
 };
 // "0.5.0" <-> 14 bits (major 0-15, minor 0-31, patch 0-31), carried in the status packet.
 uint16_t packVersion(const char* text);

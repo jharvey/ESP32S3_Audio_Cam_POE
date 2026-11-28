@@ -64,12 +64,13 @@ size_t encodeStatus(const StatusPacket& s, uint8_t* out) {
     put16(out + 26, s.syncHash);
     put16(out + 28, s.siteRev);
     put16(out + 30, s.siteHash);
-    out[32] = uint8_t((s.radarKind & 3) | ((s.radarCount > 3 ? 3 : s.radarCount) << 2));
+    out[32] = uint8_t((s.radarKind & 3) | ((s.radarCount > 3 ? 3 : s.radarCount) << 2) | ((s.radarPeople > 3 ? 3 : s.radarPeople) << 4));
+    out[45] = s.radarQuietMin;
     for (int k = 0; k < 3; k++) {
         put16(out + 33 + 4 * k, uint16_t(s.radarX[k]));
         put16(out + 35 + 4 * k, uint16_t(s.radarY[k]));
     }
-    return 45;
+    return 46;
 }
 
 uint16_t packVersion(const char* text) {
@@ -169,6 +170,9 @@ bool decodeStatus(const uint8_t* buf, size_t len, StatusPacket* s) {
     s->siteHash = len >= 32 ? get16(buf + 30) : 0;
     s->radarKind = len >= 45 ? uint8_t(buf[32] & 3) : 0;
     s->radarCount = len >= 45 ? uint8_t((buf[32] >> 2) & 3) : 0;
+    s->radarPeople = len >= 45 ? uint8_t((buf[32] >> 4) & 3) : 0;
+    if (s->radarPeople < s->radarCount) s->radarPeople = s->radarCount;  // firmware before 0.5.1 sends no count of its own
+    s->radarQuietMin = len >= 46 ? buf[45] : 0;
     for (int k = 0; k < 3; k++) {
         s->radarX[k] = len >= 45 ? int16_t(get16(buf + 33 + 4 * k)) : 0;
         s->radarY[k] = len >= 45 ? int16_t(get16(buf + 35 + 4 * k)) : 0;

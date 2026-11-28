@@ -251,12 +251,24 @@ async function siteSync(s){
   }catch(e){siteChanged=Date.now()+20000;siteNote(s,"Could not save on the unit: "+esc(String(e.message))+". Trying again shortly.");}
   siteBusy=false;}
 const EMERG=["","LOCKDOWN","EVACUATE","SHELTER"];let selfFw="";
+// People seen by a unit's mmWave sensor: u.ppl = [people in the room, minutes empty], u.radar[0] = 1 presence only, 2 counts people.
+function pplText(n,q,k){return n?(k===2?(n>=3?"3 or more people":n+(n===1?" person":" people")):"someone here"):q===255?"nobody seen yet":q>=254?"empty over 4 h":q?"empty "+q+" min":"empty";}
+let pplLine="";
+function pplSum(us){const g={};
+  for(const u of us){if(!u.online||!u.ppl||!u.radar)continue;const r=g[u.group]=g[u.group]||{n:0,k:0,q:255};  // several units in one room: the one that sees most
+    r.n=Math.max(r.n,u.ppl[0]);r.k=Math.max(r.k,u.radar[0]);r.q=Math.min(r.q,u.ppl[1]);}
+  const rs=Object.keys(g).sort((a,b)=>a-b);pplLine="";if(!rs.length)return"";
+  const w=rs.filter(r=>g[r].n);let t=0,more=false;for(const r of w){t+=g[r].n;more=more||g[r].k===1||g[r].n>=3;}
+  const head=(more?"at least ":"")+t+(t===1?" person":" people")+" in "+w.length+" of "+rs.length+" rooms with a sensor";
+  pplLine="People sensors: "+head+(w.length?". "+w.map(r=>"Room "+r+": "+(g[r].k===2?(g[r].n>=3?"3 or more":g[r].n):"someone")).join(" · "):"")+". Rooms without a sensor are not counted.";
+  return `<span class="n" title="${esc(rs.map(r=>r+": "+pplText(g[r].n,g[r].q,g[r].k)).join("\n"))}">${head}</span>`;}
 const FAULT=["","E1 no Ethernet (on Wi-Fi)","E2 no network","Lo battery low","dUP duplicate number","oL output shorted"];
 function card(u){
   let cls="ok",st="OK",d=[];
   d.push(u.link==="ethernet"?"Ethernet":u.link==="wifi"?"Wi-Fi":"no link");
   d.push(u.power==="battery"?"battery "+u.battery+"%":"PoE");
   if(u.group&&u.group!==u.room)d.push("group "+u.group);
+  if(u.ppl&&u.radar)d.unshift("<b>"+pplText(u.ppl[0],u.ppl[1],u.radar[0])+"</b>");
   if(u.fw&&selfFw&&u.fw!==selfFw)d.push("firmware "+u.fw);
   if(u.flags2&1)d.push("do not disturb");
   const f=u.flags;
@@ -284,11 +296,12 @@ async function tick(){
     for(const u of us){if(!u.online){c.off++;continue}c.on++;if(u.flags&32)c.call++;if(u.flags&1)c.talk++;
       if(u.fault||(u.flags&(8|16)))c.bad++;}
     document.getElementById("sum").innerHTML=`<span class="n">${c.on} online</span><span class="n">${c.off} offline</span>`+
-      `<span class="n">${c.call} calling</span><span class="n">${c.talk} talking</span>`+drawProbs(us);
+      `<span class="n">${c.call} calling</span><span class="n">${c.talk} talking</span>`+pplSum(us)+drawProbs(us);
     const floors={};for(const u of us){const fl=Math.floor(u.room/100);(floors[fl]=floors[fl]||[]).push(u);}
     document.getElementById("rooms").innerHTML=Object.keys(floors).sort((a,b)=>a-b).map(fl=>
       `<div class="floor">${fl==="0"?"Office / other":"Floor "+fl}</div><div class="grid">${floors[fl].map(card).join("")}</div>`).join("");
     siteSync(j.site);lastPinBad=j.pinbad||[];lastSchool=j;drawDevs(us);selfFw=j.fw||"";drawFeats(j.features||0);drawQueue(j.queue||[]);callWatch(us);drawAlarm(us,j.queue||[]);drawZones((j.features&4)?j.zones||[]:[]);
+    {const e=document.getElementById("alppl");if(e)e.textContent=pplLine;}
     document.getElementById("cwnow").textContent=j.conwatch?"Now: on, after "+j.conwatch+" min.":"Now: off.";
     {const o=j.offices||[],ns=us.filter(u=>u.online&&u.sync===0).length;
      document.getElementById("ofcnow").innerHTML=o.length?"<b>Now:</b> "+o.join(", then ")+". Acting as the office: <b>"+j.acting+"</b>"+(j.acting!==o[0]?" (unit "+o[0]+" is offline)":"")+
@@ -379,6 +392,7 @@ function drawAlarm(us,q){
     if(sig!==alSig)alT=Date.now();
     h=`<div class="al red"><h1>${k}</h1><p class="big">${by.length?"Red button pressed in room "+by.join(", "):"Started from the office"}, ${new Date(alT).toLocaleTimeString()}</p>
 <p>Every intercom is already showing and sounding the alarm. You do not have to start anything.</p>
+<p id="alppl"></p>
 ${stepsHtml(["","lockdown","evacuate","shelter"][em[0].emergency],by.length?"room "+by.join(", "):"the office")}
 <div class="alrow"><button id="altalk">Hold to talk to everyone</button><button id="almin">Show the plan</button></div>
 <div class="alrow fa"><input type="password" id="alpw" placeholder="web password" autocomplete="off"><button id="alclr">False alarm: all clear</button><span id="alnote"></span></div></div>`;

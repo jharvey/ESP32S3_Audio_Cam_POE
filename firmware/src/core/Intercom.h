@@ -210,6 +210,14 @@ public:
     // reports: nothing for 5 s = no sensor; a person is kept for 1 s after the sensor last saw them, so dots do not flicker.
     void radarBytes(const uint8_t* data, size_t n);
     RadarState radar() const;
+    // The sensor's OUT pin (LD2410C on J21, read through U22 P13; high = someone there). It serves when no serial data
+    // comes. It counts as a sensor once the pin has been seen low: a pin with nothing on it stays high.
+    void radarOut(bool high);
+    // People in the room: the most the sensor saw at once in the last 3 s, so a person it loses for a moment still counts
+    // (0-3; the LD2450 follows three people at most, so 3 means three or more; a presence sensor gives 0 or 1).
+    uint8_t people() const;
+    // Minutes since the sensor last saw anyone: 0 = someone there now or under a minute, 254 = longer, 255 = nobody since it started.
+    uint8_t radarQuietMin() const;
     bool siteAvailable() const { return hal_.store->hasBlobs(); }
     // Only office units keep the plan (any unit while no office list is set). A unit that is out of the list for
     // 5 minutes deletes its copy, so a former office unit used as a classroom does not carry the floor plan.
@@ -301,7 +309,13 @@ private:
     RadarParser radarParser_;
     uint8_t radarKind_ = kRadarNone;
     uint32_t radarAt_ = 0, radarSeen_[3] = {0, 0, 0};  // frame + 1; 0 = never
-    int16_t radarX_[3] = {0, 0, 0}, radarY_[3] = {0, 0, 0};
+    int16_t radarX_[3] = {0, 0, 0}, radarY_[3] = {0, 0, 0}, radarSpeed_[3] = {0, 0, 0};
+    bool radarMove_[3] = {false, false, false};
+    uint8_t radarEnergy_ = 0;
+    uint32_t radarCountAt_[3] = {0, 0, 0}, radarLastSeen_ = 0, radarOutAt_ = 0;  // frame + 1; 0 = never
+    bool radarOutHigh_ = false, radarOutLow_ = false;
+    bool radarSerial() const { return radarAt_ && frame_ + 1 - radarAt_ <= uint32_t(5000 / kFrameMs); }
+    bool radarPin() const { return radarOutLow_ && radarOutAt_ && frame_ + 1 - radarOutAt_ <= uint32_t(5000 / kFrameMs); }
     void sitePart(const TextPacket& r);
     std::string siteGet(const std::vector<std::string>& a);
     void saveOfficeBoards();

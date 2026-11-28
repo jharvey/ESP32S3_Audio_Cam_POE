@@ -400,7 +400,7 @@ std::string WebUi::schoolJson() {
             o.pop_back();
             o += ",\"radar\":[" + std::to_string(st.radarKind);
             for (int k = 0; k < int(st.radarCount) && k < 3; k++) o += "," + std::to_string(st.radarX[k]) + "," + std::to_string(st.radarY[k]);
-            o += "]}";
+            o += "],\"ppl\":[" + std::to_string(st.radarPeople) + "," + std::to_string(st.radarQuietMin) + "]}";  // people in the room, minutes empty
         }
         return o;
     };
@@ -423,6 +423,8 @@ std::string WebUi::schoolJson() {
         const RadarState r = ic_.radar();
         me.radarKind = r.kind;
         me.radarCount = r.count;
+        me.radarPeople = ic_.people();
+        me.radarQuietMin = ic_.radarQuietMin();
         for (int k = 0; k < 3; k++) {
             me.radarX[k] = r.x[k];
             me.radarY[k] = r.y[k];

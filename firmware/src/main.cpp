@@ -224,6 +224,7 @@ public:
 ExpanderLines gTmLines;
 board::Tm1637 gTm(gTmLines);
 std::atomic<uint8_t> gButtons{0};
+std::atomic<uint8_t> gRadarOut{2};  // the people sensor's OUT pin (U22 P13): 0 low, 1 high, 2 not read
 std::atomic<uint32_t> gDisplay{0x00202020};  // 3 chars + dots, written by the audio task
 std::atomic<bool> gDisplayOk{false};
 std::atomic<uint32_t> gShutter{0};  // camera shutter from the core: pulse width in microseconds, bit 16 = slow; 0 = nothing asked yet
@@ -281,9 +282,11 @@ void panelTask(void*) {
                 in = uint16_t(in | uint16_t(Wire.read()) << 8);
                 gButtons = board::buttonsFromInputs(in);
                 gButtonsOk = true;
+                gRadarOut = uint8_t((in >> board::kRadarOutBit) & 1);
             } else {
                 gButtons = 0;  // U22 missing: no stuck TALK
                 gButtonsOk = false;
+                gRadarOut = 2;
             }
             uint32_t want = gDisplay.load();
             if (want != shown) {
@@ -670,6 +673,8 @@ void audioTask(void*) {
                 n = int(Serial1.read(rb, size_t(n > 64 ? 64 : n)));
                 if (n > 0) gIntercom->radarBytes(rb, size_t(n));
             }
+            const uint8_t out = gRadarOut.load();
+            if (out < 2) gIntercom->radarOut(out == 1);
         }
         gIntercom->processFrame(mic, spk);
         gSpk.write(reinterpret_cast<uint8_t*>(spk), sizeof(spk));

@@ -58,7 +58,7 @@ ConsoleWindow::ConsoleWindow(const ConsoleOptions& opt) : opt_(opt), voice_(120.
     root->addWidget(summary_);
 
     table_ = new QTableWidget(0, 7);
-    table_->setHorizontalHeaderLabels({"Unit", "IP", "State", "Link", "Power", "Up", "Last heard"});
+    table_->setHorizontalHeaderLabels({"Unit", "IP", "State", "People", "Link", "Power", "Up", "Last heard"});
     table_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     table_->verticalHeader()->hide();
     table_->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -573,7 +573,13 @@ void ConsoleWindow::refreshTable() {
             up = duration(s.uptimeS);
         }
         seen = u.lastSeen < 0 ? "-" : duration((now - u.lastSeen) / 1000) + " ago";
-        QStringList cells = {unitName(s.from), unitIp(s.from), state, link, power, up, seen};
+        QString ppl;  // the unit's mmWave people sensor, if it has one
+        if (u.online && s.radarKind) {
+            const int n = s.radarPeople, q = s.radarQuietMin;
+            ppl = n ? (s.radarKind == ic::kRadarTracking ? (n >= 3 ? QString("3 or more") : QString::number(n)) : QString("someone"))
+                    : q == 255 ? QString("nobody yet") : q >= 254 ? QString("empty > 4 h") : q ? QString("empty %1 min").arg(q) : QString("empty");
+        }
+        QStringList cells = {unitName(s.from), unitIp(s.from), state, ppl, link, power, up, seen};
         for (int c = 0; c < cells.size(); c++) {
             QTableWidgetItem* it = table_->item(r, c);
             if (!it) table_->setItem(r, c, it = new QTableWidgetItem);

@@ -2168,6 +2168,46 @@ static void testR33Sync() {
             seen = web.handle(q).body.find("\"radar\":[2,-782,1713]") != std::string::npos;
         }
         CHECK(seen, "the person's position reaches the office page");
+        CHECK(r1new.ic->people() == 1 && r1new.ic->radarQuietMin() == 0 && web.handle(q).body.find("\"ppl\":[1,0]") != std::string::npos &&
+                  r1new.ic->command("radar").find("people in the room: 1") != std::string::npos && o2.ic->command("people").find("room 101: 1\n") != std::string::npos &&
+                  o2.ic->command("people").find("1 person in 1 of 1 rooms") != std::string::npos,
+              "one person in room 101: on the office page and in the office unit's list [%s]", o2.ic->command("people").c_str());
+        {  // three people now and then two: the count holds the most seen in 3 s, so one lost for a moment still counts
+            uint8_t f3[30], f2[30];
+            std::memcpy(f3, f2450, 30);
+            std::memcpy(f3 + 12, f2450 + 4, 8);
+            std::memcpy(f3 + 20, f2450 + 4, 8);
+            f3[12] = 0x10;  // a little to the side of the first
+            f3[20] = 0x20;
+            std::memcpy(f2, f3, 30);
+            std::memset(f2 + 20, 0, 8);
+            for (int k = 0; k < 10; k++) {
+                r1new.ic->radarBytes(f3, 30);
+                run(5);
+            }
+            CHECK(r1new.ic->radar().count == 3 && r1new.ic->people() == 3 && r1new.ic->command("radar").find("3 or more") != std::string::npos, "three people: shown as 3 or more [%s]",
+                  r1new.ic->command("radar").c_str());
+            for (int k = 0; k < 20; k++) {
+                r1new.ic->radarBytes(f2, 30);
+                run(5);
+            }
+            CHECK(r1new.ic->radar().count == 2 && r1new.ic->people() == 3, "one of them lost for 2 s: still counted");
+            for (int k = 0; k < 40; k++) {
+                r1new.ic->radarBytes(f2, 30);
+                run(5);
+            }
+            CHECK(r1new.ic->people() == 2, "gone for more than 3 s: two people");
+            uint8_t f0[30];
+            std::memcpy(f0, f2450, 30);
+            std::memset(f0 + 4, 0, 24);
+            for (int k = 0; k < 6400; k++) {  // an empty room for a little over two minutes
+                r1new.ic->radarBytes(f0, 30);
+                run(1);
+            }
+            CHECK(r1new.ic->people() == 0 && r1new.ic->radarQuietMin() == 2 && r1new.ic->command("radar").find("empty for 2 min") != std::string::npos &&
+                      o2.ic->command("people").find("room 101: empty for 2 min") != std::string::npos && web.handle(q).body.find("\"ppl\":[0,2]") != std::string::npos,
+                  "the room is empty: the office sees for how long [%s]", o2.ic->command("people").c_str());
+        }
         run(80);
         CHECK(r1new.ic->radar().kind == kRadarTracking && r1new.ic->radar().count == 0, "the person is gone a second after the sensor stops seeing them");
         run(300);
@@ -2177,7 +2217,26 @@ static void testR33Sync() {
         r1new.ic->radarBytes(f2410, sizeof(f2410));
         run(2);
         const RadarState r1 = r1new.ic->radar();
-        CHECK(r1.kind == kRadarPresence && r1.count == 1 && r1.x[0] == 0 && r1.y[0] == 2000, "LD2410: someone 2.0 m away, no direction [%s]", r1new.ic->command("radar").c_str());
+        CHECK(r1.kind == kRadarPresence && r1.count == 1 && r1.x[0] == 0 && r1.y[0] == 2000 && !r1.moving && r1.energy == 59 && r1new.ic->people() == 1,
+              "LD2410: someone 2.0 m away, sitting still, no direction [%s]", r1new.ic->command("radar").c_str());
+        // The LD2410C's OUT pin alone (the serial line broken or not linked): it is a sensor once the pin has been low
+        run(300);
+        for (int k = 0; k < 20; k++) {
+            r1new.ic->radarOut(true);
+            run(1);
+        }
+        CHECK(r1new.ic->radar().kind == kRadarNone && r1new.ic->command("radar").find("never low yet") != std::string::npos, "a pin that is only ever high is nothing fitted [%s]",
+              r1new.ic->command("radar").c_str());
+        r1new.ic->radarOut(false);
+        run(1);
+        CHECK(r1new.ic->radar().kind == kRadarPresence && r1new.ic->people() == 0, "OUT pin low: a sensor, nobody there");
+        for (int k = 0; k < 100; k++) {
+            r1new.ic->radarOut(true);
+            run(1);
+        }
+        CHECK(r1new.ic->radar().count == 1 && r1new.ic->people() == 1 && o2.ic->command("people").find("room 101: someone") != std::string::npos &&
+                  o2.ic->command("people").find("at least 1 person") != std::string::npos,
+              "OUT pin high: someone there, and the office is told [%s]", o2.ic->command("people").c_str());
     }
     g_clockFrames = -1;
     g_clock0 = clock0;

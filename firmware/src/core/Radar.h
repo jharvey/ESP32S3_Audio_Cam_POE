@@ -16,6 +16,9 @@ struct RadarState {
     uint8_t count = 0;        // people seen (0-3); a presence sensor reports 0 or 1
     int16_t x[3] = {0, 0, 0};  // mm; + = to the right as the sensor looks into the room (0 for a presence sensor)
     int16_t y[3] = {0, 0, 0};  // mm out from the sensor
+    uint8_t moving = 0;            // bit k set: person k is moving (the others sit or stand still)
+    int16_t speed[3] = {0, 0, 0};  // LD2450 only: cm/s, + = away from the sensor
+    uint8_t energy = 0;            // LD2410 only: how strong the echo is, 0-100
 };
 
 class RadarParser {

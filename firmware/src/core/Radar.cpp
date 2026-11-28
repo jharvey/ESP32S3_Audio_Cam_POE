@@ -46,6 +46,8 @@ void RadarParser::parse() {
                     const uint8_t* t = buf_ + 4 + 8 * k;
                     const int16_t x = coord(t), y = coord(t + 2);
                     if (!x && !y) continue;
+                    s.speed[s.count] = coord(t + 4);
+                    if (s.speed[s.count]) s.moving |= uint8_t(1u << s.count);
                     s.x[s.count] = x;
                     s.y[s.count] = y;
                     s.count++;
@@ -70,6 +72,8 @@ void RadarParser::parse() {
                     if (state & 3) {
                         const unsigned cm = (state & 1) ? unsigned(d[3] | (d[4] << 8)) : unsigned(d[6] | (d[7] << 8));
                         s.count = 1;
+                        s.moving = state & 1;
+                        s.energy = (state & 1) ? d[5] : d[8];
                         s.y[0] = int16_t(cm > 3000 ? 30000 : cm * 10);
                     }
                     last_ = s;

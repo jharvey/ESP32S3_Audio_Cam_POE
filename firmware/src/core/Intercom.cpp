@@ -99,6 +99,8 @@ const char* kTunePrevKey = "tune_prev";
 
 const char* kHelp =
     "commands:\n"
+    "  radar                what this unit's people sensor sees\n"
+    "  people               people seen in every room with a sensor\n"
     "  help                 this list\n"
     "  get [key]            show tuning parameters\n"
     "  set key value ...    change parameters now (not saved)\n"
@@ -329,19 +331,54 @@ void Intercom::radarBytes(const uint8_t* data, size_t n) {
         for (int k = 0; k < int(s.count) && k < 3; k++) {
             radarX_[k] = s.x[k];
             radarY_[k] = s.y[k];
+            radarSpeed_[k] = s.speed[k];
+            radarMove_[k] = (s.moving >> k) & 1;
             radarSeen_[k] = frame_ + 1;
+            radarCountAt_[k] = frame_ + 1;
+            radarLastSeen_ = frame_ + 1;
         }
+        radarEnergy_ = s.energy;
     }
+}
+
+void Intercom::radarOut(bool high) {
+    radarOutAt_ = frame_ + 1;
+    radarOutHigh_ = high;
+    if (!high) radarOutLow_ = true;
+    if (high && radarOutLow_ && !radarSerial()) radarCountAt_[0] = radarLastSeen_ = frame_ + 1;
+}
+
+uint8_t Intercom::people() const {
+    if (!radarSerial() && !radarPin()) return 0;
+    uint8_t n = 0;
+    for (int k = 0; k < 3; k++)
+        if (radarCountAt_[k] && frame_ + 1 - radarCountAt_[k] <= uint32_t(3000 / kFrameMs)) n = uint8_t(k + 1);
+    return n;
+}
+
+uint8_t Intercom::radarQuietMin() const {
+    if (!radarSerial() && !radarPin()) return 0;
+    if (!radarLastSeen_) return 255;
+    const uint32_t min = (frame_ + 1 - radarLastSeen_) / uint32_t(60000 / kFrameMs);
+    return uint8_t(min > 254 ? 254 : min);
 }
 
 RadarState Intercom::radar() const {
     RadarState s;
-    if (!radarAt_ || frame_ + 1 - radarAt_ > uint32_t(5000 / kFrameMs)) return s;
+    if (!radarSerial()) {  // no serial data: the OUT pin alone says someone is there, not where
+        if (!radarPin()) return s;
+        s.kind = kRadarPresence;
+        s.count = radarOutHigh_ ? 1 : 0;
+        return s;
+    }
     s.kind = radarKind_;
+    s.energy = radarEnergy_;
     for (int k = 0; k < 3; k++)
         if (radarSeen_[k] && frame_ + 1 - radarSeen_[k] <= uint32_t(1000 / kFrameMs)) {
             s.x[s.count] = radarX_[k];
             s.y[s.count] = radarY_[k];
+            s.speed[s.count] = radarSpeed_[k];
+            if (radarMove_[k]) s.moving |= uint8_t(1u << s.count);
             s.count++;
         }
     return s;
@@ -1259,18 +1296,71 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
     if (c == "siteget") return siteGet(a);
     if (c == "radar") {  // what the people sensor sees right now
         const RadarState r = radar();
-        if (r.kind == kRadarNone) return "no people sensor heard (HLK-LD2450 or HLK-LD2410 on the radar connector)";
-        std::string t = r.kind == kRadarTracking ? "people sensor LD2450: " : "people sensor LD2410: ";
-        if (!r.count) return t + "nobody";
-        char rb[64];
+        const std::string pin = !radarOutAt_ ? std::string() : std::string("; OUT pin ") + (radarOutHigh_ ? "high" : "low") + (radarOutLow_ ? "" : " (never low yet: not taken as a sensor)");
+        if (r.kind == kRadarNone) return "no people sensor heard (HLK-LD2450 or HLK-LD2410 on the radar connector)" + pin;
+        std::string t = r.kind == kRadarTracking ? "people sensor LD2450: " : radarSerial() ? "people sensor LD2410: " : "people sensor (OUT pin only, no serial data): ";
+        char rb[96];
+        if (!r.count) t += "nobody";
         for (int k = 0; k < int(r.count); k++) {
+            const bool mv = (r.moving >> k) & 1;
             if (r.kind == kRadarTracking)
-                snprintf(rb, sizeof(rb), "%s%.1f m out, %.1f m %s", k ? "; " : "", r.y[k] / 1000.0, std::abs(r.x[k]) / 1000.0, r.x[k] < 0 ? "left" : "right");
+                snprintf(rb, sizeof(rb), "%s%.1f m out, %.1f m %s, %s", k ? "; " : "", r.y[k] / 1000.0, std::abs(r.x[k]) / 1000.0, r.x[k] < 0 ? "left" : "right",
+                         mv ? "moving" : "still");
+            else if (radarSerial())
+                snprintf(rb, sizeof(rb), "someone %.1f m away, %s, signal %u of 100", r.y[k] / 1000.0, mv ? "moving" : "still", unsigned(r.energy));
             else
-                snprintf(rb, sizeof(rb), "someone %.1f m away", r.y[k] / 1000.0);
+                snprintf(rb, sizeof(rb), "someone there");
             t += rb;
+            if (r.kind == kRadarTracking && mv) {
+                snprintf(rb, sizeof(rb), " %.1f m/s", std::abs(r.speed[k]) / 100.0);
+                t += rb;
+            }
         }
-        return t;
+        const unsigned n = people(), q = radarQuietMin();
+        if (r.kind == kRadarTracking) t += "; people in the room: " + std::to_string(n) + (n >= 3 ? " or more" : "");
+        if (!n && q == 255) t += "; nobody seen since the sensor started";
+        else if (!n && q) t += "; empty for " + (q >= 254 ? std::string("over 4 hours") : std::to_string(q) + " min");
+        return t + pin;
+    }
+    if (c == "people") {  // every room with a people sensor, as this unit hears it
+        struct Row {
+            uint16_t room;
+            uint8_t kind, n, quiet;
+        };
+        std::vector<Row> rows;
+        auto add = [&](uint16_t room, uint8_t kind, uint8_t n, uint8_t quiet) {
+            if (!kind) return;
+            for (Row& r : rows)
+                if (r.room == room) {  // several units in one room: the one that sees most
+                    if (n > r.n) r.n = n;
+                    if (kind > r.kind) r.kind = kind;
+                    if (quiet < r.quiet) r.quiet = quiet;
+                    return;
+                }
+            rows.push_back({room, kind, n, quiet});
+        };
+        add(group(), radar().kind, people(), radarQuietMin());
+        for (const Peer& p : peers_) add(p.status.group ? p.status.group : p.status.from.room, p.status.radarKind, p.status.radarPeople, p.status.radarQuietMin);
+        if (rows.empty()) return "no unit with a people sensor is online";
+        std::sort(rows.begin(), rows.end(), [](const Row& a, const Row& b) { return a.room < b.room; });
+        std::string t;
+        unsigned total = 0, used = 0;
+        bool more = false;
+        for (const Row& r : rows) {
+            t += "room " + std::to_string(r.room) + ": ";
+            if (r.n) {
+                total += r.n;
+                used++;
+                more = more || r.kind == kRadarPresence || r.n >= 3;
+                t += r.kind == kRadarPresence ? std::string("someone") : std::to_string(r.n) + (r.n >= 3 ? " or more" : "");
+            } else {
+                t += r.quiet == 255 ? std::string("empty since the sensor started")
+                     : r.quiet >= 254 ? std::string("empty for over 4 hours") : r.quiet ? "empty for " + std::to_string(r.quiet) + " min" : std::string("empty");
+            }
+            t += "\n";
+        }
+        return t + (more ? "at least " : "") + std::to_string(total) + (total == 1 ? " person in " : " people in ") + std::to_string(used) + " of " + std::to_string(rows.size()) +
+               " rooms with a sensor";
     }
     if (c == "site") {
         snprintf(buf, sizeof(buf), "office page data: version %u, %lu bytes%s", unsigned(siteRev_), (unsigned long)siteSize_,
@@ -1798,6 +1888,8 @@ void Intercom::sendStatus() {
         const RadarState r = radar();
         s.radarKind = r.kind;
         s.radarCount = r.count;
+        s.radarPeople = people();
+        s.radarQuietMin = radarQuietMin();
         for (int k = 0; k < 3; k++) {
             s.radarX[k] = r.x[k];
             s.radarY[k] = r.y[k];

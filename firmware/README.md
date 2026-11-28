@@ -342,6 +342,37 @@ command (`send all feature dnd on`). `feature` lists them; `feature all on|off` 
 `office ROOM [STAND-IN]` names the office unit and its stand-in on every unit (send it to all). Zones,
 the office, quiet hours and the switches are part of the settings backup.
 
+## People sensor (mmWave radar, 0.5.1)
+
+A unit with a Hi-Link radar tells the office how many people its sensor sees. Nothing is set up: the unit
+finds the sensor by itself, and a unit without one sends nothing.
+
+| Sensor | Where | What it gives |
+|---|---|---|
+| HLK-LD2410C | J21 on the board (0 ohm links R113 and R114 fitted) | someone is there or not, how far away, moving or still |
+| HLK-LD2450 | J22 on a cable (remove R113 and R114) | up to three people, each with a position and speed |
+
+Pins: the sensor's serial line is on GPIO10 (256000 baud, read only). The LD2410C's OUT pin is on U22 P13.
+LoRa DIO0 moved to U22 P14 to free GPIO10.
+
+- **Count.** The count is the most people seen at once in the last 3 s, so a person the sensor loses for a
+  moment still counts. The LD2450 follows three people at most, so 3 is shown as "3 or more". The LD2410C
+  cannot count: it shows "someone here".
+- **Empty for how long.** Each unit keeps the time since its sensor last saw anyone, in minutes (up to 4 hours).
+- **OUT pin.** If no serial data comes, the unit uses the LD2410C's OUT pin (high = someone there). The pin
+  counts as a sensor only after it has been low once, because a pin with nothing on it stays high.
+- **Office page.** Each room's tile shows "2 people", "someone here" or "empty 12 min". The top line shows the
+  total, for example "at least 14 people in 9 of 20 rooms with a sensor". The red alarm box lists the rooms
+  with people in them. On the plan the people are small black dots, as before.
+- **Several units in one room** (a group, such as the gym): the room's count is that of the unit that sees
+  most, not the sum, because the sensors see the same people.
+- **Commands.** `radar` shows what this unit's sensor sees. `people` lists every room with a sensor.
+- **PC console.** The room table has a People column.
+
+The count is a help, not a head count: a sensor sees only part of a room, and rooms without a sensor are not counted.
+
+Not tested on a real sensor yet. The PC console change is not compiled (the build machine has no Qt).
+
 ## USB updates and first-time setup
 
 `tools/update-unit.bat` makes each room visit one command.

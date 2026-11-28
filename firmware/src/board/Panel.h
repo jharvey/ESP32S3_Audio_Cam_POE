@@ -5,7 +5,9 @@
 //   P00 PB1 TALK   P01 PB2 MODE   P02 PB4 UP   P03 PB5 DOWN   P04 PB6 hidden SETUP (under the cover)
 //   P05 PB7 OFFICE   P12 PB12 the red LOCKDOWN button (under the clear lid)
 //   P06 PB8  P07 PB9  P10 PB10  P11 PB11: more TALK buttons, any one talks
-//   P13-P17 free.  (PB3 is the AXP2101 power button, not on U22.)
+//   P13 RADAR.OUT: the LD2410C's OUT pin on J21 through the 0R link (high = someone there)
+//   P14 LORA_IRQ: the RFM95's DIO0 (moved here from GPIO10, which now reads the people sensor's serial line)
+//   P15-P17 free.  (PB3 is the AXP2101 power button, not on U22.)
 #pragma once
 #include <cstdint>
 
@@ -14,6 +16,8 @@
 namespace board {
 
 constexpr uint8_t kButtonExpanderAddr = 0x21;
+constexpr int kRadarOutBit = 11;  // P13
+constexpr int kLoraIrqBit = 12;   // P14 (LoRa is not used by the firmware yet)
 
 struct PinMap {
     int bit;  // 0..15 = P00..P17
