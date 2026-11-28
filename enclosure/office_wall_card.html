@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Office intercom: wall card</title>
+<!-- The sheet for the wall next to the office unit: one US Letter page. Print at 100 %, write in the three lines at the
+     bottom, laminate it and pin it up. The small card for the unit's holder is office_card.html. -->
+<style>
+@page{size:letter portrait;margin:9mm}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:#111;font:11.5pt/1.25 Arial,Helvetica,sans-serif}
+.sheet{width:197.9mm;height:259mm;margin:0 auto;display:flex;flex-direction:column;gap:2.4mm}
+.sheet>*{flex-shrink:0}
+h1{margin:0;font-size:27pt;line-height:1.05}
+h1 small{font-size:14pt;font-weight:normal;color:#444;margin-left:3mm}
+h2{margin:0;font-size:15pt;background:#111;color:#fff;padding:1.3mm 3mm;border-radius:1.5mm}
+.row{display:grid;grid-template-columns:66mm 1fr;border:0.5mm solid #111;border-radius:2mm;overflow:hidden}
+.row>div{padding:1.8mm 3mm}
+.hear{background:#eee;font-weight:bold;font-size:13pt;border-right:0.5mm solid #111}
+.hear em{display:block;font-style:normal;font-weight:normal;font-size:10.5pt;color:#333;margin-top:1mm}
+.do b.first{font-size:12.5pt}
+.do p{margin:0 0 1mm}.do p:last-child{margin:0}
+.hush{border:0.6mm solid #111;border-radius:1.5mm;padding:1.6mm 2.5mm;margin-top:1.5mm}
+.red .hear{background:#c62828;color:#fff}.red .hear em{color:#fff}
+.red{border-color:#c62828}.red .hear{border-right-color:#c62828}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+.box{border:0.5mm solid #111;border-radius:2mm;padding:2.2mm 3mm}
+.box h3{margin:0 0 1mm;font-size:14pt}
+.box p{margin:0 0 1mm}.box p:last-child{margin:0}
+.key{display:inline-block;background:#4d4f57;color:#fff;font-weight:bold;border-radius:1.2mm;padding:0 1.8mm}
+.key.r{background:#c62828}
+.code{display:inline-block;background:#111;color:#7fb8ff;font:bold 12pt Consolas,"DejaVu Sans Mono",monospace;border-radius:1.2mm;padding:0 1.6mm}
+.fill{margin-top:auto;border-top:0.5mm solid #111;padding-top:2.5mm;font-size:12pt}
+.fill div{display:flex;align-items:flex-end;gap:2mm;margin-bottom:3.6mm}
+.fill div:last-child{margin-bottom:0}
+.fill i{flex:1;border-bottom:0.4mm solid #111;height:5mm}
+.note{font-size:10.5pt;color:#333}
+@media screen{body{background:#888}.sheet{background:#fff;padding:0;margin:6mm auto;outline:9mm solid #fff}}
+</style></head><body><div class="sheet">
+<h1>OFFICE INTERCOM <small>what to do when it makes a sound</small></h1>
+
+<h2>It is making a sound</h2>
+
+<div class="row"><div class="hear">Ringing every 2 seconds<em>A room number blinks on the display.</em></div>
+<div class="do"><p><b class="first">That room is calling the office.</b></p>
+<p>On the office page the room is blue. Click it, then hold <b>Hold to talk to room …</b> and speak. Only that room hears you. Not answered: the ringing stops after 10 seconds.</p></div></div>
+
+<div class="row"><div class="hear">Ringing again every 30 seconds<em>The same room number blinks.</em></div>
+<div class="do"><p><b class="first">A call for help is still waiting.</b></p>
+<p>The office page shows the room and what to do. Talk to the room or send someone. Then press <b>Help is on the way: close this call</b>.</p></div></div>
+
+<div class="row"><div class="hear">You hear a room, with no ringing first<em>Nobody is speaking to you.</em></div>
+<div class="do"><p><b class="first">A silent call for help.</b> You hear that room's microphone. The room cannot hear you.</p>
+<p>The office page shows which room. Follow the steps on the page.</p></div></div>
+
+<div class="row"><div class="hear">Two short beeps every 30 seconds<em>No number blinks.</em></div>
+<div class="do"><p><b class="first">The office page is not open on any PC.</b></p>
+<p>Open it in the browser (the address is at the bottom of this sheet). The beeps stop in a few seconds.</p>
+<div class="hush"><b>PC not working?</b> Hold <span class="key">OFFICE</span> on the intercom for <b>3 seconds</b>, until it chimes.
+The beeps stay quiet for <b>1 hour</b>, then start again. Calls, calls for help and alarms still sound.
+Get the PC fixed soon: the page shows who is calling and why.</div></div></div>
+
+<div class="row red"><div class="hear">Alarm signal<em>The display shows <span class="code">LoC</span> <span class="code">EUA</span> or <span class="code">SHE</span></em></div>
+<div class="do"><p><b class="first">Lockdown, evacuate or shelter. Every intercom is already sounding it.</b></p>
+<p>The office page turns red and lists the steps. Follow them.</p>
+<p>To end it: on the office page only, <b>False alarm: all clear</b>, with the web password. No intercom can end it.</p></div></div>
+
+<div class="two">
+<div class="box"><h3>Talking</h3>
+<p><span class="key">TALK</span> Hold and speak: the <b>whole school</b> hears you. Let go when you have finished.</p>
+<p><b>One room:</b> on the office page, click the room and hold <b>Hold to talk to room …</b></p></div>
+<div class="box" style="border-color:#c62828"><h3>Emergency</h3>
+<p><span class="key r">RED</span> Lift the lid and press: the whole school goes to <b>lockdown</b> at once.</p>
+<p>Or on the office page: <b>Lockdown</b>, <b>Evacuate</b> or <b>Shelter</b>.</p></div>
+</div>
+
+<div class="fill">
+<div><b>Office page:</b> http://<i></i>/school</div>
+<div><b>If this intercom fails, open the page on:</b> http://<i></i>/school</div>
+<div><b>Web password is kept by:</b><i></i><b>Problems, call:</b><i></i></div>
+</div>
+</div></body></html>
