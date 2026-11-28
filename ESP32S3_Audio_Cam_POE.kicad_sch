@@ -85723,7 +85723,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:R_0402"
+		(property "Footprint" "JLCPCB:R_0603"
 			(at 161.29 47.498 90)
 			(hide yes)
 			(show_name no)
@@ -85734,7 +85734,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0402WGF1002TCE_C25744.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf"
 			(at 161.29 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -85745,7 +85745,7 @@
 				)
 			)
 		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 10kΩ 0402 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "100mW Thick Film Resistors 75V ±100ppm/°C ±1% 10kΩ 0603 Chip Resistor - Surface Mount ROHS"
 			(at 161.29 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -85756,7 +85756,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25744"
+		(property "LCSC" "C25804"
 			(at 161.29 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -96913,7 +96913,7 @@
 				)
 			)
 		)
-		(property "Footprint" "JLCPCB:R_0402"
+		(property "Footprint" "JLCPCB:R_0603"
 			(at 161.29 42.418 90)
 			(hide yes)
 			(show_name no)
@@ -96924,7 +96924,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2411221126_UNI-ROYAL-Uniroyal-Elec-0402WGF1002TCE_C25744.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf"
 			(at 161.29 40.64 0)
 			(hide yes)
 			(show_name no)
@@ -96935,7 +96935,7 @@
 				)
 			)
 		)
-		(property "Description" "62.5mW Thick Film Resistors 50V ±100ppm/°C ±1% 10kΩ 0402 Chip Resistor - Surface Mount ROHS"
+		(property "Description" "100mW Thick Film Resistors 75V ±100ppm/°C ±1% 10kΩ 0603 Chip Resistor - Surface Mount ROHS"
 			(at 161.29 40.64 0)
 			(hide yes)
 			(show_name no)
@@ -96946,7 +96946,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25744"
+		(property "LCSC" "C25804"
 			(at 161.29 40.64 0)
 			(hide yes)
 			(show_name no)
