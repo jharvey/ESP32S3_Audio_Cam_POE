@@ -2458,6 +2458,467 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Connector_Generic:Conn_01x04"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x04"
+				(at 0 -7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Conn_01x04_1_1"
+				(rectangle
+					(start -1.27 3.81)
+					(end 1.27 -6.35)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(rectangle
+					(start -1.27 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -4.953)
+					(end 0 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Connector_Generic:Conn_01x05"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 0 7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x05"
+				(at 0 -7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Conn_01x05_1_1"
+				(rectangle
+					(start -1.27 6.35)
+					(end 1.27 -6.35)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(rectangle
+					(start -1.27 5.207)
+					(end 0 4.953)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -4.953)
+					(end 0 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 5.08 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Device:C_Small"
 			(pin_numbers
 				(hide yes)
@@ -37522,7 +37983,7 @@
 	)
 	(text "SPARE IO / EXPANSION PADS (1 mm, solder a wire):\nTP132-136 = U20 PCA9685 LED11-15 (PWM out), TP137 = U21 TCA9555 INT (open drain, needs pull-up),\nTP138-141 = I2C SDA, SCL, +3V3, COM. U7 has no free GPIO (GPIO33-37 are the in-package PSRAM)."
 		(exclude_from_sim no)
-		(at 144.78 316.23 0)
+		(at 200.66 340.36 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -39818,6 +40279,10 @@
 		(uuid "57331738-0f01-49c9-b9b6-130d51070174")
 	)
 	(no_connect
+		(at 215.9 321.31)
+		(uuid "5835b6b9-36f1-41ff-87f0-d2db0bb4bbfb")
+	)
+	(no_connect
 		(at 281.94 172.72)
 		(uuid "65b097e6-e25b-4365-9560-53de1ade07b0")
 	)
@@ -39888,6 +40353,10 @@
 	(no_connect
 		(at 237.49 20.32)
 		(uuid "fce9697a-83d4-4d47-a3d8-3f82291cf642")
+	)
+	(no_connect
+		(at 266.7 323.85)
+		(uuid "fdbd9c5c-e6ec-470c-9f50-cd08426522b7")
 	)
 	(wire
 		(pts
@@ -40891,6 +41360,16 @@
 	)
 	(wire
 		(pts
+			(xy 266.7 326.39) (xy 261.62 326.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "219feea9-a619-498d-9527-ff7dc8891e53")
+	)
+	(wire
+		(pts
 			(xy 416.56 101.6) (xy 421.64 101.6)
 		)
 		(stroke
@@ -41251,6 +41730,16 @@
 	)
 	(wire
 		(pts
+			(xy 215.9 318.77) (xy 210.82 318.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2dbec78f-9df0-4b97-8109-513afc65694d")
+	)
+	(wire
+		(pts
 			(xy 209.55 134.62) (xy 217.17 134.62)
 		)
 		(stroke
@@ -41518,6 +42007,16 @@
 			(type default)
 		)
 		(uuid "37008188-0832-4e89-8eb6-c10a9f7f626f")
+	)
+	(wire
+		(pts
+			(xy 203.2 279.4) (xy 208.28 279.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37082404-a149-4373-a8dd-7c6104f3886b")
 	)
 	(wire
 		(pts
@@ -42051,6 +42550,16 @@
 	)
 	(wire
 		(pts
+			(xy 266.7 321.31) (xy 261.62 321.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4697ce3d-9191-4785-98b0-31bc6f05f1cd")
+	)
+	(wire
+		(pts
 			(xy 281.94 193.04) (xy 293.37 193.04)
 		)
 		(stroke
@@ -42421,6 +42930,16 @@
 	)
 	(wire
 		(pts
+			(xy 215.9 328.93) (xy 208.28 328.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "52d91a08-6a2b-4539-87c6-5d5791b389ff")
+	)
+	(wire
+		(pts
 			(xy 93.98 279.4) (xy 99.06 279.4)
 		)
 		(stroke
@@ -42748,6 +43267,16 @@
 			(type default)
 		)
 		(uuid "5fe19f83-eab5-4ca5-b346-444c24d44949")
+	)
+	(wire
+		(pts
+			(xy 266.7 328.93) (xy 264.16 328.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5feed533-0462-484f-aaf5-3fc809b5f46d")
 	)
 	(wire
 		(pts
@@ -44141,6 +44670,16 @@
 	)
 	(wire
 		(pts
+			(xy 215.9 326.39) (xy 203.2 326.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8745da92-8297-419b-bb3b-b954fbc47d74")
+	)
+	(wire
+		(pts
 			(xy 538.48 58.42) (xy 529.59 58.42)
 		)
 		(stroke
@@ -44471,6 +45010,16 @@
 	)
 	(wire
 		(pts
+			(xy 203.2 276.86) (xy 208.28 276.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "93efeeee-08b4-49b9-8ce1-1ceef509cf54")
+	)
+	(wire
+		(pts
 			(xy 86.36 289.56) (xy 88.9 289.56)
 		)
 		(stroke
@@ -44628,6 +45177,16 @@
 			(type default)
 		)
 		(uuid "97a914b4-1dc7-412c-a5ad-9b6b18a0c85e")
+	)
+	(wire
+		(pts
+			(xy 215.9 323.85) (xy 210.82 323.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "97f05810-f419-4edc-af0f-5d0cf92d7e2e")
 	)
 	(wire
 		(pts
@@ -45371,6 +45930,16 @@
 	)
 	(wire
 		(pts
+			(xy 264.16 328.93) (xy 264.16 331.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b24d69ab-295a-4aa9-a84c-63b95daceaad")
+	)
+	(wire
+		(pts
 			(xy 326.39 247.65) (xy 326.39 313.69)
 		)
 		(stroke
@@ -45808,6 +46377,16 @@
 			(type default)
 		)
 		(uuid "bfa5d52c-17b2-4c61-93b6-fdd9b270f753")
+	)
+	(wire
+		(pts
+			(xy 208.28 328.93) (xy 208.28 334.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c04cf85e-d1b8-49bb-a9e3-1c86344e6fc2")
 	)
 	(wire
 		(pts
@@ -49140,7 +49719,7 @@
 		(uuid "21d6a66d-c828-4eb0-9df4-7d56e251982b")
 	)
 	(label "EXP.PWM12"
-		(at 154.94 326.39 0)
+		(at 220.98 443.23 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -49348,6 +49927,16 @@
 			(justify left bottom)
 		)
 		(uuid "2f6abc9a-49f1-4b6e-aae9-283ba58ed491")
+	)
+	(label "RADAR.OUT"
+		(at 208.28 276.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "306f8b10-6ba5-4754-95bb-2f6e933c2947")
 	)
 	(label "7SEG.SEG4"
 		(at 334.01 245.11 0)
@@ -50120,7 +50709,7 @@
 		(uuid "67703592-4011-41ff-8bcf-0a3461797c50")
 	)
 	(label "EXP.PWM15"
-		(at 177.8 326.39 0)
+		(at 243.84 443.23 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -50169,8 +50758,18 @@
 		)
 		(uuid "6be1d69f-35da-4ef9-87db-db7c63fd6da2")
 	)
+	(label "RADAR.TX"
+		(at 203.2 318.77 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "6c5861b8-66a9-4b4d-8f26-4d620cc34865")
+	)
 	(label "EXP.PWM14"
-		(at 170.18 326.39 0)
+		(at 236.22 443.23 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -50198,6 +50797,16 @@
 			(justify left bottom)
 		)
 		(uuid "72722602-e43f-4064-ab0a-36571d22b8cd")
+	)
+	(label "LORA_IRQ"
+		(at 208.28 279.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "73452361-19a0-4670-b3c8-8bb877c1dafd")
 	)
 	(label "MIC.L"
 		(at 593.09 168.91 180)
@@ -50491,7 +51100,7 @@
 		(uuid "83025bcf-2675-4e3c-aa8b-2191d0ca463d")
 	)
 	(label "I2C.SCL"
-		(at 200.66 326.39 0)
+		(at 266.7 443.23 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -50731,7 +51340,7 @@
 		(uuid "979d4f45-afd2-491f-a7e2-4eecee716458")
 	)
 	(label "I2C.SDA"
-		(at 193.04 326.39 0)
+		(at 259.08 443.23 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -50871,7 +51480,7 @@
 		)
 		(uuid "a40e831f-e730-4aaa-a437-8ef33a059220")
 	)
-	(label "LORA_IRQ"
+	(label "RADAR.TX"
 		(at 182.88 167.64 0)
 		(effects
 			(font
@@ -51040,6 +51649,16 @@
 			(justify left bottom)
 		)
 		(uuid "b35d67eb-9470-4813-b909-c277c8d4fd7a")
+	)
+	(label "RADAR.TX"
+		(at 261.62 326.39 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b3689be4-25f3-4e04-8519-b7a573e2be81")
 	)
 	(label "MISC.OUT1"
 		(at 88.9 292.1 0)
@@ -51502,7 +52121,7 @@
 		(uuid "da748a8f-a5c7-47c0-91dd-b41c7d0db28a")
 	)
 	(label "EXP.PWM11"
-		(at 147.32 326.39 0)
+		(at 213.36 443.23 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -51530,6 +52149,16 @@
 			(justify left bottom)
 		)
 		(uuid "dbc2a25a-2a66-4713-a38d-5886c80ebd54")
+	)
+	(label "RADAR.OUT"
+		(at 210.82 323.85 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "dcb25522-43ca-46ad-8681-c0c6af4b1a91")
 	)
 	(label "PMU.Vo3"
 		(at 213.36 369.57 180)
@@ -51572,7 +52201,7 @@
 		(uuid "df98c5ae-75b0-4dbb-8280-d1291e199752")
 	)
 	(label "EXP.PWM13"
-		(at 162.56 326.39 0)
+		(at 228.6 443.23 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -51942,7 +52571,7 @@
 		(uuid "f81fe8d8-09ef-432e-9925-07bee3e70dee")
 	)
 	(label "EXP.INT"
-		(at 185.42 326.39 0)
+		(at 251.46 443.23 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -59117,7 +59746,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 213.36 326.39 180)
+		(at 279.4 443.23 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -59128,7 +59757,7 @@
 		(fields_autoplaced yes)
 		(uuid "1b141ece-a155-4f9e-98cc-6fecf7ab3601")
 		(property "Reference" "#PWR0343"
-			(at 213.36 320.04 0)
+			(at 279.4 436.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -59139,7 +59768,7 @@
 			)
 		)
 		(property "Value" "COM"
-			(at 213.36 322.58 0)
+			(at 279.4 439.42 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -59150,7 +59779,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 213.36 326.39 0)
+			(at 279.4 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -59161,7 +59790,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 213.36 326.39 0)
+			(at 279.4 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -59172,7 +59801,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 213.36 326.39 0)
+			(at 279.4 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -60408,6 +61037,104 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x04")
+		(at 271.78 323.85 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "1eeb2221-5b27-427f-83c4-61d113fef68d")
+		(property "Reference" "J22"
+			(at 274.32 322.58 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "HLK-LD2450 cable"
+			(at 274.32 325.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_ZH_B4B-ZR_1x04_P1.50mm_Vertical"
+			(at 271.78 323.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C157997.html"
+			(at 271.78 323.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "JST ZH 1.5 mm 4-pin socket for the HLK-LD2450 radar on a 1:1 cable. Pins: 1 5V, 2 module RX (not used), 3 module TX, 4 GND. CHECK the cable order with a meter before first power-up"
+			(at 271.78 323.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C157997"
+			(at 271.78 323.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3af9a34a-6888-4d15-854b-06a4c61ac89e")
+		)
+		(pin "2"
+			(uuid "272638cc-3ca3-47cb-b093-2124bdb2dcf3")
+		)
+		(pin "3"
+			(uuid "9065cd6e-4ca7-4902-99a9-df0fc2cab59d")
+		)
+		(pin "4"
+			(uuid "fb0a7d79-33fb-477a-a3f9-ccade3ffcaab")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "J22")
 					(unit 1)
 				)
 			)
@@ -63826,7 +64553,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 170.18 326.39 180)
+		(at 236.22 443.23 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -63836,7 +64563,7 @@
 		(dnp yes)
 		(uuid "33d7ac21-1442-4ddd-9aba-8a1e83e77770")
 		(property "Reference" "TP135"
-			(at 170.18 331.724 90)
+			(at 236.22 448.564 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -63847,7 +64574,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 167.64 328.422 0)
+			(at 233.68 445.262 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -63859,7 +64586,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 165.1 326.39 0)
+			(at 231.14 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -63870,7 +64597,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 165.1 326.39 0)
+			(at 231.14 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -63881,7 +64608,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 170.18 326.39 0)
+			(at 236.22 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -64238,6 +64965,84 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "TP46")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 264.16 331.47 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "3816eeb6-117b-4d8e-a993-2351f3b369bb")
+		(property "Reference" "#PWR0383"
+			(at 264.16 337.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 264.16 335.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 264.16 331.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 264.16 331.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 264.16 331.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "17dab360-79d4-4030-b399-a1cfba75c056")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0383")
 					(unit 1)
 				)
 			)
@@ -65136,7 +65941,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 213.36 326.39 180)
+		(at 279.4 443.23 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -65146,7 +65951,7 @@
 		(dnp yes)
 		(uuid "3ba31e8d-a3fc-4d81-950f-16579904f42b")
 		(property "Reference" "TP141"
-			(at 213.36 331.724 90)
+			(at 279.4 448.564 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -65157,7 +65962,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 210.82 328.422 0)
+			(at 276.86 445.262 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -65169,7 +65974,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 208.28 326.39 0)
+			(at 274.32 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -65180,7 +65985,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 208.28 326.39 0)
+			(at 274.32 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -65191,7 +65996,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 213.36 326.39 0)
+			(at 279.4 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -67230,7 +68035,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 208.28 326.39 0)
+		(at 274.32 443.23 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -67240,7 +68045,7 @@
 		(dnp no)
 		(uuid "43f5ac15-9b61-4e84-9985-53fa4fec5866")
 		(property "Reference" "#PWR0342"
-			(at 212.09 326.39 0)
+			(at 278.13 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -67251,7 +68056,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 208.026 322.072 0)
+			(at 274.066 438.912 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -67261,7 +68066,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 208.28 326.39 0)
+			(at 274.32 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -67272,7 +68077,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 208.28 326.39 0)
+			(at 274.32 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -67283,7 +68088,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 208.28 326.39 0)
+			(at 274.32 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -70366,6 +71171,84 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
+		(at 203.2 326.39 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "5444843d-ca3e-4bfe-a4e9-cc2aee9563f7")
+		(property "Reference" "#PWR0380"
+			(at 203.2 332.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "COM"
+			(at 203.2 330.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 203.2 326.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 203.2 326.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 203.2 326.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b27405c7-276f-4150-ac97-616c337bb486")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0380")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
 		(at 427.99 349.25 0)
 		(unit 1)
 		(body_style 1)
@@ -70596,6 +71479,84 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "TP66")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:VBUS")
+		(at 208.28 334.01 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "55271196-ed39-4949-a3ec-f6cddd4f1704")
+		(property "Reference" "#PWR0381"
+			(at 208.28 337.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "VBUS"
+			(at 209.55 335.28 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 208.28 334.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 208.28 334.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VBUS\""
+			(at 208.28 334.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "77fa00c3-82fa-4ab8-a7b6-86e1f679e768")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0381")
 					(unit 1)
 				)
 			)
@@ -75357,7 +76318,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 177.8 326.39 180)
+		(at 243.84 443.23 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -75367,7 +76328,7 @@
 		(dnp yes)
 		(uuid "6a67488e-caf2-432a-a5bf-dcbb717c2404")
 		(property "Reference" "TP136"
-			(at 177.8 331.724 90)
+			(at 243.84 448.564 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -75378,7 +76339,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 175.26 328.422 0)
+			(at 241.3 445.262 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -75390,7 +76351,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 172.72 326.39 0)
+			(at 238.76 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -75401,7 +76362,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 172.72 326.39 0)
+			(at 238.76 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -75412,7 +76373,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 177.8 326.39 0)
+			(at 243.84 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -76738,7 +77699,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 208.28 326.39 180)
+		(at 274.32 443.23 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -76748,7 +77709,7 @@
 		(dnp yes)
 		(uuid "72498827-ba88-47c5-b60f-1b14a2491c3b")
 		(property "Reference" "TP140"
-			(at 208.28 331.724 90)
+			(at 274.32 448.564 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -76759,7 +77720,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 205.74 328.422 0)
+			(at 271.78 445.262 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -76771,7 +77732,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 203.2 326.39 0)
+			(at 269.24 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -76782,7 +77743,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 203.2 326.39 0)
+			(at 269.24 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -76793,7 +77754,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 208.28 326.39 0)
+			(at 274.32 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -78257,7 +79218,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 147.32 326.39 180)
+		(at 213.36 443.23 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -78267,7 +79228,7 @@
 		(dnp yes)
 		(uuid "7a8f2fd4-1ed8-43a3-8937-b8694c4fd634")
 		(property "Reference" "TP132"
-			(at 147.32 331.724 90)
+			(at 213.36 448.564 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -78278,7 +79239,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 144.78 328.422 0)
+			(at 210.82 445.262 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -78290,7 +79251,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 142.24 326.39 0)
+			(at 208.28 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -78301,7 +79262,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 142.24 326.39 0)
+			(at 208.28 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -78312,7 +79273,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 147.32 326.39 0)
+			(at 213.36 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -78647,7 +79608,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 154.94 326.39 180)
+		(at 220.98 443.23 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -78657,7 +79618,7 @@
 		(dnp yes)
 		(uuid "7d1901d1-46c0-4ce4-9654-c8b44fe0d01d")
 		(property "Reference" "TP133"
-			(at 154.94 331.724 90)
+			(at 220.98 448.564 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -78668,7 +79629,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 152.4 328.422 0)
+			(at 218.44 445.262 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -78680,7 +79641,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 149.86 326.39 0)
+			(at 215.9 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -78691,7 +79652,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 149.86 326.39 0)
+			(at 215.9 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -78702,7 +79663,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 154.94 326.39 0)
+			(at 220.98 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -95944,7 +96905,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 185.42 326.39 180)
+		(at 251.46 443.23 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -95954,7 +96915,7 @@
 		(dnp yes)
 		(uuid "ce57caac-daa5-45fc-a280-f1163ff83b5c")
 		(property "Reference" "TP137"
-			(at 185.42 331.724 90)
+			(at 251.46 448.564 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -95965,7 +96926,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 182.88 328.422 0)
+			(at 248.92 445.262 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -95977,7 +96938,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 180.34 326.39 0)
+			(at 246.38 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -95988,7 +96949,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 180.34 326.39 0)
+			(at 246.38 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -95999,7 +96960,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 185.42 326.39 0)
+			(at 251.46 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -96439,7 +97400,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 200.66 326.39 180)
+		(at 266.7 443.23 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -96449,7 +97410,7 @@
 		(dnp yes)
 		(uuid "d02f73a0-cd96-43be-8dc3-1d761aa40c48")
 		(property "Reference" "TP139"
-			(at 200.66 331.724 90)
+			(at 266.7 448.564 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -96460,7 +97421,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 198.12 328.422 0)
+			(at 264.16 445.262 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -96472,7 +97433,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 195.58 326.39 0)
+			(at 261.62 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -96483,7 +97444,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 195.58 326.39 0)
+			(at 261.62 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -96494,7 +97455,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 200.66 326.39 0)
+			(at 266.7 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -101013,6 +101974,83 @@
 		)
 	)
 	(symbol
+		(lib_id "power:VBUS")
+		(at 261.62 321.31 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e4741e06-b03a-4a6f-b477-f8e32da01537")
+		(property "Reference" "#PWR0382"
+			(at 261.62 325.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "VBUS"
+			(at 261.62 317.5 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 261.62 321.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 261.62 321.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VBUS\""
+			(at 261.62 321.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4ffd05d7-1a84-4712-ae39-ccbb85d99fb6")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "#PWR0382")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "JLCPCB-Capacitors:0603,100nF")
 		(at 327.66 156.21 180)
 		(unit 1)
@@ -104359,6 +105397,107 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector_Generic:Conn_01x05")
+		(at 220.98 323.85 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp yes)
+		(uuid "f3c8bebf-6d3c-4e7e-ba08-9954cba63562")
+		(property "Reference" "J21"
+			(at 223.52 322.58 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "HLK-LD2410C (low-cost option)"
+			(at 223.52 325.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Project-specific:HLK-LD2410C"
+			(at 220.98 323.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://datasheet.lcsc.com/lcsc/2312221750_HI-LINK-HLK-LD2410C-P_C19723500.pdf"
+			(at 220.98 323.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "24 GHz mmWave human presence radar module. Pins: 1 TX, 2 RX, 3 OUT, 4 GND, 5 VCC 5 V. UART 256000 baud"
+			(at 220.98 323.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C19723500"
+			(at 220.98 323.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "575b91b6-7d0a-4bde-b10f-31cae54af6a1")
+		)
+		(pin "2"
+			(uuid "bc7e4d8c-f271-4c71-8150-7aa063e7f9ad")
+		)
+		(pin "3"
+			(uuid "7af65c48-9013-4104-ab3b-e2824a118e05")
+		)
+		(pin "4"
+			(uuid "8a55f812-876d-43d5-8b6d-1dd32bc23a9f")
+		)
+		(pin "5"
+			(uuid "e0b6058a-9ead-4fa2-9646-556f07a0175c")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "J21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "JLCPCB-Resistors:0402,10kΩ")
 		(at 478.79 146.05 180)
 		(unit 1)
@@ -105315,7 +106454,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 162.56 326.39 180)
+		(at 228.6 443.23 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -105325,7 +106464,7 @@
 		(dnp yes)
 		(uuid "f78bf548-fea9-4bc5-bc48-f74bbf491aa8")
 		(property "Reference" "TP134"
-			(at 162.56 331.724 90)
+			(at 228.6 448.564 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -105336,7 +106475,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 160.02 328.422 0)
+			(at 226.06 445.262 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -105348,7 +106487,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 157.48 326.39 0)
+			(at 223.52 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -105359,7 +106498,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 157.48 326.39 0)
+			(at 223.52 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -105370,7 +106509,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 162.56 326.39 0)
+			(at 228.6 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -106233,7 +107372,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 193.04 326.39 180)
+		(at 259.08 443.23 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -106243,7 +107382,7 @@
 		(dnp yes)
 		(uuid "fb9d2f45-c05d-47b1-8dd3-7bb4fa8a5b85")
 		(property "Reference" "TP138"
-			(at 193.04 331.724 90)
+			(at 259.08 448.564 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -106254,7 +107393,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 190.5 328.422 0)
+			(at 256.54 445.262 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -106266,7 +107405,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 187.96 326.39 0)
+			(at 254 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -106277,7 +107416,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 187.96 326.39 0)
+			(at 254 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -106288,7 +107427,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 193.04 326.39 0)
+			(at 259.08 443.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -107313,6 +108452,86 @@
 			(project "ESP32S3_Audio_Cam_POE"
 				(path "/c5870406-763b-471e-b639-251ff1f3739e"
 					(reference "#PWR328")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Jumper:SolderJumper_2_Open")
+		(at 207.01 318.77 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp yes)
+		(uuid "01a085cb-5fdd-41c4-b1a4-5239c5f785e7")
+		(property "Reference" "JP9"
+			(at 210.31 317.25 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SolderJumper_2_Open"
+			(at 207.01 314.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm"
+			(at 207.01 318.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 207.01 318.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Close with solder only when the HLK-LD2410C is fitted on J21: it joins the module's TX to RADAR.TX. Leave open when a radar is plugged into J22"
+			(at 207.01 318.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "69775e8f-e89f-46cb-a4d6-d048062d43de")
+		)
+		(pin "2"
+			(uuid "4d1fb6b2-a65e-432c-93ea-b95e612131d2")
+		)
+		(instances
+			(project "ESP32S3_Audio_Cam_POE"
+				(path "/c5870406-763b-471e-b639-251ff1f3739e"
+					(reference "JP9")
 					(unit 1)
 				)
 			)
