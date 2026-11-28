@@ -78,6 +78,7 @@ public:
         out->clear();
         return false;
     }
+    virtual void removeBlob(const char* name) { (void)name; }
 };
 
 // Optional board checks for the "selftest" command: which chips answer, link state, etc.

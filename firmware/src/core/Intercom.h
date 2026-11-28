@@ -206,6 +206,9 @@ public:
     // The office page's own data (plan, dots, areas, emergency steps) is kept on every office unit, so the page shows the
     // same from any of them. The page saves it on the unit it is open on; the other office units fetch the newest copy.
     bool siteAvailable() const { return hal_.store->hasBlobs(); }
+    // Only office units keep the plan (any unit while no office list is set). A unit that is out of the list for
+    // 5 minutes deletes its copy, so a former office unit used as a classroom does not carry the floor plan.
+    bool siteHere() const { return siteAvailable() && (offices_.empty() || isOffice(unit_.room)); }
     uint16_t siteRev() const { return siteRev_; }
     uint16_t siteHash() const { return siteHash_; }
     uint32_t siteSize() const { return siteSize_; }
@@ -284,7 +287,7 @@ private:
     std::vector<std::pair<uint16_t, uint32_t>> officeBoards_;
     uint8_t mismatchWas_ = 0;
     uint16_t siteRev_ = 0, siteHash_ = 0, sitePullRoom_ = 0, sitePullRev_ = 0, sitePullHash_ = 0;
-    uint32_t siteSize_ = 0, sitePullTotal_ = 0, sitePullAt_ = 0, siteCacheAt_ = 0;
+    uint32_t siteSize_ = 0, sitePullTotal_ = 0, sitePullAt_ = 0, siteCacheAt_ = 0, siteGoneAt_ = 0;
     int sitePullTries_ = 0;
     std::string sitePullBuf_, siteCache_;
     void siteSetMeta(uint16_t rev, uint16_t hash, uint32_t size);

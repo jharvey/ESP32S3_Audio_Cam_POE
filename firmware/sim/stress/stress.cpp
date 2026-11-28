@@ -176,6 +176,7 @@ struct Unit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFirmwa
     bool hasBlobs() const override { return true; }
     bool saveBlob(const char* n, const std::string& d) override { blobs[n] = d; return true; }
     bool loadBlob(const char* n, std::string* o) override { *o = blobs[n]; return !o->empty(); }
+    void removeBlob(const char* n) override { blobs.erase(n); }
     std::string loadText(const char* k) override { return kv[k]; }
     void saveText(const char* k, const std::string& v) override { kv[k] = v; }
     std::string boardTest() override { return "ok fake board\n"; }

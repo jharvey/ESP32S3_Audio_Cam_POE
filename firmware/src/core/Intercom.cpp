@@ -331,12 +331,13 @@ void Intercom::siteSetMeta(uint16_t rev, uint16_t hash, uint32_t size) {
 
 std::string Intercom::siteText() {
     std::string t;
-    if (!siteRev_ || !hal_.store->loadBlob("site", &t)) return "";
+    if (!siteRev_ || !siteHere() || !hal_.store->loadBlob("site", &t)) return "";
     return t;
 }
 
 std::string Intercom::sitePut(const std::string& text) {
     if (!siteAvailable()) return "this unit has no room to keep the plan";
+    if (!siteHere()) return "only the office units keep the plan";
     if (text.empty() || text.size() > kSiteMax) return "the plan is too large for the unit (200 kB at most)";
     if (!hal_.store->saveBlob("site", text)) return "could not save the plan on the unit";
     uint16_t top = siteRev_;
@@ -359,6 +360,21 @@ void Intercom::siteTick() {
         siteCache_.shrink_to_fit();
         siteCacheAt_ = 0;
     }
+    if (siteRev_ && !siteHere()) {
+        if (!siteGoneAt_) siteGoneAt_ = frame_ ? frame_ : 1;
+        if (frame_ - siteGoneAt_ >= uint32_t(5 * 60 * 1000 / kFrameMs)) {
+            hal_.store->removeBlob("site");
+            sitePullRoom_ = 0;
+            sitePullBuf_.clear();
+            sitePullBuf_.shrink_to_fit();
+            siteSetMeta(0, 0, 0);
+            hal_.store->saveText("sitemeta", "");
+            siteGoneAt_ = 0;
+            event(EventKind::Info, unit_.room, "unit %u: office plan removed (no longer an office unit)", unsigned(unit_.room));
+        }
+        return;
+    }
+    siteGoneAt_ = 0;
     if (!siteAvailable() || !isOffice(unit_.room) || frame_ < 500) return;
     if (sitePullRoom_) {
         if (frame_ - sitePullAt_ < 100) return;
@@ -391,7 +407,7 @@ void Intercom::siteTick() {
 std::string Intercom::siteGet(const std::vector<std::string>& a) {
     if (a.size() != 3) return "usage: siteget REV OFFSET";
     const unsigned long rev = std::strtoul(a[1].c_str(), nullptr, 10), off = std::strtoul(a[2].c_str(), nullptr, 10);
-    if (!siteRev_ || rev != siteRev_) return "sitepart 0 0 0 -";
+    if (!siteRev_ || rev != siteRev_ || !siteHere()) return "sitepart 0 0 0 -";
     if (siteCache_.empty() && !hal_.store->loadBlob("site", &siteCache_)) return "sitepart 0 0 0 -";
     siteCacheAt_ = frame_ ? frame_ : 1;
     if (off > siteCache_.size()) return "sitepart 0 0 0 -";

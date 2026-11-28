@@ -348,6 +348,7 @@ struct FakeUnit : INet, ILinks, IPower, IPanel, IStore, ILog, ILamps, IDiag, IFi
     bool hasBlobs() const override { return blobsOn; }
     bool saveBlob(const char* n, const std::string& d) override { if (blobsOn) blobs[n] = d; return blobsOn; }
     bool loadBlob(const char* n, std::string* o) override { *o = blobs[n]; return blobsOn && !o->empty(); }
+    void removeBlob(const char* n) override { blobs.erase(n); }
     std::string loadText(const char* k) override { return kv[k]; }
     void saveText(const char* k, const std::string& v) override { kv[k] = v; }
 
@@ -2117,6 +2118,15 @@ static void testR33Sync() {
         q.body.clear();
         CHECK(web.handle(q).body.find("\"site\":{\"ok\":true,\"rev\":3,") != std::string::npos, "the school page is told which version the unit holds");
     }
+    CHECK(!r1new.ic->sitePut(planA).empty() && r1new.ic->siteText().empty(), "a classroom unit refuses to keep the plan");
+    // an office unit taken out of the list deletes its copy after 5 minutes; the others keep theirs
+    o2.ic->command("office 105 104");
+    run(2000);
+    CHECK(!o3.ic->isOffice(901) && o3.ic->siteRev() != 0 && o3.ic->siteText().empty(), "901 is no longer an office unit: it stops handing out the plan, and keeps its copy for a while in case that was a mistake");
+    run(14000);
+    CHECK(o3.ic->siteText().empty() && o3.ic->siteRev() == 0 && o3.kv["sitemeta"].empty() && has(o3, "plan removed") && o2.ic->siteText() == o1new.ic->siteText() &&
+              !o2.ic->siteText().empty(),
+          "after 5 minutes it deletes its copy of the plan; the office units keep theirs"); 
     g_clockFrames = -1;
     g_clock0 = clock0;
 }

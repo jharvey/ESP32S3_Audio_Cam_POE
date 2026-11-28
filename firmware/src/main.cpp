@@ -531,6 +531,12 @@ public:
         if (n != out->size()) out->clear();
         return !out->empty();
     }
+    void removeBlob(const char* name) override {
+        if (!gFsOk) return;
+        const String path = String("/") + name;
+        LittleFS.remove(path);
+        LittleFS.remove(path + ".new");
+    }
     std::string loadText(const char* key) override { return gPrefs.getString(key, "").c_str(); }
     void saveText(const char* key, const std::string& v) override { gPrefs.putString(key, v.c_str()); }
     void log(const char* m) override { Serial.println(m); }
