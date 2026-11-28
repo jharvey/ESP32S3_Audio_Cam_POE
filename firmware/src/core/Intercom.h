@@ -233,6 +233,10 @@ public:
     // unit chirps every 30 s once nothing has read it for N minutes, so a closed page or a PC that is off is noticed.
     void consoleSeen() { conSeen_ = frame_; }
     bool consoleMissing() const { return conMissing_; }
+    // The chirp can be quieted at the unit when the PC cannot be put right at once: OFFICE held 3 s while it chirps
+    // (or "consolewatch quiet [MIN]") stops it for an hour. Calls, help calls and emergencies sound as always, and the
+    // quiet ends by itself when the office page is open again.
+    bool consoleQuiet() const { return conQuietUntil_ && frame_ < conQuietUntil_; }
     int consoleWatchMin() const { return conWatchMin_; }
     uint16_t actingOffice() const;  // the office unit, or its stand-in while the office unit is offline; 0 = none set
     bool urgent() const { return urgent_ && callingOffice_; }
@@ -347,7 +351,8 @@ private:
     bool powerKnown_ = false, wasLow_ = false;
     PowerSource lastSource_ = PowerSource::PoE;
     int conWatchMin_ = 0;        // consolewatch: minutes without the office page before the chirp, 0 = off
-    uint32_t conSeen_ = 0, conChirpNext_ = 0;
+    uint32_t conSeen_ = 0, conChirpNext_ = 0, conQuietUntil_ = 0, hushSince_ = 0;
+    void quietConsole(unsigned minutes, const char* how);
     bool conMissing_ = false;
     int selfMin_ = -1;           // nightly self-check: minute of the day, -1 = off
     uint32_t selfDay_ = 0;       // yyyymmdd it last ran

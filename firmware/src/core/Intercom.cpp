@@ -71,6 +71,8 @@ std::string b64(const std::string& in) {
 }
 const char* const kFeatureNames[] = {"reason", "queue", "zones", "dnd", "quiet", "silent", "failover", "lockdown"};
 constexpr uint32_t kUrgentHoldFrames = 75;            // OFFICE held 1.5 s = "help needed"
+constexpr uint32_t kConQuietHoldFrames = 150;         // OFFICE held 3 s on a chirping office unit = quiet for an hour
+constexpr unsigned kConQuietMin = 60;
 constexpr uint32_t kSilentBothFrames = 50;            // TALK and OFFICE held together 1 s = silent help call
 constexpr uint32_t kPressDelayFrames = 8;             // TALK and OFFICE wait 0.16 s before they act, so pressing both does neither
 constexpr uint32_t kHelpAgainFrames = 1500;           // an office unit rings again every 30 s for an unanswered call for help
@@ -147,6 +149,7 @@ const char* kHelp =
     "  log [calls|faults] [N]  the event log: faults and calls this unit saw, school-wide (last 30)\n"
     "  selfcheck [HH:MM|off|now]  nightly speaker->microphone check; a failure shows on the school page\n"
     "  consolewatch [MIN|off]  the office unit chirps when no office page has read it for MIN minutes (1-60)\n"
+    "  consolewatch quiet [MIN]  stop that chirp for MIN minutes (60; 1-240); the same as OFFICE held 3 s on the unit\n"
     "  emergency [lockdown|evacuate|shelter|clear] [all]  emergency signal here; all = on every unit (USB / web)\n"
     "  backup               this unit's settings as key=value lines (no passwords or keys)\n"
     "  restore key=value    put one line of a backup back\n"
@@ -1393,6 +1396,13 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
         return (t.empty() ? std::string("no office boards registered yet") : "office boards: " + t) + (bad.empty() ? "" : "; ANOTHER BOARD at:" + bad);
     }
     if (c == "consolewatch") {  // the office unit chirps while no office page is open
+        if (a.size() >= 2 && a[1] == "quiet") {
+            const int n = a.size() == 3 ? std::atoi(a[2].c_str()) : int(kConQuietMin);
+            if (a.size() > 3 || n < 1 || n > 240) return "usage: consolewatch quiet [MIN]   (1-240 minutes, 60 if left out)";
+            if (!conMissing_) return "the office unit is not chirping for its office page";
+            quietConsole(unsigned(n), "command");
+            return "console watch: quiet for " + std::to_string(n) + " min";
+        }
         if (a.size() == 2) {
             const int n = std::atoi(a[1].c_str());
             if (a[1] == "off") hal_.store->saveText("conwatch", "");
@@ -1403,6 +1413,7 @@ std::string Intercom::command(const std::string& line, CmdSource src) {
             return "usage: consolewatch [1-60|off]";
         }
         snprintf(buf, sizeof(buf), "console watch: the office unit chirps after %d min without the office page%s", conWatchMin_, conMissing_ ? "; NOT OPEN NOW" : "");
+        if (consoleQuiet()) return std::string(buf) + "; quiet for " + std::to_string((conQuietUntil_ - frame_) * kFrameMs / 60000 + 1) + " more min";
         return conWatchMin_ ? buf : "console watch off";
     }
     if (c == "selfcheck") {  // nightly speaker->microphone check
@@ -2213,6 +2224,12 @@ int Intercom::bootTestStep(char text[3], uint8_t* dots, uint8_t lamps[], uint32_
 }
 
 bool Intercom::inCall() const { return callLast_ && frame_ - callLast_ < kCallFrames; }
+void Intercom::quietConsole(unsigned minutes, const char* how) {
+    conQuietUntil_ = frame_ + minutes * 60000u / kFrameMs;
+    event(EventKind::Info, unit_.room, "office unit %u: the office page is still not open; its chirp is quiet for %u min (%s)", unsigned(unit_.room), minutes, how);
+    startSound(Sound::Chime);  // heard: the unit took it
+}
+
 bool Intercom::canAnswer() const { return callLast_ && frame_ - callLast_ < kAnswerFrames; }
 
 void Intercom::setCallingOffice(bool on, const char* why) {
@@ -2592,7 +2609,19 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         officeSince_ = 0;
         officeActed_ = true;
     }
-    if (office && canAnswer()) {
+    // The acting office unit while it chirps for its office page and nothing else is going on: OFFICE held 3 s quiets
+    // the chirp for an hour. OFFICE does nothing else then (an office unit has no office to call).
+    const bool hushing = conMissing_ && office && !canAnswer() && waiting_.empty() && emerg_ == Emergency::None;
+    if (hushing) {
+        if (!hushSince_) hushSince_ = frame_ ? frame_ : 1;
+        if (frame_ - hushSince_ == kConQuietHoldFrames) quietConsole(kConQuietMin, "OFFICE held 3 s");
+        officeSince_ = 0;
+        officeActed_ = true;
+    } else if (!ofcRaw) {
+        hushSince_ = 0;
+    }
+    if (hushing) {
+    } else if (office && canAnswer()) {
         if (!muted()) talk = true;
         officeActed_ = true;
     } else {
@@ -2719,10 +2748,11 @@ void Intercom::processFrame(const int16_t* mic, int16_t* speaker) {
         const bool miss = frame_ - conSeen_ >= uint32_t(conWatchMin_) * 60000u / kFrameMs;
         if (miss != conMissing_) {
             conMissing_ = miss;
+            conQuietUntil_ = 0;
             conChirpNext_ = frame_;
             event(EventKind::Fault, unit_.room, miss ? "office unit %u: the office page is not open on any PC" : "office unit %u: the office page is open again", unsigned(unit_.room));
         }
-        if (miss && frame_ >= conChirpNext_ && !soundActive_ && !transmitting_ && !inCall() && emerg_ == Emergency::None && quietNowDb_ == 0) {
+        if (miss && !consoleQuiet() && frame_ >= conChirpNext_ && !soundActive_ && !transmitting_ && !inCall() && emerg_ == Emergency::None && quietNowDb_ == 0) {
             startSound(Sound::Chirp);
             conChirpNext_ = frame_ + 30000 / kFrameMs;
         }

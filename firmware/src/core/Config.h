@@ -5,7 +5,7 @@
 
 namespace ic {
 
-constexpr const char* kFirmwareVersion = "0.5.1";
+constexpr const char* kFirmwareVersion = "0.5.2";
 
 constexpr int kSampleRate = 16000;                          // Hz, mono
 constexpr int kFrameMs = 20;

@@ -129,6 +129,24 @@ pages, and the unit's page is plain `http://` on the intercom network, so set th
 - **TALK and OFFICE held together for 1 second (feature "Silent help call", on at first):** a silent help call. Nothing sounds in the room; the third dot on its display is the only sign. The office unit plays what the room's microphone hears for 2 minutes. Pressing OFFICE alone in the room cancels it. The two fingers need not land together: each button waits a moment before it acts.
 - **On the school page** a call for help fills the screen: which room, **Hold to talk to room N** (not for a silent call), **Lockdown now** and **Help is on the way: close this call**. **Show the plan** folds it into a bar at the top.
 
+## The office unit beeps: the office page is not open
+
+With `consolewatch N` set (Setup, Options on the school page; N = 1 to 60 minutes), the acting office unit gives two
+short beeps every 30 seconds once no PC has had the school page open for N minutes. A closed browser or a PC that
+is off is noticed this way. It is silent in quiet hours and during an emergency.
+
+- **To stop it:** open the school page on a PC. The beeps stop in a few seconds.
+- **The PC cannot be used right now:** hold **OFFICE** on the office unit for 3 seconds, until it chimes. The beeps
+  stay quiet for 1 hour and then start again. Rooms calling the office, calls for help and alarms sound as always.
+  The log keeps a line. The quiet ends at once when the page is open again, so the next time is heard.
+  `consolewatch quiet [MIN]` does the same from the command line (60 minutes if left out, up to 240).
+- While the unit beeps for its page, OFFICE on that unit does nothing else.
+
+**Cards for the office** (in the board repository, folder `enclosure`): `office_card.html` prints the small card
+for the holder on the office unit (buttons on the front, what the sounds mean on the back), and
+`office_wall_card.html` prints one Letter sheet to laminate and pin up next to it. Write the school page's address
+on both before laminating.
+
 ## Emergency: how to start it and how to clear it
 
 - **Start, from any intercom:** lift the clear lid and press the **red button**. Every unit goes to lockdown at once: no holding, no counting. (Feature "Red button", on at first.)

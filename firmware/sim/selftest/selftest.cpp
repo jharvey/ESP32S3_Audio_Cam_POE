@@ -1894,6 +1894,36 @@ static void testR31() {
         CHECK(!o.ic->consoleMissing() && so <= 12, "the page is open again: the chirping stops (%d)", so);
         run(3200);
         CHECK(o.ic->consoleMissing() && so > 0, "the page closed for a minute: it chirps again (%d)", so);
+        // nobody can get the PC going: OFFICE held 3 s on the unit quiets the chirp for an hour
+        o.held = uint8_t(1u << kBtnOffice);
+        run(100);
+        CHECK(!o.ic->consoleQuiet(), "OFFICE held 2 s: not yet");
+        run(60);
+        o.held = 0;
+        CHECK(o.ic->consoleQuiet() && so > 0 && has(o, "quiet for 60 min") && o.ic->command("consolewatch").find("quiet for 60 more min") != std::string::npos,
+              "OFFICE held 3 s: a chime, and the chirp is quiet for an hour [%s]", o.ic->command("consolewatch").c_str());
+        run(200);
+        run(3100);
+        CHECK(so == 0 && o.ic->consoleMissing() && r.ic->officeAlert() == 0, "a minute later: no chirp, and the office unit did not call anyone (%d)", so);
+        r.held = uint8_t(1u << kBtnOffice);
+        run(5);
+        r.held = 0;
+        run(200);
+        CHECK(so > 0, "a room calling the office still rings there (%d)", so);
+        r.ic->command("callofc off");
+        run(600);
+        CHECK(o.ic->command("consolewatch quiet 1").find("quiet for 1 min") != std::string::npos && o.ic->command("consolewatch quiet 0").find("usage") != std::string::npos,
+              "consolewatch quiet MIN does the same");
+        run(100);
+        run(2800);
+        CHECK(so == 0, "quiet for that minute (%d)", so);
+        run(1700);
+        CHECK(so > 0 && !o.ic->consoleQuiet(), "the time is up: it chirps again (%d)", so);
+        o.ic->command("consolewatch quiet");
+        run(100);
+        run(3200, true);
+        run(3200);
+        CHECK(o.ic->consoleMissing() && !o.ic->consoleQuiet() && so > 0, "the page was open in between: the quiet is over, so the next time is heard (%d)", so);
         o.ic->command("emergency lockdown");
         run(600);
         o.ic->command("emergency clear");
