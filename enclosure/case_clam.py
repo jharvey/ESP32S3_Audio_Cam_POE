@@ -92,6 +92,15 @@ CARD_DX = 6.0    # the card holder sits this far right of the board's middle, to
 # speaker's own sealed box keeps its sound out of the inside of the case: both help the echo canceller.
 SPK2_W, SPK2_H, SPK2_T = 25.0, 35.0, 6.8   # across, tall, thick (6.2 to 6.8 mm, by maker)
 SPK2_AT = (-1.9, 124.0)                    # its middle (KiCad x, y)
+# People sensor (Hi-Link HLK-LD2410C, 22 x 16 mm, about 3 mm thick): it stands behind the lower face, right of the
+# Ethernet plug, looking into the room through the face and the use card (plastic and paper do not stop it; no metal
+# or foil there). It drops into a channel from above and gravity keeps it there; its wires go to J22 on the board.
+# THE MODULE'S SIZE IS FROM THE MAKER'S MANUAL, NOT MEASURED. The four holding tabs are at the corners only, so the
+# soldered wires are free whichever edge the module's pins are on.
+RADAR = True
+RADAR_W, RADAR_H, RADAR_PCB = 22.0, 16.0, 1.0   # across, tall, board thickness
+RADAR_AT = (82.0, 120.0)                   # its middle (KiCad x, y)
+RADAR_GAP = 1.5                            # room between the module's front and the inside of the face, for its parts
 MIC_D = 1.5      # microphone ports
 CAM_D = 12.0     # camera lens opening
 
@@ -354,6 +363,25 @@ for i in range(-3, 4):
 cover = cover.cut(g2)
 speaker2 = slab(sx0 + 0.2, sy0 + 0.2, sx1 - 0.2, sy1 - 0.2, Z_IN - SPK2_T, Z_IN)
 
+# ---- people sensor: a channel behind the lower face, open at the top ----
+radar = None
+if RADAR:
+    qx0, qx1 = RADAR_AT[0] - RADAR_W / 2 - 0.2, RADAR_AT[0] + RADAR_W / 2 + 0.2
+    qy0, qy1 = RADAR_AT[1] - RADAR_H / 2 - 0.2, RADAR_AT[1] + RADAR_H / 2 + 0.2
+    zq1 = Z_IN - RADAR_GAP                  # the module's front
+    zq0 = zq1 - RADAR_PCB - 0.3             # its back, with a little play
+    zr = zq0 - 1.0                          # the tabs behind it are 1 mm thick
+    ch = slab(qx0 - 1.5, qy0, qx0, qy1 + 1.5, zr, Z_IN + 0.1)                           # left rail
+    ch = ch.union(slab(qx1, qy0, qx1 + 1.5, qy1 + 1.5, zr, Z_IN + 0.1))                 # right rail
+    ch = ch.union(slab(qx0 - 1.5, qy1, qx1 + 1.5, qy1 + 1.5, zr, Z_IN + 0.1))           # the stop it stands on
+    for xa, xb in ((qx0, qx0 + 0.8), (qx1 - 0.8, qx1)):                                 # ledges that keep it off the face
+        ch = ch.union(slab(xa, qy0, xb, qy1, zq1, Z_IN + 0.1))
+    ch = ch.union(slab(qx0, qy1 - 0.8, qx1, qy1, zq1, Z_IN + 0.1))
+    for ya in (qy0 + 1.0, qy1 - 2.5):                                                   # four tabs behind its corners
+        ch = ch.union(slab(qx0, ya, qx0 + 0.9, ya + 2.5, zr, zq0)).union(slab(qx1 - 0.9, ya, qx1, ya + 2.5, zr, zq0))
+    cover = cover.union(ch)
+    radar = slab(qx0 + 0.2, qy0 + 0.2, qx1 - 0.2, qy1 - 0.2, zq1 - RADAR_PCB, zq1)
+    radar = radar.union(slab(RADAR_AT[0] - 2.5, RADAR_AT[1] - 2.5, RADAR_AT[0] + 2.5, RADAR_AT[1] + 2.5, zq1, zq1 + 0.9))   # its chip
 # ---- looks: an engraved ring round the speaker and round the status light, a bevel on the camera opening ------
 def ring(x, y, d_out, width):
     return cyl(x, y, d_out, Z_TOP - LABEL_DEPTH, Z_TOP + 1).cut(cyl(x, y, d_out - 2 * width, Z_TOP - LABEL_DEPTH - 1, Z_TOP + 2))
@@ -403,7 +431,8 @@ out = os.path.join(here, "out_clam"); os.makedirs(out, exist_ok=True)
 for name, s in (("clam_back", back), ("clam_cover", cover), ("clam_button", cap), ("clam_buttons", caps), ("board_standin", board), ("use_card", use_card), ("paint", paint),
                 ("clam_red_button", red), ("red_at", red_at), ("lid", lid), ("lid_open", lid_open), ("lid_90", lid_90), ("lid_pre", lid_pre),
                 ("lid_clip_left", clip_parts[0]), ("lid_clip_right", clip_parts[1]), ("clips_at", clips), ("clips_pre", clips.translate((0, 0, 9.0))),
-                ("speaker_standin", speaker2), ("shutter_paddle", paddle), ("pad_closed", pad_closed), ("pad_open", pad_open), ("pad_flag", pad_flag), ("servo_standin", servo)):
+                ("speaker_standin", speaker2), ("radar_standin", radar), ("shutter_paddle", paddle), ("pad_closed", pad_closed), ("pad_open", pad_open), ("pad_flag", pad_flag), ("servo_standin", servo)):
+    if s is None: continue
     if name not in ("clam_buttons", "use_card", "paint", "red_at", "lid_open", "lid_90", "lid_pre", "clips_at", "clips_pre", "pad_closed", "pad_open", "pad_flag"): cq.exporters.export(s, os.path.join(out, name + ".step"))
     cq.exporters.export(s, os.path.join(out, name + ".stl"), tolerance=0.05)
 cq.exporters.export(lid2d.faces("<Z"), os.path.join(out, "lid.dxf"))   # the lid's outline, for the laser cutter (mm)
